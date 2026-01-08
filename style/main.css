@@ -1,5 +1,5 @@
 /* =========================================
-   TEAM LAZER - FINAL FIX (Mobile & Desktop)
+   TEAM LAZER - FINAL POLISH (Flush & Fixed)
    ========================================= */
 
 :root {
@@ -18,20 +18,21 @@
 
 /* GLOBAL RESET & SICHERHEIT */
 * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
-html { overflow-x: hidden; width: 100%; }
+html { overflow-x: hidden; width: 100%; -webkit-text-size-adjust: 100%; }
 body {
   background-color: var(--bg-dark);
   color: var(--text-main);
   font-family: 'Inter', sans-serif;
   line-height: 1.6;
   width: 100%;
-  overflow-x: hidden; /* Verhindert seitliches Scrollen */
+  max-width: 100vw;
+  overflow-x: hidden; /* Verhindert seitliches Scrollen strikt */
   position: relative;
 }
 
 /* --- BACKGROUND --- */
 .global-bg {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; /* width 100% statt 100vw */
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
   background-color: #05000a;
   background-image: 
     linear-gradient(rgba(124, 58, 237, 0.07) 1px, transparent 1px),
@@ -61,12 +62,13 @@ img { max-width: 100%; display: block; }
   height: var(--header-height);
   background: rgba(10, 11, 16, 0.95); 
   backdrop-filter: blur(12px);
-  position: fixed; top: 0; left: 0; right: 0; /* Fixiert über die volle Breite */
+  position: fixed; top: 0; left: 0; 
   width: 100%; 
   z-index: 1000;
   border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex; align-items: center;
 }
-.nav-container { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+.nav-container { height: 100%; display: flex; align-items: center; justify-content: space-between; width: 90%; margin: 0 auto; }
 .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; letter-spacing: 1px; }
 .nav-logo img { height: 40px; transition: transform 0.3s; }
 .nav-logo:hover img { transform: rotate(-5deg) scale(1.1); }
@@ -74,22 +76,22 @@ img { max-width: 100%; display: block; }
 .nav-links a { font-weight: 500; font-size: 0.95rem; color: var(--text-muted); position: relative; }
 .nav-links a:hover, .nav-links a.active { color: #fff; text-shadow: 0 0 10px var(--primary-glow); }
 .social-icon-nav:hover { color: var(--primary) !important; transform: scale(1.2); }
-.burger-btn { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 10px; }
+.burger-btn { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 5px; }
 
-/* --- HERO SECTION (Fix für Positionierung) --- */
+/* --- HERO SECTION --- */
 .hero { 
-  min-height: 85vh; 
+  min-height: 80vh; 
   display: flex; 
-  /* WICHTIG: align-items flex-start statt center, damit es oben bleibt */
-  align-items: flex-start; 
-  padding-top: 180px; /* Schiebt die Headline manuell nach unten/oben */
+  align-items: flex-start; /* Oben bündig für Desktop */
+  /* HIER GEÄNDERT: Weniger Abstand, damit Headline hoch rutscht */
+  padding-top: 130px; 
   position: relative; 
   overflow: visible;
 }
 
 .hero-content { 
   display: flex; 
-  align-items: flex-start; /* Auch hier oben bündig */
+  align-items: flex-start; 
   justify-content: space-between; 
   gap: 50px; 
   width: 100%; 
@@ -130,7 +132,7 @@ img { max-width: 100%; display: block; }
 .glow-anim { animation: btnGlow 3s infinite; }
 @keyframes btnGlow { 0%, 100% { box-shadow: 0 0 10px var(--primary-glow); } 50% { box-shadow: 0 0 25px var(--primary); } }
 
-/* --- CONTENT SECTIONS --- */
+/* --- CONTENT --- */
 .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
 .game-card { background: var(--bg-panel); border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.05); overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; position: relative; }
 .game-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 10px 40px rgba(124, 58, 237, 0.2); }
@@ -150,8 +152,6 @@ img { max-width: 100%; display: block; }
 .cta-section { padding: 120px 0; text-align: center; background: linear-gradient(0deg, rgba(124, 58, 237, 0.1), transparent); }
 .cta-content h2 { font-size: 3.5rem; margin-bottom: 20px; }
 .scale-hover:hover { transform: scale(1.05); }
-
-/* --- FOOTER --- */
 footer { background: #050005; border-top: 1px solid rgba(255,255,255,0.05); padding: 80px 0 30px; }
 .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 50px; margin-bottom: 50px; }
 .footer-logo { width: 70px; margin-bottom: 20px; }
@@ -174,22 +174,20 @@ footer { background: #050005; border-top: 1px solid rgba(255,255,255,0.05); padd
 .slide-left { transform: translateX(-50px); }
 .slide-right { transform: translateX(50px); }
 .visible { opacity: 1; transform: translate(0); }
+.delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; }
 
-/* === MOBILE FIXES (Wichtig!) === */
+/* === MOBILE & TABLET FIXES (Wichtig!) === */
 @media (max-width: 900px) {
   /* Navbar Fix */
   .nav-links, .desktop-only { display: none !important; }
   .burger-btn { display: block; }
   
-  /* Container Breite sicherstellen */
-  .container { width: 90%; margin: 0 auto; }
-
   /* Hero Mobile */
   .hero { 
     min-height: auto; 
-    padding-top: 120px; /* Weniger Abstand oben am Handy, aber genug für Navbar */
+    padding-top: 110px; 
     padding-bottom: 60px;
-    align-items: center; /* Am Handy zentrieren wir alles */
+    align-items: center; 
   }
   
   .hero-content { 
@@ -198,27 +196,34 @@ footer { background: #050005; border-top: 1px solid rgba(255,255,255,0.05); padd
     gap: 40px; 
   }
 
-  /* Schriftgröße etwas größer machen, damit es nicht "zu klein" wirkt */
-  .hero h1 { font-size: 3rem; margin-bottom: 20px; }
-  .hero p { font-size: 1.1rem; }
+  .hero h1 { font-size: 3.2rem; margin-bottom: 20px; line-height: 1.1; }
+  .hero p { font-size: 1.15rem; }
 
   .hero-btns { 
     justify-content: center; 
     width: 100%;
   }
-  
-  .btn { width: 100%; } /* Buttons volle Breite am Handy */
+  .btn { width: 100%; } 
 
-  /* Stats Card Mobile */
+  /* Stats Card Mobile - BÜNDIG FIX */
   .hero-visual { width: 100%; padding: 0; }
   .stats-card { 
     width: 100%; 
-    max-width: none; /* Volle Breite nutzen */
+    max-width: none;
     transform: none !important; 
-    margin-top: 20px;
-    padding: 25px;
+    margin-top: 10px;
+    padding: 25px 20px; /* Etwas weniger Padding seitlich */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Zentriert die Rows im Container */
   }
-  
+
+  .stat-row {
+    width: 100%;
+    max-width: 320px; /* Begrenzt die Breite damit es kompakt wirkt */
+    justify-content: flex-start; /* Icons linksbündig zueinander */
+  }
+
   /* Footer & Allgemein */
   .footer-top { grid-template-columns: 1fr; text-align: center; }
   .social-links { justify-content: center; }
