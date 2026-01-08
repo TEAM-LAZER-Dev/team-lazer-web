@@ -20,10 +20,10 @@
     <div class="ladder-line"></div>
     <div class="ladder-indicator" id="scrollIndicator"></div>
     <div class="ladder-dot active" data-target="#intro"></div>
-    <div class="ladder-dot" data-target="#story"></div>
+    <div class="ladder-dot" data-target="#history"></div>
     <div class="ladder-dot" data-target="#team"></div>
+    <div class="ladder-dot" data-target="#values"></div>
     <div class="ladder-dot" data-target="#faq"></div>
-    <div class="ladder-dot" data-target="#join"></div>
   </div>
 
   <header class="navbar">
@@ -52,14 +52,21 @@
     <div class="container text-center fade-in-up">
       <span class="hero-tag">INSIDE THE CODE</span>
       <h1>TEAM LAZER <span class="highlight">CORE</span></h1>
-      <p>Die Köpfe hinter dem Projekt. Kompakt. Direkt.</p>
+      <p>Die Köpfe hinter dem Projekt. <br>Kompakt. Direkt.</p>
     </div>
   </section>
 
-  <section id="story" class="section-padding">
-    <div class="container text-center scroll-reveal">
-      <h2>Unsere <span class="highlight">Story</span></h2>
-      <p style="max-width: 600px; margin: 0 auto; color: var(--text-muted);">Gegründet aus der Leidenschaft für Gaming, gewachsen durch Vertrauen. Wir sind seit 2020 eine Instanz für Qualität.</p>
+  <section id="history" class="section-padding">
+    <div class="container split-layout">
+      <div class="glass-box scroll-reveal">
+        <h2>Unsere <span class="highlight">Story</span></h2>
+        <p>Wir sind seit 2020 eine Instanz für Qualität.</p>
+      </div>
+      <div class="glass-box scroll-reveal delay-1">
+        <i class="fa-solid fa-code-commit"></i>
+        <h3>Vision</h3>
+        <p>Innovation durch Technik.</p>
+      </div>
     </div>
   </section>
 
@@ -67,46 +74,48 @@
     <div class="container">
       <div class="section-header text-center"><h2>Active <span class="highlight">Roster</span></h2></div>
       
-      <div class="team-grid">
-        <div class="team-card rank-purple scroll-reveal">
-          <div class="card-head">
-            <h3>Fivozo</h3><span class="badge">OWNER</span>
+      <div class="team-structure">
+        <div class="team-row">
+          <div class="team-member purple scroll-reveal">
+            <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Fivozo"><div class="tm-titles"><h3>Fivozo</h3><span class="badge">OWNER</span></div></div>
+            <div class="tm-body"><p>Product Lead • Developer • Design</p></div>
           </div>
-          <p>Product Lead • Developer • Design</p>
-        </div>
-        <div class="team-card rank-purple scroll-reveal delay-1">
-          <div class="card-head">
-            <h3>Wizzard Gaming</h3><span class="badge">CO-OWNER</span>
+          <div class="team-member purple scroll-reveal delay-1">
+            <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Wizzard"><div class="tm-titles"><h3>Wizzard Gaming</h3><span class="badge">CO-OWNER</span></div></div>
+            <div class="tm-body"><p>Product Manager • Service</p></div>
           </div>
-          <p>Product Manager • Service</p>
         </div>
 
-        <div class="team-card rank-green scroll-reveal delay-2">
-          <div class="card-head">
-            <h3>Username</h3><span class="badge">DEV</span>
+        <div class="team-row">
+          <div class="team-member green scroll-reveal delay-2">
+            <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Dev"><div class="tm-titles"><h3>Username</h3><span class="badge">DEV</span></div></div>
+            <div class="tm-body"><p>Java • Backend</p></div>
           </div>
-          <p>Java • Backend Systems</p>
-        </div>
-        <div class="team-card rank-green scroll-reveal delay-3">
-          <div class="card-head">
-            <h3>Username</h3><span class="badge">DEV</span>
+          <div class="team-member green scroll-reveal delay-2">
+            <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Dev"><div class="tm-titles"><h3>Username</h3><span class="badge">DEV</span></div></div>
+            <div class="tm-body"><p>Web • API</p></div>
           </div>
-          <p>Web Frontend • API</p>
         </div>
 
-        <div class="team-card rank-blue scroll-reveal delay-4">
-          <div class="card-head">
-            <h3>Umbra</h3><span class="badge">MOD</span>
+        <div class="team-row">
+          <div class="team-member blue scroll-reveal delay-3">
+            <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Umbra"><div class="tm-titles"><h3>Umbra</h3><span class="badge">MOD</span></div></div>
+            <div class="tm-body"><p>Support</p></div>
           </div>
-          <p>Community Support</p>
-        </div>
-        <div class="team-card rank-blue scroll-reveal delay-5">
-          <div class="card-head">
-            <h3>Username</h3><span class="badge">MOD</span>
+          <div class="team-member blue scroll-reveal delay-3">
+            <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Mod"><div class="tm-titles"><h3>Username</h3><span class="badge">MOD</span></div></div>
+            <div class="tm-body"><p>Tickets</p></div>
           </div>
-          <p>Ticket Management</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section id="values" class="section-padding">
+    <div class="container grid-3">
+        <div class="value-card"><h3>Sicherheit</h3></div>
+        <div class="value-card"><h3>Speed</h3></div>
+        <div class="value-card"><h3>Fairness</h3></div>
     </div>
   </section>
 
@@ -114,26 +123,15 @@
     <div class="container">
       <div class="section-header text-center"><h2>FAQ</h2></div>
       <div class="accordion-wrapper">
-        <div class="accordion-item">
-          <div class="accordion-header"><span>Wie joine ich?</span><i class="fa-solid fa-chevron-down"></i></div>
-          <div class="accordion-content"><p>Klicke einfach auf den Discord Button oben.</p></div>
-        </div>
-        <div class="accordion-item">
-          <div class="accordion-header"><span>Sucht ihr Leute?</span><i class="fa-solid fa-chevron-down"></i></div>
-          <div class="accordion-content"><p>Ja, Bewerbungen sind im Discord offen.</p></div>
-        </div>
+        <div class="accordion-item"><div class="accordion-header"><span>Frage 1</span></div><div class="accordion-content"><p>Antwort.</p></div></div>
+        <div class="accordion-item"><div class="accordion-header"><span>Frage 2</span></div><div class="accordion-content"><p>Antwort.</p></div></div>
       </div>
     </div>
   </section>
 
-  <section id="join" class="cta-section scroll-reveal">
-    <div class="container text-center">
-      <h2>Bereit?</h2>
-      <a href="https://discord.gg/DEINLINK" class="btn btn-primary glow-anim">Los geht's</a>
-    </div>
-  </section>
-
-  <footer><div class="container text-center"><p>&copy; 2026 TEAM LAZER.</p></div></footer>
+  <footer>
+    <div class="container footer-bottom"><p>&copy; 2026 TEAM LAZER.</p></div>
+  </footer>
 
   <script src="../script/main.js"></script>
   <script src="../script/ladder.js"></script>
