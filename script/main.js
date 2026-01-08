@@ -61,41 +61,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- SCROLL LADDER LOGIC (PC) ---
+  // --- SCROLL LADDER LOGIC (Jumping Energy) ---
   const ladderEnergy = document.getElementById('ladderEnergy');
   const ladderDots = document.querySelectorAll('.ladder-dot');
   
   if (ladderEnergy && window.innerWidth > 900) {
-    window.addEventListener('scroll', () => {
-      // 1. Energieball bewegen (Relativ zur gesamten Seitenhöhe)
-      const scrollTop = window.scrollY;
-      const docHeight = document.body.scrollHeight - window.innerHeight;
-      const scrollPercent = scrollTop / docHeight;
+    
+    const updateLadder = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
       
-      // Begrenzung zwischen 0% und 100% der Leiter-Höhe
-      const ladderHeight = document.querySelector('.ladder-line').offsetHeight;
-      const movePos = Math.min(Math.max(scrollPercent * ladderHeight, 0), ladderHeight);
-      
-      ladderEnergy.style.top = movePos + 'px';
-
-      // 2. Aktive Sektion highlighten
-      let currentSectionId = "";
+      // Finde die aktuell aktive Sektion
+      let currentSectionId = "home"; // Default
       
       document.querySelectorAll('section').forEach(section => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.clientHeight;
-        if (scrollTop >= (sectionTop - 300)) {
+        
+        // Wenn die Sektion mindestens zur Hälfte sichtbar ist oder wir oben sind
+        if (scrollY >= (sectionTop - windowHeight/2)) {
           currentSectionId = section.getAttribute('id');
         }
       });
 
+      // Update Dots & Jump Energy
       ladderDots.forEach(dot => {
-        dot.classList.remove('active');
-        if (dot.getAttribute('data-target') === '#' + currentSectionId) {
+        const target = dot.getAttribute('data-target').substring(1); // z.B. "home"
+        
+        if (target === currentSectionId) {
           dot.classList.add('active');
+          
+          // Berechne Position für den Sprung
+          // Position des Dots relativ zum Leiter-Container
+          const dotTop = dot.offsetTop;
+          ladderEnergy.style.top = dotTop + 'px';
+          
+        } else {
+          dot.classList.remove('active');
         }
       });
-    });
+    };
+
+    window.addEventListener('scroll', updateLadder);
+    updateLadder(); // Init call
 
     // Klick auf Dots
     ladderDots.forEach(dot => {
