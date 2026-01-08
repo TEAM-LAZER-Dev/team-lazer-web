@@ -1,0 +1,34 @@
+/* HERO */
+.hero { min-height: 85vh; display: flex; align-items: center; padding-top: 100px; }
+.hero-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.hero-text h1 { font-size: 4rem; font-family: 'Rajdhani'; line-height: 1.1; margin-bottom: 20px; }
+.hero-tag { background: rgba(124, 58, 237, 0.15); color: var(--primary); padding: 5px 12px; border-radius: 4px; font-weight: 700; letter-spacing: 2px; border: 1px solid rgba(124, 58, 237, 0.3); }
+.hero-btns { display: flex; gap: 15px; margin-top: 30px; }
+
+/* STATS CARD */
+.stats-card { background: rgba(20, 20, 30, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 30px; min-width: 300px; transform: rotateY(-5deg) perspective(1000px); transition: 0.3s; }
+.stats-card:hover { transform: rotateY(0deg); border-color: var(--primary); }
+.stat-row { display: flex; align-items: center; gap: 20px; margin: 15px 0; }
+.stat-icon { font-size: 1.5rem; color: var(--primary); }
+.stat-separator { height: 1px; background: rgba(255,255,255,0.1); }
+
+/* UNIVERSE GRID */
+.universe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.universe-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 40px; border-radius: 12px; text-align: center; position: relative; overflow: hidden; transition: 0.3s; }
+.universe-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+.u-icon { font-size: 2.5rem; margin-bottom: 15px; color: #fff; }
+.color-1 .u-icon { color: #ff0055; } 
+.color-2 .u-icon { color: #5865F2; } 
+.color-3 .u-icon { color: #00ff88; }
+
+/* FEATURES */
+.features-wrapper { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.feature-box { background: rgba(255,255,255,0.02); padding: 30px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
+
+@media (max-width: 900px) {
+  .hero-content { flex-direction: column; text-align: center; }
+  .hero-text h1 { font-size: 2.8rem; }
+  .hero-btns { justify-content: center; }
+  .stats-card { margin-top: 40px; width: 100%; transform: none; }
+  .features-wrapper { grid-template-columns: 1fr; }
+}
