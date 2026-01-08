@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- MOBILE MENU ---
   const burgerBtn = document.getElementById('burgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
+  
   burgerBtn?.addEventListener('click', () => {
     mobileMenu.classList.toggle('active');
     const icon = burgerBtn.querySelector('i');
@@ -18,13 +19,16 @@ document.addEventListener('DOMContentLoaded', () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        if(entry.target.querySelector('.counter')) startCounters();
+        if(entry.target.querySelector('.counter')) {
+            startCounters();
+        }
       }
     });
   }, { threshold: 0.15 });
+
   document.querySelectorAll('.scroll-reveal, .slide-left, .slide-right, .stats-card, .universe-card, .feature-box').forEach(el => observer.observe(el));
 
-  // --- COUNTER ---
+  // --- COUNTER ANIMATION ---
   let countersStarted = false;
   function startCounters() {
     if(countersStarted) return; countersStarted = true;
@@ -33,8 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = parseFloat(counter.getAttribute('data-target'));
       const suffix = counter.getAttribute('data-suffix') || "";
       const decimals = parseInt(counter.getAttribute('data-decimals')) || 0;
+      
       const duration = 2000; const stepTime = 20; const steps = duration / stepTime; const increment = target / steps;
       let current = 0;
+      
       const timer = setInterval(() => {
         current += increment;
         if(current >= target) { current = target; clearInterval(timer); }
@@ -44,149 +50,101 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- SCROLL LADDER DOTS (Navigation only) ---
+  // --- SCROLL LADDER LOGIC (Clean & Jumping) ---
   const scrollIndicator = document.getElementById('scrollIndicator');
   const ladderDots = document.querySelectorAll('.ladder-dot');
   
   if (scrollIndicator && window.innerWidth > 900) {
-    const updateScrollDot = () => {
-      let currentId = "home";
-      const midLine = window.scrollY + window.innerHeight/2;
-      document.querySelectorAll('section').forEach(sec => {
-        if(midLine >= sec.offsetTop) currentId = sec.getAttribute('id');
-      });
+    
+    let lastSectionId = "";
+
+    const updateLadder = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
       
-      ladderDots.forEach(dot => {
-        const target = dot.getAttribute('data-target').substring(1);
-        if(target === currentId) {
-          dot.classList.add('active');
-          scrollIndicator.classList.add('active'); // Pulsing effect
-          const topPos = dot.offsetTop + dot.offsetHeight/2;
-          scrollIndicator.style.top = topPos + 'px';
-        } else {
-          dot.classList.remove('active');
+      // Finde aktive Sektion
+      let currentSectionId = "home"; 
+      
+      document.querySelectorAll('section').forEach(section => {
+        const sectionTop = section.offsetTop;
+        // Wenn Sektion sichtbar ist (mitte des screens)
+        if (scrollY >= (sectionTop - windowHeight/2)) {
+          currentSectionId = section.getAttribute('id');
         }
       });
+
+      if (currentSectionId !== lastSectionId) {
+        lastSectionId = currentSectionId;
+        
+        ladderDots.forEach(dot => {
+          const target = dot.getAttribute('data-target').substring(1);
+          
+          if (target === currentSectionId) {
+            dot.classList.add('active');
+            
+            // Position berechnen
+            const dotTop = dot.offsetTop;
+            const dotHeight = dot.offsetHeight;
+            const centerPos = dotTop + (dotHeight / 2);
+
+            // Animation Reset
+            scrollIndicator.classList.remove('pulsing');
+            scrollIndicator.classList.remove('landed');
+            
+            // Sprung starten
+            void scrollIndicator.offsetWidth; // Reflow Trigger
+            scrollIndicator.classList.add('jumping');
+            
+            // Bewegen
+            scrollIndicator.style.top = centerPos + 'px';
+
+            // Landung
+            setTimeout(() => {
+              scrollIndicator.classList.remove('jumping');
+              scrollIndicator.classList.add('landed');
+              scrollIndicator.classList.add('pulsing');
+            }, 600); // Entspricht CSS Transition Zeit
+
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
     };
-    window.addEventListener('scroll', updateScrollDot);
-    setTimeout(updateScrollDot, 100);
-    
-    // Dot Click
+
+    // Init
+    setTimeout(() => updateLadder(), 100);
+    window.addEventListener('scroll', updateLadder);
+
+    // Dot Click Navigation
     ladderDots.forEach(dot => {
       dot.addEventListener('click', () => {
-        const targetSection = document.querySelector(dot.getAttribute('data-target'));
-        if(targetSection) window.scrollTo({ top: targetSection.offsetTop - 100, behavior: 'smooth' });
+        const targetId = dot.getAttribute('data-target');
+        const targetSection = document.querySelector(targetId);
+        if (targetSection) {
+          window.scrollTo({
+            top: targetSection.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        }
       });
     });
   }
 
-  // --- FREE ROAMING STICK MAN (The AI) ---
-  const stickMan = document.getElementById('freeStickMan');
-  const wrapper = stickMan?.querySelector('.man-wrapper');
-  
-  if (stickMan && window.innerWidth > 900) {
-    let isIdle = false;
-    let idleTimer = null;
-    let aiLoop = null;
-
-    // Start Position (Center Screen)
-    let posX = window.innerWidth / 2;
-    let posY = window.innerHeight / 2;
-    
-    const thoughts = ["?", "Zzz...", "Hunger", "Wo hin?", "Laufen...", "Team Lazer", "Code?", "Bug?", "Kaffee?", "AFK?"];
-
-    const updatePos = (x, y, speed) => {
-      stickMan.style.transition = `top ${speed}s linear, left ${speed}s linear`;
-      stickMan.style.left = x + 'px';
-      stickMan.style.top = y + 'px';
-      posX = x; 
-      posY = y;
-    };
-
-    const showThought = () => {
-      const bubble = document.createElement('div');
-      bubble.className = 'thought-bubble';
-      bubble.innerText = thoughts[Math.floor(Math.random() * thoughts.length)];
-      bubble.style.left = posX + 'px';
-      bubble.style.top = (posY - 60) + 'px'; // Überm Kopf
-      document.body.appendChild(bubble);
-      setTimeout(() => bubble.remove(), 3000);
-    };
-
-    const decideNextMove = () => {
-      if (!isIdle) return; // Stop if not idle
-
-      const action = Math.random(); 
-
-      if (action < 0.6) { 
-        // --- WALK ---
-        stickMan.classList.remove('sitting');
-        stickMan.classList.add('walking');
-
-        // Random target (padded from edges)
-        const targetX = Math.random() * (window.innerWidth - 100) + 50;
-        const targetY = Math.random() * (window.innerHeight - 100) + 50;
-        
-        // Direction
-        if (targetX > posX) wrapper.style.transform = "scaleX(-1)"; // Right
-        else wrapper.style.transform = "scaleX(1)"; // Left
-
-        // Speed calculation
-        const dist = Math.hypot(targetX - posX, targetY - posY);
-        const duration = dist / 150; // Speed factor
-
-        updatePos(targetX, targetY, duration);
-
-        aiLoop = setTimeout(decideNextMove, duration * 1000);
-
-      } else if (action < 0.9) {
-        // --- SIT ---
-        stickMan.classList.remove('walking');
-        stickMan.classList.add('sitting');
-        
-        if(Math.random() > 0.5) showThought();
-
-        aiLoop = setTimeout(decideNextMove, Math.random() * 3000 + 2000);
-
-      } else {
-        // --- STAND ---
-        stickMan.classList.remove('walking');
-        stickMan.classList.remove('sitting');
-        aiLoop = setTimeout(decideNextMove, 1000);
+  // --- SMOOTH SCROLL (General) ---
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      mobileMenu.classList.remove('active');
+      const targetId = this.getAttribute('href');
+      const targetSection = document.querySelector(targetId);
+      if(targetSection){
+          window.scrollTo({
+            top: targetSection.offsetTop - 80,
+            behavior: 'smooth'
+          });
       }
-    };
+    });
+  });
 
-    // --- IDLE CHECKER ---
-    const resetIdle = () => {
-      clearTimeout(idleTimer);
-      clearTimeout(aiLoop);
-      
-      if (isIdle) {
-        isIdle = false;
-        stickMan.classList.remove('active'); // Hide
-        stickMan.classList.remove('walking', 'sitting');
-      }
-
-      // Wait 3 seconds then start AI
-      idleTimer = setTimeout(() => {
-        isIdle = true;
-        stickMan.classList.add('active'); // Show
-        
-        // Teleport near random spot to start
-        posX = Math.random() * (window.innerWidth - 100) + 50;
-        posY = Math.random() * (window.innerHeight - 100) + 50;
-        stickMan.style.transition = 'none';
-        stickMan.style.left = posX + 'px';
-        stickMan.style.top = posY + 'px';
-
-        decideNextMove();
-      }, 3000);
-    };
-
-    window.addEventListener('mousemove', resetIdle);
-    window.addEventListener('scroll', resetIdle);
-    window.addEventListener('click', resetIdle);
-    
-    resetIdle(); // Init
-  }
 });
