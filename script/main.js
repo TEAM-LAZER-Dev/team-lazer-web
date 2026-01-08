@@ -207,3 +207,160 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  // ... (Dein existierender Mobile Menu & Scroll Animation Code bleibt hier) ...
+  // ... (Füge hier den Code für Mobile Menu, Observer, Counter ein, wie im vorigen Schritt) ...
+
+  // --- SCROLL LADDER (Nur der Punkt links) ---
+  const scrollIndicator = document.getElementById('scrollIndicator');
+  const ladderDots = document.querySelectorAll('.ladder-dot');
+  
+  if (scrollIndicator && window.innerWidth > 900) {
+    // Einfache Logik: Punkt springt mit Sektionen (wie vorher, nur ohne Männchen-Logik)
+    const updateScrollDot = () => {
+      let currentId = "home";
+      const midLine = window.scrollY + window.innerHeight/2;
+      document.querySelectorAll('section').forEach(sec => {
+        if(midLine >= sec.offsetTop) currentId = sec.getAttribute('id');
+      });
+      
+      ladderDots.forEach(dot => {
+        const target = dot.getAttribute('data-target').substring(1);
+        if(target === currentId) {
+          dot.classList.add('active');
+          const topPos = dot.offsetTop + dot.offsetHeight/2;
+          scrollIndicator.style.top = topPos + 'px';
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    };
+    window.addEventListener('scroll', updateScrollDot);
+    setTimeout(updateScrollDot, 100);
+  }
+
+  // --- FREE ROAMING STICK MAN (Die AI) ---
+  const stickMan = document.getElementById('freeStickMan');
+  const wrapper = stickMan?.querySelector('.man-wrapper');
+  
+  if (stickMan && window.innerWidth > 900) {
+    let isIdle = false;
+    let idleTimer = null;
+    let aiLoop = null;
+
+    // Startposition (Mitte Screen)
+    let posX = window.innerWidth / 2;
+    let posY = window.innerHeight / 2;
+    
+    // Gedanken (Random Texte)
+    const thoughts = ["?", "Zzz...", "Hunger", "Wo hin?", "Laufen...", "Team Lazer", "Code?", "Bug?", "Kaffee?"];
+
+    // Update Funktion für Position
+    const updatePos = (x, y, speed) => {
+      stickMan.style.transition = `top ${speed}s linear, left ${speed}s linear`;
+      stickMan.style.left = x + 'px';
+      stickMan.style.top = y + 'px';
+      posX = x; 
+      posY = y;
+    };
+
+    const showThought = () => {
+      const bubble = document.createElement('div');
+      bubble.className = 'thought-bubble';
+      bubble.innerText = thoughts[Math.floor(Math.random() * thoughts.length)];
+      
+      // Position über dem Kopf
+      bubble.style.left = posX + 'px';
+      bubble.style.top = (posY - 60) + 'px';
+      
+      document.body.appendChild(bubble);
+      setTimeout(() => bubble.remove(), 3000);
+    };
+
+    // Die "Intelligenz"
+    const decideNextMove = () => {
+      if (!isIdle) return; // Wenn User scrollt, mach nix
+
+      const action = Math.random(); // Zufallszahl 0.0 - 1.0
+
+      if (action < 0.6) { 
+        // --- LAUFEN (60% Chance) ---
+        stickMan.classList.remove('sitting');
+        stickMan.classList.add('walking');
+
+        // Neues zufälliges Ziel im Fenster (mit Randabstand)
+        const targetX = Math.random() * (window.innerWidth - 100) + 50;
+        const targetY = Math.random() * (window.innerHeight - 100) + 50;
+        
+        // Blickrichtung setzen
+        if (targetX > posX) wrapper.style.transform = "scaleX(-1)"; // Nach rechts schauen
+        else wrapper.style.transform = "scaleX(1)"; // Nach links schauen
+
+        // Distanz berechnen für Geschwindigkeit
+        const dist = Math.hypot(targetX - posX, targetY - posY);
+        const duration = dist / 100; // Pixel pro Sekunde (Speed)
+
+        updatePos(targetX, targetY, duration);
+
+        // Nächste Entscheidung nach Ankunft
+        aiLoop = setTimeout(decideNextMove, duration * 1000);
+
+      } else if (action < 0.9) {
+        // --- SITZEN / WARTEN (30% Chance) ---
+        stickMan.classList.remove('walking');
+        stickMan.classList.add('sitting');
+        
+        // Vielleicht denken?
+        if(Math.random() > 0.5) showThought();
+
+        // Warten
+        aiLoop = setTimeout(decideNextMove, Math.random() * 3000 + 2000); // 2-5 Sek warten
+
+      } else {
+        // --- STEHEN (10% Chance) ---
+        stickMan.classList.remove('walking');
+        stickMan.classList.remove('sitting');
+        
+        // Kurz warten
+        aiLoop = setTimeout(decideNextMove, 1000);
+      }
+    };
+
+    // --- IDLE CHECKER ---
+    // Prüft, ob der User interagiert
+    const resetIdle = () => {
+      clearTimeout(idleTimer);
+      clearTimeout(aiLoop);
+      
+      // Wenn er gerade aktiv war, verschwinden lassen
+      if (isIdle) {
+        isIdle = false;
+        stickMan.classList.remove('active'); // Fade out
+        stickMan.classList.remove('walking', 'sitting');
+      }
+
+      // Timer neu starten (nach 4 Sekunden Inaktivität -> Start)
+      idleTimer = setTimeout(() => {
+        isIdle = true;
+        stickMan.classList.add('active'); // Fade in
+        
+        // Startposition auf aktuelle Mausposition oder Mitte setzen? 
+        // Wir nehmen einfach eine zufällige Position in der Nähe, damit er nicht aufploppt
+        posX = Math.random() * (window.innerWidth - 100) + 50;
+        posY = Math.random() * (window.innerHeight - 100) + 50;
+        stickMan.style.transition = 'none'; // Sofort springen
+        stickMan.style.left = posX + 'px';
+        stickMan.style.top = posY + 'px';
+
+        decideNextMove(); // Start AI
+      }, 4000);
+    };
+
+    window.addEventListener('mousemove', resetIdle);
+    window.addEventListener('scroll', resetIdle);
+    window.addEventListener('click', resetIdle);
+    
+    resetIdle(); // Init
+  }
+});
