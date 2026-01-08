@@ -286,3 +286,112 @@ footer { background: #050005; border-top: 1px solid rgba(255,255,255,0.05); padd
   .section-padding { padding: 60px 0; }
   .cta-content h2 { font-size: 2.2rem; }
 }
+
+/* --- FREE ROAM STICK MAN --- */
+.stick-man {
+  position: fixed;
+  z-index: 9999; /* Über allem */
+  width: 30px;
+  height: 50px;
+  pointer-events: none; /* Klicks gehen durch */
+  opacity: 0; /* Standardmäßig unsichtbar */
+  transition: opacity 0.5s, top 2s linear, left 2s linear; /* Bewegung wird per JS gesteuert */
+  /* Top/Left werden per JS gesetzt */
+}
+
+.stick-man.active {
+  opacity: 1;
+}
+
+.man-wrapper {
+  position: relative;
+  width: 100%; height: 100%;
+}
+
+/* Körperteile */
+.man-head {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 12px; height: 12px; background: var(--primary); border-radius: 50%;
+  box-shadow: 0 0 10px var(--primary); z-index: 5;
+}
+
+.man-torso {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 20px; background: var(--primary); z-index: 4;
+}
+
+.man-arm, .man-leg {
+  position: absolute; background: var(--primary); width: 3px; height: 16px;
+  transform-origin: top center; border-radius: 2px;
+}
+
+/* Positionen */
+.man-arm { top: 13px; left: 13px; }
+.man-leg { top: 28px; left: 13px; }
+
+/* --- ANIMATIONEN --- */
+
+/* Laufen (Walking) */
+.stick-man.walking .man-wrapper {
+  animation: bounceWalk 0.4s infinite alternate ease-in-out;
+}
+.stick-man.walking .man-leg.left { animation: walkLeg 0.8s infinite linear; }
+.stick-man.walking .man-leg.right { animation: walkLeg 0.8s infinite linear reverse; }
+.stick-man.walking .man-arm.left { animation: walkArm 0.8s infinite linear reverse; }
+.stick-man.walking .man-arm.right { animation: walkArm 0.8s infinite linear; }
+
+@keyframes bounceWalk { 
+  from { transform: translateY(0); } 
+  to { transform: translateY(-3px); } 
+}
+@keyframes walkLeg { 
+  0% { transform: rotate(-30deg); } 
+  50% { transform: rotate(30deg); } 
+  100% { transform: rotate(-30deg); } 
+}
+@keyframes walkArm { 
+  0% { transform: rotate(20deg); } 
+  50% { transform: rotate(-20deg); } 
+  100% { transform: rotate(20deg); } 
+}
+
+/* Sitzen (Sitting) */
+.stick-man.sitting .man-wrapper {
+  transform: translateY(10px); /* Runter rutschen */
+}
+.stick-man.sitting .man-torso { height: 16px; }
+.stick-man.sitting .man-head { top: 4px; }
+.stick-man.sitting .man-leg.left { transform: rotate(-90deg) translate(-2px, 0); height: 14px; }
+.stick-man.sitting .man-leg.right { transform: rotate(-80deg); height: 14px; }
+.stick-man.sitting .man-arm.left { transform: rotate(30deg) translate(0, 5px); } /* Hände auf Knie */
+.stick-man.sitting .man-arm.right { transform: rotate(-30deg) translate(0, 5px); }
+
+/* Gedankenblasen (Deutlicher) */
+.thought-bubble {
+  position: absolute;
+  background: #fff;
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-family: sans-serif;
+  font-weight: bold;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  animation: popUpBubble 3s forwards;
+  z-index: 10000;
+}
+/* Kleines Dreieck unten an der Blase */
+.thought-bubble::after {
+  content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+  border-width: 5px 5px 0; border-style: solid; border-color: #fff transparent transparent;
+}
+
+@keyframes popUpBubble {
+  0% { transform: scale(0) translateY(0); opacity: 0; }
+  10% { transform: scale(1) translateY(-20px); opacity: 1; }
+  80% { transform: scale(1) translateY(-30px); opacity: 1; }
+  100% { transform: scale(0) translateY(-40px); opacity: 0; }
+}
