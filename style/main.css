@@ -1,5 +1,5 @@
 /* =========================================
-   TEAM LAZER - FINAL FIX (Animations Added)
+   TEAM LAZER - FINAL (Stronger BG)
    ========================================= */
 
 :root {
@@ -30,21 +30,30 @@ body {
   position: relative;
 }
 
-/* --- BACKGROUND --- */
+/* --- BACKGROUND (Stärker eingestellt) --- */
 .global-bg {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
   background-color: #05000a;
   background-image: 
-    linear-gradient(rgba(124, 58, 237, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(124, 58, 237, 0.07) 1px, transparent 1px);
+    linear-gradient(rgba(124, 58, 237, 0.13) 1px, transparent 1px), /* Stärker: 0.13 */
+    linear-gradient(90deg, rgba(124, 58, 237, 0.13) 1px, transparent 1px); /* Stärker: 0.13 */
   background-size: 50px 50px;
   animation: gridFloat 40s linear infinite;
 }
 .global-bg::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center, transparent 20%, #05000a 90%); pointer-events: none; }
-.global-bg::after { content: ''; position: absolute; top: -20%; right: -20%; width: 70vw; height: 70vh; background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, transparent 70%); filter: blur(60px); pointer-events: none; animation: cornerPulse 10s ease-in-out infinite alternate; }
+
+/* NEBEL (Stärker) */
+.global-bg::after { 
+  content: ''; position: absolute; top: -20%; right: -20%; 
+  width: 70vw; height: 70vh; 
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.55) 0%, transparent 70%); /* Stärker: 0.55 */
+  filter: blur(80px); /* Weicherer Übergang */
+  pointer-events: none; 
+  animation: cornerPulse 10s ease-in-out infinite alternate; 
+}
 
 @keyframes gridFloat { 0% { background-position: 0 0; } 100% { background-position: 50px 50px; } }
-@keyframes cornerPulse { 0% { opacity: 0.4; transform: scale(1); } 100% { opacity: 1.0; transform: scale(1.3); } }
+@keyframes cornerPulse { 0% { opacity: 0.6; transform: scale(1); } 100% { opacity: 1.0; transform: scale(1.2); } }
 
 /* --- TYPOGRAPHY --- */
 h1, h2, h3, .logo-text, .counter { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; font-weight: 700; }
@@ -76,13 +85,8 @@ img { max-width: 100%; display: block; }
 .social-icon-nav:hover { color: var(--primary) !important; transform: scale(1.2); }
 .burger-btn { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 5px; }
 
-/* --- ANIMATED NAV LINKS (Neu) --- */
-
-/* 1. Cyber Glitch Effect */
-.cyber-hover {
-  position: relative;
-  overflow: hidden;
-}
+/* --- ANIMATED NAV LINKS --- */
+.cyber-hover { position: relative; overflow: hidden; }
 .cyber-hover:hover {
   animation: glitchText 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
   color: var(--primary) !important;
@@ -97,36 +101,19 @@ img { max-width: 100%; display: block; }
   100% { transform: translate(0) }
 }
 
-/* 2. Chat Bubble Effect */
-.chat-hover {
-  position: relative;
-}
+.chat-hover { position: relative; }
 .chat-hover::before, .chat-hover::after {
-  content: '💬';
-  position: absolute;
-  opacity: 0;
-  font-size: 0.8rem;
-  pointer-events: none;
-  transition: 0.2s;
-  top: -5px;
+  content: '💬'; position: absolute; opacity: 0; font-size: 0.8rem; pointer-events: none; transition: 0.2s; top: -5px;
 }
 .chat-hover::before { right: -15px; }
 .chat-hover::after { right: -25px; font-size: 0.6rem; }
-
-.chat-hover:hover::before {
-  opacity: 1;
-  animation: floatBubble 1s infinite;
-}
-.chat-hover:hover::after {
-  opacity: 1;
-  animation: floatBubble 1.2s infinite 0.2s;
-}
+.chat-hover:hover::before { opacity: 1; animation: floatBubble 1s infinite; }
+.chat-hover:hover::after { opacity: 1; animation: floatBubble 1.2s infinite 0.2s; }
 @keyframes floatBubble {
   0% { transform: translateY(0) scale(0.8); opacity: 0; }
   50% { opacity: 1; }
   100% { transform: translateY(-15px) scale(1.1); opacity: 0; }
 }
-
 
 /* --- HERO SECTION --- */
 .hero { 
@@ -211,7 +198,7 @@ footer { background: #050005; border-top: 1px solid rgba(255,255,255,0.05); padd
 .footer-links li { margin-bottom: 15px; }
 .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px; text-align: center; color: rgba(255,255,255,0.2); font-size: 0.9rem; }
 
-/* --- MOBILE RESPONSIVE --- */
+/* --- MOBILE RESPONSIVE OPTIMIZATION --- */
 .mobile-menu {
   position: fixed; top: var(--header-height); left: 0; width: 100%; height: calc(100vh - var(--header-height));
   background: var(--bg-dark); z-index: 999; flex-direction: column; padding: 30px;
@@ -237,9 +224,22 @@ footer { background: #050005; border-top: 1px solid rgba(255,255,255,0.05); padd
   .hero-btns { justify-content: center; width: 100%; }
   .btn { width: 100%; } 
   .hero-visual { width: 100%; padding: 0; }
-  .stats-card { width: 100%; max-width: none; transform: none !important; margin-top: 10px; padding: 25px 20px; display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+  
+  /* BÜNDIG FIX */
+  .stats-card { 
+    width: 100%; 
+    max-width: none; 
+    transform: none !important; 
+    margin-top: 10px; 
+    padding: 25px 20px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; /* Alles Links */
+    text-align: left; 
+  }
   .stat-row { width: 100%; justify-content: flex-start; }
   .stat-data { text-align: left; }
+  
   .footer-top { grid-template-columns: 1fr; text-align: center; }
   .social-links { justify-content: center; }
   .section-padding { padding: 60px 0; }
