@@ -4,10 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Über uns | TEAM LAZER</title>
-  
   <link rel="stylesheet" href="../style/global.css" />
   <link rel="stylesheet" href="../style/about.css" />
-  
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
 </head>
@@ -36,6 +34,7 @@
         <a href="../index.html">Home</a>
         <a href="about.html" class="active">Über uns</a>
         <a href="contact.html">Kontakt</a>
+        <a href="../index.html#network" class="cyber-hover">Netzwerk</a>
         <a href="https://discord.gg/DEINLINK" target="_blank" class="chat-hover">Discord</a>
       </nav>
       <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
@@ -73,7 +72,6 @@
   <section id="team" class="section-padding bg-darker">
     <div class="container">
       <div class="section-header text-center"><h2>Active <span class="highlight">Roster</span></h2></div>
-      
       <div class="team-structure">
         <div class="team-row">
           <div class="team-member purple scroll-reveal">
@@ -85,24 +83,22 @@
             <div class="tm-body"><p>Service • Management</p></div>
           </div>
         </div>
-
         <div class="team-row">
-          <div class="team-member green scroll-reveal delay-2">
+          <div class="team-member green scroll-reveal">
             <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Dev"><div class="tm-titles"><h3>Username</h3><span class="badge">DEV</span></div></div>
             <div class="tm-body"><p>Java • Backend</p></div>
           </div>
-          <div class="team-member green scroll-reveal delay-2">
+          <div class="team-member green scroll-reveal delay-1">
             <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Dev"><div class="tm-titles"><h3>Username</h3><span class="badge">DEV</span></div></div>
             <div class="tm-body"><p>Web • API</p></div>
           </div>
         </div>
-
         <div class="team-row">
-          <div class="team-member blue scroll-reveal delay-3">
-            <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Umbra"><div class="tm-titles"><h3>Umbra</h3><span class="badge">MOD</span></div></div>
+          <div class="team-member blue scroll-reveal">
+            <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Mod"><div class="tm-titles"><h3>Umbra</h3><span class="badge">MOD</span></div></div>
             <div class="tm-body"><p>Support</p></div>
           </div>
-          <div class="team-member blue scroll-reveal delay-3">
+          <div class="team-member blue scroll-reveal delay-1">
             <div class="tm-head"><img src="../images/tl-logo-nobg.webp" alt="Mod"><div class="tm-titles"><h3>Username</h3><span class="badge">MOD</span></div></div>
             <div class="tm-body"><p>Tickets</p></div>
           </div>
@@ -113,9 +109,9 @@
 
   <section id="values" class="section-padding">
     <div class="container grid-3">
-      <div class="value-card"><h3>Sicherheit</h3></div>
-      <div class="value-card"><h3>Speed</h3></div>
-      <div class="value-card"><h3>Fairness</h3></div>
+        <div class="value-card"><h3>Sicherheit</h3></div>
+        <div class="value-card"><h3>Speed</h3></div>
+        <div class="value-card"><h3>Fairness</h3></div>
     </div>
   </section>
 
@@ -123,13 +119,45 @@
     <div class="container">
       <div class="section-header text-center"><h2>FAQ</h2></div>
       <div class="accordion-wrapper">
-        <div class="accordion-item"><div class="accordion-header"><span>Frage 1</span></div><div class="accordion-content"><p>Antwort.</p></div></div>
-        <div class="accordion-item"><div class="accordion-header"><span>Frage 2</span></div><div class="accordion-content"><p>Antwort.</p></div></div>
+        <div class="accordion-item"><div class="accordion-header"><span>Wie kann ich joinen?</span></div><div class="accordion-content"><p>Einfach Discord Button klicken.</p></div></div>
+        <div class="accordion-item"><div class="accordion-header"><span>Sucht ihr Developer?</span></div><div class="accordion-content"><p>Ja, melde dich im Ticket.</p></div></div>
       </div>
     </div>
   </section>
 
-  <footer><div class="container text-center"><p>&copy; 2026 TEAM LAZER.</p></div></footer>
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="../images/tl-logo-nobg.webp" alt="Logo" class="footer-logo" />
+          <p>Gaming Excellence & Development.</p>
+          <div class="social-links">
+            <a href="#"><i class="fa-brands fa-discord"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#"><i class="fa-brands fa-twitch"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Bereiche</h4>
+          <ul>
+            <li><a href="../index.html#network">Content</a></li>
+            <li><a href="../index.html#network">Services</a></li>
+            <li><a href="#intro">Philosophie</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Rechtliches</h4>
+          <ul>
+            <li><a href="#">Impressum</a></li>
+            <li><a href="#">Datenschutz</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 TEAM LAZER. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
 
   <script src="../script/main.js"></script>
   <script src="../script/ladder.js"></script>
