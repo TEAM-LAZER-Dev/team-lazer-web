@@ -2,168 +2,177 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Über uns | TEAM LAZER</title>
-  <meta name="theme-color" content="#0a0b10" />
-
-  <link rel="icon" type="image/webp" href="../images/tl-logo-nobg.webp" />
-  <link rel="stylesheet" href="../style/main.css" />
   
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style/global.css" />
+  <link rel="stylesheet" href="../style/about.css" />
+  
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
 </head>
-
 <body>
 
   <div class="global-bg"></div>
 
-  <header class="navbar" id="navbar">
+  <header class="navbar">
     <div class="container nav-container">
       <a class="nav-logo" href="../index.html">
-        <img src="../images/tl-logo-nobg.webp" alt="TEAM LAZER Logo" />
+        <img src="../images/tl-logo-nobg.webp" alt="Logo" />
         <span class="logo-text">TEAM LAZER</span>
       </a>
-
       <nav class="nav-links">
         <a href="../index.html">Home</a>
         <a href="about.html" class="active">Über uns</a>
         <a href="../index.html#network" class="cyber-hover">Netzwerk</a>
-        <a href="https://discord.gg/DEINLINK" target="_blank" class="chat-hover">Discord</a>
       </nav>
-
-      <div class="nav-actions">
-        <a href="https://youtube.com/@DEINKANAL" target="_blank" class="desktop-only social-icon-nav">
-          <i class="fa-brands fa-youtube"></i>
-        </a>
-        <button class="burger-btn" id="burgerBtn" aria-label="Menü">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-      </div>
+      <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
     </div>
   </header>
 
   <div class="mobile-menu" id="mobileMenu">
-    <a href="../index.html" class="mobile-link"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="about.html" class="mobile-link active"><i class="fa-solid fa-star"></i> Über uns</a>
-    <a href="../index.html#network" class="mobile-link"><i class="fa-solid fa-users"></i> Netzwerk</a>
-    <a href="https://discord.gg/DEINLINK" target="_blank" class="mobile-link"><i class="fa-brands fa-discord"></i> Discord</a>
+    <a href="../index.html" class="mobile-link">Home</a>
+    <a href="about.html" class="mobile-link active">Über uns</a>
   </div>
 
-  <section class="hero small-hero">
-    <div class="container hero-content fade-in-up">
-      <div class="hero-text text-center">
-        <span class="hero-tag">DIE MISSION</span>
-        <h1>Mehr als nur <br><span class="highlight">Gaming</span></h1>
-        <p>Wir sind Entwickler, Gamer und Visionäre. Erfahre, wer hinter Team Lazer steckt.</p>
-      </div>
+  <section class="about-hero">
+    <div class="container text-center fade-in-up">
+      <span class="hero-tag">THE CREW</span>
+      <h1>BEHIND <span class="highlight">TEAM LAZER</span></h1>
+      <p>Gamer. Entwickler. Visionäre. <br>Wir bauen die Community der Zukunft.</p>
     </div>
+    <div class="hero-glow"></div>
   </section>
 
-  <section class="section-padding">
-    <div class="container split-layout">
-      <div class="split-text scroll-reveal">
-        <h2>Unsere <span class="highlight">Geschichte</span></h2>
-        <p>Alles begann 2020 mit einem einfachen Discord-Server und einer Vision: Einen Ort zu schaffen, an dem Gaming fair, sicher und professionell ist.</p>
-        <p>Was als kleine Gruppe von Freunden startete, ist heute ein Netzwerk aus über 400 Mitgliedern, eigenen Software-Lösungen und einem der vertrauenswürdigsten Service-Anbieter im deutschsprachigen Raum.</p>
-        
-        <div class="stats-mini-grid">
-          <div class="mini-stat">
-            <strong>2020</strong>
-            <span>Gründung</span>
-          </div>
-          <div class="mini-stat">
-            <strong>400+</strong>
-            <span>Community</span>
-          </div>
-          <div class="mini-stat">
-            <strong>24/7</strong>
-            <span>Support</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="split-visual scroll-reveal delay-1">
-        <div class="abstract-box">
-          <i class="fa-solid fa-gamepad"></i>
-          <div class="orbit-circle"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section-padding bg-darker">
+  <section class="mission-section">
     <div class="container">
-      <div class="section-header scroll-reveal">
-        <h2>Das <span class="highlight">Team</span></h2>
-        <p class="muted">Die Köpfe hinter dem Projekt.</p>
-      </div>
-
-      <div class="team-grid">
-        
-        <div class="team-card scroll-reveal">
-          <div class="team-avatar">
-            <img src="../images/tl-logo-nobg.webp" alt="Admin" />
-          </div>
-          <h3>Owner Name</h3>
-          <span class="role highlight">Founder & Lead Dev</span>
-          <p>Der Kopf des Ganzen. Spezialisiert auf Discord Bots und Web-Entwicklung.</p>
+      <div class="mission-grid">
+        <div class="mission-card scroll-reveal">
+          <i class="fa-solid fa-rocket"></i>
+          <h3>Innovation</h3>
+          <p>Wir bleiben nicht stehen. TEAM LAZER entwickelt ständig neue Tools.</p>
         </div>
-
-        <div class="team-card scroll-reveal delay-1">
-          <div class="team-avatar">
-            <img src="../images/tl-logo-nobg.webp" alt="Admin" />
-          </div>
-          <h3>Admin Name</h3>
-          <span class="role">Community Manager</span>
-          <p>Sorgt für Ordnung im Discord und kümmert sich um Support-Tickets.</p>
+        <div class="mission-card scroll-reveal delay-1">
+          <i class="fa-solid fa-shield-halved"></i>
+          <h3>Sicherheit</h3>
+          <p>Schutz und Fairness stehen bei TEAM LAZER an oberster Stelle.</p>
         </div>
-
-        <div class="team-card scroll-reveal delay-2">
-          <div class="team-avatar">
-            <img src="../images/tl-logo-nobg.webp" alt="Admin" />
-          </div>
-          <h3>Mod Name</h3>
-          <span class="role">Head of Boosting</span>
-          <p>Experte für In-Game Services und Account Sicherheit.</p>
+        <div class="mission-card scroll-reveal delay-2">
+          <i class="fa-solid fa-users"></i>
+          <h3>Community</h3>
+          <p>Über 400 Mitglieder. Wir sind eine Familie, kein Business.</p>
         </div>
-
       </div>
     </div>
   </section>
 
-  <section class="cta-section scroll-reveal">
-    <div class="container cta-content">
-      <h2>Werde Teil des Teams</h2>
-      <p>Wir suchen immer nach talentierten Leuten.</p>
-      <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim scale-hover">Bewerben <i class="fa-solid fa-paper-plane"></i></a>
+  <section class="team-section">
+    <div class="container">
+      <div class="section-header text-center scroll-reveal">
+        <h2>DIE <span class="highlight">RÄNGE</span></h2>
+        <p class="muted">Wer leitet TEAM LAZER?</p>
+      </div>
+
+      <div class="rank-tier purple-tier">
+        <h3 class="tier-title">MANAGEMENT & LEAD</h3>
+        <div class="team-grid two-col">
+          
+          <div class="member-card glow-purple scroll-reveal">
+            <div class="img-container">
+              <div class="spin-ring"></div>
+              <img src="../images/tl-logo-nobg.webp" alt="Fivozo" /> </div>
+            <div class="member-info">
+              <h2>Fivozo</h2>
+              <span class="main-role">Owner & Lead</span>
+              <div class="role-tags">
+                <span>Developer</span><span>Product Manager</span>
+                <span>Service</span><span>Designer</span><span>Social Media</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="member-card glow-purple scroll-reveal delay-1">
+            <div class="img-container">
+              <div class="spin-ring"></div>
+              <img src="../images/tl-logo-nobg.webp" alt="Wizzard" /> </div>
+            <div class="member-info">
+              <h2>Wizzard Gaming</h2>
+              <span class="main-role">Co-Owner</span>
+              <div class="role-tags">
+                <span>Product Manager</span><span>Service</span><span>Social Media</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="rank-tier green-tier">
+        <h3 class="tier-title">DEVELOPMENT</h3>
+        <div class="team-grid one-col">
+          
+          <div class="member-card glow-green scroll-reveal">
+            <div class="img-container">
+              <div class="spin-ring"></div>
+              <img src="../images/tl-logo-nobg.webp" alt="Dev" /> </div>
+            <div class="member-info">
+              <h2>Username</h2>
+              <span class="main-role">Developer</span>
+              <div class="role-tags">
+                <span>Discord Mod</span><span>Coding</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="rank-tier blue-tier">
+        <h3 class="tier-title">MODERATION</h3>
+        <div class="team-grid two-col">
+          
+          <div class="member-card glow-blue scroll-reveal">
+            <div class="img-container">
+              <div class="spin-ring"></div>
+              <img src="../images/tl-logo-nobg.webp" alt="Umbra" /> </div>
+            <div class="member-info">
+              <h2>Umbra</h2>
+              <span class="main-role">Moderator</span>
+              <div class="role-tags">
+                <span>Support</span><span>Community Watch</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="member-card glow-blue scroll-reveal delay-1">
+            <div class="img-container">
+              <div class="spin-ring"></div>
+              <img src="../images/tl-logo-nobg.webp" alt="Mod" /> </div>
+            <div class="member-info">
+              <h2>Username</h2>
+              <span class="main-role">Moderator</span>
+              <div class="role-tags">
+                <span>Support</span><span>Ticket Management</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container text-center">
+      <h2>Werde Teil von TEAM LAZER</h2>
+      <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim scale-hover">Join Discord</a>
     </div>
   </section>
 
   <footer>
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <img src="../images/tl-logo-nobg.webp" alt="Logo" class="footer-logo" />
-          <p>Gaming Excellence & Development.</p>
-          <div class="social-links">
-            <a href="#"><i class="fa-brands fa-discord"></i></a>
-            <a href="#"><i class="fa-brands fa-youtube"></i></a>
-          </div>
-        </div>
-        <div class="footer-links">
-          <h4>Links</h4>
-          <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="about.html">Über uns</a></li>
-            <li><a href="impressum.html">Impressum</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 TEAM LAZER. All rights reserved.</p>
-      </div>
+    <div class="container text-center">
+      <p>&copy; 2026 TEAM LAZER. All rights reserved.</p>
     </div>
   </footer>
 
