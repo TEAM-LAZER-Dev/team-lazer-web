@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TEAM LAZER | Community & Dev</title>
+  
+  <link rel="icon" type="image/webp" href="./images/tl-logo-nobg.webp" />
+  
+  <link rel="stylesheet" href="./style/global.css" />
+  <link rel="stylesheet" href="./style/home.css" />
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+
+  <div class="global-bg"></div>
+
+  <div class="scroll-ladder desktop-only">
+    <div class="ladder-line"></div>
+    <div class="ladder-indicator" id="scrollIndicator"></div>
+    <div class="ladder-dot active" data-target="#home"></div>
+    <div class="ladder-dot" data-target="#network"></div>
+    <div class="ladder-dot" data-target="#features"></div>
+    <div class="ladder-dot" data-target="#join"></div>
+  </div>
+
+  <header class="navbar">
+    <div class="container nav-container">
+      <a class="nav-logo" href="index.html">
+        <img src="./images/tl-logo-nobg.webp" alt="Logo" />
+        <span class="logo-text">TEAM LAZER</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="pages/about.html">Über uns</a>
+        <a href="pages/contact.html">Kontakt</a>
+        <a href="#network" class="cyber-hover">Netzwerk</a>
+        <a href="https://discord.gg/DEINLINK" target="_blank" class="chat-hover">Discord</a>
+      </nav>
+      <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="mobile-link active">Home</a>
+    <a href="pages/about.html" class="mobile-link">Über uns</a>
+    <a href="pages/contact.html" class="mobile-link">Kontakt</a>
+  </div>
+
+  <section class="hero" id="home">
+    <div class="container hero-content fade-in-up">
+      <div class="hero-text">
+        <span class="hero-tag">⚡ NEXT LEVEL GAMING</span>
+        <h1>Wir bauen deine <br><span class="highlight">digitale Welt</span></h1>
+        <p>Dein Hub für professionelle Discord-Lösungen, hochwertigen Gaming-Content und exklusive In-Game Services.</p>
+        <div class="hero-btns">
+          <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim">
+            <i class="fa-brands fa-discord"></i> Community
+          </a>
+          <a href="https://youtube.com/@DEINKANAL" target="_blank" class="btn btn-secondary">
+            <i class="fa-brands fa-youtube"></i> Content
+          </a>
+        </div>
+      </div>
+      
+      <div class="hero-visual">
+        <div class="stats-card glass-panel">
+          <div class="stat-row">
+            <div class="stat-icon"><i class="fa-brands fa-discord"></i></div>
+            <div class="stat-data"><h3 class="counter" data-target="427">0</h3><p>Mitglieder</p></div>
+          </div>
+          <div class="stat-separator"></div>
+          <div class="stat-row">
+            <div class="stat-icon"><i class="fa-solid fa-code-branch"></i></div>
+            <div class="stat-data"><h3 class="counter" data-target="14">0</h3><p>Projekte</p></div>
+          </div>
+          <div class="stat-separator"></div>
+          <div class="stat-row">
+            <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+            <div class="stat-data"><h3 class="counter" data-target="93.3" data-suffix="%" data-decimals="1">0</h3><p>Zufriedenheit</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="network" class="section-padding">
+    <div class="container">
+      <div class="section-header scroll-reveal">
+        <h2>Unser <span class="highlight">Universum</span></h2>
+        <p class="muted">Alles, was Gamer und Server-Owner brauchen.</p>
+      </div>
+      <div class="category-grid">
+        <a href="#" class="game-card scroll-reveal">
+          <div class="img-wrapper"><div class="overlay-icon"><i class="fa-brands fa-youtube"></i></div></div>
+          <div class="card-info"><div><h3>Entertainment</h3><p>Highlights.</p></div><i class="fa-solid fa-play arrow"></i></div>
+        </a>
+        <a href="#" class="game-card scroll-reveal delay-1">
+          <div class="img-wrapper"><div class="overlay-icon"><i class="fa-brands fa-discord"></i></div></div>
+          <div class="card-info"><div><h3>Community Hub</h3><p>Support.</p></div><i class="fa-solid fa-users arrow"></i></div>
+        </a>
+        <div class="game-card scroll-reveal delay-2 cursor-default">
+          <div class="img-wrapper"><div class="overlay-icon"><i class="fa-solid fa-terminal"></i></div></div>
+          <div class="card-info"><div><h3>Code Factory</h3><p>Bot Dev.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="section-padding bg-darker">
+    <div class="container">
+      <div class="section-header scroll-reveal"><h2>Team Lazer <span class="highlight">DNA</span></h2></div>
+      <div class="features-wrapper">
+        <div class="feature-box slide-left"><div class="icon-box"><i class="fa-solid fa-eye"></i></div><h3>Transparenz</h3><p>Ehrliche Kommunikation.</p></div>
+        <div class="feature-box scroll-reveal delay-1"><div class="icon-box"><i class="fa-solid fa-stopwatch"></i></div><h3>Effizienz</h3><p>Schnelle Bearbeitung.</p></div>
+        <div class="feature-box slide-right delay-2"><div class="icon-box"><i class="fa-solid fa-heart"></i></div><h3>Leidenschaft</h3><p>Von Gamern für Gamer.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section scroll-reveal" id="join">
+    <div class="container cta-content">
+      <h2>Werde Teil der Bewegung</h2>
+      <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim scale-hover">Jetzt Beitreten</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-top">
+      <div class="footer-logo"><img src="./images/tl-logo-nobg.webp" alt="Logo"></div>
+      <div class="footer-links"><h4>Rechtliches</h4><ul><li><a href="#">Impressum</a></li><li><a href="#">Datenschutz</a></li></ul></div>
+      <div class="social-links"><a href="#"><i class="fa-brands fa-discord"></i></a></div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 TEAM LAZER. All rights reserved.</p></div>
+  </footer>
+
+  <script src="./script/main.js"></script>
+  <script src="./script/ladder.js"></script>
+</body>
+</html>
