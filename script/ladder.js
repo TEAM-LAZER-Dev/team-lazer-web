@@ -1,13 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   const indicator = document.getElementById('scrollIndicator');
   const dots = document.querySelectorAll('.ladder-dot');
-  
   if(!indicator) return;
 
   const updateLadder = () => {
     const scrollY = window.scrollY;
     const windowH = window.innerHeight;
-    let currentId = dots[0].getAttribute('data-target').substring(1);
+    let currentId = dots[0]?.getAttribute('data-target').substring(1) || "home";
 
     document.querySelectorAll('section').forEach(sec => {
       if(scrollY >= (sec.offsetTop - windowH/2)) {
@@ -20,17 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if(target === currentId) {
         dot.classList.add('active');
         const centerPos = dot.offsetTop + (dot.offsetHeight/2);
-        
-        indicator.classList.remove('landed', 'active');
-        void indicator.offsetWidth; 
-        indicator.classList.add('jumping');
         indicator.style.top = centerPos + 'px';
-        
-        setTimeout(() => {
-           indicator.classList.remove('jumping');
-           indicator.classList.add('landed');
-           indicator.classList.add('active');
-        }, 600);
+        indicator.classList.add('active');
       } else {
         dot.classList.remove('active');
       }
