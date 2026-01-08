@@ -1,0 +1,168 @@
+/* =========================================
+   TEAM LAZER - ABOUT PAGE STYLES
+   ========================================= */
+
+/* --- FARBEN DEFINITIONEN --- */
+:root {
+  --rank-purple: #7c3aed;
+  --rank-green: #10b981;
+  --rank-blue: #3b82f6;
+}
+
+/* HERO */
+.about-hero {
+  padding: 160px 0 100px;
+  position: relative;
+  overflow: hidden;
+}
+.about-hero h1 {
+  font-size: 4rem;
+  font-family: 'Rajdhani', sans-serif;
+  margin-bottom: 20px;
+  position: relative; z-index: 2;
+}
+.hero-glow {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+  filter: blur(60px); z-index: 1;
+  animation: pulseHero 5s infinite alternate;
+}
+@keyframes pulseHero { from { opacity: 0.5; transform: translate(-50%, -50%) scale(0.8); } to { opacity: 1; transform: translate(-50%, -50%) scale(1.1); } }
+
+/* MISSION CARDS */
+.mission-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 80px;
+}
+.mission-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 40px;
+  border-radius: 16px;
+  text-align: center;
+  transition: 0.4s;
+}
+.mission-card:hover {
+  background: rgba(255,255,255,0.06);
+  transform: translateY(-5px);
+  border-color: var(--primary);
+}
+.mission-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
+.mission-card h3 { font-size: 1.5rem; margin-bottom: 10px; color: #fff; }
+
+/* --- TEAM SECTION LAYOUT --- */
+.team-section { padding-bottom: 100px; }
+.rank-tier { margin-bottom: 80px; position: relative; }
+.tier-title {
+  text-align: center; font-family: 'Rajdhani'; font-size: 1.2rem;
+  letter-spacing: 4px; color: var(--text-muted); margin-bottom: 40px;
+  position: relative; display: inline-block; left: 50%; transform: translateX(-50%);
+}
+.tier-title::after {
+  content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+  width: 50px; height: 2px; background: var(--primary);
+}
+
+/* Anpassung der Linienfarbe pro Rang */
+.green-tier .tier-title::after { background: var(--rank-green); }
+.blue-tier .tier-title::after { background: var(--rank-blue); }
+
+/* Grid Layouts */
+.team-grid { display: grid; gap: 40px; justify-content: center; }
+.two-col { grid-template-columns: repeat(auto-fit, minmax(350px, 450px)); }
+.one-col { grid-template-columns: minmax(350px, 450px); }
+
+/* --- MEMBER CARD DESIGN --- */
+.member-card {
+  background: rgba(19, 21, 28, 0.8);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: 0.4s ease;
+  backdrop-filter: blur(10px);
+}
+
+.member-card:hover { transform: translateY(-10px); }
+
+/* Farben Logik */
+.glow-purple:hover { border-color: var(--rank-purple); box-shadow: 0 10px 40px rgba(124, 58, 237, 0.2); }
+.glow-green:hover { border-color: var(--rank-green); box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2); }
+.glow-blue:hover { border-color: var(--rank-blue); box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2); }
+
+/* AVATAR & SPIN RING */
+.img-container {
+  width: 140px; height: 140px;
+  position: relative; margin-bottom: 25px;
+  display: flex; justify-content: center; align-items: center;
+}
+
+.img-container img {
+  width: 120px; height: 120px;
+  border-radius: 50%; object-fit: cover;
+  position: relative; z-index: 2;
+  border: 3px solid var(--bg-dark);
+}
+
+/* Der drehende Ring */
+.spin-ring {
+  position: absolute; width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #fff;
+  border-left-color: #fff;
+  opacity: 0.3;
+  animation: spinSlow 8s linear infinite;
+  z-index: 1;
+}
+
+/* Ring Farben */
+.glow-purple .spin-ring { border-top-color: var(--rank-purple); border-left-color: var(--rank-purple); }
+.glow-green .spin-ring { border-top-color: var(--rank-green); border-left-color: var(--rank-green); }
+.glow-blue .spin-ring { border-top-color: var(--rank-blue); border-left-color: var(--rank-blue); }
+
+@keyframes spinSlow { 100% { transform: rotate(360deg); } }
+
+/* TEXT & ROLLEN */
+.member-info h2 {
+  font-family: 'Rajdhani'; font-size: 2rem; color: #fff; margin-bottom: 5px; text-transform: uppercase;
+}
+.main-role {
+  font-size: 1rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  display: block; margin-bottom: 20px;
+}
+.glow-purple .main-role { color: var(--rank-purple); text-shadow: 0 0 10px rgba(124, 58, 237, 0.5); }
+.glow-green .main-role { color: var(--rank-green); text-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+.glow-blue .main-role { color: var(--rank-blue); text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+
+/* ROLE BADGES (Die vielen kleinen Rollen) */
+.role-tags {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+}
+.role-tags span {
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.05);
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-muted);
+  transition: 0.3s;
+}
+.member-card:hover .role-tags span {
+  background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.3);
+}
+
+/* MOBILE FIX */
+@media (max-width: 900px) {
+  .team-grid { grid-template-columns: 1fr; }
+  .about-hero h1 { font-size: 2.5rem; }
+  .member-card { padding: 30px 20px; }
+}
