@@ -159,6 +159,43 @@ body {
   0% { width: 100%; height: 100%; opacity: 1; border-width: 2px; }
   100% { width: 300%; height: 300%; opacity: 0; border-width: 0px; }
 }
+
+/* --- LEITER EASTER EGG (DAS MÄNNLEIN) --- */
+
+/* Wenn der Modus aktiv ist: Punkt wird durchsichtig, Inhalt wird sichtbar */
+.ladder-energy.little-man {
+  background: transparent !important; /* Original Punkt ausblenden */
+  box-shadow: none !important;        /* Original Leuchten weg */
+  animation: none !important;         /* Kein Pulsieren mehr */
+  /* Wichtig: Overflow muss im Parent container (scroll-ladder) sichtbar sein, 
+     falls er zu weit rausspringt. Prüfe .scroll-ladder { overflow: visible; } */
+}
+
+/* Das Männlein selbst */
+.ladder-energy.little-man::after {
+  content: '🤪'; /* Oder: 👾, 🤖, 🕺 */
+  font-size: 24px;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  
+  /* Die wilde Animation */
+  animation: crazyManAction 2s infinite ease-in-out;
+}
+
+@keyframes crazyManAction {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  10% { transform: translate(-150%, -50%) rotate(-20deg); } /* Links raus */
+  20% { transform: translate(-50%, -80%) rotate(10deg) scale(1.2); } /* Sprung hoch */
+  30% { transform: translate(50%, -50%) rotate(0deg); } /* Zurück Mitte */
+  40% { transform: translate(150%, -20%) rotate(20deg); } /* Rechts raus & runter */
+  50% { transform: translate(200%, -50%) rotate(180deg); } /* Salto rechts aussen */
+  60% { transform: translate(50%, -50%) rotate(360deg); } /* Zurück */
+  75% { transform: translate(-50%, -50%) scale(0.8); } /* Ducken */
+  85% { transform: translate(-50%, -150%) scale(1.1); } /* Super Sprung */
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+
 /* --- TYPOGRAPHY & LAYOUT --- */
 h1, h2, h3, .logo-text, .counter { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; font-weight: 700; }
 a { text-decoration: none; color: inherit; transition: 0.3s; }
