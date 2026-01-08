@@ -28,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: 0.15 });
 
-  document.querySelectorAll('.scroll-reveal, .slide-left, .slide-right, .stats-card').forEach(el => observer.observe(el));
+  document.querySelectorAll('.scroll-reveal, .slide-left, .slide-right, .stats-card, .universe-card, .feature-box').forEach(el => observer.observe(el));
 
-  // --- INTELLIGENT COUNTER ANIMATION ---
+  // --- COUNTER ANIMATION ---
   let countersStarted = false;
   function startCounters() {
     if(countersStarted) return;
@@ -38,11 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const counters = document.querySelectorAll('.counter');
     counters.forEach(counter => {
-      const target = parseFloat(counter.getAttribute('data-target')); // Kann auch Float sein
+      const target = parseFloat(counter.getAttribute('data-target'));
       const suffix = counter.getAttribute('data-suffix') || "";
-      const decimals = parseInt(counter.getAttribute('data-decimals')) || 0; // Wie viele Nachkommastellen?
+      const decimals = parseInt(counter.getAttribute('data-decimals')) || 0;
       
-      const duration = 2000; // Animation dauert immer 2 Sekunden
+      const duration = 2000; 
       const stepTime = 20;
       const steps = duration / stepTime;
       const increment = target / steps;
@@ -51,21 +51,68 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const timer = setInterval(() => {
         current += increment;
-        
         if(current >= target) {
           current = target;
           clearInterval(timer);
         }
-        
-        // Formatierung: Punkt zu Komma für deutsche Ausgabe
         let formattedNumber = current.toFixed(decimals).replace('.', ',');
         counter.innerText = formattedNumber + suffix;
-        
       }, stepTime);
     });
   }
 
-  // --- SMOOTH SCROLL ---
+  // --- SCROLL LADDER LOGIC (PC) ---
+  const ladderEnergy = document.getElementById('ladderEnergy');
+  const ladderDots = document.querySelectorAll('.ladder-dot');
+  
+  if (ladderEnergy && window.innerWidth > 900) {
+    window.addEventListener('scroll', () => {
+      // 1. Energieball bewegen (Relativ zur gesamten Seitenhöhe)
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = scrollTop / docHeight;
+      
+      // Begrenzung zwischen 0% und 100% der Leiter-Höhe
+      const ladderHeight = document.querySelector('.ladder-line').offsetHeight;
+      const movePos = Math.min(Math.max(scrollPercent * ladderHeight, 0), ladderHeight);
+      
+      ladderEnergy.style.top = movePos + 'px';
+
+      // 2. Aktive Sektion highlighten
+      let currentSectionId = "";
+      
+      document.querySelectorAll('section').forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollTop >= (sectionTop - 300)) {
+          currentSectionId = section.getAttribute('id');
+        }
+      });
+
+      ladderDots.forEach(dot => {
+        dot.classList.remove('active');
+        if (dot.getAttribute('data-target') === '#' + currentSectionId) {
+          dot.classList.add('active');
+        }
+      });
+    });
+
+    // Klick auf Dots
+    ladderDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const targetId = dot.getAttribute('data-target');
+        const targetSection = document.querySelector(targetId);
+        if (targetSection) {
+          window.scrollTo({
+            top: targetSection.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  }
+
+  // --- SMOOTH SCROLL (Allgemein) ---
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
