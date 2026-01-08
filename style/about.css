@@ -1,0 +1,38 @@
+/* COMPACT HERO */
+.small-hero { min-height: 40vh; display: flex; align-items: center; justify-content: center; padding-top: 100px; text-align: center; }
+.small-hero h1 { font-size: 3.5rem; font-family: 'Rajdhani'; margin-bottom: 10px; }
+
+/* TEAM GRID (Leaderboard Style) */
+.team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.team-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; transition: 0.3s; }
+.team-card:hover { background: rgba(255,255,255,0.06); transform: translateX(5px); }
+
+/* RANKS & COLORS */
+.rank-purple { border-left: 3px solid #9d4edd; }
+.rank-green { border-left: 3px solid #10b981; }
+.rank-blue { border-left: 3px solid #3b82f6; }
+
+.badge { font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.1); margin-left: 10px; }
+.rank-purple .badge { color: #9d4edd; }
+.rank-green .badge { color: #10b981; }
+.rank-blue .badge { color: #3b82f6; }
+
+.card-head h3 { margin: 0; display: inline-block; font-family: 'Rajdhani'; font-size: 1.3rem; }
+.team-card p { margin: 5px 0 0; font-size: 0.9rem; color: var(--text-muted); }
+
+/* ACCORDION */
+.accordion-wrapper { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+.accordion-item { background: rgba(255,255,255,0.03); border-radius: 8px; overflow: hidden; }
+.accordion-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; font-weight: 700; }
+.accordion-header:hover { background: rgba(255,255,255,0.05); }
+.accordion-content { max-height: 0; overflow: hidden; transition: 0.3s; padding: 0 20px; color: var(--text-muted); }
+.accordion-item.active .accordion-content { max-height: 150px; padding-bottom: 20px; }
+
+/* TILE ANIMATION (Background) */
+.tile-container { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.bg-tile { position: absolute; background: rgba(124, 58, 237, 0.05); border: 1px solid rgba(124, 58, 237, 0.1); animation: tileFloat 15s linear forwards; }
+@keyframes tileFloat { from { transform: translateY(110vh) rotate(0deg); opacity: 0; } 50% { opacity: 0.3; } to { transform: translateY(-20vh) rotate(45deg); opacity: 0; } }
+
+@media (max-width: 768px) {
+  .team-grid { grid-template-columns: 1fr; }
+}
