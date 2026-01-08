@@ -147,4 +147,109 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  document.addEventListener('DOMContentLoaded', () => {
+  
+  // --- MOBILE MENU ---
+  const burgerBtn = document.getElementById('burgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burgerBtn?.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+    const icon = burgerBtn.querySelector('i');
+    if (mobileMenu.classList.contains('active')) {
+      icon.classList.remove('fa-bars'); icon.classList.add('fa-xmark');
+    } else {
+      icon.classList.remove('fa-xmark'); icon.classList.add('fa-bars');
+    }
+  });
+
+  // --- SCROLL ANIMATIONS ---
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.scroll-reveal, .slide-left, .slide-right, .stats-card, .team-member, .value-card, .accordion-item').forEach(el => observer.observe(el));
+
+  // --- LADDER LOGIC ---
+  const scrollIndicator = document.getElementById('scrollIndicator');
+  const ladderDots = document.querySelectorAll('.ladder-dot');
+  
+  if (scrollIndicator && window.innerWidth > 900) {
+    const updateLadder = () => {
+      let currentId = "intro"; // Standard
+      const midLine = window.scrollY + window.innerHeight/2;
+      
+      document.querySelectorAll('section').forEach(sec => {
+        if(midLine >= sec.offsetTop) currentId = sec.getAttribute('id');
+      });
+      
+      ladderDots.forEach(dot => {
+        const target = dot.getAttribute('data-target').substring(1);
+        if(target === currentId) {
+          dot.classList.add('active');
+          const centerPos = dot.offsetTop + dot.offsetHeight/2;
+          
+          // Reset Animation
+          scrollIndicator.classList.remove('landed');
+          // Trigger Reflow
+          void scrollIndicator.offsetWidth; 
+          
+          scrollIndicator.style.top = centerPos + 'px';
+          
+          setTimeout(() => {
+             scrollIndicator.classList.add('landed');
+             scrollIndicator.classList.add('active'); // pulsing
+          }, 600);
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    };
+    window.addEventListener('scroll', updateLadder);
+    setTimeout(updateLadder, 100);
+    
+    // Klick
+    ladderDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const target = document.querySelector(dot.getAttribute('data-target'));
+        if(target) window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
+      });
+    });
+  }
+
+  // --- ACCORDION (Klapper) ---
+  const accHeaders = document.querySelectorAll('.accordion-header');
+  accHeaders.forEach(header => {
+    header.addEventListener('click', () => {
+      header.parentElement.classList.toggle('active');
+    });
+  });
+
+  // --- 3D TILES EASTER EGG (Slower & Less) ---
+  const tileContainer = document.getElementById('tileContainer');
+  if(tileContainer) {
+    const spawnTile = () => {
+      const tile = document.createElement('div');
+      tile.className = 'bg-tile';
+      // Zufall Größe 20-60px
+      const size = Math.random() * 40 + 20; 
+      tile.style.width = size + 'px'; 
+      tile.style.height = size + 'px';
+      // Zufall Position
+      tile.style.left = Math.random() * 100 + 'vw';
+      // Zufall Speed (Langsam: 15-25s)
+      const dur = Math.random() * 10 + 15;
+      tile.style.animationDuration = dur + 's';
+      
+      tileContainer.appendChild(tile);
+      setTimeout(() => tile.remove(), dur * 1000);
+    };
+    // Nur alle 2 Sekunden eine Kachel (Weniger ist mehr)
+    setInterval(spawnTile, 2000);
+  }
+
+});
+
 });
