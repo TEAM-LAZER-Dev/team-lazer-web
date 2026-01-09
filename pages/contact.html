@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Kontakt | TEAM LAZER</title>
   <link rel="stylesheet" href="../style/global.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -12,51 +12,48 @@
   
   <header class="navbar">
     <div class="container nav-container">
-      <a class="nav-logo" href="../index.html">TEAM LAZER</a>
+      <a class="nav-logo" href="../index.html">
+        <img src="../images/tl-logo-nobg.webp" alt="Logo" />
+        <span class="logo-text">TEAM LAZER</span>
+      </a>
       <nav class="nav-links">
         <a href="../index.html">Home</a>
         <a href="about.html">Über uns</a>
         <a href="contact.html" class="active">Kontakt</a>
+        <a href="../index.html#network" class="cyber-hover">Netzwerk</a>
+        <a href="https://discord.gg/DEINLINK" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
       </nav>
+      <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
     </div>
   </header>
 
-  <section class="hero small-hero" style="min-height: 60vh;">
-    <div class="container text-center">
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="../index.html" class="mobile-link"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="about.html" class="mobile-link"><i class="fa-solid fa-users"></i> Über uns</a>
+    <a href="contact.html" class="mobile-link active"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+  </div>
+
+  <section class="hero small-hero" style="min-height: 60vh; padding-top: 100px;">
+    <div class="container text-center fade-in-up">
+      <span class="hero-tag">SUPPORT</span>
       <h1>KONTAKT</h1>
-      <p>Wir freuen uns auf deine Nachricht.</p>
-      <form id="contactForm" style="max-width: 400px; margin: 40px auto; display: flex; flex-direction: column; gap: 15px;">
-        <input type="text" placeholder="Name" style="padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px;">
-        <input type="email" placeholder="Email" style="padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px;">
-        <textarea rows="5" placeholder="Nachricht" style="padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px;"></textarea>
-        <button type="submit" class="btn btn-primary">Senden</button>
+      <p style="margin-bottom: 30px;">Schreib uns eine Nachricht oder komm auf den Discord.</p>
+      
+      <form id="contactForm" style="max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+        <input type="text" placeholder="Dein Name" style="padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px;">
+        <input type="email" placeholder="Deine Email" style="padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px;">
+        <textarea rows="5" placeholder="Deine Nachricht..." style="padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; resize: vertical;"></textarea>
+        <button type="submit" class="btn btn-primary glow-anim">Nachricht Senden</button>
       </form>
     </div>
   </section>
 
   <footer>
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <img src="../images/tl-logo-nobg.webp" alt="Logo" class="footer-logo" />
-          <p>Gaming Excellence.</p>
-          <div class="social-links">
-            <a href="#"><i class="fa-brands fa-discord"></i></a>
-            <a href="#"><i class="fa-brands fa-youtube"></i></a>
-          </div>
-        </div>
-        <div class="footer-links">
-          <h4>Links</h4>
-          <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="about.html">Über uns</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 TEAM LAZER.</p>
-      </div>
+    <div class="container text-center">
+      <p>&copy; 2026 TEAM LAZER.</p>
     </div>
   </footer>
+
+  <script src="../script/main.js"></script>
 </body>
 </html>
