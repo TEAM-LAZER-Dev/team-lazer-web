@@ -1,22 +1,17 @@
 /* =========================================
-   GLOBAL STYLES (Navbar, Buttons, Footer)
+   GLOBAL.CSS (Navbar, Footer, Reset, Utils)
    ========================================= */
 
 :root {
   --bg-dark: #0a0b10;
   --bg-darker: #050508;
-  --bg-panel: rgba(20, 20, 30, 0.7); /* Etwas dunkler für besseren Kontrast */
+  --bg-panel: rgba(20, 20, 30, 0.7);
   --primary: #7c3aed;
   --primary-glow: rgba(124, 58, 237, 0.6);
   --text-main: #ffffff;
   --text-muted: #9ca3af;
-  --radius: 8px; /* Etwas kantiger für Tech-Look */
+  --radius: 8px;
   --header-height: 80px;
-  
-  /* Ranks */
-  --rank-purple: #9d4edd;
-  --rank-green: #10b981;
-  --rank-blue: #3b82f6;
 }
 
 /* RESET */
@@ -33,7 +28,7 @@ body {
   display: flex; flex-direction: column; min-height: 100vh;
 }
 
-/* HINTERGRUND */
+/* HINTERGRUND (Global) */
 .global-bg {
   position: fixed; inset: 0; z-index: -1; background: #05000a;
   background-image: 
@@ -65,22 +60,16 @@ body {
 .delay-2 { transition-delay: 0.2s; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-/* === NEUE NAVBAR === */
+/* === NAVBAR === */
 .navbar {
   height: var(--header-height);
   position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-  background: rgba(5, 5, 10, 0.7); /* Dunkler & Transparenter */
-  backdrop-filter: blur(15px); /* Starker Blur Effekt */
-  -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  transition: all 0.3s ease;
+  background: rgba(5, 5, 10, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.3s ease;
 }
-
 .nav-container { height: 100%; display: flex; align-items: center; justify-content: space-between; }
-
 .nav-logo { 
-  display: flex; align-items: center; gap: 12px; 
-  font-size: 1.5rem; letter-spacing: 2px; color: #fff; text-decoration: none; 
+  display: flex; align-items: center; gap: 12px; font-size: 1.5rem; letter-spacing: 2px; color: #fff; text-decoration: none; 
   font-family: 'Rajdhani', sans-serif; font-weight: 800; text-transform: uppercase;
 }
 .nav-logo img { height: 38px; filter: drop-shadow(0 0 5px rgba(124,58,237,0.5)); transition: 0.3s; }
@@ -91,67 +80,33 @@ body {
   font-weight: 600; font-size: 0.9rem; color: var(--text-muted); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
   position: relative; padding: 25px 0; transition: 0.3s;
 }
-
-/* Cooler Underline Effekt */
+.nav-links a:hover, .nav-links a.active { color: #fff; text-shadow: 0 0 10px var(--primary-glow); }
 .nav-links a::after {
   content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
-  background: var(--primary); box-shadow: 0 -2px 10px var(--primary);
-  transition: width 0.3s ease;
+  background: var(--primary); box-shadow: 0 -2px 10px var(--primary); transition: width 0.3s ease;
 }
-.nav-links a:hover, .nav-links a.active { color: #fff; text-shadow: 0 0 10px var(--primary-glow); }
 .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
 
-/* Spezial Button in Navbar (Discord) */
-.nav-links a.chat-hover {
-  padding: 8px 20px; border-radius: 4px; background: rgba(88, 101, 242, 0.1); 
-  border: 1px solid rgba(88, 101, 242, 0.3); color: #fff; margin-left: 10px;
-}
-.nav-links a.chat-hover:hover {
-  background: #5865F2; border-color: #5865F2; box-shadow: 0 0 20px rgba(88, 101, 242, 0.4); transform: translateY(-2px);
-}
-.nav-links a.chat-hover::after { display: none; } /* Kein Underline beim Button */
+/* Spezial-Klassen */
+.nav-links a.chat-hover { padding: 8px 20px; border-radius: 4px; background: rgba(88, 101, 242, 0.1); border: 1px solid rgba(88, 101, 242, 0.3); color: #fff; margin-left: 10px; }
+.nav-links a.chat-hover:hover { background: #5865F2; border-color: #5865F2; box-shadow: 0 0 20px rgba(88, 101, 242, 0.4); transform: translateY(-2px); }
+.nav-links a.chat-hover::after { display: none; }
 
 .burger-btn { display: none; background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
 
-/* === NEUE BUTTONS (Fix) === */
+/* === BUTTONS === */
 .btn { 
-  padding: 14px 36px; border-radius: 6px; font-weight: 700; 
-  display: inline-flex; align-items: center; justify-content: center; gap: 10px; 
-  cursor: pointer; border: none; transition: all 0.3s ease; 
-  font-size: 1rem; text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
-  font-family: 'Rajdhani', sans-serif; position: relative; overflow: hidden;
+  padding: 14px 36px; border-radius: 6px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 10px; 
+  cursor: pointer; border: none; transition: 0.3s; font-size: 1rem; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; font-family: 'Rajdhani', sans-serif;
 }
-
-/* Primary Button (Lila Glow) */
-.btn-primary { 
-  background: var(--primary); color: #fff; 
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.4); border: 1px solid var(--primary);
-}
-.btn-primary:hover { 
-  transform: translateY(-3px); 
-  box-shadow: 0 0 40px var(--primary), 0 0 10px #fff inset; 
-  background: #6d28d9; /* Etwas dunkler für Kontrast */
-}
-
-/* Secondary Button (Transparent) */
-.btn-secondary { 
-  background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; 
-}
-.btn-secondary:hover { 
-  border-color: var(--primary); color: var(--primary); 
-  background: rgba(124, 58, 237, 0.1);
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
-}
-
-/* Glow Animation für Hero Button */
+.btn-primary { background: var(--primary); color: #fff; box-shadow: 0 0 20px rgba(124, 58, 237, 0.4); border: 1px solid var(--primary); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 40px var(--primary), 0 0 10px #fff inset; background: #6d28d9; }
+.btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+.btn-secondary:hover { border-color: var(--primary); color: var(--primary); background: rgba(124, 58, 237, 0.1); box-shadow: 0 0 20px rgba(124, 58, 237, 0.2); }
 .glow-anim { animation: btnPulse 3s infinite; }
-@keyframes btnPulse { 
-  0% { box-shadow: 0 0 15px rgba(124, 58, 237, 0.4); } 
-  50% { box-shadow: 0 0 30px rgba(124, 58, 237, 0.8); } 
-  100% { box-shadow: 0 0 15px rgba(124, 58, 237, 0.4); } 
-}
+@keyframes btnPulse { 0%, 100% { box-shadow: 0 0 15px rgba(124, 58, 237, 0.4); } 50% { box-shadow: 0 0 30px rgba(124, 58, 237, 0.8); } }
 
-/* SCROLL LEITER */
+/* SCROLL LEITER (Global Element) */
 .scroll-ladder { position: fixed; left: 30px; top: 50%; transform: translateY(-50%); height: 40vh; width: 20px; z-index: 100; display: flex; flex-direction: column; justify-content: space-between; align-items: center; pointer-events: none; }
 .ladder-line { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: rgba(255,255,255,0.1); transform: translateX(-50%); z-index: 1; }
 .ladder-indicator { position: absolute; left: 50%; width: 10px; height: 10px; background: var(--primary); border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--primary); z-index: 3; transition: top 0.5s cubic-bezier(0.5, 0, 0.3, 1); }
@@ -159,12 +114,6 @@ body {
 .ladder-dot { width: 14px; height: 14px; background: #000; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; z-index: 2; cursor: pointer; transition: 0.3s; pointer-events: all; }
 .ladder-dot:hover { border-color: var(--primary); transform: scale(1.2); }
 .ladder-dot.active { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 15px var(--primary); }
-
-/* MOBILE MENU */
-.mobile-menu { position: fixed; top: var(--header-height); left: 0; width: 100%; height: 0; background: rgba(5,5,10,0.98); backdrop-filter: blur(20px); z-index: 999; overflow: hidden; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.mobile-menu.active { height: auto; padding-bottom: 20px; }
-.mobile-link { font-size: 1.2rem; padding: 20px 30px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 600; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; display: block; }
-.mobile-link:active { background: rgba(255,255,255,0.05); }
 
 /* FOOTER */
 footer { background: #050005; border-top: 1px solid rgba(255,255,255,0.05); padding: 80px 0 30px; margin-top: auto; }
@@ -180,7 +129,11 @@ footer { background: #050005; border-top: 1px solid rgba(255,255,255,0.05); padd
 .footer-links a:hover { color: #fff; transform: translateX(5px); display: inline-block; }
 .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px; text-align: center; color: rgba(255,255,255,0.2); font-size: 0.9rem; }
 
-/* RESPONSIVE */
+/* MOBILE MENU & RESPONSIVE */
+.mobile-menu { position: fixed; top: var(--header-height); left: 0; width: 100%; height: 0; background: rgba(5,5,10,0.98); backdrop-filter: blur(20px); z-index: 999; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.mobile-menu.active { height: auto; padding-bottom: 20px; }
+.mobile-link { font-size: 1.2rem; padding: 20px 30px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 600; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; display: block; }
+
 @media (max-width: 900px) {
   .nav-links, .desktop-only { display: none !important; }
   .burger-btn { display: block; }
