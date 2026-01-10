@@ -19,11 +19,7 @@
   <div class="scroll-ladder desktop-only">
     <div class="ladder-line"></div>
     <div class="ladder-indicator" id="scrollIndicator"></div>
-    <div class="ladder-dot active" data-target="#intro" title="Start"></div>
-    <div class="ladder-dot" data-target="#story" title="Vision"></div>
-    <div class="ladder-dot" data-target="#team" title="Team"></div>
-    <div class="ladder-dot" data-target="#socials" title="Netzwerk"></div>
-  </div>
+    </div>
 
   <header class="navbar">
     <div class="container nav-container">
@@ -47,39 +43,120 @@
     <a href="contact.html" class="mobile-link">Kontakt</a>
   </div>
 
-  <section id="intro" class="hero small-hero">
+  <section id="intro" class="hero small-hero" data-ladder-title="Start">
     <div class="container text-center fade-in-up">
       <span class="hero-tag">INSIDE THE CORE</span>
       <h1>TEAM LAZER <span class="highlight">DNA</span></h1>
-      <p>Wir bauen nicht nur Projekte, wir erschaffen digitale Welten mit Präzision und Leidenschaft.</p>
+      <p>Wir bauen nicht nur Projekte, wir erschaffen digitale Welten mit Präzision.</p>
     </div>
   </section>
   
-  <section id="story" class="section-padding">
+  <section id="story" class="section-padding" data-ladder-title="Vision">
     <div class="container">
       <div class="split-layout">
         <div class="scroll-reveal">
           <h2 class="highlight">Unsere Philosophie</h2>
           <div class="about-text-block">
-            <p>Was 2026 als Vision begann, hat sich heute zu einem Hub für technische Exzellenz entwickelt. Bei Team Lazer setzen wir auf Transparenz, Geschwindigkeit und eine Qualität, die keine Kompromisse eingeht.</p>
+            <p>Was 2026 als Vision begann, ist heute ein Hub für technische Exzellenz. Transparenz, Geschwindigkeit und kompromisslose Qualität sind keine Marketing-Begriffe, sondern unser Standard.</p>
             <br>
-            <p>Jede Codezeile und jedes Designelement wird von Gamern für Gamer entwickelt, um das bestmögliche Erlebnis in der digitalen Welt zu garantieren.</p>
+            <p>Von Gamern für Gamer entwickelt – jede Zeile Code dient dazu, das Spielerlebnis zu verbessern.</p>
           </div>
         </div>
         <div class="glass-box scroll-reveal delay-1">
           <i class="fa-solid fa-shield-halved"></i>
-          <h3>99.9% Qualität</h3>
-          <p>Nur das Beste für unsere Community.</p>
+          <h3>99.9% Uptime</h3>
+          <p>Stabilität ist unser Fundament.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="team" class="section-padding bg-darker">
+  <section id="history" class="section-padding bg-darker" data-ladder-title="Historie">
+    <div class="container">
+      <div class="section-header text-center scroll-reveal">
+        <h2>Die <span class="highlight">Evolution</span></h2>
+        <p class="muted">Der Weg von der Idee zur Realität.</p>
+      </div>
+      <div class="timeline">
+        <div class="tl-item scroll-reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-date">Q1 2024</span>
+            <h4>Der Ursprung</h4>
+            <p>Gründung der Idee und erste Bot-Prototypen auf Discord.</p>
+          </div>
+        </div>
+        <div class="tl-item scroll-reveal delay-1">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-date">Q3 2024</span>
+            <h4>Expansion</h4>
+            <p>Erweiterung des Teams um zwei Developer. Start der Website.</p>
+          </div>
+        </div>
+        <div class="tl-item scroll-reveal delay-2">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-date">Q2 2025</span>
+            <h4>Community Hub</h4>
+            <p>Launch des öffentlichen Discord Servers & Partner-Programms.</p>
+          </div>
+        </div>
+        <div class="tl-item scroll-reveal delay-3">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-date">HEUTE</span>
+            <h4>Next Level</h4>
+            <p>Full-Service Agentur für Gaming Communities & Content Creator.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tech" class="section-padding" data-ladder-title="Technik">
+    <div class="container">
+      <div class="section-header text-center scroll-reveal">
+        <h2>Unser <span class="highlight">Arsenal</span></h2>
+        <p class="muted">Tools of the Trade.</p>
+      </div>
+      <div class="tech-grid scroll-reveal">
+        <div class="tech-card"><i class="fa-brands fa-js" style="color: #f7df1e;"></i><span>JavaScript</span></div>
+        <div class="tech-card"><i class="fa-brands fa-node" style="color: #68a063;"></i><span>Node.js</span></div>
+        <div class="tech-card"><i class="fa-brands fa-html5" style="color: #e34f26;"></i><span>HTML5</span></div>
+        <div class="tech-card"><i class="fa-brands fa-css3-alt" style="color: #264de4;"></i><span>CSS3</span></div>
+        <div class="tech-card"><i class="fa-brands fa-react" style="color: #61dbfb;"></i><span>React</span></div>
+        <div class="tech-card"><i class="fa-brands fa-python" style="color: #4584b6;"></i><span>Python</span></div>
+        <div class="tech-card"><i class="fa-brands fa-discord" style="color: #5865F2;"></i><span>D.JS</span></div>
+        <div class="tech-card"><i class="fa-solid fa-database" style="color: #00758f;"></i><span>SQL</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stats" class="section-padding bg-darker" data-ladder-title="Daten">
+    <div class="container">
+      <div class="grid-3">
+        <div class="glass-box scroll-reveal">
+          <h2 class="counter highlight" style="font-size: 3rem;" data-target="150">0</h2>
+          <p>Aktive Kunden</p>
+        </div>
+        <div class="glass-box scroll-reveal delay-1">
+          <h2 class="counter highlight" style="font-size: 3rem;" data-target="5000">0</h2>
+          <p>Lines of Code</p>
+        </div>
+        <div class="glass-box scroll-reveal delay-2">
+          <h2 class="counter highlight" style="font-size: 3rem;" data-target="24">0</h2>
+          <p>Stunden Support / 7</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" class="section-padding" data-ladder-title="Team">
     <div class="container">
       <div class="section-header text-center scroll-reveal">
         <h2>Das <span class="highlight">Roster</span></h2>
-        <p class="muted">Die Experten hinter den Kulissen von Team Lazer.</p>
+        <p class="muted">Die Experten hinter den Kulissen.</p>
       </div>
 
       <div class="team-structure">
@@ -93,10 +170,9 @@
               </div>
             </div>
             <div class="tm-body">
-              <p>Experte für Full-Stack Development, UI/UX Design, Service-Strukturen und strategisches Social Media Management.</p>
+              <p>Experte für Full-Stack Development, UI/UX Design und Strategie.</p>
             </div>
           </div>
-
           <div class="team-member purple scroll-reveal delay-1">
             <div class="tm-head">
               <img src="../images/tl-logo-nobg.webp" alt="wizzard">
@@ -106,87 +182,114 @@
               </div>
             </div>
             <div class="tm-body">
-              <p>Spezialisiert auf Product Management, In-Game Services und die Optimierung interner Workflows.</p>
+              <p>Product Management und Workflow-Optimierung.</p>
             </div>
           </div>
         </div>
-
         <div class="team-row">
-          <div class="team-member blue scroll-reveal">
-            <div class="tm-head">
-              <img src="../images/tl-logo-nobg.webp" alt="nico">
-              <div class="tm-titles">
-                <h3>nico</h3>
-                <span class="badge">Developer & Artist</span>
-              </div>
-            </div>
-            <div class="tm-body">
-              <p>Kreativer Kopf für Web-Entwicklung, Grafikdesign und Discord-Sicherheitsarchitektur.</p>
-            </div>
-          </div>
-
-          <div class="team-member blue scroll-reveal delay-1">
+           <div class="team-member blue scroll-reveal">
             <div class="tm-head">
               <img src="../images/tl-logo-nobg.webp" alt="Dev">
               <div class="tm-titles">
-                <h3>-</h3>
+                <h3>nico</h3>
                 <span class="badge">Developer</span>
               </div>
             </div>
-            <div class="tm-body">
-              <p>Fokus auf Backend-Systeme, API-Integrationen und automatisierte Bot-Lösungen.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="team-row">
-          <div class="team-member green scroll-reveal">
-            <div class="tm-head">
-              <img src="../images/tl-logo-nobg.webp" alt="Mod">
-              <div class="tm-titles">
-                <h3>-</h3>
-                <span class="badge">Moderator</span>
-              </div>
-            </div>
-            <div class="tm-body">
-              <p>Community Support & Moderation auf allen Kanälen.</p>
-            </div>
+            <div class="tm-body"><p>Frontend Wizard & Security.</p></div>
           </div>
           <div class="team-member green scroll-reveal delay-1">
-            <div class="tm-head">
-              <img src="../images/tl-logo-nobg.webp" alt="Mod">
+             <div class="tm-head">
+              <img src="../images/tl-logo-nobg.webp" alt="Supp">
               <div class="tm-titles">
-                <h3>-</h3>
-                <span class="badge">Moderator</span>
+                <h3>Support</h3>
+                <span class="badge">Staff</span>
               </div>
             </div>
-            <div class="tm-body">
-              <p>Community Support & Moderation auf allen Kanälen.</p>
-            </div>
+            <div class="tm-body"><p>Dein direkter Draht bei Fragen.</p></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="socials" class="section-padding">
+  <section id="gallery" class="section-padding bg-darker" data-ladder-title="Showcase">
+    <div class="container">
+      <div class="section-header text-center scroll-reveal">
+        <h2>Im <span class="highlight">Fokus</span></h2>
+        <p class="muted">Einblicke in unsere Projekte.</p>
+      </div>
+      <div class="gallery-grid scroll-reveal">
+        <div class="gallery-item">
+          <img src="../images/tl-logo-nobg.webp" alt="Projekt 1">
+          <div class="gallery-overlay"><h4>Dashboard UI</h4></div>
+        </div>
+        <div class="gallery-item">
+          <img src="../images/tl-logo-nobg.webp" alt="Projekt 2">
+          <div class="gallery-overlay"><h4>Bot Logic</h4></div>
+        </div>
+        <div class="gallery-item">
+          <img src="../images/tl-logo-nobg.webp" alt="Projekt 3">
+          <div class="gallery-overlay"><h4>Community Event</h4></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="partners" class="section-padding" data-ladder-title="Partner">
     <div class="container text-center">
-      <h2 class="scroll-reveal" style="margin-bottom: 40px;">Werde Teil der <span class="highlight">Community</span></h2>
+      <h3 class="muted scroll-reveal" style="margin-bottom: 30px;">Vertraut von</h3>
+      <div class="tech-grid scroll-reveal" style="opacity: 0.6;">
+         <div class="tech-card"><i class="fa-solid fa-server"></i><span>Server A</span></div>
+         <div class="tech-card"><i class="fa-solid fa-gamepad"></i><span>Clan B</span></div>
+         <div class="tech-card"><i class="fa-brands fa-twitch"></i><span>Streamer C</span></div>
+         <div class="tech-card"><i class="fa-solid fa-crown"></i><span>Team D</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="section-padding bg-darker" data-ladder-title="FAQ">
+    <div class="container">
+      <div class="section-header text-center scroll-reveal">
+        <h2>Häufige <span class="highlight">Fragen</span></h2>
+      </div>
+      <div class="faq-container scroll-reveal">
+        <div class="accordion-item">
+          <div class="accordion-header">Bietet ihr Custom Bots an? <i class="fa-solid fa-chevron-down"></i></div>
+          <div class="accordion-content">
+            <p>Ja, wir entwickeln maßgeschneiderte Discord Bots, die genau auf deine Server-Bedürfnisse zugeschnitten sind.</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header">Sucht ihr neue Teammitglieder? <i class="fa-solid fa-chevron-down"></i></div>
+          <div class="accordion-content">
+            <p>Aktuell sind unsere Reihen gefüllt, aber wir halten immer Ausschau nach Talenten. Join unserem Discord für Updates!</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header">Wie kontaktiere ich euch am besten? <i class="fa-solid fa-chevron-down"></i></div>
+          <div class="accordion-content">
+            <p>Der schnellste Weg ist über unser Ticket-System auf dem Discord Server.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="socials" class="section-padding" data-ladder-title="Netzwerk">
+    <div class="container text-center">
+      <h2 class="scroll-reveal" style="margin-bottom: 40px;">Join the <span class="highlight">Club</span></h2>
       <div class="grid-3">
         <a href="#" class="value-card scroll-reveal">
           <i class="fa-brands fa-youtube" style="color: #ff0000;"></i>
           <h3>YouTube</h3>
-          <p>Täglicher Content & Dev-Logs.</p>
         </a>
         <a href="#" class="value-card scroll-reveal delay-1">
-          <i class="fa-brands fa-instagram" style="color: #e1306c;"></i>
-          <h3>Instagram</h3>
-          <p>Updates & Behind-the-Scenes.</p>
+          <i class="fa-brands fa-discord" style="color: #5865F2;"></i>
+          <h3>Discord</h3>
         </a>
         <a href="#" class="value-card scroll-reveal delay-2">
-          <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>
-          <h3>WhatsApp</h3>
-          <p>Direkte News & Support.</p>
+          <i class="fa-brands fa-instagram" style="color: #e1306c;"></i>
+          <h3>Instagram</h3>
         </a>
       </div>
     </div>
