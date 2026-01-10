@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. Zwinge die Seite beim Laden nach oben (gegen Browser-Restore)
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
+  // 2. Aktiviere Scroll-Snap erst nach kurzer Zeit (verhindert Start-Sprung)
+  setTimeout(() => {
+    document.documentElement.classList.add('snap-active');
+  }, 500);
+
   // Mobile Menu
   const burgerBtn = document.getElementById('burgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
@@ -6,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     burgerBtn.addEventListener('click', () => mobileMenu.classList.toggle('active'));
   }
 
-  // Scroll Animations
+  // Scroll Animations (Elemente einblenden)
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(entry.isIntersecting) entry.target.classList.add('visible');
@@ -33,13 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
     update();
   });
   
-  // Accordion (About)
+  // Accordion (About Page)
   const accHeaders = document.querySelectorAll('.accordion-header');
   accHeaders.forEach(header => {
     header.addEventListener('click', () => header.parentElement.classList.toggle('active'));
   });
 
-  // Tile Spawner (About)
+  // Tile Spawner (About Page Background)
   const tileContainer = document.getElementById('tileContainer');
   if(tileContainer) {
     setInterval(() => {
