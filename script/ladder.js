@@ -5,13 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const updateLadder = () => {
     const scrollY = window.scrollY;
-    let currentId = dots[0]?.getAttribute('data-target').substring(1) || "intro";
+    const windowH = window.innerHeight;
+    let currentId = dots[0]?.getAttribute('data-target').substring(1) || "home";
 
-    // Prüfe, welche Sektion gerade sichtbar ist
-    const sections = document.querySelectorAll('section[id]');
-    sections.forEach(sec => {
-      const secTop = sec.offsetTop - 300; // Offset für früheres Aktivieren
-      if (scrollY >= secTop) {
+    document.querySelectorAll('section').forEach(sec => {
+      if(scrollY >= (sec.offsetTop - windowH/2)) {
         currentId = sec.getAttribute('id');
       }
     });
@@ -20,30 +18,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = dot.getAttribute('data-target').substring(1);
       if(target === currentId) {
         dot.classList.add('active');
-        // Berechne die Position des Indikators relativ zum ersten Punkt
-        const dotPos = dot.offsetTop;
-        indicator.style.top = (dotPos + 7) + 'px'; 
+        const centerPos = dot.offsetTop + (dot.offsetHeight/2);
+        indicator.style.top = centerPos + 'px';
+        indicator.classList.add('active');
       } else {
         dot.classList.remove('active');
       }
     });
   };
 
-  // Event Listener
   window.addEventListener('scroll', updateLadder);
-  // Einmal beim Laden ausführen
-  setTimeout(updateLadder, 200);
+  setTimeout(updateLadder, 100);
 
-  // Smooth Scroll beim Klicken auf einen Punkt
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
       const target = document.querySelector(dot.getAttribute('data-target'));
-      if(target) {
-        window.scrollTo({
-          top: target.offsetTop - 70,
-          behavior: 'smooth'
-        });
-      }
+      if(target) window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
     });
   });
 });
