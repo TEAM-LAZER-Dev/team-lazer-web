@@ -14,12 +14,11 @@
 <body>
 
   <div class="global-bg"></div>
-  <div id="tileContainer" class="tile-container"></div>
 
   <div class="scroll-ladder desktop-only">
     <div class="ladder-line"></div>
     <div class="ladder-indicator" id="scrollIndicator"></div>
-    </div>
+  </div>
 
   <header class="navbar">
     <div class="container nav-container">
@@ -43,262 +42,144 @@
     <a href="contact.html" class="mobile-link">Kontakt</a>
   </div>
 
-  <section id="intro" class="hero small-hero" data-ladder-title="Start">
-    <div class="container text-center fade-in-up">
+  <section id="start" class="small-hero" data-ladder-title="Intro">
+    <div class="container fade-in-up">
       <span class="hero-tag">INSIDE THE CORE</span>
-      <h1>TEAM LAZER <span class="highlight">DNA</span></h1>
-      <p>Wir bauen nicht nur Projekte, wir erschaffen digitale Welten mit Präzision.</p>
+      <h1>UNSERE <span class="highlight">DNA</span></h1>
+      <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+        Wir erschaffen digitale Erlebnisse. Kein Bullshit, nur Performance.
+      </p>
     </div>
   </section>
   
-  <section id="story" class="section-padding" data-ladder-title="Vision">
-    <div class="container">
-      <div class="split-layout">
-        <div class="scroll-reveal">
-          <h2 class="highlight">Unsere Philosophie</h2>
-          <div class="about-text-block">
-            <p>Was 2026 als Vision begann, ist heute ein Hub für technische Exzellenz. Transparenz, Geschwindigkeit und kompromisslose Qualität sind keine Marketing-Begriffe, sondern unser Standard.</p>
-            <br>
-            <p>Von Gamern für Gamer entwickelt – jede Zeile Code dient dazu, das Spielerlebnis zu verbessern.</p>
-          </div>
-        </div>
-        <div class="glass-box scroll-reveal delay-1">
-          <i class="fa-solid fa-shield-halved"></i>
-          <h3>99.9% Uptime</h3>
-          <p>Stabilität ist unser Fundament.</p>
-        </div>
+  <div class="bento-wrapper">
+    
+    <section id="vision" class="bento-box box-vision scroll-reveal" data-ladder-title="Vision">
+      <h2 class="bento-title">Die Philosophie</h2>
+      <p class="bento-text">
+        Team Lazer startete 2026 nicht als Business, sondern als Bewegung. Wir waren frustriert von schlechten UIs, langsamen Bots und toxischen Communitys.
+        <br><br>
+        <strong>Unsere Mission:</strong> Wir bauen Tools, die wir selbst benutzen wollen. Jedes Pixel, jede Codezeile wird auf maximalen Impact optimiert. Wir verstecken uns nicht hinter Agentur-Sprech – wir liefern ab.
+      </p>
+      <div style="margin-top: 30px;">
+        <span class="badge" style="background: rgba(124, 58, 237, 0.2); color: var(--primary);">#GAMING</span>
+        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; margin-left: 10px;">#QUALITY</span>
+      </div>
+    </section>
+
+    <section id="stats" class="bento-box box-stat-1 scroll-reveal delay-1" data-ladder-title="Impact">
+      <div class="text-center">
+        <i class="fa-solid fa-users" style="color: var(--primary); font-size: 2rem; margin-bottom: 10px;"></i>
+        <div class="stat-number counter" data-target="14000">0</div>
+        <div class="stat-label">Nutzer erreicht</div>
+      </div>
+    </section>
+
+    <div class="bento-box box-stat-2 scroll-reveal delay-2">
+      <div class="text-center">
+        <i class="fa-solid fa-code-commit" style="color: #3b82f6; font-size: 2rem; margin-bottom: 10px;"></i>
+        <div class="stat-number counter" data-target="99.9" data-suffix="%" data-decimals="1">0</div>
+        <div class="stat-label">Uptime</div>
       </div>
     </div>
+
+    <section id="team" class="bento-box box-team scroll-reveal" data-ladder-title="Squad">
+      <h2 class="bento-title text-center" style="margin-bottom: 40px;">Das <span class="highlight">Roster</span></h2>
+      <div class="team-grid">
+        <div class="mini-member">
+          <img src="../images/tl-logo-nobg.webp" alt="fivozo">
+          <h4>fivozo</h4>
+          <span>CEO & Founder</span>
+        </div>
+        <div class="mini-member">
+          <img src="../images/tl-logo-nobg.webp" alt="wizzard">
+          <h4>wizzard</h4>
+          <span>Management</span>
+        </div>
+        <div class="mini-member">
+          <img src="../images/tl-logo-nobg.webp" alt="nico">
+          <h4>nico</h4>
+          <span>Lead Dev</span>
+        </div>
+        <div class="mini-member">
+          <img src="../images/tl-logo-nobg.webp" alt="support">
+          <h4>Staff</h4>
+          <span>Support Team</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="history" class="bento-box box-timeline scroll-reveal" data-ladder-title="History">
+      <h2 class="bento-title">Evolution</h2>
+      <div class="mini-timeline">
+        <div class="mt-item">
+          <h5>2024 - Q1</h5>
+          <p>Gründung der Idee & erster Bot Prototyp.</p>
+        </div>
+        <div class="mt-item">
+          <h5>2024 - Q4</h5>
+          <p>Website Launch v1.0 & Team Erweiterung.</p>
+        </div>
+        <div class="mt-item">
+          <h5>2025</h5>
+          <p>Partner-System und Public Discord Release.</p>
+        </div>
+        <div class="mt-item">
+          <h5 style="color: #fff;">Heute</h5>
+          <p>Full-Service Hub für Creator & Gamer.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="showcase" class="bento-box box-gallery scroll-reveal delay-1" data-ladder-title="Work">
+      <img src="../images/tl-logo-nobg.webp" class="gal-img" alt="Work 1">
+      <img src="../images/tl-logo-nobg.webp" class="gal-img" alt="Work 2">
+      <img src="../images/tl-logo-nobg.webp" class="gal-img" alt="Work 3">
+      <div style="background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <span style="font-weight: 700;">Mehr ansehen <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+    </section>
+
+    <section id="tech" class="bento-box box-tech scroll-reveal" data-ladder-title="Stack">
+      <i class="fa-brands fa-js tech-icon" style="color: #f7df1e;"></i>
+      <i class="fa-brands fa-node tech-icon" style="color: #68a063;"></i>
+      <i class="fa-brands fa-react tech-icon" style="color: #61dbfb;"></i>
+      <i class="fa-brands fa-python tech-icon" style="color: #4584b6;"></i>
+      <i class="fa-brands fa-discord tech-icon" style="color: #5865F2;"></i>
+      <i class="fa-solid fa-database tech-icon" style="color: #00758f;"></i>
+    </section>
+
+    <section id="faq" class="bento-box box-faq scroll-reveal" data-ladder-title="FAQ">
+      <h2 class="bento-title">Oft gefragt</h2>
+      <div class="faq-item" style="margin-bottom: 15px;">
+        <h4 style="color: #fff; margin-bottom: 5px;">Baut ihr Custom Bots?</h4>
+        <p class="bento-text">Ja, absolut. Schreib uns einfach ein Ticket im Discord.</p>
+      </div>
+      <div class="faq-item">
+        <h4 style="color: #fff; margin-bottom: 5px;">Sucht ihr Leute?</h4>
+        <p class="bento-text">Immer. Zeig uns, was du kannst.</p>
+      </div>
+    </section>
+
+    <section id="partners" class="bento-box box-partners scroll-reveal delay-1" data-ladder-title="Partner">
+      <h2 class="bento-title">Trusted By</h2>
+      <div style="display: flex; gap: 15px; justify-content: center; font-size: 1.5rem; color: var(--text-muted);">
+        <i class="fa-brands fa-twitch"></i>
+        <i class="fa-brands fa-youtube"></i>
+        <i class="fa-solid fa-server"></i>
+      </div>
+    </section>
+
+  </div> <section id="socials" class="section-padding text-center" data-ladder-title="Join">
+    <h2 class="scroll-reveal" style="margin-bottom: 30px;">Werde Teil der <span class="highlight">Elite</span></h2>
+    <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim">
+      <i class="fa-brands fa-discord"></i> Jetzt Beitreten
+    </a>
   </section>
 
-  <section id="history" class="section-padding bg-darker" data-ladder-title="Historie">
-    <div class="container">
-      <div class="section-header text-center scroll-reveal">
-        <h2>Die <span class="highlight">Evolution</span></h2>
-        <p class="muted">Der Weg von der Idee zur Realität.</p>
-      </div>
-      <div class="timeline">
-        <div class="tl-item scroll-reveal">
-          <div class="tl-dot"></div>
-          <div class="tl-content">
-            <span class="tl-date">Q1 2024</span>
-            <h4>Der Ursprung</h4>
-            <p>Gründung der Idee und erste Bot-Prototypen auf Discord.</p>
-          </div>
-        </div>
-        <div class="tl-item scroll-reveal delay-1">
-          <div class="tl-dot"></div>
-          <div class="tl-content">
-            <span class="tl-date">Q3 2024</span>
-            <h4>Expansion</h4>
-            <p>Erweiterung des Teams um zwei Developer. Start der Website.</p>
-          </div>
-        </div>
-        <div class="tl-item scroll-reveal delay-2">
-          <div class="tl-dot"></div>
-          <div class="tl-content">
-            <span class="tl-date">Q2 2025</span>
-            <h4>Community Hub</h4>
-            <p>Launch des öffentlichen Discord Servers & Partner-Programms.</p>
-          </div>
-        </div>
-        <div class="tl-item scroll-reveal delay-3">
-          <div class="tl-dot"></div>
-          <div class="tl-content">
-            <span class="tl-date">HEUTE</span>
-            <h4>Next Level</h4>
-            <p>Full-Service Agentur für Gaming Communities & Content Creator.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="tech" class="section-padding" data-ladder-title="Technik">
-    <div class="container">
-      <div class="section-header text-center scroll-reveal">
-        <h2>Unser <span class="highlight">Arsenal</span></h2>
-        <p class="muted">Tools of the Trade.</p>
-      </div>
-      <div class="tech-grid scroll-reveal">
-        <div class="tech-card"><i class="fa-brands fa-js" style="color: #f7df1e;"></i><span>JavaScript</span></div>
-        <div class="tech-card"><i class="fa-brands fa-node" style="color: #68a063;"></i><span>Node.js</span></div>
-        <div class="tech-card"><i class="fa-brands fa-html5" style="color: #e34f26;"></i><span>HTML5</span></div>
-        <div class="tech-card"><i class="fa-brands fa-css3-alt" style="color: #264de4;"></i><span>CSS3</span></div>
-        <div class="tech-card"><i class="fa-brands fa-react" style="color: #61dbfb;"></i><span>React</span></div>
-        <div class="tech-card"><i class="fa-brands fa-python" style="color: #4584b6;"></i><span>Python</span></div>
-        <div class="tech-card"><i class="fa-brands fa-discord" style="color: #5865F2;"></i><span>D.JS</span></div>
-        <div class="tech-card"><i class="fa-solid fa-database" style="color: #00758f;"></i><span>SQL</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="stats" class="section-padding bg-darker" data-ladder-title="Daten">
-    <div class="container">
-      <div class="grid-3">
-        <div class="glass-box scroll-reveal">
-          <h2 class="counter highlight" style="font-size: 3rem;" data-target="150">0</h2>
-          <p>Aktive Kunden</p>
-        </div>
-        <div class="glass-box scroll-reveal delay-1">
-          <h2 class="counter highlight" style="font-size: 3rem;" data-target="5000">0</h2>
-          <p>Lines of Code</p>
-        </div>
-        <div class="glass-box scroll-reveal delay-2">
-          <h2 class="counter highlight" style="font-size: 3rem;" data-target="24">0</h2>
-          <p>Stunden Support / 7</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="team" class="section-padding" data-ladder-title="Team">
-    <div class="container">
-      <div class="section-header text-center scroll-reveal">
-        <h2>Das <span class="highlight">Roster</span></h2>
-        <p class="muted">Die Experten hinter den Kulissen.</p>
-      </div>
-
-      <div class="team-structure">
-        <div class="team-row">
-          <div class="team-member purple scroll-reveal">
-            <div class="tm-head">
-              <img src="../images/tl-logo-nobg.webp" alt="fivozo">
-              <div class="tm-titles">
-                <h3>fivozo</h3>
-                <span class="badge">Founder & CEO</span>
-              </div>
-            </div>
-            <div class="tm-body">
-              <p>Experte für Full-Stack Development, UI/UX Design und Strategie.</p>
-            </div>
-          </div>
-          <div class="team-member purple scroll-reveal delay-1">
-            <div class="tm-head">
-              <img src="../images/tl-logo-nobg.webp" alt="wizzard">
-              <div class="tm-titles">
-                <h3>wizzard</h3>
-                <span class="badge">Co-Owner</span>
-              </div>
-            </div>
-            <div class="tm-body">
-              <p>Product Management und Workflow-Optimierung.</p>
-            </div>
-          </div>
-        </div>
-        <div class="team-row">
-           <div class="team-member blue scroll-reveal">
-            <div class="tm-head">
-              <img src="../images/tl-logo-nobg.webp" alt="Dev">
-              <div class="tm-titles">
-                <h3>nico</h3>
-                <span class="badge">Developer</span>
-              </div>
-            </div>
-            <div class="tm-body"><p>Frontend Wizard & Security.</p></div>
-          </div>
-          <div class="team-member green scroll-reveal delay-1">
-             <div class="tm-head">
-              <img src="../images/tl-logo-nobg.webp" alt="Supp">
-              <div class="tm-titles">
-                <h3>Support</h3>
-                <span class="badge">Staff</span>
-              </div>
-            </div>
-            <div class="tm-body"><p>Dein direkter Draht bei Fragen.</p></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="gallery" class="section-padding bg-darker" data-ladder-title="Showcase">
-    <div class="container">
-      <div class="section-header text-center scroll-reveal">
-        <h2>Im <span class="highlight">Fokus</span></h2>
-        <p class="muted">Einblicke in unsere Projekte.</p>
-      </div>
-      <div class="gallery-grid scroll-reveal">
-        <div class="gallery-item">
-          <img src="../images/tl-logo-nobg.webp" alt="Projekt 1">
-          <div class="gallery-overlay"><h4>Dashboard UI</h4></div>
-        </div>
-        <div class="gallery-item">
-          <img src="../images/tl-logo-nobg.webp" alt="Projekt 2">
-          <div class="gallery-overlay"><h4>Bot Logic</h4></div>
-        </div>
-        <div class="gallery-item">
-          <img src="../images/tl-logo-nobg.webp" alt="Projekt 3">
-          <div class="gallery-overlay"><h4>Community Event</h4></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="partners" class="section-padding" data-ladder-title="Partner">
+  <footer class="bg-darker" style="margin-top: 50px;">
     <div class="container text-center">
-      <h3 class="muted scroll-reveal" style="margin-bottom: 30px;">Vertraut von</h3>
-      <div class="tech-grid scroll-reveal" style="opacity: 0.6;">
-         <div class="tech-card"><i class="fa-solid fa-server"></i><span>Server A</span></div>
-         <div class="tech-card"><i class="fa-solid fa-gamepad"></i><span>Clan B</span></div>
-         <div class="tech-card"><i class="fa-brands fa-twitch"></i><span>Streamer C</span></div>
-         <div class="tech-card"><i class="fa-solid fa-crown"></i><span>Team D</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="faq" class="section-padding bg-darker" data-ladder-title="FAQ">
-    <div class="container">
-      <div class="section-header text-center scroll-reveal">
-        <h2>Häufige <span class="highlight">Fragen</span></h2>
-      </div>
-      <div class="faq-container scroll-reveal">
-        <div class="accordion-item">
-          <div class="accordion-header">Bietet ihr Custom Bots an? <i class="fa-solid fa-chevron-down"></i></div>
-          <div class="accordion-content">
-            <p>Ja, wir entwickeln maßgeschneiderte Discord Bots, die genau auf deine Server-Bedürfnisse zugeschnitten sind.</p>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <div class="accordion-header">Sucht ihr neue Teammitglieder? <i class="fa-solid fa-chevron-down"></i></div>
-          <div class="accordion-content">
-            <p>Aktuell sind unsere Reihen gefüllt, aber wir halten immer Ausschau nach Talenten. Join unserem Discord für Updates!</p>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <div class="accordion-header">Wie kontaktiere ich euch am besten? <i class="fa-solid fa-chevron-down"></i></div>
-          <div class="accordion-content">
-            <p>Der schnellste Weg ist über unser Ticket-System auf dem Discord Server.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="socials" class="section-padding" data-ladder-title="Netzwerk">
-    <div class="container text-center">
-      <h2 class="scroll-reveal" style="margin-bottom: 40px;">Join the <span class="highlight">Club</span></h2>
-      <div class="grid-3">
-        <a href="#" class="value-card scroll-reveal">
-          <i class="fa-brands fa-youtube" style="color: #ff0000;"></i>
-          <h3>YouTube</h3>
-        </a>
-        <a href="#" class="value-card scroll-reveal delay-1">
-          <i class="fa-brands fa-discord" style="color: #5865F2;"></i>
-          <h3>Discord</h3>
-        </a>
-        <a href="#" class="value-card scroll-reveal delay-2">
-          <i class="fa-brands fa-instagram" style="color: #e1306c;"></i>
-          <h3>Instagram</h3>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <footer class="bg-darker">
-    <div class="container text-center">
-      <img src="../images/tl-logo-nobg.webp" alt="Footer Logo" style="width: 50px; margin-bottom: 15px;">
-      <p class="muted">&copy; 2026 TEAM LAZER. All rights reserved.</p>
+      <p class="muted">&copy; 2026 TEAM LAZER.</p>
     </div>
   </footer>
 
