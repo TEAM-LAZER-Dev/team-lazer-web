@@ -87,3 +87,16 @@
   border-color: var(--primary);
   transform: scale(1.05);
 }
+.team-member.purple { border-left: 4px solid var(--primary); }
+.team-member.blue { border-left: 4px solid #3b82f6; }
+.team-member.green { border-left: 4px solid #10b981; }
+
+.team-member .badge {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.05);
+  display: inline-block;
+  margin-top: 5px;
+  color: #fff;
+}
