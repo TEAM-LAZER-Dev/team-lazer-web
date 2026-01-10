@@ -1,73 +1,140 @@
 /* =========================================
-   ABOUT.CSS - UPDATES (STABLE CARDS & ARROW)
+   ABOUT.CSS - BENTO GRID & CLEAN LOOK
    ========================================= */
 
-/* --- HERO & BENTO BASIS (Unverändert) --- */
+/* --- HERO SECTION --- */
 .small-hero {
-  min-height: 40vh;
-  display: flex; align-items: center; justify-content: center;
-  padding-top: 140px; padding-bottom: 60px;
-  text-align: center; position: relative; z-index: 1;
+  min-height: 40vh; /* Etwas kompakter */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 140px; /* Mehr Platz für Navbar, verhindert "zu hoch scrollen" */
+  padding-bottom: 60px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
 }
+
 .small-hero h1 {
-  font-size: 3.8rem; font-family: 'Rajdhani', sans-serif; font-weight: 800;
-  margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; transform: none !important;
+  font-size: 3.8rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 800;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  /* Fix: Kein Wackeln durch Transform/Animation hier */
+  transform: none !important; 
 }
 
+/* --- BENTO GRID LAYOUT (Das Herzstück) --- */
+/* Ersetzt die langweiligen Sektionen untereinander */
 .bento-wrapper {
-  display: grid; grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: minmax(200px, auto); gap: 25px;
-  width: 90%; max-width: 1400px; margin: 0 auto 100px auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(200px, auto);
+  gap: 25px;
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto 100px auto;
 }
 
+/* Kachel-Basis-Style (Glass Look statt schwarz) */
 .bento-box {
-  background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 20px;
-  padding: 35px; display: flex; flex-direction: column; justify-content: center;
+  background: rgba(255, 255, 255, 0.02); /* Sehr subtil */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   transition: transform 0.4s ease, border-color 0.4s ease;
-  overflow: hidden; position: relative;
+  overflow: hidden;
+  position: relative;
 }
+
 .bento-box:hover {
-  border-color: var(--primary); transform: translateY(-5px);
+  border-color: var(--primary);
+  transform: translateY(-5px);
   box-shadow: 0 10px 40px rgba(0,0,0,0.2);
 }
 
-/* Grid Positionen */
+/* --- GRID PLATZIERUNG --- */
+/* Vision (Groß links) */
 .box-vision { grid-column: span 8; grid-row: span 2; }
+/* Stats (Rechts daneben) */
 .box-stat-1 { grid-column: span 4; }
 .box-stat-2 { grid-column: span 4; }
+
+/* Team (Volle Breite, eigene interne Grid) */
 .box-team { grid-column: span 12; padding: 50px; background: rgba(20, 20, 30, 0.3); }
-.box-tech { grid-column: span 12; display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-around; }
-.box-timeline { grid-column: span 5; grid-row: span 2; display: flex; flex-direction: column; }
+
+/* Tech Stack (Lang, schmal) */
+.box-tech { grid-column: span 12; display: flex; align-items: center; justify-content: space-around; flex-wrap: wrap; gap: 20px; }
+
+/* Timeline (Hochkant oder breit) */
+.box-timeline { grid-column: span 5; grid-row: span 2; }
+/* Gallery (Rechts daneben) */
 .box-gallery { grid-column: span 7; grid-row: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+/* FAQ & Partners */
 .box-faq { grid-column: span 8; }
 .box-partners { grid-column: span 4; text-align: center; }
 
-/* Typo */
+/* --- INHALT STYLES --- */
 .bento-title { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; margin-bottom: 15px; color: #fff; font-weight: 700; }
 .bento-text { color: var(--text-muted); font-size: 1rem; line-height: 1.6; }
+
+/* Special Styles für Elemente */
 .stat-number { font-size: 3.5rem; color: var(--primary); font-family: 'Rajdhani', sans-serif; font-weight: 800; line-height: 1; }
 .stat-label { color: #fff; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
 
-/* --- TEAM SECTION (FIXED HEIGHT - NO FLAPPING) --- */
+/* Team Cards (Innerhalb der Bento Box) */
+.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; width: 100%; }
+.mini-member { text-align: center; }
+.mini-member img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); margin-bottom: 15px; transition: 0.3s; }
+.mini-member:hover img { border-color: var(--primary); transform: scale(1.1); }
+.mini-member h4 { color: #fff; margin-bottom: 5px; }
+.mini-member span { font-size: 0.8rem; color: var(--primary); text-transform: uppercase; font-weight: 700; }
+
+/* Gallery Images */
+.gal-img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; opacity: 0.7; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
+.gal-img:hover { opacity: 1; transform: scale(1.02); border-color: var(--primary); }
+
+/* Timeline Minimalistisch */
+.mini-timeline { border-left: 2px solid rgba(255,255,255,0.1); padding-left: 20px; display: flex; flex-direction: column; gap: 20px; }
+.mt-item h5 { color: var(--primary); margin-bottom: 2px; }
+.mt-item p { font-size: 0.9rem; color: var(--text-muted); }
+
+/* Tech Icons */
+.tech-icon { font-size: 2.5rem; color: rgba(255,255,255,0.3); transition: 0.3s; }
+.tech-icon:hover { color: #fff; transform: translateY(-5px); text-shadow: 0 0 15px currentColor; }
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .bento-wrapper { grid-template-columns: 1fr; grid-auto-rows: auto; }
+  .bento-box { grid-column: span 1 !important; grid-row: span 1 !important; }
+  .small-hero h1 { font-size: 2.8rem; }
+  .box-gallery { grid-template-columns: 1fr; }
+}
+
+/* =========================================
+   ABOUT.CSS - UPDATES (TEAM & HISTORY)
+   ========================================= */
+
+/* --- TEAM SECTION (Interaktive Karten) --- */
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Etwas breiter */
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
   width: 100%;
 }
 
 .member-card {
-  /* WICHTIG: Feste Höhe verhindert das "Aufklappen" */
-  height: 320px; 
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  padding: 0 20px; /* Padding nur links/rechts, oben/unten flexibel */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; /* Zentriert Inhalt vertikal */
+  padding: 25px 20px;
   text-align: center;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
@@ -76,122 +143,127 @@
 
 .member-card:hover {
   background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-5px);
   border-color: var(--primary);
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-/* Container für Bild & Namen bewegt sich beim Hover nach oben */
-.member-inner {
-  transition: transform 0.4s ease;
-  transform: translateY(15px); /* Startposition leicht tiefer */
-}
-
-.member-card:hover .member-inner {
-  transform: translateY(-30px); /* Rutscht nach oben um Platz für Bio zu machen */
+.member-img-wrapper {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 15px auto;
+  position: relative;
 }
 
 .member-img {
-  width: 90px; height: 90px;
-  border-radius: 50%; object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
   border: 2px solid rgba(255,255,255,0.1);
   transition: 0.4s ease;
-  margin-bottom: 15px;
 }
 
 .member-card:hover .member-img {
   border-color: var(--primary);
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(5deg);
   box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
 }
 
 .member-info h4 {
-  color: #fff; font-size: 1.2rem; margin-bottom: 5px;
-  font-family: 'Rajdhani', sans-serif; font-weight: 700;
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
 }
 
 .member-role {
-  font-size: 0.8rem; color: var(--primary); text-transform: uppercase;
-  letter-spacing: 1px; font-weight: 700; display: block;
+  font-size: 0.8rem;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 10px;
 }
 
-/* Bio ist absolut positioniert und blendet ein */
+/* Versteckte Bio, die beim Hover erscheint */
 .member-bio {
-  position: absolute;
-  bottom: 25px; /* Klebt unten fest */
-  left: 20px; right: 20px;
   font-size: 0.85rem;
   color: var(--text-muted);
   line-height: 1.4;
   opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.4s ease;
-  pointer-events: none; /* Klickt durch */
+  max-height: 0;
+  transform: translateY(15px);
+  transition: 0.4s ease;
+  overflow: hidden;
 }
 
 .member-card:hover .member-bio {
   opacity: 1;
+  max-height: 80px; /* Genug Platz für den Text */
   transform: translateY(0);
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
-/* --- HISTORY SECTION (TIMELINE + PFEIL) --- */
+/* --- HISTORY SECTION (Animierte Timeline) --- */
+.box-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
 .timeline-wrapper {
   position: relative;
-  padding-left: 25px; margin-top: 30px;
-  display: flex; flex-direction: column; gap: 40px;
-  padding-bottom: 40px; /* Platz für Pfeil */
+  padding-left: 25px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
-/* Linie */
+/* Die graue Hintergrundlinie */
 .timeline-line {
-  position: absolute; left: 6px; top: 10px; bottom: 0;
-  width: 3px; background: rgba(255, 255, 255, 0.05); border-radius: 3px;
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
 }
 
-/* Fortschrittsbalken */
+/* Der farbige Balken, der sich füllt */
 .timeline-progress {
-  position: absolute; left: 6px; top: 10px;
-  width: 3px; height: 0;
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  width: 3px;
+  height: 0;
   background: var(--primary);
   box-shadow: 0 0 15px var(--primary);
   border-radius: 3px;
   animation: fillLine 2.5s ease-out forwards;
 }
-@keyframes fillLine { to { height: 90%; } }
 
-/* DER PFEIL UNTEN */
-.timeline-arrow {
-  position: absolute;
-  bottom: -15px; left: -3px; /* Ausrichten an der Linie (6px breit -> Mitte ca 3 + offset) */
-  color: rgba(255, 255, 255, 0.1);
-  font-size: 1.2rem;
-  animation: pulseArrow 2s infinite;
-}
-/* Aktiviert wenn Linie voll ist (simuliert) */
-.timeline-progress::after {
-  content: '\f078'; /* FontAwesome Chevron Down */
-  font-family: "Font Awesome 6 Free"; font-weight: 900;
-  position: absolute; bottom: -25px; left: -6px;
-  color: var(--primary);
-  font-size: 1rem;
-  text-shadow: 0 0 10px var(--primary);
-  opacity: 0;
-  animation: fadeInArrow 0.5s 2.5s forwards, bounceArrow 2s 2.5s infinite;
-}
-
-@keyframes fadeInArrow { to { opacity: 1; } }
-@keyframes bounceArrow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(5px); }
+@keyframes fillLine {
+  to { height: 85%; }
 }
 
 .tl-item {
-  position: relative; padding-left: 20px; opacity: 0;
+  position: relative;
+  padding-left: 20px;
+  opacity: 0;
   animation: fadeInRight 0.6s ease forwards;
 }
-.tl-item:nth-child(3) { animation-delay: 0.3s; }
-.tl-item:nth-child(4) { animation-delay: 0.8s; }
-.tl-item:nth-child(5) { animation-delay: 1.3s; }
-.tl-item:nth-child(6) { animation-delay: 1.8s; }
+
+/* Verzögerung für jeden Punkt */
+.tl-item:nth-child(1) { animation-delay: 0.3s; }
+.tl-item:nth-child(2) { animation-delay: 0.8s; }
+.tl-item:nth-child(3) { animation-delay: 1.3s; }
+.tl-item:nth-child(4) { animation-delay: 1.8s; }
 
 @keyframes fadeInRight {
   from { opacity: 0; transform: translateX(-15px); }
@@ -199,26 +271,46 @@
 }
 
 .tl-dot {
-  position: absolute; left: -26px; top: 2px;
-  width: 15px; height: 15px;
-  background: var(--bg-dark); border: 2px solid var(--text-muted);
-  border-radius: 50%; z-index: 2; transition: 0.3s;
+  position: absolute;
+  left: -26px; /* Position auf der Linie */
+  top: 2px;
+  width: 15px;
+  height: 15px;
+  background: var(--bg-dark);
+  border: 2px solid var(--text-muted);
+  border-radius: 50%;
+  z-index: 2;
+  transition: 0.3s;
 }
-.tl-item:hover .tl-dot, .tl-item.active .tl-dot {
-  border-color: var(--primary); background: var(--primary);
-  box-shadow: 0 0 15px var(--primary); transform: scale(1.2);
+
+/* Sobald die Animation den Punkt erreicht (simuliert durch Delay), wird er aktiv */
+.tl-item:hover .tl-dot,
+.tl-item.active .tl-dot {
+  border-color: var(--primary);
+  background: var(--primary);
+  box-shadow: 0 0 15px var(--primary);
+  transform: scale(1.2);
 }
 
 .tl-date {
-  font-size: 0.85rem; font-weight: 700; color: var(--primary);
-  margin-bottom: 5px; display: block; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 5px;
+  display: block;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 1px;
 }
-.tl-content h4 { font-size: 1.15rem; color: #fff; margin-bottom: 5px; font-weight: 700; }
-.tl-content p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .bento-wrapper { grid-template-columns: 1fr; grid-auto-rows: auto; }
-  .bento-box { grid-column: span 1 !important; grid-row: span 1 !important; }
-  .box-gallery { grid-template-columns: 1fr; }
+.tl-content h4 {
+  font-size: 1.15rem;
+  color: #fff;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.tl-content p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
