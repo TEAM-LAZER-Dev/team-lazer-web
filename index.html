@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TEAM LAZER | Community & Dev</title>
+  <title>Über uns | TEAM LAZER</title>
   
-  <link rel="icon" type="image/webp" href="./images/tl-logo-nobg.webp" />
+  <link rel="stylesheet" href="../style/global.css">
+  <link rel="stylesheet" href="../style/about.css">
   
-  <link rel="stylesheet" href="./style/global.css" />
-  <link rel="stylesheet" href="./style/home.css" />
-  
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -20,23 +18,18 @@
   <div class="scroll-ladder desktop-only">
     <div class="ladder-line"></div>
     <div class="ladder-indicator" id="scrollIndicator"></div>
-    <div class="ladder-dot active" data-target="#home" title="Start"></div>
-    <div class="ladder-dot" data-target="#network" title="Universum"></div>
-    <div class="ladder-dot" data-target="#features" title="DNA"></div>
-    <div class="ladder-dot" data-target="#join" title="Join"></div>
   </div>
 
   <header class="navbar">
     <div class="container nav-container">
-      <a class="nav-logo" href="index.html">
-        <img src="./images/tl-logo-nobg.webp" alt="Logo" />
+      <a class="nav-logo" href="../index.html">
+        <img src="../images/tl-logo-nobg.webp" alt="Logo" />
         <span class="logo-text">TEAM LAZER</span>
       </a>
       <nav class="nav-links">
-        <a href="index.html" class="active">Home</a>
-        <a href="pages/about.html">Über uns</a>
-        <a href="pages/contact.html">Kontakt</a>
-        <a href="#network" class="cyber-hover">Netzwerk</a>
+        <a href="../index.html">Home</a>
+        <a href="about.html" class="active">Über uns</a>
+        <a href="contact.html">Kontakt</a>
         <a href="https://discord.gg/DEINLINK" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
       </nav>
       <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
@@ -44,166 +37,228 @@
   </header>
 
   <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html" class="mobile-link active"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="pages/about.html" class="mobile-link"><i class="fa-solid fa-users"></i> Über uns</a>
-    <a href="pages/contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
-    <a href="#network" class="mobile-link"><i class="fa-solid fa-network-wired"></i> Netzwerk</a>
-    <a href="https://discord.gg/DEINLINK" target="_blank" class="mobile-link"><i class="fa-brands fa-discord"></i> Discord</a>
+    <a href="../index.html" class="mobile-link">Home</a>
+    <a href="about.html" class="mobile-link active">Über uns</a>
+    <a href="contact.html" class="mobile-link">Kontakt</a>
   </div>
 
-  <section class="hero" id="home">
-    <div class="container hero-content fade-in-up">
-      <div class="hero-text">
-        <span class="hero-tag">⚡ NEXT LEVEL GAMING</span>
-        <h1>Wir bauen deine <br><span class="highlight">digitale Welt</span></h1>
-        <p>Dein Hub für professionelle Discord-Lösungen, hochwertigen Gaming-Content und exklusive In-Game Services.</p>
-        <div class="hero-btns">
-          <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim">
-            <i class="fa-brands fa-discord"></i> Community
-          </a>
-          <a href="#network" class="btn btn-secondary">
-            Mehr erfahren
-          </a>
-        </div>
+  <section id="start" class="small-hero" data-ladder-title="Intro">
+    <div class="container fade-in-up">
+      <span class="hero-tag">INSIDE THE CORE</span>
+      <h1>UNSERE <span class="highlight">DNA</span></h1>
+      <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+        Wir erschaffen digitale Erlebnisse. Kein Bullshit, nur Performance.
+      </p>
+    </div>
+  </section>
+  
+  <div class="bento-wrapper">
+    
+    <section id="vision" class="bento-box box-vision scroll-reveal" data-ladder-title="Vision">
+      <h2 class="bento-title">Die Philosophie</h2>
+      <p class="bento-text">
+        Team Lazer startete 2026 nicht als Business, sondern als Bewegung. Wir waren frustriert von schlechten UIs, langsamen Bots und toxischen Communitys.
+        <br><br>
+        <strong>Unsere Mission:</strong> Wir bauen Tools, die wir selbst benutzen wollen. Jedes Pixel, jede Codezeile wird auf maximalen Impact optimiert. Wir verstecken uns nicht hinter Agentur-Sprech – wir liefern ab.
+      </p>
+      <div style="margin-top: 30px;">
+        <span class="badge" style="background: rgba(124, 58, 237, 0.2); color: var(--primary);">#GAMING</span>
+        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; margin-left: 10px;">#QUALITY</span>
       </div>
+    </section>
+
+    <section id="stats" class="bento-box box-stat-1 scroll-reveal delay-1" data-ladder-title="Impact">
+      <div class="text-center">
+        <i class="fa-solid fa-users" style="color: var(--primary); font-size: 2rem; margin-bottom: 10px;"></i>
+        <div class="stat-number counter" data-target="14000">0</div>
+        <div class="stat-label">Nutzer erreicht</div>
+      </div>
+    </section>
+
+    <div class="bento-box box-stat-2 scroll-reveal delay-2">
+      <div class="text-center">
+        <i class="fa-solid fa-code-commit" style="color: #3b82f6; font-size: 2rem; margin-bottom: 10px;"></i>
+        <div class="stat-number counter" data-target="99.9" data-suffix="%" data-decimals="1">0</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+    </div>
+
+    <section id="team" class="bento-box box-team scroll-reveal" data-ladder-title="Squad">
+      <h2 class="bento-title text-center" style="margin-bottom: 10px;">Das <span class="highlight">Roster</span></h2>
+      <p class="text-center muted" style="margin-bottom: 25px;">Die Köpfe hinter dem Code.</p>
       
-      <div class="hero-visual">
-        <div class="stats-card glass-panel">
-          <div class="stat-row">
-            <div class="stat-icon"><i class="fa-brands fa-discord"></i></div>
-            <div class="stat-data">
-              <h3 class="counter" data-target="427">0</h3>
-              <p>Mitglieder</p>
-            </div>
-          </div>
-          <div class="stat-separator"></div>
-          <div class="stat-row">
-            <div class="stat-icon"><i class="fa-solid fa-code-branch"></i></div>
-            <div class="stat-data">
-              <h3 class="counter" data-target="14">0</h3>
-              <p>Projekte</p>
-            </div>
-          </div>
-          <div class="stat-separator"></div>
-          <div class="stat-row">
-            <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
-            <div class="stat-data">
-              <h3 class="counter" data-target="93.3" data-suffix="%" data-decimals="1">0</h3>
-              <p>Zufriedenheit</p>
-            </div>
+      <div class="team-grid">
+        
+        <div class="member-card">
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="fivozo" class="member-img"></div>
+          <div class="member-info">
+            <h4>fivozo</h4>
+            <span class="member-role">Admin</span>
+            <div class="member-bio">Developer • Team Management • Service • Product Management • Designer • Social Media • Support</div>
           </div>
         </div>
-      </div>
-    </div>
+        
+        <div class="member-card">
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="wizzard" class="member-img"></div>
+          <div class="member-info">
+            <h4>wizzard</h4>
+            <span class="member-role">Co-Owner</span>
+            <div class="member-bio">Service • Product Management • Support</div>
+          </div>
+        </div>
 
-    <div class="scroll-down-indicator" onclick="document.querySelector('#network').scrollIntoView({ behavior: 'smooth' });">
-      <i class="fa-solid fa-chevron-down"></i>
-    </div>
+        <div class="member-card">
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user4" class="member-img"></div>
+          <div class="member-info">
+            <h4>user4</h4>
+            <span class="member-role">Team Management</span>
+            <div class="member-bio">Cybersecurity</div>
+          </div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="nico" class="member-img"></div>
+          <div class="member-info">
+            <h4>nico</h4>
+            <span class="member-role">Developer</span>
+            <div class="member-bio">Designer • Support</div>
+          </div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user1" class="member-img"></div>
+          <div class="member-info">
+            <h4>user1</h4>
+            <span class="member-role">Developer</span>
+            <div class="member-bio">Discord Mod • Discord Support</div>
+          </div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user 3" class="member-img"></div>
+          <div class="member-info">
+            <h4>user 3</h4>
+            <span class="member-role">Cybersecurity</span>
+            <div class="member-bio">System Security</div>
+          </div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user2" class="member-img"></div>
+          <div class="member-info">
+            <h4>user2</h4>
+            <span class="member-role">Service</span>
+            <div class="member-bio">Product Management</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="history" class="bento-box box-timeline scroll-reveal" data-ladder-title="History">
+      <h2 class="bento-title">Die <span class="highlight">Evolution</span></h2>
+      <p class="bento-text small" style="margin-bottom: 10px;">Vom Discord-Server zur Marke.</p>
+
+      <div class="timeline-wrapper">
+        <div class="timeline-line"></div>
+        <div class="timeline-progress"></div> 
+        
+        <div class="tl-item active">
+          <div class="tl-dot" style="background: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px var(--primary);"></div>
+          <div class="tl-content">
+            <span class="tl-date">Q1 2024</span>
+            <h4>Der Funke</h4>
+            <p>Erste Codezeilen. Ein Bot-Prototyp entsteht aus Frust über schlechte Alternativen.</p>
+          </div>
+        </div>
+
+        <div class="tl-item active">
+          <div class="tl-dot" style="background: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px var(--primary);"></div>
+          <div class="tl-content">
+            <span class="tl-date">Q4 2024</span>
+            <h4>Foundation</h4>
+            <p>Team Lazer formiert sich. Branding, Website v1 und Start der Public Beta.</p>
+          </div>
+        </div>
+
+        <div class="tl-item active">
+          <div class="tl-dot" style="background: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px var(--primary);"></div>
+          <div class="tl-content">
+            <span class="tl-date">Q2 2025</span>
+            <h4>Expansion</h4>
+            <p>10.000 User Marke geknackt. Release der Dashboard-App und neue Partner.</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="background: #fff; border-color: #fff; box-shadow: 0 0 15px #fff;"></div>
+          <div class="tl-content">
+            <span class="tl-date highlight" style="color: #fff;">HEUTE</span>
+            <h4 class="highlight">Das Ökosystem</h4>
+            <p>Vollständige Suite an Tools. Wir definieren Community-Management neu.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 1.2rem; position: relative; z-index: 2;">
+            <i class="fa-solid fa-arrow-down slide-down-anim"></i>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="showcase" class="bento-box box-gallery scroll-reveal delay-1" data-ladder-title="Work">
+      <img src="../images/tl-logo-nobg.webp" class="gal-img" alt="Work 1">
+      <img src="../images/tl-logo-nobg.webp" class="gal-img" alt="Work 2">
+      <img src="../images/tl-logo-nobg.webp" class="gal-img" alt="Work 3">
+      <div style="background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <span style="font-weight: 700;">Mehr ansehen <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+    </section>
+
+    <section id="tech" class="bento-box box-tech scroll-reveal" data-ladder-title="Stack">
+      <i class="fa-brands fa-js tech-icon" style="color: #f7df1e;"></i>
+      <i class="fa-brands fa-node tech-icon" style="color: #68a063;"></i>
+      <i class="fa-brands fa-react tech-icon" style="color: #61dbfb;"></i>
+      <i class="fa-brands fa-python tech-icon" style="color: #4584b6;"></i>
+      <i class="fa-brands fa-discord tech-icon" style="color: #5865F2;"></i>
+      <i class="fa-solid fa-database tech-icon" style="color: #00758f;"></i>
+    </section>
+
+    <section id="faq" class="bento-box box-faq scroll-reveal" data-ladder-title="FAQ">
+      <h2 class="bento-title">Oft gefragt</h2>
+      <div class="faq-item" style="margin-bottom: 15px;">
+        <h4 style="color: #fff; margin-bottom: 5px;">Baut ihr Custom Bots?</h4>
+        <p class="bento-text">Ja, absolut. Schreib uns einfach ein Ticket im Discord.</p>
+      </div>
+      <div class="faq-item">
+        <h4 style="color: #fff; margin-bottom: 5px;">Sucht ihr Leute?</h4>
+        <p class="bento-text">Immer. Zeig uns, was du kannst.</p>
+      </div>
+    </section>
+
+    <section id="partners" class="bento-box box-partners scroll-reveal delay-1" data-ladder-title="Partner">
+      <h2 class="bento-title">Trusted By</h2>
+      <div style="display: flex; gap: 15px; justify-content: center; font-size: 1.5rem; color: var(--text-muted);">
+        <i class="fa-brands fa-twitch"></i>
+        <i class="fa-brands fa-youtube"></i>
+        <i class="fa-solid fa-server"></i>
+      </div>
+    </section>
+
+  </div> <section id="socials" class="section-padding text-center" data-ladder-title="Join">
+    <h2 class="scroll-reveal" style="margin-bottom: 30px;">Werde Teil der <span class="highlight">Elite</span></h2>
+    <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim">
+      <i class="fa-brands fa-discord"></i> Jetzt Beitreten
+    </a>
   </section>
 
-  <section id="network" class="section-padding">
-    <div class="container">
-      <div class="section-header scroll-reveal">
-        <h2>Unser <span class="highlight">Ökosystem</span></h2>
-        <p class="muted">Alles, was Gamer und Server-Owner brauchen.</p>
-      </div>
-      
-      <div class="universe-grid">
-        <a href="https://youtube.com/@DEINKANAL" target="_blank" class="universe-card scroll-reveal color-1">
-          <div class="u-icon-wrapper"><i class="fa-brands fa-youtube"></i></div>
-          <div class="u-content">
-            <h3>Entertainment</h3>
-            <p>Täglicher Content, Highlights & Live-Events.</p>
-            <span class="u-link">Zum Kanal <i class="fa-solid fa-arrow-right"></i></span>
-          </div>
-          <div class="u-bg-glow"></div>
-        </a>
-
-        <a href="https://discord.gg/DEINLINK" target="_blank" class="universe-card scroll-reveal delay-1 color-2">
-          <div class="u-icon-wrapper"><i class="fa-brands fa-discord"></i></div>
-          <div class="u-content">
-            <h3>Community Hub</h3>
-            <p>Support-Tickets, Community-Talk und Events.</p>
-            <span class="u-link">Beitreten <i class="fa-solid fa-arrow-right"></i></span>
-          </div>
-          <div class="u-bg-glow"></div>
-        </a>
-
-        <div class="universe-card scroll-reveal delay-2 color-3 cursor-default">
-          <div class="u-icon-wrapper"><i class="fa-solid fa-terminal"></i></div>
-          <div class="u-content">
-            <h3>Development</h3>
-            <p>Custom Bots & Software. Wir programmieren deine Wünsche.</p>
-            <span class="u-link">Mehr Infos <i class="fa-solid fa-code"></i></span>
-          </div>
-          <div class="u-bg-glow"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="features" class="section-padding bg-darker">
-    <div class="container">
-      <div class="section-header scroll-reveal"><h2>Team Lazer <span class="highlight">DNA</span></h2></div>
-      <div class="features-wrapper">
-        <div class="feature-box slide-left">
-          <div class="icon-box"><i class="fa-solid fa-eye"></i></div>
-          <h3>Transparenz</h3>
-          <p>Keine versteckten Kosten.</p>
-        </div>
-        <div class="feature-box scroll-reveal delay-1">
-          <div class="icon-box"><i class="fa-solid fa-stopwatch"></i></div>
-          <h3>Effizienz</h3>
-          <p>Schnelle Bearbeitung.</p>
-        </div>
-        <div class="feature-box slide-right delay-2">
-          <div class="icon-box"><i class="fa-solid fa-heart"></i></div>
-          <h3>Leidenschaft</h3>
-          <p>Von Gamern für Gamer.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta-section scroll-reveal" id="join">
-    <div class="container cta-content">
-      <h2>Werde Teil der Bewegung</h2>
-      <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim scale-hover">Jetzt Beitreten</a>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <img src="./images/tl-logo-nobg.webp" alt="Logo" class="footer-logo" />
-          <p>Gaming Excellence & Development.</p>
-          <div class="social-links">
-            <a href="#"><i class="fa-brands fa-discord"></i></a>
-            <a href="#"><i class="fa-brands fa-youtube"></i></a>
-          </div>
-        </div>
-        <div class="footer-links">
-          <h4>Bereiche</h4>
-          <ul>
-            <li><a href="#network">Content</a></li>
-            <li><a href="#network">Services</a></li>
-            <li><a href="#features">Philosophie</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Rechtliches</h4>
-          <ul>
-            <li><a href="#">Impressum</a></li>
-            <li><a href="#">Datenschutz</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom"><p>&copy; 2026 TEAM LAZER. All rights reserved.</p></div>
+  <footer class="bg-darker" style="margin-top: 50px;">
+    <div class="container text-center">
+      <p class="muted">&copy; 2026 TEAM LAZER.</p>
     </div>
   </footer>
 
-  <script src="./script/main.js"></script>
-  <script src="./script/ladder.js"></script>
+  <script src="../script/main.js"></script>
+  <script src="../script/ladder.js"></script>
 </body>
 </html>
