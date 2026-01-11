@@ -117,25 +117,37 @@
   display: block;
 }
 
-/* --- SCROLL INDICATOR --- */
+/* --- SCROLL INDICATOR (Clean & Grey) --- */
 .scroll-down-indicator {
   position: absolute;
   bottom: 40px; 
   left: 50%;
   transform: translateX(-50%);
-  color: var(--text-muted);
+  
+  /* Grau und nicht leuchtend */
+  color: rgba(255, 255, 255, 0.3); 
+  
   cursor: pointer;
   z-index: 10;
-  transition: 0.3s;
+  transition: 0.3s ease;
   animation: bounce 2s infinite;
 }
 
 .scroll-down-indicator i {
-  font-size: 2.5rem; /* Größerer Pfeil */
-  filter: drop-shadow(0 0 10px var(--primary));
+  /* Breiter und größer */
+  font-size: 3.5rem; 
+  font-weight: 800; /* Dicker */
+  
+  /* Kein Filter/Glow mehr */
+  filter: none; 
 }
 
-.scroll-down-indicator:hover { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+/* Hover-Effekt: Nur leichte Farbe, kein starkes Leuchten */
+.scroll-down-indicator:hover { 
+  color: #fff; 
+  transform: translateX(-50%) scale(1.1); /* Leichtes Vergrößern */
+  text-shadow: none; 
+}
 
 @keyframes bounce { 
   0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); } 
