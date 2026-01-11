@@ -53,6 +53,7 @@
 
   <section class="hero" id="home">
     <div class="container hero-content fade-in-up">
+      
       <div class="hero-text">
         <span class="hero-tag">EST. 2026 • THE NEXT STANDARD</span>
         
@@ -62,43 +63,45 @@
         
         <div class="hero-btns">
           <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim">
-            <i class="fa-brands fa-discord"></i> Join the Hub
+            Join Discord
           </a>
           <a href="#network" class="btn btn-secondary">
-            Explore Services
+            mehr erfahren
           </a>
         </div>
       </div>
       
       <div class="hero-visual">
         <div class="stats-card glass-panel">
-          <div class="stats-grid">
+          <div class="stats-list-vertical">
             
-            <div class="stat-item">
-              <div class="stat-icon icon-purple"><i class="fa-solid fa-server"></i></div>
-              <div class="stat-info">
-                <h3 id="stat-team">0</h3> <p>Systems Active</p>
+            <div class="stat-row-item">
+              <div class="stat-icon-small icon-purple">
+                <i class="fa-brands fa-discord"></i>
+              </div>
+              <div class="stat-text">
+                <h3 class="counter" data-target="457">0</h3>
+                <span>Discord Mitglieder</span>
               </div>
             </div>
 
-            <div class="stat-item">
-              <div class="stat-icon icon-blue"><i class="fa-brands fa-discord"></i></div>
-              <div class="stat-info">
-                <h3 id="stat-discord">0</h3> <p>Community</p>
+            <div class="stat-row-item">
+              <div class="stat-icon-small icon-green">
+                <i class="fa-solid fa-signal"></i>
+              </div>
+              <div class="stat-text">
+                <h3 style="color: #4ade80;">ONLINE</h3>
+                <span>System Status</span>
               </div>
             </div>
 
-            <div class="stat-item">
-              <div class="stat-icon icon-green"><i class="fa-solid fa-code"></i></div>
-              <div class="stat-info">
-                <h3 id="stat-projects">0</h3> <p>Optimizations</p>
+            <div class="stat-row-item no-border">
+              <div class="stat-icon-small icon-gold">
+                <i class="fa-solid fa-star"></i>
               </div>
-            </div>
-
-            <div class="stat-item">
-              <div class="stat-icon icon-gold"><i class="fa-solid fa-calendar-check"></i></div>
-              <div class="stat-info">
-                <h3 id="stat-satisfaction">0</h3> <p>Live Events</p>
+              <div class="stat-text">
+                <h3><span class="counter" data-target="98" data-suffix="%" data-decimals="0">0</span></h3>
+                <span>Kundenzufriedenheit</span>
               </div>
             </div>
 
@@ -108,7 +111,7 @@
     </div>
 
     <div class="scroll-down-indicator" onclick="document.querySelector('#network').scrollIntoView({ behavior: 'smooth' });">
-      <i class="fa-solid fa-chevron-down"></i>
+      <i class="fa-solid fa-arrow-down-long"></i>
     </div>
   </section>
 
