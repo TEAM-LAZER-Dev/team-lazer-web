@@ -102,6 +102,7 @@
 }
 
 .member-img-wrapper {
+  background-color: black;
   width: 60px; /* Kleineres Bild */
   height: 60px;
   margin: 0 auto 10px auto;
