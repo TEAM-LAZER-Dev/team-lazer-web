@@ -117,15 +117,15 @@
   display: block;
 }
 
-/* --- SCROLL INDICATOR (Clean & Grey) --- */
+/* --- SCROLL INDICATOR (Thin & Sleek) --- */
 .scroll-down-indicator {
   position: absolute;
-  bottom: 40px; 
+  bottom: 30px; /* Etwas tiefer für mehr Platz */
   left: 50%;
   transform: translateX(-50%);
   
-  /* Grau und nicht leuchtend */
-  color: rgba(255, 255, 255, 0.3); 
+  /* Helles Grau, nicht leuchtend */
+  color: rgba(255, 255, 255, 0.4); 
   
   cursor: pointer;
   z-index: 10;
@@ -134,19 +134,17 @@
 }
 
 .scroll-down-indicator i {
-  /* Breiter und größer */
-  font-size: 3.5rem; 
-  font-weight: 800; /* Dicker */
+  /* Angle ist dünner, daher darf er groß sein */
+  font-size: 4rem; 
+  font-weight: normal; /* Kein extra Fett mehr */
   
-  /* Kein Filter/Glow mehr */
   filter: none; 
 }
 
-/* Hover-Effekt: Nur leichte Farbe, kein starkes Leuchten */
+/* Hover: Wird weiß und bewegt sich leicht */
 .scroll-down-indicator:hover { 
   color: #fff; 
-  transform: translateX(-50%) scale(1.1); /* Leichtes Vergrößern */
-  text-shadow: none; 
+  transform: translateX(-50%) translateY(3px); /* Bewegt sich beim Hover leicht nach unten */
 }
 
 @keyframes bounce { 
