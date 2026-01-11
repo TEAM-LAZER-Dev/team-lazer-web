@@ -102,9 +102,7 @@ function initLiveChat() {
             Willkommen im Chat von <b>TEAM LAZER</b>. ⚡
           </div>
           <div class="chat-msg bot">
-            Ich bin dein Assistent. Wie kann ich dir weiterhelfen?.
-            <br><br>
-            Tipp: Schreib <b>"Support"</b>, um mit einem echten Menschen zu sprechen.
+            Ich bin dein Assistent. Wie kann ich dir weiterhelfen?
           </div>
         </div>
         
