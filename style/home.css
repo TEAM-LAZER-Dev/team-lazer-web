@@ -165,7 +165,7 @@
 .universe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
 .universe-card { background: var(--bg-panel); border-radius: var(--radius); padding: 35px 30px; transition: 0.4s; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; min-height: 260px; text-decoration: none; }
 .universe-card:hover { transform: translateY(-7px); border-color: var(--accent); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-.color-1 { --accent: #ff0055; } .color-2 { --accent: #5865F2; } .color-3 { --accent: #00ff88; }
+.color-1 { --accent: #caabb5; } .color-2 { --accent: #5865F2; } .color-3 { --accent: #00ff88; }
 .u-icon-wrapper { font-size: 2.8rem; color: var(--accent); margin-bottom: 20px; transition: 0.4s; filter: drop-shadow(0 0 10px var(--accent)); }
 .universe-card h3 { font-size: 1.4rem; margin-bottom: 10px; color: #fff; font-family: 'Rajdhani', sans-serif; font-weight: 700; }
 .universe-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px; }
