@@ -140,8 +140,8 @@
   height: 24px;
   
   /* Hier entsteht der Pfeil: Nur unten und rechts ein Rahmen */
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* 2px = Dünn, 0.3 = Grau/Transparent */
-  border-right: 2px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 3px solid rgba(255, 255, 255, 0.3); /* 2px = Dünn, 0.3 = Grau/Transparent */
+  border-right: 3px solid rgba(255, 255, 255, 0.3);
   
   /* Drehung um 45 Grad macht aus dem Eck einen Pfeil nach unten */
   transform: rotate(45deg);
