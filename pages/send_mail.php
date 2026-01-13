@@ -2,7 +2,7 @@
 // Nur POST-Anfragen erlauben
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // Daten aus dem JSON-Format lesen
+    // Daten lesen
     $json = file_get_contents('php://input');
     $data = json_decode($json);
 
@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dept = htmlspecialchars(strip_tags($data->dept));
     $message = htmlspecialchars(strip_tags($data->message));
 
-    // Empfänger-Logik (Muss exakt wie im HTML sein)
+    // Empfänger-Logik
     $emailMap = [
         'general' => 'kontakt@team-lazer.de',
         'support' => 'support@team-lazer.de',
@@ -20,26 +20,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'partnership' => 'kontakt@team-lazer.de'
     ];
 
-    // Ziel-Adresse bestimmen (Fallback auf Kontakt)
+    // Ziel-Adresse
     $to = isset($emailMap[$dept]) ? $emailMap[$dept] : 'kontakt@team-lazer.de';
 
-    // Betreff
     $subject = "Neue Anfrage von $name ($dept)";
 
-    // E-Mail Inhalt
     $email_content = "Name: $name\n";
     $email_content .= "Email: $email\n";
     $email_content .= "Bereich: $dept\n\n";
     $email_content .= "Nachricht:\n$message\n";
 
-    // Header (Wichtig damit es nicht im Spam landet)
-    // "From" sollte eine Adresse DEINER Domain sein (z.B. noreply@team-lazer.de), sonst blockt Strato oft.
-    $headers = "From: service@team-lazer.de\r\n";
+    // WICHTIG: Hier muss die existierende Strato-Adresse rein!
+    $senderAddress = 'service@team-lazer.de';
+
+    $headers = "From: $senderAddress\r\n";
     $headers .= "Reply-To: $email\r\n";
     $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
-    // Versenden
-    if (mail($to, $subject, $email_content, $headers, "-fservice@team-lazer.de")) {
+    // HIER IST DER FIX: Der 5. Parameter "-f..."
+    if (mail($to, $subject, $email_content, $headers, "-f" . $senderAddress)) {
         http_response_code(200);
         echo "Erfolg";
     } else {
