@@ -51,6 +51,47 @@
   padding-top: 10px;
 }
 
+/* --- SCROLL LEITER (HIER IST SIE!) --- */
+.scroll-ladder { 
+  position: fixed; 
+  left: 30px; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  height: 40vh; 
+  width: 20px; 
+  z-index: 10001; /* Erhöht, damit es über der Navbar (1000) liegt */
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-between; 
+  align-items: center; 
+  pointer-events: none; 
+}
+
+/* Verschönere den schwarzen Bereich (bg-darker) */
+.bg-darker { 
+  background: radial-gradient(circle at center, #0a0b14 0%, #050508 100%); 
+  border-top: 1px solid rgba(124, 58, 237, 0.1); 
+  border-bottom: 1px solid rgba(124, 58, 237, 0.1); 
+  box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+}
+.ladder-line { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: rgba(255,255,255,0.1); transform: translateX(-50%); z-index: 1; }
+.ladder-indicator { 
+  position: absolute; left: 50%; width: 10px; height: 10px; 
+  background: var(--primary); border-radius: 50%; 
+  transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--primary); 
+  z-index: 3; transition: top 0.5s cubic-bezier(0.5, 0, 0.3, 1); 
+}
+.ladder-indicator.active { box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary); }
+.ladder-dot { 
+  width: 14px; height: 14px; 
+  background: #0a0b10; /* Hintergrund passend zur Seite */
+  border: 2px solid rgba(255,255,255,0.5); /* Hellerer Rand für bessere Sichtbarkeit */
+  border-radius: 50%; z-index: 2; cursor: pointer; transition: 0.3s; pointer-events: all; 
+}
+.ladder-dot:hover { border-color: var(--primary); transform: scale(1.2); }
+.ladder-dot.active { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 15px var(--primary); }
+
+
 .stats-card {
   width: 100%;
   background: rgba(20, 20, 30, 0.6);
