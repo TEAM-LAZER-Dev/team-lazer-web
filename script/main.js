@@ -141,6 +141,12 @@ function initLiveChat() {
   let isSupportMode = false;
   let isTyping = false; 
 
+  // --- NEU: GLOBALE FUNKTION UM CHAT ZU ÖFFNEN ---
+  window.openTeamLazerChat = function() {
+    windowEl.classList.add('active');
+    setTimeout(() => inputEl.focus(), 300); // Fokus mit kleiner Verzögerung
+  };
+
   // 3. EVENTS
   toggleBtn.addEventListener('click', () => {
     windowEl.classList.toggle('active');
@@ -207,7 +213,7 @@ function initLiveChat() {
   }
 
   // ===========================================
-  // 5. BOT INTELLIGENZ (ERWEITERT)
+  // 5. BOT INTELLIGENZ
   // ===========================================
   function handleBotLogic(text) {
     showTyping(true);
@@ -279,20 +285,17 @@ function initLiveChat() {
   }
 
   // ===========================================
-  // 6. SUPPORT WECHSEL (REALISTISCH)
+  // 6. SUPPORT WECHSEL
   // ===========================================
   function initiateSupportSwitch() {
-    // Erst Bestätigung vom Bot
     showTyping(true);
     setTimeout(() => {
         showTyping(false);
         addMessage("Verstanden. Ich leite dich weiter... 🔄", 'bot');
         
-        // Dann System-Nachricht
         setTimeout(() => {
           addSystemMessage("Verbindung zum Support-Server wird hergestellt...");
           
-          // Dann der eigentliche Wechsel
           setTimeout(() => {
             switchToSupportMode();
           }, 2000);
@@ -308,20 +311,17 @@ function initLiveChat() {
     headerEl.style.background = "linear-gradient(90deg, rgba(220, 38, 38, 0.2), rgba(10, 11, 16, 0.9))";
     headerEl.style.borderBottomColor = "rgba(220, 38, 38, 0.3)";
 
-    // Avatar ändern (Headset)
     avatarEl.innerHTML = '<i class="fa-solid fa-headset" style="font-size: 1.2rem;"></i>';
     avatarEl.style.borderColor = "#ef4444";
     avatarEl.style.background = "rgba(239, 68, 68, 0.1)";
     avatarEl.style.boxShadow = "0 0 15px rgba(239, 68, 68, 0.4)";
 
-    // Text ändern
     nameEl.innerText = "Marc (Support)";
     nameEl.style.color = "#ef4444"; 
     statusEl.innerHTML = "Verbunden <i class='fa-solid fa-circle' style='font-size:6px; color:#4ade80; margin-left:5px;'></i>";
 
     addSystemMessage("Du bist nun mit einem Mitarbeiter verbunden.");
 
-    // Erste Nachricht vom Menschen (simuliert)
     showTyping(true);
     setTimeout(() => {
       showTyping(false);
@@ -329,21 +329,13 @@ function initLiveChat() {
     }, 2500);
   }
 
-  // ===========================================
-  // 7. HUMAN SUPPORT LOGIK
-  // ===========================================
   function handleSupportLogic(text) {
     showTyping(true);
-    
-    // Menschen brauchen länger
     const humanDelay = 2500 + Math.random() * 2000; 
-
     setTimeout(() => {
       showTyping(false);
-      
       const lower = text.toLowerCase();
       let reply = "";
-
       if(lower.includes("hallo") || lower.includes("hi")) {
         reply = "Hi! Wie kann ich dir helfen?";
       } else if(text.length < 5) {
@@ -351,7 +343,6 @@ function initLiveChat() {
       } else {
         reply = "Alles klar, ich schaue mir das an. Da ich aktuell nur eine Demo bin, komm bitte für echte Hilfe auf unseren Discord Server! 😄";
       }
-
       addMessage(reply, 'bot'); 
     }, humanDelay);
   }
