@@ -7,8 +7,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Inhalt oben ausrichten */
-  padding-top: 180px; /* Abstand für Navbar */
+  justify-content: flex-start;
+  padding-top: 180px;
   padding-bottom: 80px;
   position: relative;
   overflow: hidden;
@@ -24,7 +24,7 @@
   z-index: 2;
 }
 
-.hero-text { flex: 1; max-width: 650px; }
+.hero-text { flex: 1; max-width: 650px; position: relative; z-index: 10; } /* Text nach vorne holen */
 
 .hero h1 {
   font-size: 4.2rem; line-height: 1.1; margin-bottom: 25px; 
@@ -41,33 +41,22 @@
   border: 1px solid rgba(124, 58, 237, 0.3); display: inline-block; margin-bottom: 25px;
 }
 
-.hero-btns { display: flex; gap: 20px; flex-wrap: wrap; }
+.hero-btns { display: flex; gap: 20px; flex-wrap: wrap; position: relative; z-index: 20; } /* Buttons klickbar machen */
 
-/* --- HERO VISUAL (DIE BOX RECHTS - SKIZZE) --- */
 .hero-visual {
-  flex: 0 0 380px; /* Feste Breite wie in Skizze gewünscht */
+  flex: 0 0 380px;
   display: flex;
   justify-content: center;
   padding-top: 10px;
 }
 
-/* --- SCROLL LEITER (HIER IST SIE!) --- */
+/* --- SCROLL LEITER --- */
 .scroll-ladder { 
-  position: fixed; 
-  left: 30px; 
-  top: 50%; 
-  transform: translateY(-50%); 
-  height: 40vh; 
-  width: 20px; 
-  z-index: 10001; /* Erhöht, damit es über der Navbar (1000) liegt */
-  display: flex; 
-  flex-direction: column; 
-  justify-content: space-between; 
-  align-items: center; 
+  position: fixed; left: 30px; top: 50%; transform: translateY(-50%); 
+  height: 40vh; width: 20px; z-index: 10001;
+  display: flex; flex-direction: column; justify-content: space-between; align-items: center; 
   pointer-events: none; 
 }
-
-/* Verschönere den schwarzen Bereich (bg-darker) */
 .bg-darker { 
   background: radial-gradient(circle at center, #0a0b14 0%, #050508 100%); 
   border-top: 1px solid rgba(124, 58, 237, 0.1); 
@@ -83,126 +72,42 @@
 }
 .ladder-indicator.active { box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary); }
 .ladder-dot { 
-  width: 14px; height: 14px; 
-  background: #0a0b10; /* Hintergrund passend zur Seite */
-  border: 2px solid rgba(255,255,255,0.5); /* Hellerer Rand für bessere Sichtbarkeit */
-  border-radius: 50%; z-index: 2; cursor: pointer; transition: 0.3s; pointer-events: all; 
+  width: 14px; height: 14px; background: #0a0b10; 
+  border: 2px solid rgba(255,255,255,0.5); border-radius: 50%; 
+  z-index: 2; cursor: pointer; transition: 0.3s; pointer-events: all; 
 }
 .ladder-dot:hover { border-color: var(--primary); transform: scale(1.2); }
 .ladder-dot.active { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 15px var(--primary); }
 
-
 .stats-card {
-  width: 100%;
-  background: rgba(20, 20, 30, 0.6);
-  backdrop-filter: blur(20px);
-  border-radius: 16px;
-  padding: 40px;
-  
-  /* Neuer Look: Lila Rahmen & Glow statt 3D-Kippen */
+  width: 100%; background: rgba(20, 20, 30, 0.6); backdrop-filter: blur(20px);
+  border-radius: 16px; padding: 40px;
   border: 1px solid rgba(124, 58, 237, 0.3);
   box-shadow: 0 0 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(124, 58, 237, 0.05);
 }
-
-.stats-list-vertical {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-.stat-row-item {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding-bottom: 25px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Die Trennlinien */
-}
-
-.stat-row-item.no-border {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.stat-icon-small {
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  font-size: 1.4rem;
-  background: rgba(255, 255, 255, 0.05);
-  flex-shrink: 0;
-}
-
-/* Icon Farben */
+.stats-list-vertical { display: flex; flex-direction: column; gap: 25px; }
+.stat-row-item { display: flex; align-items: center; gap: 20px; padding-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.stat-row-item.no-border { border-bottom: none; padding-bottom: 0; }
+.stat-icon-small { width: 50px; height: 50px; border-radius: 12px; display: grid; place-items: center; font-size: 1.4rem; background: rgba(255, 255, 255, 0.05); flex-shrink: 0; }
 .icon-purple { color: #7c3aed; background: rgba(124, 58, 237, 0.15); }
 .icon-green { color: #4ade80; background: rgba(74, 222, 128, 0.15); }
 .icon-gold { color: #fbbf24; background: rgba(251, 191, 36, 0.15); }
+.stat-text h3 { font-size: 1.8rem; font-family: 'Rajdhani', sans-serif; font-weight: 700; margin: 0; line-height: 1; color: #fff; }
+.stat-text span { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; margin-top: 4px; display: block; }
 
-.stat-text h3 {
-  font-size: 1.8rem;
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 700;
-  margin: 0;
-  line-height: 1;
-  color: #fff;
-}
-
-.stat-text span {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 500;
-  margin-top: 4px;
-  display: block;
-}
-
-/* --- SCROLL INDICATOR (Pure CSS - Professional & Thin) --- */
 .scroll-down-indicator {
-  position: absolute;
-  bottom: 40px; 
-  left: 50%;
-  transform: translateX(-50%);
-  cursor: pointer;
-  z-index: 10;
-  
-  /* Animation für den ganzen Container */
-  animation: bounce 2s infinite;
-  
-  /* Vergrößert die Klickfläche etwas, ohne die Optik zu stören */
-  padding: 20px; 
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  cursor: pointer; z-index: 10; animation: bounce 2s infinite; padding: 20px; 
 }
-
-/* Der Pfeil selbst (Gezeichnet mit CSS) */
 .arrow-clean {
-  display: block;
-  width: 24px;  /* Größe des Pfeils */
-  height: 24px;
-  
-  /* Hier entsteht der Pfeil: Nur unten und rechts ein Rahmen */
-  border-bottom: 3px solid rgba(255, 255, 255, 0.3); /* 2px = Dünn, 0.3 = Grau/Transparent */
-  border-right: 3px solid rgba(255, 255, 255, 0.3);
-  
-  /* Drehung um 45 Grad macht aus dem Eck einen Pfeil nach unten */
-  transform: rotate(45deg);
-  
-  transition: all 0.3s ease;
+  display: block; width: 24px; height: 24px;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.3); border-right: 3px solid rgba(255, 255, 255, 0.3);
+  transform: rotate(45deg); transition: all 0.3s ease;
 }
+.scroll-down-indicator:hover .arrow-clean { border-color: #ffffff; transform: rotate(45deg) scale(1.1); }
+@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); } 40% { transform: translateX(-50%) translateY(-10px); } 60% { transform: translateX(-50%) translateY(-5px); } }
 
-/* Hover Effekt: Wird weiß und etwas schärfer */
-.scroll-down-indicator:hover .arrow-clean { 
-  border-color: #ffffff;
-  transform: rotate(45deg) scale(1.1);
-}
-
-@keyframes bounce { 
-  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); } 
-  40% { transform: translateX(-50%) translateY(-10px); } 
-  60% { transform: translateX(-50%) translateY(-5px); } 
-}
-
-/* --- UNIVERSE GRID --- */
+/* UNIVERSE GRID */
 .universe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
 .universe-card { background: var(--bg-panel); border-radius: var(--radius); padding: 35px 30px; transition: 0.4s; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; min-height: 260px; text-decoration: none; }
 .universe-card:hover { transform: translateY(-7px); border-color: var(--accent); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
@@ -215,7 +120,6 @@
 .u-bg-glow { position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, var(--accent) 0%, transparent 60%); opacity: 0.08; filter: blur(50px); transition: 0.5s; pointer-events: none; }
 .universe-card:hover .u-bg-glow { opacity: 0.15; transform: scale(1.1); }
 
-/* --- FEATURES & CTA --- */
 .features-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
 .feature-box { background: rgba(255,255,255,0.02); padding: 40px; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.03); text-align: center; transition: 0.3s; }
 .feature-box:hover { background: rgba(255,255,255,0.04); border-color: var(--primary-glow); transform: translateY(-5px); }
@@ -225,22 +129,38 @@
 .cta-section { padding: 120px 0; text-align: center; background: linear-gradient(0deg, rgba(124, 58, 237, 0.1), transparent); }
 .cta-content h2 { font-size: 3rem; margin-bottom: 25px; font-family: 'Rajdhani', sans-serif; font-weight: 700; text-transform: uppercase; }
 
-/* --- MOBILE RESPONSIVE --- */
+/* --- MOBILE RESPONSIVE FIXES --- */
 @media (max-width: 900px) {
-  .hero { height: auto; min-height: 100vh; padding-top: 130px; padding-bottom: 80px; justify-content: center; }
-  .hero-content { flex-direction: column; text-align: center; gap: 40px; }
-  .hero h1 { font-size: 2.8rem; }
-  .hero-btns { justify-content: center; width: 100%; } .btn { width: 100%; }
+  .hero { 
+    height: auto; min-height: 100vh; 
+    padding-top: 130px; padding-bottom: 80px; 
+    justify-content: flex-start; 
+  }
+  .hero-content { 
+    flex-direction: column; text-align: center; gap: 40px; 
+  }
+  
+  /* Schriftgröße anpassen für Handy */
+  .hero h1 { font-size: 2.5rem; }
+  .hero p { max-width: 100%; font-size: 1rem; }
+  
+  .hero-btns { 
+    justify-content: center; width: 100%; 
+    flex-direction: column; /* Buttons untereinander auf Handy */
+  } 
+  .btn { width: 100%; }
   
   .hero-visual { 
-    width: 100%; 
-    flex: auto; 
-    padding: 0 20px; 
+    width: 100%; flex: auto; padding: 0; 
   }
   
   .stats-card { 
-    max-width: 100%; 
-    margin-top: 10px;
-    text-align: left; /* Text in der Box bleibt linksbündig für besseren Look */
+    max-width: 100%; margin-top: 20px; text-align: left; 
+    padding: 25px; /* Weniger Padding für Mobile */
   }
+  
+  .universe-grid, .features-wrapper {
+    grid-template-columns: 1fr; /* Alles untereinander */
+  }
+  .cta-content h2 { font-size: 2rem; }
 }
