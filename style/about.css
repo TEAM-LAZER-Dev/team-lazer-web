@@ -185,9 +185,24 @@
 .gal-img:hover { opacity: 1; transform: scale(1.02); border-color: var(--primary); }
 
 /* Tech Icons */
-.tech-icon { font-size: 2.5rem; color: rgba(255,255,255,0.3); transition: 0.3s; }
-.tech-icon:hover { color: #fff; transform: translateY(-5px); text-shadow: 0 0 15px currentColor; }
-
+    #tech {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+    .tech-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .tech-item span {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: 'Rajdhani', sans-serif;
+    }
 /* --- MOBILE RESPONSIVE --- */
 @media (max-width: 1024px) {
   .bento-wrapper { grid-template-columns: 1fr; grid-auto-rows: auto; }
