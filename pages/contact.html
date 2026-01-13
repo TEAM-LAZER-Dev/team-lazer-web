@@ -251,7 +251,7 @@
         'partnership': 'f082d410f13b1bd44226e05f4bc6f364'   // Partnerschaft -> Kontakt
     };
 
-    // 2. VERSAND-LOGIK MIT DEINEM LAYOUT
+    // 2. VERSAND-LOGIK MIT SPEZIAL-BETREFF
     function validateAndSend() {
         const name = document.getElementById('name').value.trim();
         const email = document.getElementById('email').value.trim();
@@ -278,11 +278,11 @@
 
         const targetEmail = emailMap[dept];
         
-        // Deutsche Namen für die Abteilung
+        // Kurze Namen für die Mail (ohne "Anfrage")
         const deptNames = {
-            'general': 'Allgemeine Anfrage',
-            'support': 'Technischer Support',
-            'security': 'Security Report',
+            'general': 'Allgemein',
+            'support': 'Support',
+            'security': 'Security',
             'partnership': 'Partnerschaft'
         };
         const deptFancy = deptNames[dept] || dept;
@@ -297,9 +297,10 @@
             body: JSON.stringify({
                 // Design Einstellungen
                 _template: "box",
-                _subject: "📫Nutzeranfrage: " + name + " " + deptFancy,
+                // HIER IST DER FETTE BETREFF (kopierter Unicode String)
+                _subject: "📫 𝗡𝘂𝘁𝘇𝗲𝗿𝗮𝗻𝗳𝗿𝗮𝗴𝗲: " + name + " (" + deptFancy + ")",
                 
-                // DEINE GEWÜNSCHTE STRUKTUR:
+                // INHALT WIE GEWÜNSCHT:
                 "👤 Name": name,
                 "📧 Email-Adresse": email,
                 "📂 Abteilung": deptFancy,
