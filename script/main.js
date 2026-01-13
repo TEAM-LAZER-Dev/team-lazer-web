@@ -8,11 +8,17 @@ window.scrollTo(0, 0);
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => window.scrollTo(0, 0), 10);
 
-  // Mobile Menu
+  // Mobile Menu Logic
   const burgerBtn = document.getElementById('burgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
   if(burgerBtn) {
-    burgerBtn.addEventListener('click', () => mobileMenu.classList.toggle('active'));
+    burgerBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+        // Burger Button Animation (optional, einfach halten)
+        burgerBtn.innerHTML = mobileMenu.classList.contains('active') 
+            ? '<i class="fa-solid fa-xmark"></i>' 
+            : '<i class="fa-solid fa-bars"></i>';
+    });
   }
 
   // Scroll Animations
@@ -98,11 +104,13 @@ function initLiveChat() {
   const bodyEl = document.getElementById('chatBody');
   const typingEl = document.getElementById('typingIndicator');
   
-  // FIX: Chat per JS öffnen
+  // FIX: Chat per JS öffnen & Tastatur Logik
   window.openTeamLazerChat = function() {
     windowEl.classList.add('active');
-    // NUR AM DESKTOP FOKUSSIEREN (Verhindert Tastatur am Handy)
-    if(window.innerWidth > 900) setTimeout(() => inputEl.focus(), 300);
+    // NUR AM PC FOKUSSIEREN (Breite > 900px)
+    if(window.innerWidth > 900) {
+        setTimeout(() => inputEl.focus(), 300);
+    }
   };
 
   toggleBtn.addEventListener('click', () => {
