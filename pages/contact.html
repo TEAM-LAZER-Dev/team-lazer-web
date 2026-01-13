@@ -2,14 +2,121 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kontakt | TEAM LAZER</title>
-  <link rel="stylesheet" href="../style/global.css" />
+  
+  <link rel="stylesheet" href="../style/global.css">
+  <link rel="stylesheet" href="../style/about.css"> <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    /* Spezifische Styles für das Kontaktformular im Bento-Stil */
+    .contact-form-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .input-group label {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .contact-input, .contact-select, .contact-textarea {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      transition: 0.3s;
+      width: 100%;
+    }
+    .contact-input:focus, .contact-select:focus, .contact-textarea:focus {
+      border-color: var(--primary);
+      background: rgba(124, 58, 237, 0.05);
+      outline: none;
+      box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
+    }
+    .contact-select option {
+      background: #0a0b10;
+      color: #fff;
+    }
+    .contact-textarea {
+      resize: vertical;
+      min-height: 150px;
+    }
+    
+    /* Direct Contact Items */
+    .direct-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .direct-contact-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .icon-circle {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: var(--primary);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      transition: 0.3s;
+    }
+    .direct-contact-item:hover .icon-circle {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+    .dc-content h4 {
+      margin: 0 0 5px 0;
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+    }
+    .dc-content a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+    .dc-content a:hover {
+      color: var(--primary);
+      text-shadow: 0 0 10px var(--primary-glow);
+    }
+
+    /* Grid Anpassungen für Kontakt */
+    .box-form { grid-column: span 7; grid-row: span 2; }
+    .box-info { grid-column: span 5; }
+    .box-discord { grid-column: span 5; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(88, 101, 242, 0.1); border-color: rgba(88, 101, 242, 0.3); }
+    .box-discord:hover { border-color: #5865F2; box-shadow: 0 0 30px rgba(88, 101, 242, 0.2); }
+
+    @media (max-width: 1024px) {
+      .box-form, .box-info, .box-discord { grid-column: span 12; }
+    }
+  </style>
 </head>
 <body>
+
   <div class="global-bg"></div>
-  
+
   <header class="navbar">
     <div class="container nav-container">
       <a class="nav-logo" href="../index.html">
@@ -20,7 +127,6 @@
         <a href="../index.html">Home</a>
         <a href="about.html">Über uns</a>
         <a href="contact.html" class="active">Kontakt</a>
-        <a href="../index.html#network" class="cyber-hover">Netzwerk</a>
         <a href="https://discord.gg/DEINLINK" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
       </nav>
       <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
@@ -28,29 +134,111 @@
   </header>
 
   <div class="mobile-menu" id="mobileMenu">
-    <a href="../index.html" class="mobile-link"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="about.html" class="mobile-link"><i class="fa-solid fa-users"></i> Über uns</a>
-    <a href="contact.html" class="mobile-link active"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+    <a href="../index.html" class="mobile-link">Home</a>
+    <a href="about.html" class="mobile-link">Über uns</a>
+    <a href="contact.html" class="mobile-link active">Kontakt</a>
+    <a href="https://discord.gg/DEINLINK" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
   </div>
 
-  <section class="hero small-hero" style="min-height: 60vh; padding-top: 100px;">
-    <div class="container text-center fade-in-up">
-      <span class="hero-tag">SUPPORT</span>
-      <h1>KONTAKT</h1>
-      <p style="margin-bottom: 30px;">Schreib uns eine Nachricht oder komm auf den Discord.</p>
-      
-      <form id="contactForm" style="max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
-        <input type="text" placeholder="Dein Name" style="padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px;">
-        <input type="email" placeholder="Deine Email" style="padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px;">
-        <textarea rows="5" placeholder="Deine Nachricht..." style="padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; resize: vertical;"></textarea>
-        <button type="submit" class="btn btn-primary glow-anim">Nachricht Senden</button>
-      </form>
+  <section class="small-hero">
+    <div class="container fade-in-up">
+      <span class="hero-tag">SUPPORT & ANFRAGEN</span>
+      <h1>GET IN <span class="highlight">TOUCH</span></h1>
+      <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+        Du hast Fragen zu unseren Services oder benötigst technischen Support? <br>
+        Wähle unten den passenden Bereich aus.
+      </p>
     </div>
   </section>
+  
+  <div class="bento-wrapper">
+    
+    <section class="bento-box box-form scroll-reveal">
+      <h2 class="bento-title">Nachricht senden</h2>
+      <form class="contact-form-container">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="input-group">
+                <label for="name">Dein Name / Tag</label>
+                <input type="text" id="name" class="contact-input" placeholder="z.B. fivozo">
+            </div>
+            <div class="input-group">
+                <label for="email">Deine E-Mail</label>
+                <input type="email" id="email" class="contact-input" placeholder="mail@example.com">
+            </div>
+        </div>
 
-  <footer>
+        <div class="input-group">
+            <label for="department">Worum geht es?</label>
+            <select id="department" class="contact-select">
+                <option value="general">Allgemeine Anfrage</option>
+                <option value="support">Support / Technische Hilfe</option>
+                <option value="security">Security / Bug Report</option>
+                <option value="partnership">Partnerschaft & Kooperation</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="message">Deine Nachricht</label>
+            <textarea id="message" class="contact-textarea" placeholder="Beschreibe dein Anliegen so genau wie möglich..."></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary glow-anim" style="align-self: flex-start; margin-top: 10px;">
+            <i class="fa-solid fa-paper-plane"></i> Absenden
+        </button>
+
+      </form>
+    </section>
+
+    <section class="bento-box box-info scroll-reveal delay-1">
+      <h2 class="bento-title">Direkter Draht</h2>
+      <p class="bento-text" style="margin-bottom: 30px;">
+        Lieber per E-Mail? Hier sind unsere offiziellen Adressen für dein Anliegen.
+      </p>
+
+      <div class="direct-contact-item">
+        <div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>
+        <div class="dc-content">
+            <h4>Allgemein / Business</h4>
+            <a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a>
+        </div>
+      </div>
+
+      <div class="direct-contact-item">
+        <div class="icon-circle"><i class="fa-solid fa-headset"></i></div>
+        <div class="dc-content">
+            <h4>Support</h4>
+            <a href="mailto:support@team-lazer.de">support@team-lazer.de</a>
+        </div>
+      </div>
+
+      <div class="direct-contact-item">
+        <div class="icon-circle"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="dc-content">
+            <h4>Security Team</h4>
+            <a href="mailto:security@team-lazer.de">security@team-lazer.de</a>
+        </div>
+      </div>
+    </section>
+
+    <a href="https://discord.gg/DEINLINK" target="_blank" class="bento-box box-discord scroll-reveal delay-2" style="text-decoration: none;">
+      <i class="fa-brands fa-discord" style="font-size: 3rem; color: #5865F2; margin-bottom: 15px;"></i>
+      <h3 style="color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; margin-bottom: 5px;">Live Support?</h3>
+      <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Eröffne ein Ticket direkt auf unserem Discord Server.</p>
+    </a>
+
+  </div>
+
+  <footer class="bg-darker" style="margin-top: 50px;">
     <div class="container text-center">
-      <p>&copy; 2026 TEAM LAZER.</p>
+      <div class="social-links" style="justify-content: center; margin-bottom: 20px;">
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://www.tiktok.com/@team.lazer.de"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://www.instagram.com/team_lazer.de"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://wa.me/491794406720" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+      <p class="muted">&copy; 2026 TEAM LAZER. All rights reserved.</p>
     </div>
   </footer>
 
