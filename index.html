@@ -4,12 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TEAM LAZER | Startseite</title>
-  
   <link rel="icon" type="image/webp" href="./images/tl-logo-nobg.webp" />
-  
   <link rel="stylesheet" href="./style/global.css" />
   <link rel="stylesheet" href="./style/home.css" />
-  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
 </head>
@@ -20,7 +17,7 @@
   <div class="scroll-ladder desktop-only">
     <div class="ladder-line"></div>
     <div class="ladder-indicator" id="scrollIndicator"></div>
-    </div>
+  </div>
 
   <header class="navbar">
     <div class="container nav-container">
@@ -42,77 +39,40 @@
     <a href="index.html" class="mobile-link active"><i class="fa-solid fa-layer-group"></i> Home</a>
     <a href="./pages/about.html" class="mobile-link"><i class="fa-solid fa-users-gear"></i> Über uns</a>
     <a href="./pages/contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
-    <a href="https://discord.gg/DEINLINK" target="_blank" class="mobile-link"><i class="fa-brands fa-discord"></i> Discord</a>
+    <a href="https://discord.gg/DEINLINK" target="_blank" class="mobile-link mobile-discord-btn"><i class="fa-brands fa-discord"></i> Join Discord</a>
   </div>
 
   <section class="hero" id="home" data-ladder-title="Vision">
     <div class="container hero-content fade-in-up">
-      
       <div class="hero-text">
         <span class="hero-tag">NEXT LEVEL GAMING</span>
         <h1>UNLOCK YOUR <br><span class="highlight">DIGITAL FUTURE</span></h1>
-        <p>Wir schaffen mehr als nur Spielraum. TEAM LAZER vereint professionelle <strong>Discord-Architektur</strong> und eigene <strong>Server-Netzwerke</strong> mit High-End <strong>Gaming</strong>. Egal ob du eine Community suchst, Events dominieren oder dein Ingame-Level auffrischen willst – wir liefern die Infrastruktur für deinen Aufstieg.</p>
-        
+        <p>Wir schaffen mehr als nur Spielraum. TEAM LAZER vereint professionelle Discord-Architektur mit High-End Gaming.</p>
         <div class="hero-btns">
-          <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim">
-            Join Discord
-          </a>
-          <a href="./pages/about.html" class="btn btn-secondary">
-            mehr erfahren
-          </a>
+          <a href="https://discord.gg/DEINLINK" target="_blank" class="btn btn-primary glow-anim">Join Discord</a>
+          <a href="./pages/about.html" class="btn btn-secondary">mehr erfahren</a>
         </div>
       </div>
-      
       <div class="hero-visual">
         <div class="stats-card glass-panel">
           <div class="stats-list-vertical">
-            <div class="stat-row-item">
-              <div class="stat-icon-small icon-purple"><i class="fa-brands fa-discord"></i></div>
-              <div class="stat-text"><h3 class="counter" data-target="457">0</h3><span>Discord Mitglieder</span></div>
-            </div>
-            <div class="stat-row-item">
-              <div class="stat-icon-small icon-green"><i class="fa-solid fa-server"></i></div>
-              <div class="stat-text"><h3 class="counter" data-target="2">0</h3><span>Aktive Server</span></div>
-            </div>
-            <div class="stat-row-item no-border">
-              <div class="stat-icon-small icon-gold"><i class="fa-solid fa-list-check"></i></div>
-              <div class="stat-text"><h3 class="counter" data-target="56">0</h3><span>Realisierte Projekte</span></div>
-            </div>
+            <div class="stat-row-item"><div class="stat-icon-small icon-purple"><i class="fa-brands fa-discord"></i></div><div class="stat-text"><h3 class="counter" data-target="457">0</h3><span>Discord Mitglieder</span></div></div>
+            <div class="stat-row-item"><div class="stat-icon-small icon-green"><i class="fa-solid fa-server"></i></div><div class="stat-text"><h3 class="counter" data-target="2">0</h3><span>Aktive Server</span></div></div>
+            <div class="stat-row-item no-border"><div class="stat-icon-small icon-gold"><i class="fa-solid fa-list-check"></i></div><div class="stat-text"><h3 class="counter" data-target="56">0</h3><span>Realisierte Projekte</span></div></div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="scroll-down-indicator" onclick="document.querySelector('#network').scrollIntoView({ behavior: 'smooth' });">
-      <span class="arrow-clean"></span>
-    </div>
+    <div class="scroll-down-indicator" onclick="document.querySelector('#network').scrollIntoView({ behavior: 'smooth' });"><span class="arrow-clean"></span></div>
   </section>
 
   <section class="section-padding" id="network" data-ladder-title="Ökosystem">
     <div class="container">
-      <div class="section-header scroll-reveal">
-        <h2>UNSERE <span class="highlight">GEBIETE</span></h2>
-        <p class="muted">Eine vernetzte Struktur für Content, Kommunikation und Gaming.</p>
-      </div>
+      <div class="section-header scroll-reveal"><h2>UNSERE <span class="highlight">GEBIETE</span></h2><p class="muted">Eine vernetzte Struktur für Content, Kommunikation und Gaming.</p></div>
       <div class="universe-grid">
-        <a href="https://youtube.com/@DEINKANAL" target="_blank" class="universe-card scroll-reveal color-1">
-          <div class="u-icon-wrapper"><i class="fa-solid fa-clapperboard"></i></div>
-          <div class="u-content"><h3>Media Production</h3><p>Unsere Content Creator stellen euch den besten Content zu verfügung. <br>Von Glitches, Tricks und Tipps bis hin zu Livestreams und Community Events.</p></div>
-          <div class="u-bg-glow"></div>
-        </a>
-        <a href="https://discord.gg/DEINLINK" target="_blank" class="universe-card scroll-reveal delay-1 color-2">
-          <div class="u-icon-wrapper"><i class="fa-brands fa-discord"></i></div>
-          <div class="u-content"><h3>Discord</h3><p>Du suchst Mitspieler oder willst auf dem Laufenden bleiben? - kein problem, wir bieten dir eine vielzahl an Discords und eine starke Community.</p></div>
-          <div class="u-bg-glow"></div>
-        </a>
-        <div class="universe-card scroll-reveal delay-2 color-3 cursor-default">
-            <div class="u-icon-wrapper"><i class="fa-solid fa-code"></i></div>
-            <div class="u-content">
-                <h3>Entwicklung</h3>
-                <p>Wir sind stets bemüht unserer Community nur das Beste zu bieten. Daher sind wir ständig beschäftigt unsere Systeme zu updaten und euch neue Erlebnisse zu bieten.</p>
-            </div>
-            <div class="u-bg-glow"></div>
-        </div>
+        <a href="#" class="universe-card scroll-reveal color-1"><div class="u-icon-wrapper"><i class="fa-solid fa-clapperboard"></i></div><div class="u-content"><h3>Media</h3><p>Content Creator, Streams und Events.</p></div><div class="u-bg-glow"></div></a>
+        <a href="#" class="universe-card scroll-reveal delay-1 color-2"><div class="u-icon-wrapper"><i class="fa-brands fa-discord"></i></div><div class="u-content"><h3>Community</h3><p>Der Ort wo alles zusammenkommt.</p></div><div class="u-bg-glow"></div></a>
+        <div class="universe-card scroll-reveal delay-2 color-3"><div class="u-icon-wrapper"><i class="fa-solid fa-code"></i></div><div class="u-content"><h3>Dev</h3><p>Custom Bots und Systemlösungen.</p></div><div class="u-bg-glow"></div></div>
       </div>
     </div>
   </section>
@@ -121,21 +81,9 @@
     <div class="container">
       <div class="section-header scroll-reveal"><h2>UNSERE <span class="highlight">STANDARDS</span></h2></div>
       <div class="features-wrapper">
-        <div class="feature-box slide-left">
-          <div class="icon-box"><i class="fa-solid fa-gamepad"></i></div>
-            <h3>High-End Gaming</h3>
-            <p>Professionelle Server und Infrastruktur für dein Next-Level Erlebnis.</p>
-          </div>
-        <div class="feature-box scroll-reveal delay-1">
-            <div class="icon-box"><i class="fa-solid fa-layer-group"></i></div>
-            <h3>Quality First</h3>
-            <p>Klasse statt Masse. Wir setzen auf hochwertige Interaktion.</p>
-        </div>
-        <div class="feature-box slide-right delay-2">
-            <div class="icon-box"><i class="fa-solid fa-rocket"></i></div>
-            <h3>Innovation</h3>
-            <p>Stetige Weiterentwicklung unserer Plattform und Services.</p>
-        </div>
+        <div class="feature-box slide-left"><div class="icon-box"><i class="fa-solid fa-gamepad"></i></div><h3>Gaming</h3><p>Server & Events.</p></div>
+        <div class="feature-box scroll-reveal delay-1"><div class="icon-box"><i class="fa-solid fa-layer-group"></i></div><h3>Quality</h3><p>Klasse statt Masse.</p></div>
+        <div class="feature-box slide-right delay-2"><div class="icon-box"><i class="fa-solid fa-rocket"></i></div><h3>Innovation</h3><p>Next Gen Features.</p></div>
       </div>
     </div>
   </section>
@@ -150,33 +98,11 @@
   <footer>
     <div class="container">
       <div class="footer-top">
-        <div class="footer-brand">
-            <img src="./images/tl-logo-nobg.webp" alt="Logo" class="footer-logo" />
-            <p>Excellence in Gaming & Development.</p>
-            <div class="social-links">
-            <a href="#"><i class="fa-brands fa-discord"></i></a>
-          <a href="#"><i class="fa-brands fa-youtube"></i></a>
-          <a href="https://www.tiktok.com/@team.lazer.de"><i class="fa-brands fa-tiktok"></i></a>
-        <a href="https://www.instagram.com/team_lazer.de"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://wa.me/491794406720" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-</div>
-        </div>
-        <div class="footer-links">
-            <h4>Allgemein</h4>
-            <ul>
-                <li><a href="./pages/about.html">Über uns</a></li>
-                <li><a href="./pages/contact.html">Kontakt</a></li>
-            </ul>
-        </div>
-        <div class="footer-links">
-            <h4>Rechtliches</h4>
-            <ul>
-                <li><a href="./pages/impressum.html">Impressum</a></li>
-                <li><a href="./pages/privacy.html">Datenschutz</a></li>
-            </ul>
-        </div>
+        <div class="footer-brand"><img src="./images/tl-logo-nobg.webp" class="footer-logo"><p>Excellence in Gaming & Development.</p></div>
+        <div class="footer-links"><h4>Allgemein</h4><ul><li><a href="./pages/about.html">Über uns</a></li><li><a href="./pages/contact.html">Kontakt</a></li></ul></div>
+        <div class="footer-links"><h4>Rechtliches</h4><ul><li><a href="./pages/impressum.html">Impressum</a></li><li><a href="./pages/privacy.html">Datenschutz</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><p>&copy; 2026 TEAM LAZER. All rights reserved.</p></div>
+      <div class="footer-bottom"><p>&copy; 2026 TEAM LAZER.</p></div>
     </div>
   </footer>
 
