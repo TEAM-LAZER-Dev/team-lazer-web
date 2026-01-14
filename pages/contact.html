@@ -9,73 +9,11 @@
   
   <link rel="stylesheet" href="../style/global.css">
   <link rel="stylesheet" href="../style/about.css"> 
+  <link rel="stylesheet" href="../style/contact.css">
   
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
 
-  <style>
-    .contact-form-container { display: flex; flex-direction: column; gap: 20px; }
-    .input-group { display: flex; flex-direction: column; gap: 8px; }
-    .input-group label { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; }
-    .required-star { color: #ff4757; margin-left: 4px; }
-    
-    .contact-input, .contact-select, .contact-textarea { 
-      background: rgba(255, 255, 255, 0.03); 
-      border: 1px solid rgba(255, 255, 255, 0.1); 
-      border-radius: 8px; 
-      padding: 15px; 
-      color: #fff; 
-      font-family: 'Inter', sans-serif; 
-      transition: 0.3s; 
-      width: 100%; 
-    }
-    .contact-input:focus, .contact-select:focus, .contact-textarea:focus { 
-      border-color: var(--primary); 
-      background: rgba(124, 58, 237, 0.05); 
-      outline: none; 
-      box-shadow: 0 0 15px rgba(124, 58, 237, 0.2); 
-    }
-    .contact-select option { background: #0a0b10; color: #fff; }
-    .contact-textarea { resize: vertical; min-height: 150px; }
-    
-    /* Direct Contacts */
-    .direct-contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .direct-contact-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .icon-circle { width: 50px; height: 50px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; display: grid; place-items: center; color: var(--primary); font-size: 1.2rem; flex-shrink: 0; transition: 0.3s; }
-    .direct-contact-item:hover .icon-circle { background: var(--primary); color: #fff; box-shadow: 0 0 20px var(--primary-glow); }
-    .dc-content h4 { margin: 0 0 5px 0; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; }
-    .dc-content a { color: var(--text-muted); font-size: 0.95rem; transition: 0.3s; }
-    .dc-content a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
-
-    /* Support Split */
-    .support-split-container { display: flex; gap: 15px; height: 100%; }
-    .support-option { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; text-decoration: none; transition: 0.3s; cursor: pointer; padding: 20px; }
-    .opt-discord:hover { background: rgba(88, 101, 242, 0.1); border-color: #5865F2; box-shadow: 0 0 20px rgba(88, 101, 242, 0.2); }
-    .opt-discord i { color: #5865F2; font-size: 2.5rem; margin-bottom: 10px; transition: 0.3s; }
-    .opt-chat:hover { background: rgba(16, 185, 129, 0.1); border-color: #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
-    .opt-chat i { color: #10b981; font-size: 2.5rem; margin-bottom: 10px; transition: 0.3s; }
-    .opt-title { color: #fff; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1.2rem; }
-    .opt-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; }
-
-    /* Modals */
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); z-index: 9999; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
-    .modal-overlay.active { display: flex; opacity: 1; }
-    .modal-box { background: #0f0f13; border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 16px; max-width: 400px; width: 90%; text-align: center; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-    .modal-overlay.active .modal-box { transform: scale(1); }
-    .modal-icon { font-size: 3rem; margin-bottom: 20px; }
-    .modal-icon.error { color: #ff4757; }
-    .modal-icon.success { color: #10b981; }
-    .modal-title { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; margin-bottom: 10px; color: #fff; }
-    .modal-text { color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; }
-    .modal-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-family: 'Rajdhani', sans-serif; font-weight: 700; transition: 0.3s; }
-    .modal-btn:hover { background: var(--primary); }
-
-    /* Layout */
-    .box-form { grid-column: span 7; grid-row: span 2; }
-    .box-info { grid-column: span 5; }
-    .box-support { grid-column: span 5; }
-    @media (max-width: 1024px) { .box-form, .box-info, .box-support { grid-column: span 12; } .support-split-container { flex-direction: column; } }
-  </style>
 </head>
 <body>
 
