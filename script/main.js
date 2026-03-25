@@ -11,13 +11,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // Mobile Menu Logic
   const burgerBtn = document.getElementById('burgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
-  if(burgerBtn) {
+
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('active');
+    burgerBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+  }
+
+  if (burgerBtn) {
     burgerBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
-        // Burger Button Animation (optional, einfach halten)
-        burgerBtn.innerHTML = mobileMenu.classList.contains('active') 
-            ? '<i class="fa-solid fa-xmark"></i>' 
-            : '<i class="fa-solid fa-bars"></i>';
+      mobileMenu.classList.toggle('active');
+      burgerBtn.innerHTML = mobileMenu.classList.contains('active')
+        ? '<i class="fa-solid fa-xmark"></i>'
+        : '<i class="fa-solid fa-bars"></i>';
+    });
+  }
+
+  // Menu schließen wenn ein Link geklickt wird
+  if (mobileMenu) {
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
     });
   }
 

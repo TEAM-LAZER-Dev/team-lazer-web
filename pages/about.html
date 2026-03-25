@@ -6,23 +6,24 @@
   <title>TEAM LAZER | Über uns</title>
 
   <link rel="icon" type="image/webp" href="../images/tl-logo-nobg.webp" />
-  
-  <link rel="stylesheet" href="../style/global.css">
-  <link rel="stylesheet" href="../style/about.css">
-  
+
+  <link rel="stylesheet" href="../style/global.css" />
+  <link rel="stylesheet" href="../style/about.css" />
+
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
-  
 </head>
 <body>
 
   <div class="global-bg"></div>
 
+  <!-- Scroll-Ladder (nur Desktop) -->
   <div class="scroll-ladder desktop-only">
     <div class="ladder-line"></div>
     <div class="ladder-indicator" id="scrollIndicator"></div>
   </div>
 
+  <!-- NAVBAR -->
   <header class="navbar">
     <div class="container nav-container">
       <a class="nav-logo" href="../index.html">
@@ -39,24 +40,28 @@
     </div>
   </header>
 
+  <!-- MOBILE MENU -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="../index.html" class="mobile-link">Home</a>
-    <a href="about.html" class="mobile-link active">Über uns</a>
-    <a href="contact.html" class="mobile-link">Kontakt</a>
-    <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
+    <a href="../index.html" class="mobile-link"><i class="fa-solid fa-layer-group"></i> Home</a>
+    <a href="about.html" class="mobile-link active"><i class="fa-solid fa-users-gear"></i> Über uns</a>
+    <a href="contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+    <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="mobile-link discord-highlight"><i class="fa-brands fa-discord"></i> Discord</a>
   </div>
 
+  <!-- HERO -->
   <section id="start" class="small-hero" data-ladder-title="Intro">
     <div class="container fade-in-up">
       <h1>UNSERE <span class="highlight">DNA</span></h1>
-      <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+      <p class="muted" style="max-width: 600px; margin: 0 auto;">
         Wir verbinden Gaming-Leidenschaft mit technischer Exzellenz.
       </p>
     </div>
   </section>
-  
+
+  <!-- BENTO GRID -->
   <div class="bento-wrapper">
-    
+
+    <!-- Vision -->
     <section id="vision" class="bento-box box-vision scroll-reveal" data-ladder-title="Vision">
       <h2 class="bento-title">Die Philosophie</h2>
       <p class="bento-text">
@@ -70,6 +75,7 @@
       </div>
     </section>
 
+    <!-- Stat 1 -->
     <section id="stats" class="bento-box box-stat-1 scroll-reveal delay-1" data-ladder-title="Impact">
       <div class="text-center">
         <i class="fa-solid fa-users" style="color: var(--primary); font-size: 2rem; margin-bottom: 10px;"></i>
@@ -78,6 +84,7 @@
       </div>
     </section>
 
+    <!-- Stat 2 -->
     <div class="bento-box box-stat-2 scroll-reveal delay-2">
       <div class="text-center">
         <i class="fa-solid fa-code-branch" style="color: var(--primary); font-size: 2rem; margin-bottom: 10px;"></i>
@@ -86,23 +93,23 @@
       </div>
     </div>
 
+    <!-- Team -->
     <section id="team" class="bento-box box-team scroll-reveal" data-ladder-title="Squad">
       <h2 class="bento-title text-center" style="margin-bottom: 10px;">Das <span class="highlight">Roster</span></h2>
       <p class="text-center muted" style="margin-bottom: 25px;">Die Köpfe hinter der Idee.</p>
-      
+
       <div class="team-grid">
-        
         <div class="member-card">
-          <div class="member-img-wrapper"><img src="../images/team-logos/fivozo-nobg.webp" alt="fivozo" class="member-img"></div>
+          <div class="member-img-wrapper"><img src="../images/team-logos/fivozo-nobg.webp" alt="fivozo" class="member-img" /></div>
           <div class="member-info">
             <h4>fivozo</h4>
             <span class="member-role">Owner</span>
             <div class="member-bio">Admin</div>
           </div>
         </div>
-        
+
         <div class="member-card">
-          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="wizzard" class="member-img"></div>
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="wizzard" class="member-img" /></div>
           <div class="member-info">
             <h4>wizzard</h4>
             <span class="member-role">Co-Owner</span>
@@ -111,7 +118,7 @@
         </div>
 
         <div class="member-card">
-          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user4" class="member-img"></div>
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="nico" class="member-img" /></div>
           <div class="member-info">
             <h4>nico</h4>
             <span class="member-role">Developer</span>
@@ -120,7 +127,7 @@
         </div>
 
         <div class="member-card">
-          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="nico" class="member-img"></div>
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user4" class="member-img" /></div>
           <div class="member-info">
             <h4>user4</h4>
             <span class="member-role">Developer</span>
@@ -129,7 +136,7 @@
         </div>
 
         <div class="member-card">
-          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user1" class="member-img"></div>
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user1" class="member-img" /></div>
           <div class="member-info">
             <h4>user1</h4>
             <span class="member-role">Management</span>
@@ -138,7 +145,7 @@
         </div>
 
         <div class="member-card">
-          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user 3" class="member-img"></div>
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user3" class="member-img" /></div>
           <div class="member-info">
             <h4>user 3</h4>
             <span class="member-role">Cybersecurity</span>
@@ -147,25 +154,25 @@
         </div>
 
         <div class="member-card">
-          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user2" class="member-img"></div>
+          <div class="member-img-wrapper"><img src="../images/tl-logo-nobg.webp" alt="user2" class="member-img" /></div>
           <div class="member-info">
             <h4>user2</h4>
             <span class="member-role">Service</span>
             <div class="member-bio">Product Management</div>
           </div>
         </div>
-
       </div>
     </section>
 
+    <!-- Timeline -->
     <section id="history" class="bento-box box-timeline scroll-reveal" data-ladder-title="History">
       <h2 class="bento-title">Die <span class="highlight">Evolution</span></h2>
       <p class="bento-text small" style="margin-bottom: 10px;">Vom CoD Clan zur Community</p>
 
       <div class="timeline-wrapper">
         <div class="timeline-line"></div>
-        <div class="timeline-progress"></div> 
-        
+        <div class="timeline-progress"></div>
+
         <div class="tl-item active">
           <div class="tl-dot" style="background: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px var(--primary);"></div>
           <div class="tl-content">
@@ -219,28 +226,28 @@
             <p>TEAM LAZER steht. Bereit für die Zukunft.</p>
           </div>
         </div>
-        
-        <div style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 1.2rem; position: relative; z-index: 2;">
-            <i class="fa-solid fa-arrow-down slide-down-anim"></i>
-        </div>
 
+        <div style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 1.2rem; position: relative; z-index: 2;">
+          <i class="fa-solid fa-arrow-down slide-down-anim"></i>
+        </div>
       </div>
     </section>
 
+    <!-- Gallery (Platzhalter) -->
     <section id="showcase" class="bento-box box-gallery scroll-reveal delay-1" data-ladder-title="Work">
       <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center;">
       </div>
     </section>
 
-    <section class="bento-box box-faq scroll-reveal" data-ladder-title="">
+    <!-- FAQ (Platzhalter) -->
+    <section class="bento-box box-faq scroll-reveal" data-ladder-title=""></section>
 
-    </section>
+    <!-- Partners (Platzhalter) -->
+    <section id="partners" class="bento-box box-partners scroll-reveal delay-1" data-ladder-title="Partner"></section>
 
-    <section id="partners" class="bento-box box-partners scroll-reveal delay-1" data-ladder-title="Partner">
-    </section>
+  </div>
 
-  </div> 
-
+  <!-- COMMUNITY SEKTION -->
   <section id="socials" class="section-padding text-center" data-ladder-title="Join">
     <h2 class="scroll-reveal" style="margin-bottom: 30px;">Werde Teil der <span class="highlight">Community</span></h2>
     <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="btn btn-primary glow-anim">
@@ -248,39 +255,44 @@
     </a>
   </section>
 
+  <!-- FOOTER -->
   <footer>
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand">
-            <img src="../images/tl-logo-nobg.webp" alt="Logo" class="footer-logo" />
-            <p>Excellence in Gaming & Development.</p>
-            <div class="social-links">
+          <img src="../images/tl-logo-nobg.webp" alt="Logo" class="footer-logo" />
+          <p>Excellence in Gaming & Development.</p>
+          <div class="social-links">
             <a href="#"><i class="fa-brands fa-discord"></i></a>
-          <a href="#"><i class="fa-brands fa-youtube"></i></a>
-          <a href="https://www.tiktok.com/@team.lazer.de"><i class="fa-brands fa-tiktok"></i></a>
-        <a href="https://www.instagram.com/team_lazer.de"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://wa.me/491794406720" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-</div>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.tiktok.com/@team.lazer.de"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://www.instagram.com/team_lazer.de"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://wa.me/491794406720" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
         </div>
         <div class="footer-links">
-            <h4>Allgemein</h4>
-            <ul>
-                <li><a href="../index.html">Startseite</a></li>
-                <li><a href="./contact.html">Kontakt</a></li>
-            </ul>
+          <h4>Allgemein</h4>
+          <ul>
+            <li><a href="../index.html">Startseite</a></li>
+            <li><a href="./contact.html">Kontakt</a></li>
+          </ul>
         </div>
         <div class="footer-links">
-            <h4>Rechtliches</h4>
-            <ul>
-                <li><a href="./pages/impressum.html">Impressum</a></li>
-                <li><a href="./pages/privacy.html">Datenschutz</a></li>
-            </ul>
+          <h4>Rechtliches</h4>
+          <ul>
+            <li><a href="./impressum.html">Impressum</a></li>
+            <li><a href="./privacy.html">Datenschutz</a></li>
+          </ul>
         </div>
       </div>
-      <div class="footer-bottom"><p>&copy; 2026 TEAM LAZER. All rights reserved.</p></div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 TEAM LAZER. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 
   <script src="../script/main.js"></script>
+  <script src="../script/ladder.js"></script>
+
 </body>
 </html>

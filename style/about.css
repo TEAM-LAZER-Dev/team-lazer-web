@@ -93,19 +93,4 @@
   .small-hero h1 { font-size: 2.2rem; }
   .box-gallery { grid-template-columns: 1fr; }
   
-  /* FIX: Formular inputs bedienbar machen */
-  .contact-input, .contact-select, .contact-textarea {
-    font-size: 16px; /* Verhindert iOS Zoom */
-    padding: 12px;
-  }
-  
-  /* Inputs im Grid untereinander statt nebeneinander */
-  .contact-form-container div[style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
-  }
-  
-  /* Support Optionen untereinander */
-  .support-split-container {
-      flex-direction: column;
-  }
 }

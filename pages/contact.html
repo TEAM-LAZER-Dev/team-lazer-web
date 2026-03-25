@@ -6,19 +6,19 @@
   <title>TEAM LAZER | Kontakt</title>
 
   <link rel="icon" type="image/webp" href="../images/tl-logo-nobg.webp" />
-  
-  <link rel="stylesheet" href="../style/global.css">
-  <link rel="stylesheet" href="../style/about.css"> 
-  <link rel="stylesheet" href="../style/contact.css">
-  
+
+  <link rel="stylesheet" href="../style/global.css" />
+  <link rel="stylesheet" href="../style/about.css" />
+  <link rel="stylesheet" href="../style/contact.css" />
+
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
-
 </head>
 <body>
 
   <div class="global-bg"></div>
 
+  <!-- NAVBAR -->
   <header class="navbar">
     <div class="container nav-container">
       <a class="nav-logo" href="../index.html">
@@ -35,119 +35,123 @@
     </div>
   </header>
 
+  <!-- MOBILE MENU -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="../index.html" class="mobile-link">Home</a>
-    <a href="about.html" class="mobile-link">Über uns</a>
-    <a href="contact.html" class="mobile-link active">Kontakt</a>
-    <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
+    <a href="../index.html" class="mobile-link"><i class="fa-solid fa-layer-group"></i> Home</a>
+    <a href="about.html" class="mobile-link"><i class="fa-solid fa-users-gear"></i> Über uns</a>
+    <a href="contact.html" class="mobile-link active"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+    <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="mobile-link discord-highlight"><i class="fa-brands fa-discord"></i> Discord</a>
   </div>
 
+  <!-- HERO -->
   <section class="small-hero">
     <div class="container fade-in-up">
       <span class="hero-tag">SUPPORT & ANFRAGEN</span>
       <h1>GET IN <span class="highlight">TOUCH</span></h1>
-      <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">
-        Du hast Fragen oder benötigst technischen Support? <br>
+      <p class="muted" style="max-width: 600px; margin: 0 auto;">
+        Du hast Fragen oder benötigst technischen Support?<br>
         Wähle unten den passenden Bereich aus.
       </p>
     </div>
   </section>
-  
+
+  <!-- BENTO GRID -->
   <div class="bento-wrapper">
-    
+
+    <!-- Kontaktformular -->
     <section class="bento-box box-form scroll-reveal">
       <h2 class="bento-title">Nachricht senden</h2>
-      <p style="font-size: 0.8rem; color: #ff4757; margin-bottom: 20px;">* Alle Felder sind Pflichtfelder.</p>
-      
+      <p class="required-hint">* Alle Felder sind Pflichtfelder.</p>
+
       <form class="contact-form-container" id="contactForm">
-        <input type="text" name="_honey" style="display:none">
-        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_honey" style="display:none" />
+        <input type="hidden" name="_captcha" value="false" />
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div class="input-group">
-                <label for="name">Name / Tag <span class="required-star">*</span></label>
-                <input type="text" id="name" name="name" class="contact-input" placeholder="z.B. Max">
-            </div>
-            <div class="input-group">
-                <label for="email">E-Mail <span class="required-star">*</span></label>
-                <input type="email" id="email" name="email" class="contact-input" placeholder="mail@example.com">
-            </div>
+        <div class="form-row">
+          <div class="input-group">
+            <label for="name">Name / Tag <span class="required-star">*</span></label>
+            <input type="text" id="name" name="name" class="contact-input" placeholder="z.B. Max" />
+          </div>
+          <div class="input-group">
+            <label for="email">E-Mail <span class="required-star">*</span></label>
+            <input type="email" id="email" name="email" class="contact-input" placeholder="mail@example.com" />
+          </div>
         </div>
 
         <div class="input-group">
-            <label for="department">Bereich <span class="required-star">*</span></label>
-            <select id="department" name="department" class="contact-select">
-                <option value="" disabled selected>Bitte wählen...</option>
-                <option value="general">Allgemeine Anfrage</option>
-                <option value="support">Support / Technische Hilfe</option>
-                <option value="security">Security / Bug Report</option>
-                <option value="partnership">Partnerschaft & Kooperation</option>
-            </select>
+          <label for="department">Bereich <span class="required-star">*</span></label>
+          <select id="department" name="department" class="contact-select">
+            <option value="" disabled selected>Bitte wählen...</option>
+            <option value="general">Allgemeine Anfrage</option>
+            <option value="support">Support / Technische Hilfe</option>
+            <option value="security">Security / Bug Report</option>
+            <option value="partnership">Partnerschaft & Kooperation</option>
+          </select>
         </div>
 
         <div class="input-group">
-            <label for="message">Nachricht <span class="required-star">*</span></label>
-            <textarea id="message" name="message" class="contact-textarea" placeholder="Beschreibe dein Anliegen so genau wie möglich..."></textarea>
+          <label for="message">Nachricht <span class="required-star">*</span></label>
+          <textarea id="message" name="message" class="contact-textarea" placeholder="Beschreibe dein Anliegen so genau wie möglich..."></textarea>
         </div>
 
         <button type="button" onclick="validateAndSend()" class="btn btn-primary glow-anim" style="align-self: flex-start; margin-top: 10px;">
-            <i class="fa-solid fa-paper-plane"></i> Absenden
+          <i class="fa-solid fa-paper-plane"></i> Absenden
         </button>
-
       </form>
     </section>
 
+    <!-- E-Mail Adressen -->
     <section class="bento-box box-info scroll-reveal delay-1">
       <h2 class="bento-title">E-Mail Adressen</h2>
-      <p class="bento-text" style="margin-bottom: 30px;">
-        Übersicht unserer offiziellen Abteilungen.
-      </p>
+      <p class="bento-text" style="margin-bottom: 30px;">Übersicht unserer offiziellen Abteilungen.</p>
 
       <div class="direct-contact-item">
         <div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>
         <div class="dc-content">
-            <h4>Allgemein / Business</h4>
-            <a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a>
+          <h4>Allgemein / Business</h4>
+          <a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a>
         </div>
       </div>
 
       <div class="direct-contact-item">
         <div class="icon-circle"><i class="fa-solid fa-headset"></i></div>
         <div class="dc-content">
-            <h4>Support</h4>
-            <a href="mailto:support@team-lazer.de">support@team-lazer.de</a>
+          <h4>Support</h4>
+          <a href="mailto:support@team-lazer.de">support@team-lazer.de</a>
         </div>
       </div>
 
       <div class="direct-contact-item">
         <div class="icon-circle"><i class="fa-solid fa-shield-halved"></i></div>
         <div class="dc-content">
-            <h4>Security Team</h4>
-            <a href="mailto:security@team-lazer.de">security@team-lazer.de</a>
+          <h4>Security Team</h4>
+          <a href="mailto:security@team-lazer.de">security@team-lazer.de</a>
         </div>
       </div>
     </section>
 
+    <!-- Live Support -->
     <section class="bento-box box-support scroll-reveal delay-2">
       <h2 class="bento-title" style="margin-bottom: 20px;">Live Support?</h2>
-      
-      <div class="support-split-container">
-          <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="support-option opt-discord">
-              <i class="fa-brands fa-discord"></i>
-              <span class="opt-title">Discord</span>
-              <span class="opt-desc">Ticket System & Community</span>
-          </a>
 
-          <div onclick="openChatWidget()" class="support-option opt-chat">
-              <i class="fa-solid fa-comments"></i>
-              <span class="opt-title">Live Chat</span>
-              <span class="opt-desc">Direkt hier schreiben</span>
-          </div>
+      <div class="support-split-container">
+        <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="support-option opt-discord">
+          <i class="fa-brands fa-discord"></i>
+          <span class="opt-title">Discord</span>
+          <span class="opt-desc">Ticket System & Community</span>
+        </a>
+
+        <div onclick="openChatWidget()" class="support-option opt-chat">
+          <i class="fa-solid fa-comments"></i>
+          <span class="opt-title">Live Chat</span>
+          <span class="opt-desc">Direkt hier schreiben</span>
+        </div>
       </div>
     </section>
 
   </div>
 
+  <!-- FOOTER -->
   <footer class="bg-darker" style="margin-top: 50px;">
     <div class="container text-center">
       <div class="social-links" style="justify-content: center; margin-bottom: 20px;">
@@ -161,124 +165,109 @@
     </div>
   </footer>
 
+  <!-- MODALS -->
   <div id="errorModal" class="modal-overlay">
-      <div class="modal-box">
-          <i class="fa-solid fa-circle-exclamation modal-icon error"></i>
-          <h3 class="modal-title">Angaben unvollständig</h3>
-          <p class="modal-text" id="errorText">Bitte überprüfe die markierten Felder.</p>
-          <button class="modal-btn" onclick="closeModal('errorModal')">Verstanden</button>
-      </div>
+    <div class="modal-box">
+      <i class="fa-solid fa-circle-exclamation modal-icon error"></i>
+      <h3 class="modal-title">Angaben unvollständig</h3>
+      <p class="modal-text" id="errorText">Bitte überprüfe die markierten Felder.</p>
+      <button class="modal-btn" onclick="closeModal('errorModal')">Verstanden</button>
+    </div>
   </div>
 
   <div id="successModal" class="modal-overlay">
-      <div class="modal-box">
-          <i class="fa-solid fa-circle-check modal-icon success"></i>
-          <h3 class="modal-title">Nachricht gesendet!</h3>
-          <p class="modal-text">Vielen Dank! Deine Nachricht hat uns erreicht. Wir werden uns so schnell wie möglich bei dir melden.</p>
-          <button class="modal-btn" onclick="closeModal('successModal')">Schließen</button>
-      </div>
+    <div class="modal-box">
+      <i class="fa-solid fa-circle-check modal-icon success"></i>
+      <h3 class="modal-title">Nachricht gesendet!</h3>
+      <p class="modal-text">Vielen Dank! Deine Nachricht hat uns erreicht. Wir werden uns so schnell wie möglich bei dir melden.</p>
+      <button class="modal-btn" onclick="closeModal('successModal')">Schließen</button>
+    </div>
   </div>
 
   <script src="../script/main.js"></script>
 
   <script>
-    // 1. ZIEL-ADRESSEN (CRYPTO STRINGS)
+    // E-Mail-Mapping (verschlüsselte FormSubmit-Adressen)
     const emailMap = {
-        'general': 'f082d410f13b1bd44226e05f4bc6f364',      // Kontakt
-        'support': 'ef30b4fce0be46e7d234817f848644e9',      // Support
-        'security': '4757895e5c2ac2543e5b237650a09e2b',     // Security
-        'partnership': 'f082d410f13b1bd44226e05f4bc6f364'   // Partnerschaft -> Kontakt
+      'general':     'f082d410f13b1bd44226e05f4bc6f364',
+      'support':     'ef30b4fce0be46e7d234817f848644e9',
+      'security':    '4757895e5c2ac2543e5b237650a09e2b',
+      'partnership': 'f082d410f13b1bd44226e05f4bc6f364'
     };
 
-    // 2. VERSAND-LOGIK
+    const deptNames = {
+      'general':     'Allgemein',
+      'support':     'Support',
+      'security':    'Security',
+      'partnership': 'Partnerschaft'
+    };
+
     function validateAndSend() {
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const dept = document.getElementById('department').value;
-        const msg = document.getElementById('message').value.trim();
-        
-        // Spam-Schutz (Honeypot) Wert holen
-        const honey = document.querySelector('input[name="_honey"]').value;
+      const name  = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const dept  = document.getElementById('department').value;
+      const msg   = document.getElementById('message').value.trim();
+      const honey = document.querySelector('input[name="_honey"]').value;
 
-        let errors = [];
-        if(!name) errors.push("Name fehlt");
-        if(!email || !email.includes('@')) errors.push("Gültige E-Mail fehlt");
-        if(!dept) errors.push("Bereich nicht ausgewählt");
-        if(!msg) errors.push("Nachricht ist leer");
-        
-        // Wenn Honeypot ausgefüllt ist, ist es ein Bot -> Abbruch ohne Fehler anzuzeigen
-        if(honey) return; 
+      // Honeypot-Check (Bot-Schutz)
+      if (honey) return;
 
-        if(errors.length > 0) {
-            const errorList = errors.join('<br>');
-            document.getElementById('errorText').innerHTML = "Folgende Felder fehlen:<br><br>" + errorList;
-            openModal('errorModal');
-            return;
-        }
+      let errors = [];
+      if (!name) errors.push("Name fehlt");
+      if (!email || !email.includes('@')) errors.push("Gültige E-Mail fehlt");
+      if (!dept) errors.push("Bereich nicht ausgewählt");
+      if (!msg) errors.push("Nachricht ist leer");
 
-        const btn = document.querySelector('button[onclick="validateAndSend()"]');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sende...';
-        btn.disabled = true;
+      if (errors.length > 0) {
+        document.getElementById('errorText').innerHTML = "Folgende Felder fehlen:<br><br>" + errors.join('<br>');
+        openModal('errorModal');
+        return;
+      }
 
-        const targetEmail = emailMap[dept];
-        
-        // Kurze Namen für die Mail
-        const deptNames = {
-            'general': 'Allgemein',
-            'support': 'Support',
-            'security': 'Security',
-            'partnership': 'Partnerschaft'
-        };
-        const deptFancy = deptNames[dept] || dept;
-        
-        // Fetch an FormSubmit
-        fetch("https://formsubmit.co/ajax/" + targetEmail, {
-            method: "POST",
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                _template: "box",
-                _subject: "📫 𝗡𝘂𝘁𝘇𝗲𝗿𝗮𝗻𝗳𝗿𝗮𝗴𝗲: " + name + " (" + deptFancy + ")",
-                _captcha: "false", // Captcha deaktivieren wie im HTML gewünscht
-                
-                "👤 Name": name,
-                "📧 Email-Adresse": email,
-                "📂 Abteilung": deptFancy,
-                "📝 Nachricht": msg,
-                
-                _replyto: email 
-            })
+      const btn = document.querySelector('button[onclick="validateAndSend()"]');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sende...';
+      btn.disabled = true;
+
+      const targetEmail = emailMap[dept];
+      const deptFancy   = deptNames[dept] || dept;
+
+      fetch("https://formsubmit.co/ajax/" + targetEmail, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _template: "box",
+          _subject: "Nutzeranfrage: " + name + " (" + deptFancy + ")",
+          _captcha: "false",
+          "Name": name,
+          "Email": email,
+          "Abteilung": deptFancy,
+          "Nachricht": msg,
+          _replyto: email
         })
-        .then(response => response.json())
-        .then(data => {
-            openModal('successModal');
-            document.getElementById('contactForm').reset();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("Fehler beim Senden. Bitte versuche es später.");
-        })
-        .finally(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        });
+      })
+      .then(res => res.json())
+      .then(() => {
+        openModal('successModal');
+        document.getElementById('contactForm').reset();
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        alert("Fehler beim Senden. Bitte versuche es später.");
+      })
+      .finally(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      });
     }
 
-    // Modal Helper
-    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function openModal(id)  { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-    
-    // LIVE CHAT ÖFFNEN
+
     function openChatWidget() {
-        if(window.openTeamLazerChat) {
-            window.openTeamLazerChat();
-        } else {
-            // Fallback falls main.js nicht geladen ist oder Funktion fehlt
-            console.log("Chat Widget Funktion noch nicht geladen.");
-        }
+      if (window.openTeamLazerChat) {
+        window.openTeamLazerChat();
+      }
     }
   </script>
 
