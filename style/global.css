@@ -322,9 +322,11 @@ footer {
   align-items: flex-end;
   pointer-events: none;
 }
-#tl-chat-container > * { pointer-events: auto; }
-
+/* Nur der Toggle-Button und das aktive Fenster sollen Klicks empfangen.
+   WICHTIG: Kein "* { pointer-events: auto }" hier — das würde per ID-Spezifität
+   das "pointer-events: none" auf .chat-window überschreiben und Klicks blockieren! */
 .chat-toggle-btn {
+  pointer-events: auto; /* Explizit – Toggle-Button muss immer klickbar sein */
   width: 60px;
   height: 60px;
   background: var(--primary);
