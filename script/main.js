@@ -5,8 +5,48 @@
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
 
-document.addEventListener('DOMContentLoaded', () => {
+// ── Live Stats von JSONBin laden ───────────────────────────────
+// Trage hier deine Bin-ID ein (jsonbin.io → dein Bin → ID aus der URL)
+const STATS_BIN_ID = 'DEINE_BIN_ID_HIER';
+
+async function loadLiveStats() {
+  // Wenn keine Bin-ID gesetzt, Fallback auf HTML-Werte
+  if (!STATS_BIN_ID || STATS_BIN_ID === 'DEINE_BIN_ID_HIER') return;
+
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${STATS_BIN_ID}/latest`, {
+      headers: { 'X-Bin-Meta': 'false' } // Nur Daten, kein Metadata-Wrapper
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    // Alle Counter-Elemente mit passendem data-stat aktualisieren
+    const map = {
+      members:  data.members,
+      servers:  data.servers,
+    };
+
+    document.querySelectorAll('.counter[data-stat]').forEach(el => {
+      const key = el.getAttribute('data-stat');
+      if (map[key] !== undefined) {
+        el.setAttribute('data-target', map[key]);
+      }
+    });
+
+    // Auch den Bot-Wissensdatenbank-Wert aktualisieren (falls Chat geladen)
+    window._liveStats = data;
+
+    console.log(`[Stats] Live geladen: ${data.members} members (Stand: ${data.updated})`);
+  } catch (e) {
+    console.warn('[Stats] Konnte Live-Daten nicht laden, nutze Fallback:', e.message);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
   setTimeout(() => window.scrollTo(0, 0), 10);
+
+  // Live-Daten laden BEVOR Counter starten
+  await loadLiveStats();
 
   // ── Mobile Menu ────────────────────────────────
   const burgerBtn  = document.getElementById('burgerBtn');
@@ -260,7 +300,8 @@ function initLiveChat() {
     return `<a href="${href}" target="_blank" style="color:var(--primary);text-decoration:underline;">${label}</a>`;
   }
 
-  // Wissensdatenbank
+  // Wissensdatenbank – live Werte überschreiben Fallbacks wenn geladen
+  const live = window._liveStats || {};
   const KB = {
     discord:       'https://discord.gg/dCxU6KqWFz',
     instagram:     'https://www.instagram.com/team_lazer.de',
@@ -269,8 +310,8 @@ function initLiveChat() {
     mailKontakt:   'kontakt@team-lazer.de',
     mailSupport:   'support@team-lazer.de',
     mailSecurity:  'security@team-lazer.de',
-    members:       '457+',
-    servers:       '2',
+    members:       live.members   ? `${live.members}` : '457+',
+    servers:       live.servers   ? `${live.servers}`  : '2',
     projects:      '56',
     activeProj:    '5',
     founded:       '2021',
