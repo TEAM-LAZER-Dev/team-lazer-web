@@ -3,521 +3,314 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TEAM LAZER | Websites · Discord Bots · Entwicklung aus Deutschland</title>
-  <meta name="description" content="TEAM LAZER entwickelt professionelle Websites, Discord Bots und Automatisierungen. Hosting inklusive. Festpreise auf Anfrage. Aus Deutschland – für alle." />
-
+  <title>TEAM LAZER | Websites · Discord Bots · Entwicklung</title>
+  <meta name="description" content="TEAM LAZER – professionelle Websites, Discord Bots und Automatisierungen. Hosting inklusive. Festpreise auf Anfrage. Aus Deutschland." />
   <link rel="icon" type="image/webp" href="./images/tl-logo-nobg.webp" />
   <link rel="stylesheet" href="./style/global.css" />
   <link rel="stylesheet" href="./style/home.css" />
-  <link rel="stylesheet" href="./style/shop.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
 </head>
 <body>
+<div class="global-bg"></div>
 
-  <div class="global-bg"></div>
-
-  <!-- NAVBAR -->
-  <header class="navbar" id="mainNav">
-    <div class="container nav-container">
-      <a class="nav-logo" href="index.html">
-        <img src="./images/tl-logo-nobg.webp" alt="TEAM LAZER Logo" />
-        <span class="logo-text">TEAM LAZER</span>
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <div class="container nav-container">
+    <a class="nav-logo" href="index.html">
+      <img src="./images/tl-logo-nobg.webp" alt="TEAM LAZER" />
+      TEAM LAZER
+    </a>
+    <nav class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="./pages/about.html">Über uns</a>
+      <a href="./pages/shop.html">Leistungen</a>
+      <a href="./pages/contact.html">Kontakt</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="./pages/contact.html" class="btn btn-primary btn-sm">
+        <i class="fa-solid fa-paper-plane"></i> Projekt anfragen
       </a>
-      <nav class="nav-links">
-        <a href="index.html" class="active">Home</a>
-        <a href="./pages/about.html">Über uns</a>
-        <a href="./pages/shop.html">Leistungen</a>
-        <a href="./pages/contact.html">Kontakt</a>
-      </nav>
-      <div class="nav-actions">
-        <a href="./pages/contact.html" class="btn btn-primary btn-sm">
-          <i class="fa-solid fa-paper-plane"></i> Projekt anfragen
-        </a>
-        <a href="./pages/login.html" class="nav-icon-btn" title="Login">
-          <i class="fa-solid fa-user"></i>
-        </a>
-        <a href="./pages/cart.html" class="nav-icon-btn" title="Anfrageliste">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span class="cart-badge">0</span>
-        </a>
-        <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
-      </div>
+      <button class="burger" id="burger" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-  </header>
-
-  <!-- MOBILE MENU -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html" class="mobile-link active"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="./pages/about.html" class="mobile-link"><i class="fa-solid fa-users"></i> Über uns</a>
-    <a href="./pages/shop.html" class="mobile-link"><i class="fa-solid fa-briefcase"></i> Leistungen</a>
-    <a href="./pages/contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
-    <a href="./pages/login.html" class="mobile-link"><i class="fa-solid fa-user"></i> Login</a>
-    <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="mobile-link discord-highlight"><i class="fa-brands fa-discord"></i> Discord</a>
   </div>
+</header>
 
-  <!-- ══════════════════════════════════════
-       HERO
-  ══════════════════════════════════════ -->
-  <section class="hero" id="home">
-    <div class="hero-bg-orb orb-1"></div>
-    <div class="hero-bg-orb orb-2"></div>
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="index.html" class="active"><i class="fa-solid fa-house"></i> Home</a>
+  <a href="./pages/about.html"><i class="fa-solid fa-users"></i> Über uns</a>
+  <a href="./pages/shop.html"><i class="fa-solid fa-briefcase"></i> Leistungen</a>
+  <a href="./pages/contact.html"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+  <div class="mobile-nav-footer">
+    <a href="./pages/contact.html" class="btn btn-primary">
+      <i class="fa-solid fa-paper-plane"></i> Projekt anfragen
+    </a>
+  </div>
+</nav>
 
-    <div class="container hero-content fade-in-up">
-      <div class="hero-text">
-        <div class="hero-eyebrow">
-          <span class="eyebrow-dot"></span>
-          <span>Development Studio aus Deutschland</span>
-        </div>
+<!-- ══ HERO ══ -->
+<section class="hero" id="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
 
-        <h1>
-          Wir entwickeln<br>
-          <span class="hero-typewriter-wrap">
-            <span class="highlight" id="typewriterText">Websites</span>
-            <span class="cursor-blink">|</span>
-          </span>
-          <br>die überzeugen.
-        </h1>
-
-        <p class="hero-sub">
-          Von der Landing Page bis zum komplexen Discord Bot –
-          <strong>TEAM LAZER</strong> liefert sauberen Code, transparente Preise
-          und übernimmt auf Wunsch auch das Hosting.
-        </p>
-
-        <div class="hero-btns">
-          <a href="./pages/contact.html" class="btn btn-primary glow-anim">
-            <i class="fa-solid fa-paper-plane"></i> Kostenloses Erstgespräch
-          </a>
-          <a href="./pages/shop.html" class="btn btn-secondary">
-            <i class="fa-solid fa-list"></i> Alle Leistungen
-          </a>
-        </div>
-
-        <div class="hero-badges">
-          <div class="hero-badge"><i class="fa-solid fa-check"></i> Festpreisangebot</div>
-          <div class="hero-badge"><i class="fa-solid fa-check"></i> Hosting inklusive</div>
-          <div class="hero-badge"><i class="fa-solid fa-check"></i> Source-Code Übergabe</div>
-          <div class="hero-badge"><i class="fa-solid fa-check"></i> 14 Tage Bugfix-Garantie</div>
-        </div>
+  <div class="container hero-inner">
+    <!-- LEFT -->
+    <div class="hero-text">
+      <div class="hero-pill">
+        <span class="hero-pill-dot"></span>
+        Development Studio aus Deutschland
       </div>
 
-      <div class="hero-visual">
-        <div class="hero-code-card">
-          <div class="code-card-header">
-            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-            <span class="code-card-title">projekt.js</span>
-          </div>
-          <div class="code-body">
-            <div class="code-line"><span class="c-kw">const</span> <span class="c-var">projekt</span> <span class="c-op">=</span> <span class="c-fn">TEAM_LAZER</span><span class="c-op">.</span><span class="c-fn">develop</span>(<span class="c-str">{</span></div>
-            <div class="code-line indent"><span class="c-key">typ</span><span class="c-op">:</span> <span class="c-str">'Website'</span><span class="c-op">,</span></div>
-            <div class="code-line indent"><span class="c-key">design</span><span class="c-op">:</span> <span class="c-str">'individuell'</span><span class="c-op">,</span></div>
-            <div class="code-line indent"><span class="c-key">hosting</span><span class="c-op">:</span> <span class="c-val">true</span><span class="c-op">,</span></div>
-            <div class="code-line indent"><span class="c-key">preis</span><span class="c-op">:</span> <span class="c-str">'auf Anfrage'</span><span class="c-op">,</span></div>
-            <div class="code-line indent"><span class="c-key">garantie</span><span class="c-op">:</span> <span class="c-str">'14 Tage'</span></div>
-            <div class="code-line"><span class="c-str">});</span></div>
-            <div class="code-line">&nbsp;</div>
-            <div class="code-line"><span class="c-cm">// Ergebnis: ✓ Projekt erfolgreich</span></div>
-            <div class="code-line"><span class="c-fn">console</span><span class="c-op">.</span><span class="c-fn">log</span>(<span class="c-var">projekt</span><span class="c-op">.</span><span class="c-key">status</span>);</div>
-            <div class="code-line output"><span class="c-str">→ "Lieferung in 7–14 Tagen"</span></div>
-          </div>
-          <div class="code-card-footer">
-            <span class="status-dot"></span> Projekt läuft...
-          </div>
-        </div>
+      <h1>Professionelle<br><span class="highlight">Entwicklung</span>.<br>Ohne Umwege.</h1>
+
+      <div class="hero-tw-row">
+        Wir bauen <span class="tw-word" id="twWord">Websites</span><span class="tw-cursor">|</span>
+      </div>
+
+      <p class="hero-sub">
+        Von der Landing Page bis zum komplexen Discord Bot –
+        sauberer Code, transparente Festpreise und Hosting auf Wunsch.
+      </p>
+
+      <div class="hero-btns">
+        <a href="./pages/contact.html" class="btn btn-primary">
+          <i class="fa-solid fa-paper-plane"></i> Kostenloses Erstgespräch
+        </a>
+        <a href="./pages/shop.html" class="btn btn-secondary">
+          <i class="fa-solid fa-briefcase"></i> Alle Leistungen
+        </a>
+      </div>
+
+      <div class="hero-trust">
+        <div class="trust-pill"><i class="fa-solid fa-check"></i> Festpreisangebot</div>
+        <div class="trust-pill"><i class="fa-solid fa-check"></i> Hosting inklusive</div>
+        <div class="trust-pill"><i class="fa-solid fa-check"></i> Source-Code Übergabe</div>
+        <div class="trust-pill"><i class="fa-solid fa-check"></i> 14 Tage Bugfix-Garantie</div>
       </div>
     </div>
 
-    <div class="scroll-down-indicator" id="scrollArrow"
-         onclick="document.querySelector('#leistungen').scrollIntoView({behavior:'smooth'}); this.classList.add('arrow-hidden');">
-      <div class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════
-       STATS BAR
-  ══════════════════════════════════════ -->
-  <div class="stats-bar">
-    <div class="container stats-bar-inner">
-      <div class="stat-bar-item">
-        <strong class="counter" data-target="50">0</strong><span>+ Projekte</span>
+    <!-- RIGHT – Floating Project Cards -->
+    <div class="hero-visual">
+      <div class="hv-card">
+        <div class="hv-icon c-blue"><i class="fa-solid fa-globe"></i></div>
+        <div class="hv-info">
+          <strong>Business Website</strong>
+          <span>Responsiv · Schnell · Individuell</span>
+        </div>
+        <div class="hv-status"><span class="hv-status-dot"></span>Live</div>
       </div>
-      <div class="stat-bar-sep"></div>
-      <div class="stat-bar-item">
-        <strong class="counter" data-target="3">0</strong><span>+ Jahre Erfahrung</span>
+      <div class="hv-card">
+        <div class="hv-icon c-purple"><i class="fa-brands fa-discord"></i></div>
+        <div class="hv-info">
+          <strong>Discord Bot</strong>
+          <span>Moderation · Leveling · Custom</span>
+        </div>
+        <div class="hv-status"><span class="hv-status-dot"></span>Aktiv</div>
       </div>
-      <div class="stat-bar-sep"></div>
-      <div class="stat-bar-item">
-        <strong><i class="fa-solid fa-clock" style="color:var(--primary);font-size:1.1rem;"></i></strong>
-        <span>24h Reaktionszeit</span>
-      </div>
-      <div class="stat-bar-sep"></div>
-      <div class="stat-bar-item">
-        <strong class="counter" data-target="100">0</strong><span>% Source-Code</span>
+      <div class="hv-card">
+        <div class="hv-icon c-green"><i class="fa-solid fa-gears"></i></div>
+        <div class="hv-info">
+          <strong>Automatisierung</strong>
+          <span>Webhooks · APIs · Skripte</span>
+        </div>
+        <div class="hv-status"><span class="hv-status-dot"></span>Läuft</div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ══════════════════════════════════════
-       LEISTUNGEN ÜBERSICHT
-  ══════════════════════════════════════ -->
-  <section class="section-padding" id="leistungen">
-    <div class="container">
-      <div class="section-header scroll-reveal">
-        <span class="section-tag">LEISTUNGEN</span>
-        <h2>Was wir für dich <span class="highlight">entwickeln</span></h2>
-        <p class="muted">Drei Kernbereiche – alles aus einer Hand, mit Hosting-Option und Festpreisangebot.</p>
-      </div>
-
-      <div class="services-grid">
-        <a href="./pages/shop.html" class="service-card scroll-reveal" style="--sc:#2563eb;">
-          <div class="service-card-top">
-            <div class="service-icon-wrap"><i class="fa-solid fa-globe"></i></div>
-            <span class="service-tag">Hosting inklusive</span>
-          </div>
-          <h3>Website Entwicklung</h3>
-          <p>Professionelle Websites von der Landing Page bis zur mehrseitigen Business-Website. Responsiv, schnell, ohne Baukastensystem.</p>
-          <ul class="service-list">
-            <li><i class="fa-solid fa-check"></i> Landing Pages & Business Sites</li>
-            <li><i class="fa-solid fa-check"></i> Individuelles Design</li>
-            <li><i class="fa-solid fa-check"></i> Hosting auf Wunsch inklusive</li>
-          </ul>
-          <div class="service-cta">Leistungen ansehen <i class="fa-solid fa-arrow-right"></i></div>
-        </a>
-
-        <a href="./pages/shop.html" class="service-card scroll-reveal delay-1" style="--sc:#7c3aed;">
-          <div class="service-card-top">
-            <div class="service-icon-wrap"><i class="fa-solid fa-robot"></i></div>
-            <span class="service-tag">24/7 Hosting möglich</span>
-          </div>
-          <h3>Discord Bot Entwicklung</h3>
-          <p>Individuelle Bots nach deinen Vorstellungen. Vom einfachen Command-Bot bis zu komplexen Systemen mit Datenbank und eigenem Panel.</p>
-          <ul class="service-list">
-            <li><i class="fa-solid fa-check"></i> Basic bis Advanced Bots</li>
-            <li><i class="fa-solid fa-check"></i> Datenbank & Automatisierungen</li>
-            <li><i class="fa-solid fa-check"></i> 24/7 Bot-Hosting möglich</li>
-          </ul>
-          <div class="service-cta">Leistungen ansehen <i class="fa-solid fa-arrow-right"></i></div>
-        </a>
-
-        <a href="./pages/shop.html" class="service-card scroll-reveal delay-2" style="--sc:#10b981;">
-          <div class="service-card-top">
-            <div class="service-icon-wrap"><i class="fa-solid fa-gears"></i></div>
-            <span class="service-tag">Schnelle Umsetzung</span>
-          </div>
-          <h3>Automation & Skripte</h3>
-          <p>Webhooks, API-Integrationen, automatische Berichte – wir automatisieren repetitive Aufgaben damit du dich auf das Wesentliche konzentrierst.</p>
-          <ul class="service-list">
-            <li><i class="fa-solid fa-check"></i> Discord Webhooks & APIs</li>
-            <li><i class="fa-solid fa-check"></i> Python & JavaScript Skripte</li>
-            <li><i class="fa-solid fa-check"></i> Datenverarbeitung</li>
-          </ul>
-          <div class="service-cta">Leistungen ansehen <i class="fa-solid fa-arrow-right"></i></div>
-        </a>
-      </div>
+<!-- ══ LEISTUNGEN ══ -->
+<section class="section-pad" id="leistungen">
+  <div class="container">
+    <div class="section-header g-reveal">
+      <span class="section-tag">LEISTUNGEN</span>
+      <h2>Was wir für dich <span class="highlight">entwickeln</span></h2>
+      <p>Drei Kernbereiche – alles aus einer Hand, mit Hosting-Option.</p>
     </div>
-  </section>
 
-  <!-- ══════════════════════════════════════
-       BEISPIELE – WEBSITE TYPEN
-  ══════════════════════════════════════ -->
-  <section class="section-padding bg-darker" id="examples">
-    <div class="container">
-      <div class="section-header scroll-reveal">
-        <span class="section-tag">BEISPIELE</span>
-        <h2>Welche Art Website <span class="highlight">brauchst du?</span></h2>
-        <p class="muted">Wir entwickeln alle Arten von Websites – hier ein Überblick was möglich ist.</p>
-      </div>
+    <div class="services-grid">
+      <a href="./pages/shop.html" class="svc-card g-reveal d1" style="--sc:#2563eb;">
+        <div class="svc-icon"><i class="fa-solid fa-globe"></i></div>
+        <span class="svc-tag">Hosting inklusive</span>
+        <h3>Website Entwicklung</h3>
+        <p>Landing Pages, Business-Websites und Community-Sites – responsiv, ohne Baukastensystem.</p>
+        <ul class="svc-list">
+          <li><i class="fa-solid fa-check"></i> Landing Pages & Business Sites</li>
+          <li><i class="fa-solid fa-check"></i> Individuelles Design</li>
+          <li><i class="fa-solid fa-check"></i> Hosting auf Wunsch</li>
+        </ul>
+        <div class="svc-link">Ansehen <i class="fa-solid fa-arrow-right"></i></div>
+      </a>
 
-      <div class="examples-grid scroll-reveal">
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#2563eb;"><i class="fa-solid fa-mobile-screen"></i></div>
-          <h4>Landing Page</h4>
-          <p>Eine starke Einzelseite für Produkte, Events oder Dienstleistungen. Klar, überzeugend, conversion-optimiert.</p>
-          <div class="ex-tags"><span>1 Seite</span><span>3–5 Tage</span></div>
-        </div>
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#7c3aed;"><i class="fa-solid fa-briefcase"></i></div>
-          <h4>Business Website</h4>
-          <p>Mehrseiter für Unternehmen, Freelancer oder Dienstleister. Mit Über-uns, Leistungen, Kontakt und mehr.</p>
-          <div class="ex-tags"><span>3–6 Seiten</span><span>7–14 Tage</span></div>
-        </div>
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#5865F2;"><i class="fa-brands fa-discord"></i></div>
-          <h4>Community Site</h4>
-          <p>Professioneller Webauftritt für Gaming-Clans, Discord-Server oder Online-Communities mit Stats und Discord-Integration.</p>
-          <div class="ex-tags"><span>Custom</span><span>10–21 Tage</span></div>
-        </div>
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#f59e0b;"><i class="fa-solid fa-palette"></i></div>
-          <h4>Portfolio</h4>
-          <p>Zeig was du kannst – elegante Portfolio-Website für Kreative, Entwickler, Designer oder Content Creator.</p>
-          <div class="ex-tags"><span>1–3 Seiten</span><span>5–10 Tage</span></div>
-        </div>
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#10b981;"><i class="fa-solid fa-calendar-days"></i></div>
-          <h4>Event & Booking</h4>
-          <p>Eventseiten mit Countdown, Ticketinfo, Programm und Anmeldeformular. Auch für Turniere oder Gaming-Events.</p>
-          <div class="ex-tags"><span>Custom</span><span>7–14 Tage</span></div>
-        </div>
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#e25555;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-          <h4>Custom Projekt</h4>
-          <p>Deine Idee passt in keine Kategorie? Kein Problem – wir entwickeln nach Briefing was auch immer du brauchst.</p>
-          <div class="ex-tags"><span>Nach Absprache</span><span>Flexibel</span></div>
-        </div>
-      </div>
+      <a href="./pages/shop.html" class="svc-card g-reveal d2" style="--sc:#7c3aed;">
+        <div class="svc-icon"><i class="fa-brands fa-discord"></i></div>
+        <span class="svc-tag">24/7 Hosting möglich</span>
+        <h3>Discord Bot Entwicklung</h3>
+        <p>Individuelle Bots nach Maß – vom einfachen Command-Bot bis zum komplexen System.</p>
+        <ul class="svc-list">
+          <li><i class="fa-solid fa-check"></i> Basic bis Advanced Bots</li>
+          <li><i class="fa-solid fa-check"></i> Datenbank & Automatisierungen</li>
+          <li><i class="fa-solid fa-check"></i> 24/7 Hosting möglich</li>
+        </ul>
+        <div class="svc-link">Ansehen <i class="fa-solid fa-arrow-right"></i></div>
+      </a>
 
-      <div class="section-divider"></div>
-
-      <div class="section-header scroll-reveal" style="margin-top:60px;">
-        <h2>Oder einen <span class="highlight">Discord Bot?</span></h2>
-        <p class="muted">Von einfachen Befehlen bis zu kompletten Server-Management-Systemen.</p>
-      </div>
-
-      <div class="examples-grid scroll-reveal">
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#5865F2;"><i class="fa-solid fa-shield-halved"></i></div>
-          <h4>Moderation Bot</h4>
-          <p>Auto-Moderations-Regeln, Warn-System, Mutes, Bans, Kick – komplett konfigurierbar für deinen Server.</p>
-          <div class="ex-tags"><span>Basic–Advanced</span></div>
-        </div>
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#f59e0b;"><i class="fa-solid fa-star"></i></div>
-          <h4>Leveling & Economy</h4>
-          <p>XP-System, Ranglisten, virtuelle Währung, Shop, tägliche Belohnungen – für aktive und engagierte Communities.</p>
-          <div class="ex-tags"><span>Advanced</span><span>Mit Datenbank</span></div>
-        </div>
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#10b981;"><i class="fa-solid fa-ticket"></i></div>
-          <h4>Ticket & Support</h4>
-          <p>Professionelles Ticket-System mit Kategorien, Transkripten, Rollenberechtigungen und automatischen Nachrichten.</p>
-          <div class="ex-tags"><span>Basic–Advanced</span></div>
-        </div>
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#7c3aed;"><i class="fa-solid fa-door-open"></i></div>
-          <h4>Welcome & Verify</h4>
-          <p>Automatische Begrüßung neuer Mitglieder, Verifizierungssystem mit Captcha oder Reaktionsrollen.</p>
-          <div class="ex-tags"><span>Basic</span><span>Schnell umgesetzt</span></div>
-        </div>
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#e25555;"><i class="fa-solid fa-gamepad"></i></div>
-          <h4>Gaming Bot</h4>
-          <p>Statistiken aus externen APIs (Steam, Riot usw.), Match-History, Elo-Tracking oder servereigene Mini-Spiele.</p>
-          <div class="ex-tags"><span>Advanced</span><span>API-Anbindung</span></div>
-        </div>
-        <div class="example-card">
-          <div class="ex-icon" style="--ec:#0ea5e9;"><i class="fa-solid fa-bell"></i></div>
-          <h4>Notification Bot</h4>
-          <p>Automatische Benachrichtigungen bei neuen YouTube-Videos, Twitch-Streams, GitHub-Commits oder eigenen Events.</p>
-          <div class="ex-tags"><span>Webhooks</span><span>API-Anbindung</span></div>
-        </div>
-      </div>
+      <a href="./pages/shop.html" class="svc-card g-reveal d3" style="--sc:#10b981;">
+        <div class="svc-icon"><i class="fa-solid fa-gears"></i></div>
+        <span class="svc-tag">Schnelle Umsetzung</span>
+        <h3>Automation & Skripte</h3>
+        <p>Webhooks, API-Integrationen und Skripte – wir automatisieren repetitive Aufgaben.</p>
+        <ul class="svc-list">
+          <li><i class="fa-solid fa-check"></i> Discord Webhooks & APIs</li>
+          <li><i class="fa-solid fa-check"></i> Python & JavaScript</li>
+          <li><i class="fa-solid fa-check"></i> Datenverarbeitung</li>
+        </ul>
+        <div class="svc-link">Ansehen <i class="fa-solid fa-arrow-right"></i></div>
+      </a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ══════════════════════════════════════
-       PROZESS
-  ══════════════════════════════════════ -->
-  <section class="section-padding" id="prozess">
-    <div class="container">
-      <div class="section-header scroll-reveal">
-        <span class="section-tag">SO FUNKTIONIERT'S</span>
-        <h2>Von der Anfrage zur <span class="highlight">fertigen Lieferung</span></h2>
-        <p class="muted">Transparent, unkompliziert und ohne Überraschungen.</p>
-      </div>
+<!-- ══ PROZESS ══ -->
+<section class="section-pad bg-alt" id="prozess">
+  <div class="container">
+    <div class="section-header g-reveal">
+      <span class="section-tag">SO LÄUFT'S</span>
+      <h2>Von der Anfrage zur <span class="highlight">fertigen Lieferung</span></h2>
+      <p>Transparent, unkompliziert, ohne Überraschungen.</p>
+    </div>
 
-      <div class="process-steps">
-        <div class="process-step scroll-reveal">
-          <div class="step-num">01</div>
-          <div class="step-icon"><i class="fa-solid fa-comments"></i></div>
+    <div class="process-row">
+      <div class="process-step g-reveal d1">
+        <div class="ps-num">01</div>
+        <div class="ps-icon"><i class="fa-solid fa-comments"></i></div>
+        <div>
           <h4>Anfrage stellen</h4>
-          <p>Füll unser Kontaktformular aus oder schreib uns eine E-Mail. Kurze Beschreibung genügt – wir melden uns innerhalb von 24 Stunden.</p>
+          <p>Kontaktformular ausfüllen oder E-Mail schicken. Kurze Beschreibung genügt – wir melden uns innerhalb von 24 Stunden.</p>
         </div>
-        <div class="process-connector"></div>
-        <div class="process-step scroll-reveal delay-1">
-          <div class="step-num">02</div>
-          <div class="step-icon"><i class="fa-solid fa-file-invoice"></i></div>
+      </div>
+      <div class="process-line"></div>
+      <div class="process-step g-reveal d2">
+        <div class="ps-num">02</div>
+        <div class="ps-icon"><i class="fa-solid fa-file-invoice"></i></div>
+        <div>
           <h4>Angebot erhalten</h4>
-          <p>Du bekommst ein klares Festpreisangebot: Was wir liefern, bis wann, und zu welchem Preis. Kein Kleingedrucktes.</p>
+          <p>Du bekommst ein klares Festpreisangebot: Was wir liefern, bis wann, zu welchem Preis. Kein Kleingedrucktes.</p>
         </div>
-        <div class="process-connector"></div>
-        <div class="process-step scroll-reveal delay-2">
-          <div class="step-num">03</div>
-          <div class="step-icon"><i class="fa-solid fa-code"></i></div>
+      </div>
+      <div class="process-line"></div>
+      <div class="process-step g-reveal d3">
+        <div class="ps-num">03</div>
+        <div class="ps-icon"><i class="fa-solid fa-code"></i></div>
+        <div>
           <h4>Wir entwickeln</h4>
-          <p>Nach deiner Freigabe legen wir los. Du bekommst Updates und kannst jederzeit Feedback geben. Keine Blackbox.</p>
+          <p>Nach Freigabe legen wir los. Du bekommst Updates und kannst jederzeit Feedback geben – keine Blackbox.</p>
         </div>
-        <div class="process-connector"></div>
-        <div class="process-step scroll-reveal delay-3">
-          <div class="step-num">04</div>
-          <div class="step-icon"><i class="fa-solid fa-rocket"></i></div>
+      </div>
+      <div class="process-line"></div>
+      <div class="process-step g-reveal d4">
+        <div class="ps-num">04</div>
+        <div class="ps-icon"><i class="fa-solid fa-rocket"></i></div>
+        <div>
           <h4>Übergabe & Launch</h4>
-          <p>Du erhältst den vollständigen Source-Code. Wir übernehmen das Deployment – oder richten das Hosting für dich ein.</p>
+          <p>Vollständiger Source-Code, Deployment oder Hosting nach Wunsch. Fertig in vereinbarter Zeit.</p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ══════════════════════════════════════
-       WARUM TEAM LAZER
-  ══════════════════════════════════════ -->
-  <section class="section-padding bg-darker" id="warum">
-    <div class="container">
-      <div class="section-header scroll-reveal">
-        <span class="section-tag">UNSERE STÄRKEN</span>
-        <h2>Warum Kunden sich für <span class="highlight">TEAM LAZER</span> entscheiden</h2>
+<!-- ══ CTA ══ -->
+<section class="section-pad" id="anfrage">
+  <div class="container">
+    <div class="cta-box g-reveal">
+      <h2>Bereit dein Projekt <span class="highlight">zu starten?</span></h2>
+      <p>Beschreib uns kurz was du brauchst – wir schicken dir innerhalb von 24 Stunden ein unverbindliches Festpreisangebot.</p>
+      <div class="cta-btns">
+        <a href="./pages/contact.html" class="btn btn-primary">
+          <i class="fa-solid fa-paper-plane"></i> Jetzt anfragen
+        </a>
+        <a href="./pages/shop.html" class="btn btn-secondary">
+          <i class="fa-solid fa-briefcase"></i> Alle Leistungen
+        </a>
       </div>
-      <div class="features-wrapper">
-        <div class="feature-box slide-left">
-          <div class="icon-box"><i class="fa-solid fa-server"></i></div>
-          <h3>Hosting inklusive</h3>
-          <p>Wir betreiben eigene Server-Infrastruktur. Deine Website oder dein Bot kann direkt bei uns laufen – zuverlässig, rund um die Uhr, ohne zusätzliche Kosten.</p>
-        </div>
-        <div class="feature-box scroll-reveal delay-1">
-          <div class="icon-box"><i class="fa-solid fa-file-code"></i></div>
-          <h3>Source-Code gehört dir</h3>
-          <p>Du bist Eigentümer des Ergebnisses. Kein Lock-in, kein "nur bei uns erweiterbar" – wir übergeben vollständigen, sauber dokumentierten Code.</p>
-        </div>
-        <div class="feature-box slide-right">
-          <div class="icon-box"><i class="fa-solid fa-receipt"></i></div>
-          <h3>Festpreisangebote</h3>
-          <p>Du weißt vorher genau was du zahlst. Keine Stundensatz-Überraschungen, keine nachträglichen Rechnungen – Festpreis, vereinbart, fertig.</p>
-        </div>
-        <div class="feature-box slide-left delay-1">
-          <div class="icon-box"><i class="fa-solid fa-bolt"></i></div>
-          <h3>Schnelle Lieferung</h3>
-          <p>Kein wochenlanger Vorlauf für kleine Projekte. Wir starten schnell und liefern innerhalb der vereinbarten Frist – oder früher.</p>
-        </div>
-        <div class="feature-box scroll-reveal delay-2">
-          <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
-          <h3>14 Tage Bugfix-Garantie</h3>
-          <p>Fehler auf unserer Seite beheben wir kostenlos und ohne Diskussion. 14 Tage nach Übergabe ist dein Projekt in sicheren Händen.</p>
-        </div>
-        <div class="feature-box slide-right delay-1">
-          <div class="icon-box"><i class="fa-solid fa-envelope"></i></div>
-          <h3>Direkter Kontakt</h3>
-          <p>Du erreichst uns per E-Mail oder Kontaktformular und bekommst innerhalb von 24 Stunden eine echte Antwort – kein automatischer Chatbot.</p>
-        </div>
+      <div class="cta-pills">
+        <div class="cta-pill"><i class="fa-solid fa-clock"></i> 24h Reaktionszeit</div>
+        <div class="cta-pill"><i class="fa-solid fa-server"></i> Hosting inklusive</div>
+        <div class="cta-pill"><i class="fa-solid fa-shield-halved"></i> Bugfix-Garantie</div>
+        <div class="cta-pill"><i class="fa-solid fa-file-code"></i> Source-Code Übergabe</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ══════════════════════════════════════
-       CTA – ANFRAGE
-  ══════════════════════════════════════ -->
-  <section class="section-padding scroll-reveal" id="anfrage">
-    <div class="container">
-      <div class="cta-project-box">
-        <div class="cta-project-glow"></div>
-        <div class="cta-project-content">
-          <span class="section-tag" style="margin-bottom:18px;display:inline-block;">KOSTENLOSE ERSTBERATUNG</span>
-          <h2>Bereit dein Projekt<br><span class="highlight">zu starten?</span></h2>
-          <p>Beschreib uns kurz was du brauchst – wir schicken dir innerhalb von 24 Stunden ein unverbindliches Festpreisangebot. Keine Kosten, keine Verpflichtung.</p>
-          <div class="cta-project-btns">
-            <a href="./pages/contact.html" class="btn btn-primary glow-anim">
-              <i class="fa-solid fa-paper-plane"></i> Jetzt anfragen
-            </a>
-            <a href="./pages/shop.html" class="btn btn-secondary">
-              <i class="fa-solid fa-list"></i> Alle Leistungen
-            </a>
-          </div>
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="./images/tl-logo-nobg.webp" alt="TEAM LAZER" />
+        <p>Websites · Discord Bots · Automatisierung.<br>Entwickelt in Deutschland.</p>
+        <div class="footer-social">
+          <a href="https://discord.gg/dCxU6KqWFz" title="Discord"><i class="fa-brands fa-discord"></i></a>
+          <a href="https://www.tiktok.com/@team.lazer.de" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://www.instagram.com/team_lazer.de" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
         </div>
-        <div class="cta-project-badges">
-          <div class="cta-badge"><i class="fa-solid fa-comment-dots"></i><div><strong>Kostenlose Beratung</strong><span>Unverbindlich anfragen</span></div></div>
-          <div class="cta-badge"><i class="fa-solid fa-clock"></i><div><strong>24h Reaktionszeit</strong><span>Wir melden uns schnell</span></div></div>
-          <div class="cta-badge"><i class="fa-solid fa-server"></i><div><strong>Hosting inklusive</strong><span>Website & Bot</span></div></div>
-          <div class="cta-badge"><i class="fa-solid fa-shield-halved"></i><div><strong>Bugfix-Garantie</strong><span>14 Tage nach Launch</span></div></div>
-        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Leistungen</h5>
+        <a href="./pages/shop.html">Alle Leistungen</a>
+        <a href="./pages/shop.html">Website Entwicklung</a>
+        <a href="./pages/shop.html">Discord Bots</a>
+        <a href="./pages/shop.html">Automation</a>
+      </div>
+      <div class="footer-col">
+        <h5>Unternehmen</h5>
+        <a href="./pages/about.html">Über uns</a>
+        <a href="./pages/contact.html">Kontakt</a>
+        <a href="./pages/login.html">Login</a>
+      </div>
+      <div class="footer-col">
+        <h5>Rechtliches</h5>
+        <a href="./pages/impressum.html">Impressum</a>
+        <a href="./pages/agb.html">AGB</a>
+        <a href="./pages/privacy.html">Datenschutz</a>
       </div>
     </div>
-  </section>
-
-  <!-- ══════════════════════════════════════
-       FOOTER
-  ══════════════════════════════════════ -->
-  <footer>
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <img src="./images/tl-logo-nobg.webp" alt="TEAM LAZER Logo" class="footer-logo" />
-          <p>Websites · Discord Bots · Automatisierung.<br>Entwickelt und gehostet in Deutschland.</p>
-          <div class="social-links">
-            <a href="https://discord.gg/dCxU6KqWFz" title="Discord"><i class="fa-brands fa-discord"></i></a>
-            <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://www.tiktok.com/@team.lazer.de" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://www.instagram.com/team_lazer.de" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          </div>
-        </div>
-        <div class="footer-links">
-          <h4>Leistungen</h4>
-          <ul>
-            <li><a href="./pages/shop.html">Alle Leistungen</a></li>
-            <li><a href="./pages/shop.html">Website Entwicklung</a></li>
-            <li><a href="./pages/shop.html">Discord Bots</a></li>
-            <li><a href="./pages/shop.html">Automation</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Unternehmen</h4>
-          <ul>
-            <li><a href="./pages/about.html">Über uns</a></li>
-            <li><a href="./pages/contact.html">Kontakt</a></li>
-            <li><a href="./pages/login.html">Kundenbereich</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Rechtliches</h4>
-          <ul>
-            <li><a href="./pages/impressum.html">Impressum</a></li>
-            <li><a href="./pages/agb.html">AGB</a></li>
-            <li><a href="./pages/privacy.html">Datenschutz</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 TEAM LAZER · Alle Rechte vorbehalten · Entwickelt mit <i class="fa-solid fa-heart" style="color:#7c3aed;font-size:0.75rem;"></i> in Deutschland</p>
-        <div class="footer-bottom-links">
-          <a href="./pages/impressum.html">Impressum</a>
-          <a href="./pages/privacy.html">Datenschutz</a>
-        </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 TEAM LAZER · Alle Rechte vorbehalten</span>
+      <div class="footer-bottom-links">
+        <a href="./pages/impressum.html">Impressum</a>
+        <a href="./pages/privacy.html">Datenschutz</a>
       </div>
     </div>
-  </footer>
+  </div>
+</footer>
 
-  <script src="./script/products.js"></script>
-  <script src="./script/cart.js"></script>
-  <script src="./script/main.js"></script>
-  <script src="./script/cookie.js"></script>
-
-  <script>
-    /* ── Scroll-Pfeil ausblenden ── */
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 80) {
-        document.getElementById('scrollArrow')?.classList.add('arrow-hidden');
-      }
-    }, { passive: true });
-
-    /* ── Typewriter ── */
-    const words = ['Websites', 'Discord Bots', 'Landing Pages', 'Automatisierungen', 'Community Sites'];
-    let wi = 0, ci = 0, deleting = false;
-    const el = document.getElementById('typewriterText');
-
-    function typeLoop() {
-      if (!el) return;
-      const word = words[wi];
-      if (!deleting) {
-        el.textContent = word.slice(0, ++ci);
-        if (ci === word.length) { deleting = true; setTimeout(typeLoop, 1800); return; }
-        setTimeout(typeLoop, 80);
-      } else {
-        el.textContent = word.slice(0, --ci);
-        if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; setTimeout(typeLoop, 300); return; }
-        setTimeout(typeLoop, 45);
-      }
-    }
-    typeLoop();
-  </script>
-
+<script src="./script/main.js"></script>
+<script src="./script/cookie.js"></script>
+<script>
+/* ── Typewriter (below h1, no layout jump) ── */
+const words = ['Websites','Discord Bots','Landing Pages','Automatisierungen','Bots'];
+let wi=0,ci=0,del=false;
+const el=document.getElementById('twWord');
+function tw(){
+  if(!el)return;
+  const w=words[wi];
+  if(!del){
+    el.textContent=w.slice(0,++ci);
+    if(ci===w.length){del=true;setTimeout(tw,2000);return;}
+    setTimeout(tw,80);
+  } else {
+    el.textContent=w.slice(0,--ci);
+    if(ci===0){del=false;wi=(wi+1)%words.length;setTimeout(tw,300);return;}
+    setTimeout(tw,45);
+  }
+}
+tw();
+</script>
 </body>
 </html>

@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="../style/global.css">
-    <link rel="stylesheet" href="../style/shop.css">
     <style>
         .legal-section {
             padding: 130px 0 80px;
@@ -89,34 +88,35 @@
 </head>
 <body>
     <div class="global-bg"></div>
-    <header class="navbar">
-        <div class="container nav-container">
-            <a class="nav-logo" href="../index.html">
-                <img src="../images/tl-logo-nobg.webp" alt="Logo" />
-                <span class="logo-text">TEAM LAZER</span>
-            </a>
-                  <nav class="nav-links">
-        <a href="../index.html">Home</a>
-        <a href="about.html">Über uns</a>
-        <a href="shop.html">Leistungen</a>
-        <a href="contact.html">Kontakt</a>
-      </nav>
-      <div class="nav-actions">
-        <a href="contact.html" class="btn btn-primary btn-sm">
-          <i class="fa-solid fa-paper-plane"></i> Projekt anfragen
-        </a>
-        <a href="login.html" class="nav-icon-btn" title="Login">
-          <i class="fa-solid fa-user"></i>
-        </a>
-        <a href="cart.html" class="nav-icon-btn" title="Anfrageliste">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span class="cart-badge">0</span>
-        </a>
-        <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
-      </div>
-        </div>
-    </header>
-      <div class="mobile-menu" id="mobileMenu">
+    
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <div class="container nav-container">
+    <a class="nav-logo" href="../index.html">
+      <img src="../images/tl-logo-nobg.webp" alt="TEAM LAZER" /> TEAM LAZER
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="about.html">Über uns</a>
+      <a href="shop.html">Leistungen</a>
+      <a href="contact.html">Kontakt</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="contact.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-paper-plane"></i> Projekt anfragen</a>
+      <button class="burger" id="burger" aria-label="Menü"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
+  <a href="about.html"><i class="fa-solid fa-users"></i> Über uns</a>
+  <a href="shop.html"><i class="fa-solid fa-briefcase"></i> Leistungen</a>
+  <a href="contact.html"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+  <div class="mobile-nav-footer">
+    <a href="contact.html" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Projekt anfragen</a>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
     <a href="../index.html" class="mobile-link"><i class="fa-solid fa-house"></i> Home</a>
     <a href="about.html" class="mobile-link"><i class="fa-solid fa-users"></i> Über uns</a>
     <a href="shop.html" class="mobile-link"><i class="fa-solid fa-briefcase"></i> Leistungen</a>
@@ -332,58 +332,47 @@ Wir werden Ihre Anfrage innerhalb von 30 Tagen bearbeiten.</p>
         </div>
     </section>
 
-      <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <img src="../images/tl-logo-nobg.webp" alt="TEAM LAZER Logo" class="footer-logo" />
-          <p>Websites · Discord Bots · Automatisierung.<br>Entwickelt und gehostet in Deutschland.</p>
-          <div class="social-links">
-            <a href="https://discord.gg/dCxU6KqWFz" title="Discord"><i class="fa-brands fa-discord"></i></a>
-            <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://www.tiktok.com/@team.lazer.de" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://www.instagram.com/team_lazer.de" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          </div>
-        </div>
-        <div class="footer-links">
-          <h4>Leistungen</h4>
-          <ul>
-            <li><a href="shop.html">Alle Leistungen</a></li>
-            <li><a href="shop.html">Website Entwicklung</a></li>
-            <li><a href="shop.html">Discord Bots</a></li>
-            <li><a href="shop.html">Automation</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Unternehmen</h4>
-          <ul>
-            <li><a href="about.html">Über uns</a></li>
-            <li><a href="contact.html">Kontakt</a></li>
-            <li><a href="login.html">Kundenbereich</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Rechtliches</h4>
-          <ul>
-            <li><a href="impressum.html">Impressum</a></li>
-            <li><a href="agb.html">AGB</a></li>
-            <li><a href="privacy.html">Datenschutz</a></li>
-          </ul>
+      
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="../images/tl-logo-nobg.webp" alt="TEAM LAZER" />
+        <p>Websites · Discord Bots · Automatisierung.<br>Entwickelt in Deutschland.</p>
+        <div class="footer-social">
+          <a href="https://discord.gg/dCxU6KqWFz"><i class="fa-brands fa-discord"></i></a>
+          <a href="https://www.tiktok.com/@team.lazer.de"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://www.instagram.com/team_lazer.de"><i class="fa-brands fa-instagram"></i></a>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 TEAM LAZER &middot; Alle Rechte vorbehalten &middot; Entwickelt mit <i class="fa-solid fa-heart" style="color:#7c3aed;font-size:0.75rem;"></i> in Deutschland</p>
-        <div class="footer-bottom-links">
-          <a href="impressum.html">Impressum</a>
-          <a href="privacy.html">Datenschutz</a>
-        </div>
+      <div class="footer-col"><h5>Leistungen</h5>
+        <a href="shop.html">Alle Leistungen</a>
+        <a href="shop.html">Website Entwicklung</a>
+        <a href="shop.html">Discord Bots</a>
+        <a href="shop.html">Automation</a>
+      </div>
+      <div class="footer-col"><h5>Unternehmen</h5>
+        <a href="about.html">Über uns</a>
+        <a href="contact.html">Kontakt</a>
+        <a href="login.html">Login</a>
+      </div>
+      <div class="footer-col"><h5>Rechtliches</h5>
+        <a href="impressum.html">Impressum</a>
+        <a href="agb.html">AGB</a>
+        <a href="privacy.html">Datenschutz</a>
       </div>
     </div>
-  </footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 TEAM LAZER &middot; Alle Rechte vorbehalten</span>
+      <div class="footer-bottom-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="privacy.html">Datenschutz</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-    <script src="../script/products.js"></script>
-    <script src="../script/cart.js"></script>
     <script src="../script/main.js"></script>
     <script src="../script/cookie.js"></script>
 </body>

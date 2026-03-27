@@ -4,523 +4,258 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TEAM LAZER | Kontakt</title>
-
   <link rel="icon" type="image/webp" href="../images/tl-logo-nobg.webp" />
-
   <link rel="stylesheet" href="../style/global.css" />
-  <link rel="stylesheet" href="../style/about.css" />
-  <link rel="stylesheet" href="../style/shop.css" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
-
   <style>
-    /* Contact Page Specific Styles */
-    .contact-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      padding: 80px 0;
-      align-items: start;
+    .contact-layout {
+      display: grid; grid-template-columns: 1fr 380px;
+      gap: 48px; align-items: start;
     }
-
-    .contact-form-section h2 {
-      font-size: 1.8rem;
-      margin-bottom: 30px;
-      color: #fff;
+    .contact-form-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 36px;
     }
-
-    .form-group {
-      margin-bottom: 25px;
+    .contact-form-card h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.5rem; font-weight: 800;
+      text-transform: uppercase; margin-bottom: 22px;
     }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-submit { margin-top: 4px; }
+    .form-submit .btn { width: 100%; justify-content: center; padding: 14px; font-size: 0.92rem; }
 
-    .form-group label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: 600;
-      color: #fff;
-      font-size: 0.95rem;
+    /* Info column */
+    .contact-info { display: flex; flex-direction: column; gap: 14px; }
+    .info-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 22px;
+      display: flex; align-items: flex-start; gap: 16px;
+      transition: 0.3s;
     }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.03);
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      transition: all 0.3s ease;
+    .info-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
+    .info-icon {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      background: var(--primary-dim); border: 1px solid var(--primary-border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--primary); font-size: 1rem;
     }
+    .info-text strong { display: block; font-size: 0.88rem; font-weight: 600; color: #fff; margin-bottom: 3px; }
+    .info-text span { font-size: 0.82rem; color: var(--muted); }
+    .info-text a { color: var(--primary); }
+    .info-text a:hover { text-decoration: underline; }
 
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--primary);
-      box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
-    }
-
-    .form-group input::placeholder,
-    .form-group textarea::placeholder {
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .form-group textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
-
-    .form-submit {
-      margin-top: 10px;
-    }
-
-    .contact-info-section {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-    }
-
-    .contact-info-card {
-      background: rgba(124, 58, 237, 0.08);
-      border: 1px solid rgba(124, 58, 237, 0.2);
-      border-radius: 12px;
-      padding: 30px;
-      display: flex;
-      gap: 20px;
-    }
-
-    .contact-info-icon {
-      width: 50px;
-      height: 50px;
-      background: rgba(124, 58, 237, 0.2);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--primary);
-      font-size: 1.5rem;
-      flex-shrink: 0;
-    }
-
-    .contact-info-content h3 {
-      font-size: 1.1rem;
-      margin-bottom: 5px;
-      color: #fff;
-    }
-
-    .contact-info-content p {
-      color: var(--text-muted);
-      margin-bottom: 10px;
-      font-size: 0.95rem;
-    }
-
-    .contact-info-content a {
-      color: var(--primary);
-      font-weight: 600;
-      text-decoration: none;
-      transition: 0.3s ease;
-    }
-
-    .contact-info-content a:hover {
-      text-shadow: 0 0 15px var(--primary-glow);
+    .form-success {
+      display: none; padding: 20px; border-radius: 12px;
+      background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2);
+      text-align: center; color: #4ade80; font-size: 0.9rem;
     }
 
     @media (max-width: 900px) {
-      .contact-container {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .contact-form-section h2 {
-        font-size: 1.5rem;
-      }
+      .contact-layout { grid-template-columns: 1fr; gap: 24px; }
+      .contact-info { order: -1; flex-direction: row; flex-wrap: wrap; }
+      .info-card { flex: 1; min-width: 200px; }
     }
-
-    /* Modal Styles */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(5px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 5000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .modal-box {
-      background: rgba(10, 11, 16, 0.95);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(124, 58, 237, 0.3);
-      border-radius: 12px;
-      padding: 50px 40px;
-      text-align: center;
-      max-width: 450px;
-      animation: modalSlideUp 0.3s ease;
-    }
-
-    @keyframes modalSlideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .modal-icon {
-      font-size: 3rem;
-      margin-bottom: 20px;
-    }
-
-    .modal-icon.error {
-      color: #ef4444;
-    }
-
-    .modal-icon.success {
-      color: #10b981;
-    }
-
-    .modal-title {
-      font-size: 1.5rem;
-      margin-bottom: 15px;
-      color: #fff;
-    }
-
-    .modal-text {
-      color: var(--text-muted);
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-
-    .modal-btn {
-      padding: 12px 30px;
-      background: var(--primary);
-      border: none;
-      border-radius: 6px;
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .modal-btn:hover {
-      background: #6d28d9;
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .contact-form-card { padding: 24px 18px; }
+      .contact-info { flex-direction: column; }
     }
   </style>
 </head>
 <body>
+<div class="global-bg"></div>
 
-  <div class="global-bg"></div>
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <div class="container nav-container">
+    <a class="nav-logo" href="../index.html">
+      <img src="../images/tl-logo-nobg.webp" alt="TEAM LAZER" /> TEAM LAZER
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="about.html">Über uns</a>
+      <a href="shop.html">Leistungen</a>
+      <a href="contact.html" class="active">Kontakt</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="contact.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-paper-plane"></i> Projekt anfragen</a>
+      <button class="burger" id="burger" aria-label="Menü"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
+  <a href="about.html"><i class="fa-solid fa-users"></i> Über uns</a>
+  <a href="shop.html"><i class="fa-solid fa-briefcase"></i> Leistungen</a>
+  <a href="contact.html" class="active"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+  <div class="mobile-nav-footer">
+    <a href="contact.html" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Projekt anfragen</a>
+  </div>
+</nav>
 
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="container nav-container">
-      <a class="nav-logo" href="../index.html">
-        <img src="../images/tl-logo-nobg.webp" alt="Logo" />
-        <span class="logo-text">TEAM LAZER</span>
-      </a>
-            <nav class="nav-links">
-        <a href="../index.html">Home</a>
+<!-- HERO -->
+<section class="small-hero">
+  <div class="container g-reveal">
+    <span class="section-tag">KOSTENLOSE ERSTBERATUNG</span>
+    <h1>Kontakt</h1>
+    <p>Stell uns dein Projekt vor. Wir melden uns innerhalb von 24 Stunden mit einem unverbindlichen Festpreisangebot.</p>
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section class="section-pad bg-alt">
+  <div class="container">
+    <div class="contact-layout">
+      <!-- FORM -->
+      <div class="contact-form-card g-reveal">
+        <h2>Projektanfrage</h2>
+        <div class="form-success" id="formSuccess">
+          <i class="fa-solid fa-circle-check" style="font-size:1.4rem;margin-bottom:8px;display:block;"></i>
+          Danke für deine Anfrage! Wir melden uns innerhalb von 24 Stunden.
+        </div>
+        <form id="contactForm" action="https://formsubmit.co/kontakt@team-lazer.de" method="POST">
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_subject" value="Neue Projektanfrage – TEAM LAZER" />
+          <input type="text" name="_honey" style="display:none" />
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">Name *</label>
+              <input type="text" id="fname" name="name" placeholder="Max Mustermann" required />
+            </div>
+            <div class="form-group">
+              <label for="femail">E-Mail *</label>
+              <input type="email" id="femail" name="email" placeholder="deine@email.de" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="ftyp">Art des Projekts *</label>
+            <select id="ftyp" name="projekttyp" required>
+              <option value="" disabled selected>– Bitte wählen –</option>
+              <option>Landing Page</option>
+              <option>Business Website</option>
+              <option>Custom Website</option>
+              <option>Discord Bot (Basic)</option>
+              <option>Discord Bot (Advanced)</option>
+              <option>Bot Anpassung</option>
+              <option>Discord Server Setup</option>
+              <option>Webhook / API Integration</option>
+              <option>Custom Skript / Automation</option>
+              <option>Sonstiges</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="fmsg">Beschreibung *</label>
+            <textarea id="fmsg" name="nachricht" placeholder="Beschreib kurz dein Projekt oder was du brauchst..." required></textarea>
+          </div>
+
+          <div class="form-submit">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-paper-plane"></i> Anfrage abschicken
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- INFO -->
+      <div class="contact-info">
+        <div class="info-card g-reveal d1">
+          <div class="info-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div class="info-text">
+            <strong>E-Mail</strong>
+            <span><a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a></span>
+          </div>
+        </div>
+        <div class="info-card g-reveal d2">
+          <div class="info-icon"><i class="fa-solid fa-clock"></i></div>
+          <div class="info-text">
+            <strong>Reaktionszeit</strong>
+            <span>Wir antworten innerhalb von 24 Stunden.</span>
+          </div>
+        </div>
+        <div class="info-card g-reveal d3">
+          <div class="info-icon"><i class="fa-solid fa-server"></i></div>
+          <div class="info-text">
+            <strong>Hosting inklusive</strong>
+            <span>Websites und Bots können direkt bei uns gehostet werden.</span>
+          </div>
+        </div>
+        <div class="info-card g-reveal d4">
+          <div class="info-icon"><i class="fa-solid fa-receipt"></i></div>
+          <div class="info-text">
+            <strong>Festpreisangebot</strong>
+            <span>Kein Stundensatz, keine Überraschungen. Preis vor Projektstart.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="../images/tl-logo-nobg.webp" alt="TEAM LAZER" />
+        <p>Websites · Discord Bots · Automatisierung.<br>Entwickelt in Deutschland.</p>
+        <div class="footer-social">
+          <a href="https://discord.gg/dCxU6KqWFz"><i class="fa-brands fa-discord"></i></a>
+          <a href="https://www.tiktok.com/@team.lazer.de"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://www.instagram.com/team_lazer.de"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h5>Leistungen</h5>
+        <a href="shop.html">Alle Leistungen</a>
+        <a href="shop.html">Website Entwicklung</a>
+        <a href="shop.html">Discord Bots</a>
+        <a href="shop.html">Automation</a>
+      </div>
+      <div class="footer-col"><h5>Unternehmen</h5>
         <a href="about.html">Über uns</a>
-        <a href="shop.html">Leistungen</a>
-        <a href="contact.html" class="active">Kontakt</a>
-      </nav>
-      <div class="nav-actions">
-        <a href="contact.html" class="btn btn-primary btn-sm">
-          <i class="fa-solid fa-paper-plane"></i> Projekt anfragen
-        </a>
-        <a href="login.html" class="nav-icon-btn" title="Login">
-          <i class="fa-solid fa-user"></i>
-        </a>
-        <a href="cart.html" class="nav-icon-btn" title="Anfrageliste">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span class="cart-badge">0</span>
-        </a>
-        <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
+        <a href="contact.html">Kontakt</a>
+        <a href="login.html">Login</a>
+      </div>
+      <div class="footer-col"><h5>Rechtliches</h5>
+        <a href="impressum.html">Impressum</a>
+        <a href="agb.html">AGB</a>
+        <a href="privacy.html">Datenschutz</a>
       </div>
     </div>
-  </header>
-
-  <!-- MOBILE MENU -->
-    <div class="mobile-menu" id="mobileMenu">
-    <a href="../index.html" class="mobile-link"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="about.html" class="mobile-link"><i class="fa-solid fa-users"></i> Über uns</a>
-    <a href="shop.html" class="mobile-link"><i class="fa-solid fa-briefcase"></i> Leistungen</a>
-    <a href="contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
-    <a href="login.html" class="mobile-link"><i class="fa-solid fa-user"></i> Login</a>
-  </div>
-
-  <!-- HERO -->
-  <section class="small-hero">
-    <div class="container fade-in-up">
-      <h1>KONTAKT</h1>
-      <p class="muted" style="max-width: 700px; margin: 0 auto; font-size: 1.1rem;">
-        Lass uns über dein Projekt sprechen. Wir antworten innerhalb von 24 Stunden.
-      </p>
-    </div>
-  </section>
-
-  <!-- CONTACT SECTION -->
-  <section class="bg-darker">
-    <div class="container">
-      <div class="contact-container">
-
-        <!-- LEFT: CONTACT FORM -->
-        <div class="contact-form-section">
-          <h2>Projektanfrage</h2>
-          <form id="contactForm">
-            <input type="text" name="_honey" style="display:none" />
-            <input type="hidden" name="_captcha" value="false" />
-
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" id="name" name="name" placeholder="Dein Name" />
-            </div>
-
-            <div class="form-group">
-              <label for="email">E-Mail</label>
-              <input type="email" id="email" name="email" placeholder="deine@email.de" />
-            </div>
-
-            <div class="form-group">
-              <label for="projectType">Projekttyp</label>
-              <select id="projectType" name="projectType">
-                <option value="">Bitte wählen...</option>
-                <option value="Website">Website</option>
-                <option value="Discord Bot">Discord Bot</option>
-                <option value="Automation">Automation</option>
-                <option value="Sonstiges">Sonstiges</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="budget">Budget</label>
-              <select id="budget" name="budget">
-                <option value="">Bitte wählen...</option>
-                <option value="Auf Anfrage">Auf Anfrage</option>
-                <option value="unter 100 EUR">unter 100 EUR</option>
-                <option value="100-300 EUR">100-300 EUR</option>
-                <option value="300-500 EUR">300-500 EUR</option>
-                <option value="500+ EUR">500+ EUR</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="description">Projektbeschreibung</label>
-              <textarea id="description" name="description" placeholder="Beschreibe dein Projekt so genau wie möglich..."></textarea>
-            </div>
-
-            <div class="form-submit">
-              <button type="button" onclick="validateAndSend()" class="btn btn-primary">
-                <i class="fa-solid fa-arrow-right"></i> Anfrage senden
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- RIGHT: CONTACT INFO -->
-        <div class="contact-info-section">
-          <div class="contact-info-card">
-            <div class="contact-info-icon">
-              <i class="fa-solid fa-envelope"></i>
-            </div>
-            <div class="contact-info-content">
-              <h3>E-Mail</h3>
-              <a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a>
-            </div>
-          </div>
-
-          <div class="contact-info-card">
-            <div class="contact-info-icon">
-              <i class="fa-solid fa-clock"></i>
-            </div>
-            <div class="contact-info-content">
-              <h3>Reaktionszeit</h3>
-              <p>Innerhalb von 24 Stunden</p>
-            </div>
-          </div>
-
-          <div class="contact-info-card">
-            <div class="contact-info-icon">
-              <i class="fa-solid fa-rocket"></i>
-            </div>
-            <div class="contact-info-content">
-              <h3>Projektstart</h3>
-              <p>Innerhalb von 7 Tagen möglich</p>
-            </div>
-          </div>
-
-          <div class="contact-info-card">
-            <div class="contact-info-icon">
-              <i class="fa-solid fa-server"></i>
-            </div>
-            <div class="contact-info-content">
-              <h3>Hosting</h3>
-              <p>Inklusive für alle Projekte</p>
-            </div>
-          </div>
-        </div>
-
+    <div class="footer-bottom">
+      <span>&copy; 2026 TEAM LAZER · Alle Rechte vorbehalten</span>
+      <div class="footer-bottom-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="privacy.html">Datenschutz</a>
       </div>
-    </div>
-  </section>
-
-    <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <img src="../images/tl-logo-nobg.webp" alt="TEAM LAZER Logo" class="footer-logo" />
-          <p>Websites · Discord Bots · Automatisierung.<br>Entwickelt und gehostet in Deutschland.</p>
-          <div class="social-links">
-            <a href="https://discord.gg/dCxU6KqWFz" title="Discord"><i class="fa-brands fa-discord"></i></a>
-            <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://www.tiktok.com/@team.lazer.de" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://www.instagram.com/team_lazer.de" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          </div>
-        </div>
-        <div class="footer-links">
-          <h4>Leistungen</h4>
-          <ul>
-            <li><a href="shop.html">Alle Leistungen</a></li>
-            <li><a href="shop.html">Website Entwicklung</a></li>
-            <li><a href="shop.html">Discord Bots</a></li>
-            <li><a href="shop.html">Automation</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Unternehmen</h4>
-          <ul>
-            <li><a href="about.html">Über uns</a></li>
-            <li><a href="contact.html">Kontakt</a></li>
-            <li><a href="login.html">Kundenbereich</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Rechtliches</h4>
-          <ul>
-            <li><a href="impressum.html">Impressum</a></li>
-            <li><a href="agb.html">AGB</a></li>
-            <li><a href="privacy.html">Datenschutz</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 TEAM LAZER &middot; Alle Rechte vorbehalten &middot; Entwickelt mit <i class="fa-solid fa-heart" style="color:#7c3aed;font-size:0.75rem;"></i> in Deutschland</p>
-        <div class="footer-bottom-links">
-          <a href="impressum.html">Impressum</a>
-          <a href="privacy.html">Datenschutz</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- MODALS -->
-  <div id="errorModal" class="modal-overlay">
-    <div class="modal-box">
-      <i class="fa-solid fa-circle-exclamation modal-icon error"></i>
-      <h3 class="modal-title">Angaben unvollständig</h3>
-      <p class="modal-text" id="errorText">Bitte überprüfe die markierten Felder.</p>
-      <button class="modal-btn" onclick="closeModal('errorModal')">Verstanden</button>
     </div>
   </div>
+</footer>
 
-  <div id="successModal" class="modal-overlay">
-    <div class="modal-box">
-      <i class="fa-solid fa-circle-check modal-icon success"></i>
-      <h3 class="modal-title">Anfrage gesendet!</h3>
-      <p class="modal-text">Vielen Dank! Wir haben deine Anfrage erhalten und werden uns innerhalb von 24 Stunden bei dir melden.</p>
-      <button class="modal-btn" onclick="closeModal('successModal')">Schließen</button>
-    </div>
-  </div>
-
-  <script src="../script/products.js"></script>
-  <script src="../script/cart.js"></script>
-  <script src="../script/main.js"></script>
-  <script src="../script/cookie.js"></script>
-
-  <script>
-    function validateAndSend() {
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const projectType = document.getElementById('projectType').value;
-      const budget = document.getElementById('budget').value;
-      const description = document.getElementById('description').value.trim();
-      const honey = document.querySelector('input[name="_honey"]').value;
-
-      if (honey) return;
-
-      let errors = [];
-      if (!name) errors.push("Name ist erforderlich");
-      if (!email || !email.includes('@')) errors.push("Gültige E-Mail ist erforderlich");
-      if (!projectType) errors.push("Projekttyp ist erforderlich");
-      if (!budget) errors.push("Budget ist erforderlich");
-      if (!description) errors.push("Projektbeschreibung ist erforderlich");
-
-      if (errors.length > 0) {
-        document.getElementById('errorText').innerHTML = errors.join('<br>');
-        openModal('errorModal');
-        return;
-      }
-
-      const btn = document.querySelector('button[onclick="validateAndSend()"]');
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Wird gesendet...';
-      btn.disabled = true;
-
-      fetch("https://formsubmit.co/ajax/kontakt@team-lazer.de", {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          _template: "box",
-          _subject: "Neue Projektanfrage: " + name,
-          _captcha: "false",
-          "Name": name,
-          "Email": email,
-          "Projekttyp": projectType,
-          "Budget": budget,
-          "Projektbeschreibung": description,
-          _replyto: email
-        })
-      })
-      .then(res => res.json())
-      .then(() => {
-        openModal('successModal');
-        document.getElementById('contactForm').reset();
-      })
-      .catch(err => {
-        console.error('Error:', err);
-        alert("Fehler beim Senden. Bitte versuche es später.");
-      })
-      .finally(() => {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-      });
-    }
-
-    function openModal(id) {
-      document.getElementById(id).classList.add('active');
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('active');
-    }
-  </script>
-
+<script src="../script/main.js"></script>
+<script src="../script/cookie.js"></script>
+<script>
+/* Pre-fill from URL param */
+const params = new URLSearchParams(location.search);
+const p = params.get('projekt');
+if(p){
+  const sel = document.getElementById('ftyp');
+  if(sel) {
+    const map = {
+      'landing-page':'Landing Page','business-website':'Business Website',
+      'custom-website':'Custom Website','basic-bot':'Discord Bot (Basic)',
+      'advanced-bot':'Discord Bot (Advanced)','bot-anpassung':'Bot Anpassung',
+      'server-setup':'Discord Server Setup','webhook-api':'Webhook / API Integration',
+      'custom-skript':'Custom Skript / Automation'
+    };
+    const val = map[p];
+    if(val) [...sel.options].forEach(o=>{ if(o.text===val) o.selected=true; });
+  }
+}
+</script>
 </body>
 </html>

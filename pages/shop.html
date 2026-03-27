@@ -1,245 +1,347 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAM LAZER | Shop</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style/global.css">
-    <link rel="stylesheet" href="../style/shop.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TEAM LAZER | Leistungen</title>
+  <link rel="icon" type="image/webp" href="../images/tl-logo-nobg.webp" />
+  <link rel="stylesheet" href="../style/global.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+  <style>
+    /* ── SERVICE CARDS ── */
+    .leistungen-section { padding: 60px 0 80px; }
+    .leistungen-section + .leistungen-section { padding-top: 0; }
+
+    .cat-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px; padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cat-icon {
+      width: 46px; height: 46px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .cat-icon.ci-blue { background: rgba(37,99,235,0.15); color: #60a5fa; border: 1px solid rgba(37,99,235,0.25); }
+    .cat-icon.ci-purple { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.25); }
+    .cat-icon.ci-green { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+    .cat-title h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.6rem; font-weight: 800;
+      text-transform: uppercase; margin-bottom: 2px;
+    }
+    .cat-title p { font-size: 0.85rem; color: var(--muted); }
+
+    .pkg-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .pkg-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: 0.3s;
+    }
+    .pkg-card:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+    }
+    .pkg-card h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0;
+    }
+    .pkg-card p { font-size: 0.86rem; color: var(--muted); line-height: 1.65; flex: 1; }
+    .pkg-features { display: flex; flex-direction: column; gap: 6px; }
+    .pkg-features li { font-size: 0.82rem; color: rgba(255,255,255,0.45); display: flex; align-items: center; gap: 8px; }
+    .pkg-features li i { font-size: 0.7rem; color: var(--primary); }
+    .pkg-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4px;
+    }
+    .pkg-price {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem; font-weight: 700; color: var(--primary);
+    }
+    .pkg-footer .btn { font-size: 0.78rem; padding: 7px 16px; border-radius: 8px; }
+
+    /* Trust bar */
+    .trust-bar {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center; margin-top: 56px;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 18px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; font-size: 0.82rem; font-weight: 500;
+      color: rgba(255,255,255,0.55);
+    }
+    .trust-item i { color: var(--primary); font-size: 0.85rem; }
+
+    @media (max-width: 900px) {
+      .pkg-grid { grid-template-columns: 1fr; gap: 12px; }
+    }
+    @media (max-width: 600px) {
+      .cat-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .trust-bar { flex-direction: column; align-items: center; }
+    }
+  </style>
 </head>
 <body>
-    <div class="global-bg"></div>
-    <header class="navbar">
-        <div class="container nav-container">
-            <a class="nav-logo" href="../index.html">
-                <img src="../images/tl-logo-nobg.webp" alt="Logo" />
-                <span class="logo-text">TEAM LAZER</span>
-            </a>
-                  <nav class="nav-links">
-        <a href="../index.html">Home</a>
-        <a href="about.html">Über uns</a>
-        <a href="shop.html" class="active">Leistungen</a>
-        <a href="contact.html">Kontakt</a>
-      </nav>
-      <div class="nav-actions">
-        <a href="contact.html" class="btn btn-primary btn-sm">
-          <i class="fa-solid fa-paper-plane"></i> Projekt anfragen
-        </a>
-        <a href="login.html" class="nav-icon-btn" title="Login">
-          <i class="fa-solid fa-user"></i>
-        </a>
-        <a href="cart.html" class="nav-icon-btn" title="Anfrageliste">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span class="cart-badge">0</span>
-        </a>
-        <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
-      </div>
-        </div>
-    </header>
-      <div class="mobile-menu" id="mobileMenu">
-    <a href="../index.html" class="mobile-link"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="about.html" class="mobile-link"><i class="fa-solid fa-users"></i> Über uns</a>
-    <a href="shop.html" class="mobile-link"><i class="fa-solid fa-briefcase"></i> Leistungen</a>
-    <a href="contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
-    <a href="login.html" class="mobile-link"><i class="fa-solid fa-user"></i> Login</a>
+<div class="global-bg"></div>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <div class="container nav-container">
+    <a class="nav-logo" href="../index.html">
+      <img src="../images/tl-logo-nobg.webp" alt="TEAM LAZER" /> TEAM LAZER
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="about.html">Über uns</a>
+      <a href="shop.html" class="active">Leistungen</a>
+      <a href="contact.html">Kontakt</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="contact.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-paper-plane"></i> Projekt anfragen</a>
+      <button class="burger" id="burger" aria-label="Menü"><span></span><span></span><span></span></button>
+    </div>
   </div>
+</header>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
+  <a href="about.html"><i class="fa-solid fa-users"></i> Über uns</a>
+  <a href="shop.html" class="active"><i class="fa-solid fa-briefcase"></i> Leistungen</a>
+  <a href="contact.html"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+  <div class="mobile-nav-footer">
+    <a href="contact.html" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Projekt anfragen</a>
+  </div>
+</nav>
 
-    <section class="shop-hero">
-        <div class="shop-hero-glow"></div>
-        <div class="container">
-            <div class="hero-tag"><span class="highlight-text">TEAM LAZER DEVELOPMENT</span></div>
-            <h1>ALLE <span class="highlight">LEISTUNGEN</span></h1>
-            <p>Websites, Discord Bots und Automatisierungen – alle Preise auf Anfrage. Kein Risiko, kein Kleingedrucktes. Schreib uns einfach was du brauchst.</p>
-            <div class="trust-bar">
-                <div class="trust-item">
-                    <i class="fa-solid fa-file-code"></i>
-                    <span>Source-Code Übergabe</span>
-                </div>
-                <div class="trust-item">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <span>Bugfix-Garantie</span>
-                </div>
-                <div class="trust-item">
-                    <i class="fa-brands fa-discord"></i>
-                    <span>Direkt auf Discord</span>
-                </div>
-                <div class="trust-item">
-                    <i class="fa-solid fa-handshake"></i>
-                    <span>Festpreisangebote</span>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- HERO -->
+<section class="small-hero">
+  <div class="container g-reveal">
+    <span class="section-tag">AUF ANFRAGE</span>
+    <h1>Leistungen</h1>
+    <p>Websites, Discord Bots und Automatisierungen – alle Preise auf Anfrage. Kein Risiko, kein Kleingedrucktes.</p>
+  </div>
+</section>
 
-    <!-- COMING SOON OVERLAY – entfernen sobald Gewerbe angemeldet -->
-    <section class="coming-soon-section">
-        <div class="container">
-            <div class="coming-soon-box">
-                <div class="cs-icon"><i class="fa-solid fa-store-slash"></i></div>
-                <h2>Shop derzeit nicht verfügbar</h2>
-                <p>Wir sind noch in der Aufbauphase und können aktuell keine Leistungen verbindlich anbieten. Sobald wir unseren Betrieb offiziell aufnehmen, findest du hier unser vollständiges Angebot.</p>
-                <div class="cs-divider"></div>
-                <p class="cs-hint"><i class="fa-solid fa-clock"></i> <strong>Coming Soon</strong> – bis dahin erreichst du uns gerne direkt:</p>
-                <div class="cs-actions">
-                    <a href="contact.html" class="btn btn-primary"><i class="fa-solid fa-envelope"></i> Kontakt aufnehmen</a>
-                    <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="btn btn-discord"><i class="fa-brands fa-discord"></i> Discord beitreten</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SHOP INHALT (noch nicht aktiv – für spätere Aktivierung bereit) -->
-    <section class="category-section" style="display:none;" id="shopContent">
-        <div class="container">
-            <div class="filter-tabs">
-                <button class="filter-tab active" data-filter="all">
-                    <i class="fa-solid fa-border-all"></i>
-                    Alle Leistungen
-                </button>
-                <button class="filter-tab" data-filter="websites">
-                    <i class="fa-solid fa-globe"></i>
-                    Websites
-                </button>
-                <button class="filter-tab" data-filter="bots">
-                    <i class="fa-solid fa-robot"></i>
-                    Discord Bots
-                </button>
-                <button class="filter-tab" data-filter="discord">
-                    <i class="fa-brands fa-discord"></i>
-                    Discord & Automation
-                </button>
-            </div>
-            <div id="productsGrid" class="products-grid"></div>
-        </div>
-    </section>
-    <!-- ENDE SHOP INHALT -->
-
-      <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <img src="../images/tl-logo-nobg.webp" alt="TEAM LAZER Logo" class="footer-logo" />
-          <p>Websites · Discord Bots · Automatisierung.<br>Entwickelt und gehostet in Deutschland.</p>
-          <div class="social-links">
-            <a href="https://discord.gg/dCxU6KqWFz" title="Discord"><i class="fa-brands fa-discord"></i></a>
-            <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://www.tiktok.com/@team.lazer.de" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://www.instagram.com/team_lazer.de" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          </div>
-        </div>
-        <div class="footer-links">
-          <h4>Leistungen</h4>
-          <ul>
-            <li><a href="shop.html">Alle Leistungen</a></li>
-            <li><a href="shop.html">Website Entwicklung</a></li>
-            <li><a href="shop.html">Discord Bots</a></li>
-            <li><a href="shop.html">Automation</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Unternehmen</h4>
-          <ul>
-            <li><a href="about.html">Über uns</a></li>
-            <li><a href="contact.html">Kontakt</a></li>
-            <li><a href="login.html">Kundenbereich</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Rechtliches</h4>
-          <ul>
-            <li><a href="impressum.html">Impressum</a></li>
-            <li><a href="agb.html">AGB</a></li>
-            <li><a href="privacy.html">Datenschutz</a></li>
-          </ul>
+<!-- ══ WEBSITES ══ -->
+<section class="leistungen-section section-pad">
+  <div class="container">
+    <div class="cat-header g-reveal">
+      <div class="cat-icon ci-blue"><i class="fa-solid fa-globe"></i></div>
+      <div class="cat-title">
+        <h2>Website Entwicklung</h2>
+        <p>Responsiv, schnell, ohne Baukastensystem – Hosting auf Wunsch inklusive</p>
+      </div>
+    </div>
+    <div class="pkg-grid">
+      <div class="pkg-card g-reveal d1">
+        <h3>Landing Page</h3>
+        <p>Eine starke Einzelseite für Produkte, Events oder Dienstleistungen. Klar, überzeugend, conversion-optimiert.</p>
+        <ul class="pkg-features">
+          <li><i class="fa-solid fa-check"></i> 1 Seite, vollständig responsiv</li>
+          <li><i class="fa-solid fa-check"></i> Kontaktformular</li>
+          <li><i class="fa-solid fa-check"></i> Lieferung in 3–5 Tagen</li>
+        </ul>
+        <div class="pkg-footer">
+          <span class="pkg-price">Auf Anfrage</span>
+          <a href="contact.html?projekt=landing-page" class="btn btn-primary">Anfragen</a>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 TEAM LAZER &middot; Alle Rechte vorbehalten &middot; Entwickelt mit <i class="fa-solid fa-heart" style="color:#7c3aed;font-size:0.75rem;"></i> in Deutschland</p>
-        <div class="footer-bottom-links">
-          <a href="impressum.html">Impressum</a>
-          <a href="privacy.html">Datenschutz</a>
+      <div class="pkg-card g-reveal d2">
+        <h3>Business Website</h3>
+        <p>Mehrseiter für Unternehmen, Freelancer oder Dienstleister. Mit Über-uns, Leistungen, Kontakt und mehr.</p>
+        <ul class="pkg-features">
+          <li><i class="fa-solid fa-check"></i> 3–6 Seiten, individuelles Design</li>
+          <li><i class="fa-solid fa-check"></i> Kontaktformular + SEO-Basis</li>
+          <li><i class="fa-solid fa-check"></i> Lieferung in 7–14 Tagen</li>
+        </ul>
+        <div class="pkg-footer">
+          <span class="pkg-price">Auf Anfrage</span>
+          <a href="contact.html?projekt=business-website" class="btn btn-primary">Anfragen</a>
+        </div>
+      </div>
+      <div class="pkg-card g-reveal d3">
+        <h3>Custom Projekt</h3>
+        <p>Portfolio, Community-Site, Event-Seite oder alles andere – wir entwickeln nach Briefing genau was du brauchst.</p>
+        <ul class="pkg-features">
+          <li><i class="fa-solid fa-check"></i> Individuell nach Absprache</li>
+          <li><i class="fa-solid fa-check"></i> Discord-Integration möglich</li>
+          <li><i class="fa-solid fa-check"></i> Zeitplan nach Projektgröße</li>
+        </ul>
+        <div class="pkg-footer">
+          <span class="pkg-price">Auf Anfrage</span>
+          <a href="contact.html?projekt=custom-website" class="btn btn-primary">Anfragen</a>
         </div>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-    <script src="../script/products.js"></script>
-    <script src="../script/cart.js"></script>
-    <script src="../script/main.js"></script>
-    <script src="../script/cookie.js"></script>
+<!-- ══ DISCORD BOTS ══ -->
+<section class="leistungen-section bg-alt" style="padding:60px 0;">
+  <div class="container">
+    <div class="cat-header g-reveal">
+      <div class="cat-icon ci-purple"><i class="fa-brands fa-discord"></i></div>
+      <div class="cat-title">
+        <h2>Discord Bots</h2>
+        <p>Individuelle Bots nach Maß – 24/7 Hosting bei uns möglich</p>
+      </div>
+    </div>
+    <div class="pkg-grid">
+      <div class="pkg-card g-reveal d1">
+        <h3>Basic Bot</h3>
+        <p>Commands, Willkommensnachrichten, Auto-Rollen, einfache Moderationsfunktionen.</p>
+        <ul class="pkg-features">
+          <li><i class="fa-solid fa-check"></i> Bis zu 10 Custom-Commands</li>
+          <li><i class="fa-solid fa-check"></i> Welcome-System</li>
+          <li><i class="fa-solid fa-check"></i> Lieferung in 3-5 Tagen</li>
+        </ul>
+        <div class="pkg-footer">
+          <span class="pkg-price">Auf Anfrage</span>
+          <a href="contact.html?projekt=basic-bot" class="btn btn-primary">Anfragen</a>
+        </div>
+      </div>
+      <div class="pkg-card g-reveal d2">
+        <h3>Advanced Bot</h3>
+        <p>Ticket-System, Leveling & XP, Economy, Datenbank-Anbindung, eigenes Dashboard.</p>
+        <ul class="pkg-features">
+          <li><i class="fa-solid fa-check"></i> Datenbank (SQLite / MongoDB)</li>
+          <li><i class="fa-solid fa-check"></i> Leveling, Tickets, Economy</li>
+          <li><i class="fa-solid fa-check"></i> Lieferung in 7–14 Tagen</li>
+        </ul>
+        <div class="pkg-footer">
+          <span class="pkg-price">Auf Anfrage</span>
+          <a href="contact.html?projekt=advanced-bot" class="btn btn-primary">Anfragen</a>
+        </div>
+      </div>
+      <div class="pkg-card g-reveal d3">
+        <h3>Bot Anpassung</h3>
+        <p>Du hast bereits einen Bot und möchtest Funktionen erweitern oder Bugs beheben?</p>
+        <ul class="pkg-features">
+          <li><i class="fa-solid fa-check"></i> Erweiterung bestehender Bots</li>
+          <li><i class="fa-solid fa-check"></i> Bugfixing & Optimierung</li>
+          <li><i class="fa-solid fa-check"></i> Auf Stundenpreisbasis</li>
+        </ul>
+        <div class="pkg-footer">
+          <span class="pkg-price">Auf Anfrage</span>
+          <a href="contact.html?projekt=bot-anpassung" class="btn btn-primary">Anfragen</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            renderProducts('all');
-            setupFilterTabs();
-        });
+<!-- ══ AUTOMATION ══ -->
+<section class="leistungen-section section-pad">
+  <div class="container">
+    <div class="cat-header g-reveal">
+      <div class="cat-icon ci-green"><i class="fa-solid fa-gears"></i></div>
+      <div class="cat-title">
+        <h2>Automation & Skripte</h2>
+        <p>Webhooks, APIs und Skripte – repetitive Aufgaben automatisiert</p>
+      </div>
+    </div>
+    <div class="pkg-grid">
+      <div class="pkg-card g-reveal d1">
+        <h3>Discord Server Setup</h3>
+        <p>Professioneller Server-Aufbau mit Kategorien, Rollen, Berechtigungen und Bot-Integration.</p>
+        <ul class="pkg-features">
+          <li><i class="fa-solid fa-check"></i> Struktur nach Briefing</li>
+          <li><i class="fa-solid fa-check"></i> Rollen & Berechtigungen</li>
+          <li><i class="fa-solid fa-check"></i> Lieferung in 1–3 Tagen</li>
+        </ul>
+        <div class="pkg-footer">
+          <span class="pkg-price">Auf Anfrage</span>
+          <a href="contact.html?projekt=server-setup" class="btn btn-primary">Anfragen</a>
+        </div>
+      </div>
+      <div class="pkg-card g-reveal d2">
+        <h3>Webhook & API</h3>
+        <p>Automatische Benachrichtigungen, Datenübertragungen zwischen Diensten oder externe API-Anbindungen.</p>
+        <ul class="pkg-features">
+          <li><i class="fa-solid fa-check"></i> Discord Webhooks</li>
+          <li><i class="fa-solid fa-check"></i> API-Integration</li>
+          <li><i class="fa-solid fa-check"></i> Python / Node.js</li>
+        </ul>
+        <div class="pkg-footer">
+          <span class="pkg-price">Auf Anfrage</span>
+          <a href="contact.html?projekt=webhook-api" class="btn btn-primary">Anfragen</a>
+        </div>
+      </div>
+      <div class="pkg-card g-reveal d3">
+        <h3>Custom Skript</h3>
+        <p>Datenverarbeitung, Scheduler, Scraper oder ein ganz eigenes Automatisierungstool.</p>
+        <ul class="pkg-features">
+          <li><i class="fa-solid fa-check"></i> Python oder JavaScript</li>
+          <li><i class="fa-solid fa-check"></i> Vollständiger Source-Code</li>
+          <li><i class="fa-solid fa-check"></i> Zeitplan nach Absprache</li>
+        </ul>
+        <div class="pkg-footer">
+          <span class="pkg-price">Auf Anfrage</span>
+          <a href="contact.html?projekt=custom-skript" class="btn btn-primary">Anfragen</a>
+        </div>
+      </div>
+    </div>
 
-        function setupFilterTabs() {
-            const filterTabs = document.querySelectorAll('.filter-tab');
-            filterTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    filterTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    const filter = this.getAttribute('data-filter');
-                    renderProducts(filter);
-                });
-            });
-        }
+    <!-- Trust bar -->
+    <div class="trust-bar g-reveal">
+      <div class="trust-item"><i class="fa-solid fa-file-code"></i> Source-Code Übergabe</div>
+      <div class="trust-item"><i class="fa-solid fa-shield-halved"></i> 14 Tage Bugfix-Garantie</div>
+      <div class="trust-item"><i class="fa-solid fa-receipt"></i> Festpreisangebote</div>
+      <div class="trust-item"><i class="fa-solid fa-server"></i> Hosting inklusive</div>
+      <div class="trust-item"><i class="fa-solid fa-clock"></i> 24h Reaktionszeit</div>
+    </div>
+  </div>
+</section>
 
-        function renderProducts(filter) {
-            const container = document.getElementById('productsGrid');
-            container.innerHTML = '';
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="../images/tl-logo-nobg.webp" alt="TEAM LAZER" />
+        <p>Websites · Discord Bots · Automatisierung.<br>Entwickelt in Deutschland.</p>
+        <div class="footer-social">
+          <a href="https://discord.gg/dCxU6KqWFz"><i class="fa-brands fa-discord"></i></a>
+          <a href="https://www.tiktok.com/@team.lazer.de"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://www.instagram.com/team_lazer.de"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h5>Leistungen</h5>
+        <a href="shop.html">Alle Leistungen</a>
+        <a href="shop.html">Website Entwicklung</a>
+        <a href="shop.html">Discord Bots</a>
+        <a href="shop.html">Automation</a>
+      </div>
+      <div class="footer-col"><h5>Unternehmen</h5>
+        <a href="about.html">Über uns</a>
+        <a href="contact.html">Kontakt</a>
+        <a href="login.html">Login</a>
+      </div>
+      <div class="footer-col"><h5>Rechtliches</h5>
+        <a href="impressum.html">Impressum</a>
+        <a href="agb.html">AGB</a>
+        <a href="privacy.html">Datenschutz</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 TEAM LAZER · Alle Rechte vorbehalten</span>
+      <div class="footer-bottom-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="privacy.html">Datenschutz</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-            const products = getProductsByCategory(filter);
-
-            if (products.length === 0) {
-                container.innerHTML = `
-                  <div class="empty-state">
-                    <i class="fa-solid fa-box-open"></i>
-                    <h3>Keine Leistungen gefunden</h3>
-                    <p>In dieser Kategorie gibt es aktuell keine Einträge.</p>
-                  </div>`;
-                return;
-            }
-
-            products.forEach(product => {
-                const badgeHtml = product.badge ? `<div class="product-badge ${getBadgeClass(product.badge)}">${product.badge}</div>` : '';
-                const card = document.createElement('a');
-                card.href = `product.html?id=${product.id}`;
-                card.className = 'product-card scroll-reveal';
-                card.innerHTML = `
-                    <div class="product-img" style="background:${product.gradient};">
-                        ${badgeHtml}
-                        <div class="product-img-noise"></div>
-                        <div class="product-img-shine"></div>
-                        <i class="${product.icon} product-img-icon"></i>
-                    </div>
-                    <div class="product-body">
-                        <div class="product-category-tag">${product.categoryName}</div>
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-tagline">${product.tagline}</div>
-                        <div class="product-footer">
-                            <span class="price-na">Auf Anfrage</span>
-                            <span class="btn-inquiry"><i class="fa-solid fa-envelope"></i> Anfragen</span>
-                        </div>
-                    </div>`;
-                container.appendChild(card);
-            });
-
-            // Scroll-Reveal
-            const obs = new IntersectionObserver(entries => {
-                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-            }, { threshold: 0.05 });
-            container.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
-        }
-
-        function getBadgeClass(badge) {
-            const map = { 'Neu': 'badge-new', 'Beliebt': 'badge-beliebt', 'Premium': 'badge-premium', 'Empfohlen': 'badge-empfohlen' };
-            return map[badge] || '';
-        }
-    </script>
+<script src="../script/main.js"></script>
+<script src="../script/cookie.js"></script>
 </body>
 </html>
