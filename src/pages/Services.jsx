@@ -29,7 +29,9 @@ const pageStyle = `
   .pkg-features li{font-size:.82rem;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:8px;}
   .pkg-features li i{font-size:.7rem;color:var(--primary);}
   .pkg-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,.05);margin-top:4px;}
-  .pkg-price{font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:700;color:var(--primary);}
+  .pkg-price-block{display:flex;flex-direction:column;gap:1px;}
+  .pkg-price-from{font-size:.68rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+  .pkg-price{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:800;color:var(--primary);line-height:1.1;}
   .pkg-footer .btn{font-size:.78rem;padding:7px 16px;border-radius:8px;}
   .trust-bar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:56px;}
   .trust-item{display:flex;align-items:center;gap:8px;padding:10px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:.82rem;font-weight:500;color:rgba(255,255,255,.55);}
@@ -38,7 +40,7 @@ const pageStyle = `
   @media(max-width:600px){.cat-header{flex-direction:column;align-items:flex-start;gap:10px;}.trust-bar{flex-direction:column;align-items:center;}}
 `
 
-function PkgCard({ title, desc, features, slug, delay }) {
+function PkgCard({ title, desc, features, slug, price }) {
   return (
     <motion.div className="pkg-card" variants={staggerItem} whileHover={{ y: -4 }}>
       <h3>{title}</h3>
@@ -47,7 +49,10 @@ function PkgCard({ title, desc, features, slug, delay }) {
         {features.map(f => <li key={f}><i className="fa-solid fa-check" />{f}</li>)}
       </ul>
       <div className="pkg-footer">
-        <span className="pkg-price">Auf Anfrage</span>
+        <div className="pkg-price-block">
+          <span className="pkg-price-from">schon ab</span>
+          <span className="pkg-price">{price}</span>
+        </div>
         <Link to={`/contact?projekt=${slug}`} className="btn btn-primary">Anfragen</Link>
       </div>
     </motion.div>
@@ -60,27 +65,27 @@ const CATEGORIES = [
     sub: 'Responsiv, schnell, ohne Baukastensystem – Hosting auf Wunsch möglich',
     alt: false,
     cards: [
-      { title: 'Landing Page', desc: 'Eine starke Einzelseite für Produkte, Events oder Dienstleistungen. Klar, überzeugend, conversion-optimiert.', features: ['1 Seite, vollständig responsiv', 'Kontaktformular', 'Lieferung in 3–5 Tagen'], slug: 'landing-page' },
-      { title: 'Business Website', desc: 'Mehrseiter für Unternehmen, Freelancer oder Dienstleister. Mit Über-uns, Leistungen, Kontakt und mehr.', features: ['3–6 Seiten, individuelles Design', 'Kontaktformular + SEO-Basis', 'Lieferung in 7–14 Tagen'], slug: 'business-website' },
-      { title: 'Custom Projekt', desc: 'Portfolio, Community-Site, Event-Seite oder alles andere – wir entwickeln nach Briefing genau was du brauchst.', features: ['Individuell nach Absprache', 'Discord-Integration möglich', 'Zeitplan nach Projektgröße'], slug: 'custom-website' },
+      { title: 'Landing Page', desc: 'Eine starke Einzelseite für Produkte, Events oder Dienstleistungen. Klar, überzeugend, conversion-optimiert.', features: ['1 Seite, vollständig responsiv', 'Kontaktformular', 'Lieferung in 3–5 Tagen'], slug: 'landing-page', price: '149 €' },
+      { title: 'Business Website', desc: 'Mehrseiter für Unternehmen, Freelancer oder Dienstleister. Mit Über-uns, Leistungen, Kontakt und mehr.', features: ['3–6 Seiten, individuelles Design', 'Kontaktformular + SEO-Basis', 'Lieferung in 7–14 Tagen'], slug: 'business-website', price: '349 €' },
+      { title: 'Custom Projekt', desc: 'Portfolio, Community-Site, Event-Seite oder alles andere – wir entwickeln nach Briefing genau was du brauchst.', features: ['Individuell nach Absprache', 'Discord-Integration möglich', 'Zeitplan nach Projektgröße'], slug: 'custom-website', price: 'Anfrage' },
     ],
   },
   {
     icon: 'fa-brands fa-discord', cls: 'ci-purple', title: 'Discord Bots',
     sub: 'Individuelle Bots nach Maß – 24/7 Hosting bei uns möglich', alt: true,
     cards: [
-      { title: 'Basic Bot', desc: 'Commands, Willkommensnachrichten, Auto-Rollen, einfache Moderationsfunktionen.', features: ['Bis zu 10 Custom-Commands', 'Welcome-System', 'Lieferung in 3–5 Tagen'], slug: 'basic-bot' },
-      { title: 'Advanced Bot', desc: 'Ticket-System, Leveling & XP, Economy, Datenbank-Anbindung, eigenes Dashboard.', features: ['Datenbank (SQLite / MongoDB)', 'Leveling, Tickets, Economy', 'Lieferung in 7–14 Tagen'], slug: 'advanced-bot' },
-      { title: 'Bot Anpassung', desc: 'Du hast bereits einen Bot und möchtest Funktionen erweitern oder Bugs beheben?', features: ['Erweiterung bestehender Bots', 'Bugfixing & Optimierung', 'Auf Stundenpreisbasis'], slug: 'bot-anpassung' },
+      { title: 'Basic Bot', desc: 'Commands, Willkommensnachrichten, Auto-Rollen, einfache Moderationsfunktionen.', features: ['Bis zu 10 Custom-Commands', 'Welcome-System', 'Lieferung in 3–5 Tagen'], slug: 'basic-bot', price: '79 €' },
+      { title: 'Advanced Bot', desc: 'Ticket-System, Leveling & XP, Economy, Datenbank-Anbindung, eigenes Dashboard.', features: ['Datenbank (SQLite / MongoDB)', 'Leveling, Tickets, Economy', 'Lieferung in 7–14 Tagen'], slug: 'advanced-bot', price: '199 €' },
+      { title: 'Bot Anpassung', desc: 'Du hast bereits einen Bot und möchtest Funktionen erweitern oder Bugs beheben?', features: ['Erweiterung bestehender Bots', 'Bugfixing & Optimierung', 'Auf Stundenpreisbasis'], slug: 'bot-anpassung', price: '25 €/h' },
     ],
   },
   {
     icon: 'fa-solid fa-gears', cls: 'ci-green', title: 'Automation & Skripte',
     sub: 'Webhooks, APIs und Skripte – repetitive Aufgaben automatisiert', alt: false,
     cards: [
-      { title: 'Discord Server Setup', desc: 'Professioneller Server-Aufbau mit Kategorien, Rollen, Berechtigungen und Bot-Integration.', features: ['Struktur nach Briefing', 'Rollen & Berechtigungen', 'Lieferung in 1–3 Tagen'], slug: 'server-setup' },
-      { title: 'Webhook & API', desc: 'Automatische Benachrichtigungen, Datenübertragungen zwischen Diensten oder externe API-Anbindungen.', features: ['Discord Webhooks', 'API-Integration', 'Python / Node.js'], slug: 'webhook-api' },
-      { title: 'Custom Skript', desc: 'Datenverarbeitung, Scheduler, Scraper oder ein ganz eigenes Automatisierungstool.', features: ['Python oder JavaScript', 'Vollständiger Source-Code', 'Zeitplan nach Absprache'], slug: 'custom-skript' },
+      { title: 'Discord Server Setup', desc: 'Professioneller Server-Aufbau mit Kategorien, Rollen, Berechtigungen und Bot-Integration.', features: ['Struktur nach Briefing', 'Rollen & Berechtigungen', 'Lieferung in 1–3 Tagen'], slug: 'server-setup', price: '49 €' },
+      { title: 'Webhook & API', desc: 'Automatische Benachrichtigungen, Datenübertragungen zwischen Diensten oder externe API-Anbindungen.', features: ['Discord Webhooks', 'API-Integration', 'Python / Node.js'], slug: 'webhook-api', price: '99 €' },
+      { title: 'Custom Skript', desc: 'Datenverarbeitung, Scheduler, Scraper oder ein ganz eigenes Automatisierungstool.', features: ['Python oder JavaScript', 'Vollständiger Source-Code', 'Zeitplan nach Absprache'], slug: 'custom-skript', price: '79 €' },
     ],
   },
 ]

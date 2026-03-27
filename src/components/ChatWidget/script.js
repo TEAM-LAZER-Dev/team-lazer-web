@@ -8,7 +8,7 @@ export const STEPS = {
 
   welcome: {
     messages: [
-      { delay: 0,    text: 'Hey! 👋 Willkommen bei Team Lazer.' },
+      { delay: 0,    text: 'Hey! 👋 Willkommen bei TEAM LAZER.' },
       { delay: 900,  text: 'Ich kann dir direkt weiterhelfen oder dich mit unserem Team verbinden. Worum geht es?' },
     ],
     options: [
