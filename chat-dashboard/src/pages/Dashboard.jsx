@@ -1,144 +1,215 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
-/* ── Helpers ─────────────────────────────────────── */
-function timeAgo(dateStr) {
-  const diff = Math.floor((Date.now() - new Date(dateStr)) / 1000)
-  if (diff < 60)   return 'Gerade eben'
-  if (diff < 3600) return `${Math.floor(diff / 60)} Min`
-  if (diff < 86400) return `${Math.floor(diff / 3600)} Std`
-  return new Date(dateStr).toLocaleDateString('de-DE')
+/* ── Notification helpers ────────────────────────── */
+function playSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    osc.connect(gain); gain.connect(ctx.destination)
+    osc.frequency.setValueAtTime(880, ctx.currentTime)
+    osc.frequency.setValueAtTime(660, ctx.currentTime + 0.12)
+    gain.gain.setValueAtTime(0.25, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4)
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4)
+  } catch(e) {}
 }
-function Avatar({ agent, size = 36 }) {
+
+function showBrowserNotification(title, body) {
+  if (Notification?.permission === 'granted') {
+    const n = new Notification(title, { body, icon: '/favicon.ico', badge: '/favicon.ico' })
+    setTimeout(() => n.close(), 6000)
+  }
+}
+
+/* ── Time helper ─────────────────────────────────── */
+function timeAgo(d) {
+  const diff = Math.floor((Date.now() - new Date(d)) / 1000)
+  if (diff < 60)   return 'Jetzt'
+  if (diff < 3600) return `${Math.floor(diff/60)}m`
+  if (diff < 86400) return `${Math.floor(diff/3600)}h`
+  return new Date(d).toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit' })
+}
+
+function fmtTime(d) {
+  return new Date(d).toLocaleTimeString('de-DE', { hour:'2-digit', minute:'2-digit' })
+}
+
+/* ── Avatar ──────────────────────────────────────── */
+function Avatar({ agent, size = 36, name }) {
+  const displayName = agent?.name || name || '?'
   if (agent?.avatar_url) return (
-    <img src={agent.avatar_url} alt={agent.name}
-      style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' }} />
+    <img src={agent.avatar_url} alt={displayName}
+      style={{ width:size, height:size, borderRadius:'50%', objectFit:'cover', flexShrink:0 }} />
   )
-  const initials = (agent?.name || 'TL').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase()
+  const initials = displayName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()
   return (
-    <div className="avatar-placeholder" style={{ width: size, height: size }}>
+    <div className="avatar-placeholder" style={{ width:size, height:size, fontSize: size*0.36 }}>
       {initials}
     </div>
   )
 }
-const STATUS_LABEL = { waiting: 'Wartend', active: 'Aktiv', bot: 'Bot', closed: 'Geschlossen' }
-const STATUS_CLASS = { waiting: 'status-waiting', active: 'status-active', bot: 'status-bot', closed: 'status-closed' }
 
-/* ── Main Dashboard ──────────────────────────────── */
-export default function Dashboard({ session }) {
-  const [agent, setAgent]               = useState(null)
+const STATUS_LABEL = { waiting:'Wartend', active:'Aktiv', bot:'Bot', closed:'Geschlossen' }
+const STATUS_CLS   = { waiting:'status-waiting', active:'status-active', bot:'status-bot', closed:'status-closed' }
+
+/* ══════════════════════════════════════════════════
+   MAIN DASHBOARD
+══════════════════════════════════════════════════ */
+export default function Dashboard({ session, agent, onAgentUpdate }) {
+  const navigate = useNavigate()
+
   const [conversations, setConversations] = useState([])
-  const [activeConv, setActiveConv]     = useState(null)
-  const [messages, setMessages]         = useState([])
-  const [replyInput, setReplyInput]     = useState('')
-  const [isOnline, setIsOnline]         = useState(true)
+  const [history, setHistory]       = useState([])
+  const [activeConv, setActiveConv] = useState(null)
+  const [messages, setMessages]     = useState([])
+  const [replyInput, setReplyInput] = useState('')
+  const [isOnline, setIsOnline]     = useState(true)
+  const [activeTab, setActiveTab]   = useState('active') // 'active' | 'waiting' | 'history'
   const [mobileShowChat, setMobileShowChat] = useState(false)
+  const [quickReplies, setQuickReplies] = useState([])
+  const [showQR, setShowQR]         = useState(false)
+  const [unreadCounts, setUnreadCounts] = useState({})
 
   const endRef      = useRef(null)
   const channelRef  = useRef(null)
+  const inputRef    = useRef(null)
 
-  /* ── Load agent profile ──────────────────────── */
+  /* ── Load quick replies ──────────────────────── */
   useEffect(() => {
-    async function loadAgent() {
-      const { data } = await supabase
-        .from('agents').select('*').eq('auth_user_id', session.user.id).single()
-      if (data) {
-        setAgent(data)
-        await supabase.from('agents')
-          .update({ is_online: true }).eq('id', data.id)
-      }
-    }
-    loadAgent()
-
-    // Set offline on unload
-    const handle = () => {
-      if (agent?.id) {
-        navigator.sendBeacon('/api/offline') // fallback — also set via beforeunload
-        supabase.from('agents').update({ is_online: false }).eq('id', agent?.id)
-      }
-    }
-    window.addEventListener('beforeunload', handle)
-    return () => window.removeEventListener('beforeunload', handle)
-  }, [session.user.id]) // eslint-disable-line
-
-  /* ── Load conversations ──────────────────────── */
-  useEffect(() => {
-    loadConversations()
-    const ch = supabase
-      .channel('dashboard-convs')
-      .on('postgres_changes', {
-        event: '*', schema: 'public', table: 'conversations'
-      }, () => loadConversations())
+    loadQuickReplies()
+    const ch = supabase.channel('qr-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'quick_replies' },
+        () => loadQuickReplies())
       .subscribe()
     return () => supabase.removeChannel(ch)
-  }, []) // eslint-disable-line
+  }, [])
+
+  async function loadQuickReplies() {
+    const { data } = await supabase.from('quick_replies').select('*').order('sort_order')
+    setQuickReplies(data || [])
+  }
+
+  /* ── Online status + cleanup ─────────────────── */
+  useEffect(() => {
+    if (agent?.id) {
+      supabase.from('agents').update({ is_online: true }).eq('id', agent.id)
+    }
+    const off = () => {
+      if (agent?.id) supabase.from('agents').update({ is_online: false }).eq('id', agent.id)
+    }
+    window.addEventListener('beforeunload', off)
+    return () => {
+      window.removeEventListener('beforeunload', off)
+      if (agent?.id) supabase.from('agents').update({ is_online: false }).eq('id', agent.id)
+    }
+  }, [agent?.id])
+
+  /* ── Load + subscribe conversations ─────────── */
+  useEffect(() => {
+    loadConversations()
+    loadHistory()
+
+    const ch = supabase.channel('db-convs')
+      .on('postgres_changes', { event: '*', schema:'public', table:'conversations' },
+        (payload) => {
+          loadConversations()
+          // Neue wartende Conversation → Benachrichtigung
+          if (payload.eventType === 'INSERT' && payload.new.status === 'waiting') {
+            const name = payload.new.user_name || 'Besucher'
+            if (agent?.notify_sound !== false) playSound()
+            if (agent?.notify_browser !== false) {
+              showBrowserNotification('Neuer Chat! 💬', `${name} wartet auf Antwort`)
+            }
+          }
+          // Status closed → aus Liste entfernen, history neu laden
+          if (payload.new?.status === 'closed') loadHistory()
+        })
+      .subscribe()
+    return () => supabase.removeChannel(ch)
+  }, [agent]) // eslint-disable-line
 
   async function loadConversations() {
     const { data } = await supabase
-      .from('conversations')
-      .select('*, agents(*)')
-      .in('status', ['waiting', 'active'])
+      .from('conversations').select('*, agents(*)')
+      .in('status', ['waiting','active'])
       .order('last_message_at', { ascending: false })
     setConversations(data || [])
   }
 
+  async function loadHistory() {
+    const { data } = await supabase
+      .from('conversations').select('*, agents(*)')
+      .eq('status', 'closed')
+      .order('last_message_at', { ascending: false })
+      .limit(50)
+    setHistory(data || [])
+  }
+
   /* ── Select conversation ─────────────────────── */
-  async function selectConversation(conv) {
+  const selectConv = useCallback(async (conv) => {
     setActiveConv(conv)
     setMobileShowChat(true)
     setReplyInput('')
+    setShowQR(false)
 
     const { data: msgs } = await supabase
       .from('messages').select('*')
       .eq('conversation_id', conv.id)
       .order('created_at', { ascending: true })
     setMessages(msgs || [])
-    setTimeout(() => endRef.current?.scrollIntoView({ behavior: 'instant' }), 60)
 
-    // Subscribe to new messages in this conversation
+    // Clear unread
+    setUnreadCounts(prev => ({ ...prev, [conv.id]: 0 }))
+    setTimeout(() => endRef.current?.scrollIntoView({ behavior:'instant' }), 60)
+
+    // Subscribe to messages
     if (channelRef.current) supabase.removeChannel(channelRef.current)
-    const ch = supabase
-      .channel('dashboard-msgs-' + conv.id)
+    const ch = supabase.channel('dash-msgs-' + conv.id)
       .on('postgres_changes', {
-        event: 'INSERT', schema: 'public', table: 'messages',
-        filter: `conversation_id=eq.${conv.id}`
+        event:'INSERT', schema:'public', table:'messages',
+        filter:`conversation_id=eq.${conv.id}`
       }, (payload) => {
-        setMessages(prev => [...prev, payload.new])
-        setTimeout(() => endRef.current?.scrollIntoView({ behavior: 'smooth' }), 60)
+        setMessages(prev => prev.find(m => m.id === payload.new.id)
+          ? prev : [...prev, payload.new])
+        setTimeout(() => endRef.current?.scrollIntoView({ behavior:'smooth' }), 60)
       })
       .subscribe()
     channelRef.current = ch
-  }
+  }, [])
 
-  /* ── Claim conversation ──────────────────────── */
-  async function claimConversation(conv) {
+  /* ── Claim ───────────────────────────────────── */
+  async function claimConv(conv) {
     if (!agent) return
     await supabase.from('conversations').update({
-      status: 'active',
-      assigned_agent_id: agent.id
+      status: 'active', assigned_agent_id: agent.id
     }).eq('id', conv.id)
-    setActiveConv({ ...conv, status: 'active', assigned_agent_id: agent.id, agents: agent })
-    await loadConversations()
+    const updated = { ...conv, status:'active', assigned_agent_id:agent.id, agents:agent }
+    setActiveConv(updated)
+    setConversations(prev => prev.map(c => c.id === conv.id ? updated : c))
   }
 
   /* ── Close conversation ──────────────────────── */
-  async function closeConversation(convId) {
-    await supabase.from('conversations').update({ status: 'closed' }).eq('id', convId)
+  async function closeConv(convId) {
+    await supabase.from('conversations').update({ status:'closed' }).eq('id', convId)
     setActiveConv(null)
     setMessages([])
     setMobileShowChat(false)
-    if (channelRef.current) supabase.removeChannel(channelRef.current)
-    await loadConversations()
+    if (channelRef.current) { supabase.removeChannel(channelRef.current); channelRef.current = null }
+    loadConversations()
+    loadHistory()
   }
 
   /* ── Send message ────────────────────────────── */
   async function sendMessage(e) {
-    e.preventDefault()
+    e?.preventDefault()
     const text = replyInput.trim()
     if (!text || !activeConv || !agent) return
     setReplyInput('')
-
+    setShowQR(false)
     await supabase.from('messages').insert({
       conversation_id: activeConv.id,
       sender_type: 'agent',
@@ -146,9 +217,17 @@ export default function Dashboard({ session }) {
       sender_avatar: agent.avatar_url,
       content: text,
     })
+    setTimeout(() => inputRef.current?.focus(), 50)
   }
 
-  /* ── Toggle online status ────────────────────── */
+  /* ── Quick reply insert ──────────────────────── */
+  function insertQR(content) {
+    setReplyInput(content)
+    setShowQR(false)
+    setTimeout(() => inputRef.current?.focus(), 50)
+  }
+
+  /* ── Toggle online ───────────────────────────── */
   async function toggleOnline() {
     const next = !isOnline
     setIsOnline(next)
@@ -161,60 +240,77 @@ export default function Dashboard({ session }) {
     await supabase.auth.signOut()
   }
 
-  const waitingCount = conversations.filter(c => c.status === 'waiting').length
+  /* ── Tab data ────────────────────────────────── */
+  const waitingList = conversations.filter(c => c.status === 'waiting')
+  const activeList  = conversations.filter(c => c.status === 'active')
+  const tabList     = activeTab === 'history' ? history
+                    : activeTab === 'waiting' ? waitingList
+                    : activeList
 
-  /* ── Render ────────────────────────────────────── */
+  /* ════════════════════════════════════════════════
+     RENDER
+  ════════════════════════════════════════════════ */
   return (
     <div className="db-root">
 
-      {/* Sidebar */}
+      {/* ════ SIDEBAR ════ */}
       <div className={`db-sidebar ${mobileShowChat ? 'mobile-hidden' : ''}`}>
-        {/* Sidebar Header */}
+
+        {/* Sidebar header */}
         <div className="db-sidebar-header">
-          <div className="db-brand">
-            <i className="fas fa-bolt" />
-            <span>Chat Dashboard</span>
-          </div>
+          <div className="db-brand"><i className="fas fa-bolt" /><span>Chat Dashboard</span></div>
           <div className="db-agent-row">
             <Avatar agent={agent} size={32} />
             <div className="db-agent-info">
               <strong>{agent?.name || '…'}</strong>
               <button className={`online-toggle ${isOnline ? 'online' : 'offline'}`} onClick={toggleOnline}>
-                <span className="online-dot" />
-                {isOnline ? 'Online' : 'Offline'}
+                <span className="online-dot" />{isOnline ? 'Online' : 'Offline'}
               </button>
             </div>
-            <button className="logout-btn" onClick={logout} title="Ausloggen">
+            <button className="icon-btn" onClick={() => navigate('/settings')} title="Einstellungen">
+              <i className="fas fa-cog" />
+            </button>
+            <button className="icon-btn danger" onClick={logout} title="Ausloggen">
               <i className="fas fa-sign-out-alt" />
             </button>
           </div>
         </div>
 
-        {/* Conversation List */}
-        <div className="db-conv-list">
-          {waitingCount > 0 && (
-            <div className="db-section-label">
-              <span>Wartend</span>
-              <span className="db-count">{waitingCount}</span>
-            </div>
-          )}
+        {/* Tabs */}
+        <div className="db-tabs">
+          <button className={activeTab === 'active' ? 'active' : ''} onClick={() => setActiveTab('active')}>
+            Aktiv {activeList.length > 0 && <span className="tab-badge">{activeList.length}</span>}
+          </button>
+          <button className={activeTab === 'waiting' ? 'active' : ''} onClick={() => setActiveTab('waiting')}>
+            Wartend {waitingList.length > 0 && <span className="tab-badge warn">{waitingList.length}</span>}
+          </button>
+          <button className={activeTab === 'history' ? 'active' : ''} onClick={() => setActiveTab('history')}>
+            Verlauf
+          </button>
+        </div>
 
+        {/* Conversation list */}
+        <div className="db-conv-list">
           <AnimatePresence initial={false}>
-            {conversations.length === 0 && (
-              <motion.div className="db-empty"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <i className="fas fa-comment-slash" />
-                <p>Keine aktiven Chats</p>
+            {tabList.length === 0 && (
+              <motion.div className="db-empty" initial={{ opacity:0 }} animate={{ opacity:1 }}>
+                <i className={`fas fa-${activeTab === 'history' ? 'history' : 'comment-slash'}`} />
+                <p>{activeTab === 'history' ? 'Keine abgeschlossenen Chats' : 'Keine Chats'}</p>
               </motion.div>
             )}
-            {conversations.map(conv => (
+            {tabList.map(conv => (
               <motion.div key={conv.id}
-                className={`db-conv-item ${activeConv?.id === conv.id ? 'active' : ''} ${conv.status === 'waiting' ? 'is-waiting' : ''}`}
-                onClick={() => selectConversation(conv)}
-                initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -12 }} layout>
-                <div className="db-conv-avatar">
-                  <span>{conv.user_name?.[0]?.toUpperCase() || '?'}</span>
+                className={`db-conv-item ${activeConv?.id === conv.id ? 'selected' : ''} ${conv.status === 'waiting' ? 'is-waiting' : ''}`}
+                onClick={() => selectConv(conv)}
+                initial={{ opacity:0, x:-10 }} animate={{ opacity:1, x:0 }}
+                exit={{ opacity:0, x:-10 }} layout>
+                <div className="db-conv-avatar-wrap">
+                  <div className="db-conv-avatar">
+                    <span>{(conv.user_name?.[0] || '?').toUpperCase()}</span>
+                  </div>
+                  {unreadCounts[conv.id] > 0 && (
+                    <span className="unread-dot">{unreadCounts[conv.id]}</span>
+                  )}
                 </div>
                 <div className="db-conv-info">
                   <div className="db-conv-top">
@@ -222,7 +318,7 @@ export default function Dashboard({ session }) {
                     <span className="db-conv-time">{timeAgo(conv.last_message_at)}</span>
                   </div>
                   <div className="db-conv-bottom">
-                    <span className={`db-status-badge ${STATUS_CLASS[conv.status]}`}>
+                    <span className={`db-status-badge ${STATUS_CLS[conv.status]}`}>
                       {STATUS_LABEL[conv.status]}
                     </span>
                     {conv.agents && <span className="db-conv-agent">→ {conv.agents.name}</span>}
@@ -234,12 +330,17 @@ export default function Dashboard({ session }) {
         </div>
       </div>
 
-      {/* Main Chat Area */}
+      {/* ════ MAIN AREA ════ */}
       <div className={`db-main ${mobileShowChat ? '' : 'mobile-hidden-main'}`}>
         {!activeConv ? (
           <div className="db-main-empty">
             <i className="fas fa-comments" />
             <p>Wähle einen Chat aus der Liste</p>
+            {waitingList.length > 0 && (
+              <button className="db-claim-btn" onClick={() => selectConv(waitingList[0])}>
+                <i className="fas fa-headset" /> {waitingList.length} wartende{waitingList.length > 1 ? 'r' : ''} Chat
+              </button>
+            )}
           </div>
         ) : (
           <>
@@ -248,78 +349,116 @@ export default function Dashboard({ session }) {
               <button className="db-back-btn" onClick={() => { setMobileShowChat(false); setActiveConv(null) }}>
                 <i className="fas fa-arrow-left" />
               </button>
+              <Avatar name={activeConv.user_name} size={34} />
               <div className="db-chat-header-info">
-                <div className="db-conv-avatar sm">
-                  <span>{activeConv.user_name?.[0]?.toUpperCase() || '?'}</span>
-                </div>
-                <div>
-                  <strong>{activeConv.user_name}</strong>
-                  <span className={`db-status-badge ${STATUS_CLASS[activeConv.status]}`}>
+                <strong>{activeConv.user_name}</strong>
+                <div className="db-chat-meta">
+                  <span className={`db-status-badge ${STATUS_CLS[activeConv.status]}`}>
                     {STATUS_LABEL[activeConv.status]}
+                  </span>
+                  {activeConv.agents && (
+                    <span className="db-assigned">
+                      <Avatar agent={activeConv.agents} size={16} />
+                      {activeConv.agents.name}
+                    </span>
+                  )}
+                  <span className="db-chat-since">
+                    {fmtTime(activeConv.created_at)}
                   </span>
                 </div>
               </div>
               <div className="db-chat-header-actions">
                 {activeConv.status === 'waiting' && (
-                  <button className="db-claim-btn" onClick={() => claimConversation(activeConv)}>
+                  <button className="db-claim-btn" onClick={() => claimConv(activeConv)}>
                     <i className="fas fa-headset" /> Übernehmen
                   </button>
                 )}
-                <button className="db-close-btn" onClick={() => closeConversation(activeConv.id)}
-                  title="Chat schließen">
-                  <i className="fas fa-times" />
-                </button>
+                {activeConv.status !== 'closed' && (
+                  <button className="db-end-btn" onClick={() => closeConv(activeConv.id)} title="Chat beenden">
+                    <i className="fas fa-times-circle" /> Beenden
+                  </button>
+                )}
               </div>
             </div>
 
             {/* Messages */}
             <div className="db-messages">
-              {messages.map(msg => (
-                <motion.div key={msg.id}
-                  className={`db-msg ${msg.sender_type}`}
-                  initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
-                  <div className="db-msg-meta">
-                    <span className="db-msg-sender">
-                      {msg.sender_type === 'user' ? activeConv.user_name
-                       : msg.sender_type === 'bot' ? '🤖 Bot'
-                       : msg.sender_name}
-                    </span>
-                    <span className="db-msg-time">
-                      {new Date(msg.created_at).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
-                    </span>
+              {messages.map((msg, i) => {
+                const showDate = i === 0 || new Date(messages[i-1].created_at).toDateString() !== new Date(msg.created_at).toDateString()
+                return (
+                  <div key={msg.id}>
+                    {showDate && (
+                      <div className="db-date-divider">
+                        {new Date(msg.created_at).toLocaleDateString('de-DE', { weekday:'short', day:'2-digit', month:'2-digit' })}
+                      </div>
+                    )}
+                    <motion.div className={`db-msg ${msg.sender_type}`}
+                      initial={{ opacity:0, y:5 }} animate={{ opacity:1, y:0 }}>
+                      <div className="db-msg-header">
+                        <span className="db-msg-sender">
+                          {msg.sender_type === 'user'  ? activeConv.user_name
+                          :msg.sender_type === 'bot'   ? '🤖 Bot'
+                          :msg.sender_name || 'Agent'}
+                        </span>
+                        <span className="db-msg-time">{fmtTime(msg.created_at)}</span>
+                      </div>
+                      <div className="db-msg-bubble">{msg.content}</div>
+                    </motion.div>
                   </div>
-                  <div className="db-msg-bubble">{msg.content}</div>
-                </motion.div>
-              ))}
+                )
+              })}
               <div ref={endRef} />
             </div>
 
-            {/* Reply Input */}
+            {/* Input area */}
             {activeConv.status === 'active' && activeConv.assigned_agent_id === agent?.id ? (
-              <form className="db-reply-bar" onSubmit={sendMessage}>
-                <input
-                  type="text"
-                  placeholder={`Antworten als ${agent?.name}…`}
-                  value={replyInput}
-                  onChange={e => setReplyInput(e.target.value)}
-                  className="db-reply-input"
-                  autoFocus
-                />
-                <button type="submit" className="db-send-btn" disabled={!replyInput.trim()}>
-                  <i className="fas fa-paper-plane" />
-                  Senden
-                </button>
-              </form>
+              <div className="db-input-area">
+                {/* Quick replies panel */}
+                <AnimatePresence>
+                  {showQR && quickReplies.length > 0 && (
+                    <motion.div className="qr-panel"
+                      initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }}
+                      exit={{ opacity:0, height:0 }}>
+                      {quickReplies.map(r => (
+                        <button key={r.id} className="qr-chip" onClick={() => insertQR(r.content)}
+                          title={r.content}>
+                          <i className="fas fa-bolt" /> {r.title}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <form className="db-reply-bar" onSubmit={sendMessage}>
+                  <button type="button"
+                    className={`qr-toggle-btn ${showQR ? 'active' : ''}`}
+                    onClick={() => setShowQR(v => !v)}
+                    title="Schnellantworten">
+                    <i className="fas fa-bolt" />
+                  </button>
+                  <input ref={inputRef} type="text"
+                    placeholder={`Antworten als ${agent?.name}…`}
+                    value={replyInput} onChange={e => setReplyInput(e.target.value)}
+                    className="db-reply-input" />
+                  <button type="submit" className="db-send-btn" disabled={!replyInput.trim()}>
+                    <i className="fas fa-paper-plane" /> Senden
+                  </button>
+                </form>
+              </div>
             ) : activeConv.status === 'waiting' ? (
               <div className="db-claim-bar">
-                <p>Noch nicht übernommen</p>
-                <button className="db-claim-btn large" onClick={() => claimConversation(activeConv)}>
+                <p><i className="fas fa-clock" /> Wartet auf Übernahme</p>
+                <button className="db-claim-btn large" onClick={() => claimConv(activeConv)}>
                   <i className="fas fa-headset" /> Chat übernehmen
                 </button>
               </div>
+            ) : activeConv.status === 'closed' ? (
+              <div className="db-claim-bar muted">
+                <p><i className="fas fa-lock" /> Chat wurde beendet</p>
+              </div>
             ) : (
               <div className="db-claim-bar muted">
-                <p><i className="fas fa-info-circle" /> Dieser Chat wird von {activeConv.agents?.name} bearbeitet</p>
+                <p><i className="fas fa-info-circle" /> Wird von <strong>{activeConv.agents?.name}</strong> bearbeitet</p>
               </div>
             )}
           </>
