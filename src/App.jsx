@@ -12,8 +12,6 @@ import Contact from './pages/Contact'
 import Impressum from './pages/Impressum'
 import Agb from './pages/Agb'
 import Privacy from './pages/Privacy'
-import Login from './pages/Login'
-
 export default function App() {
   const location = useLocation()
 
@@ -31,7 +29,6 @@ export default function App() {
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/agb" element={<Agb />} />
           <Route path="/privacy" element={<Privacy />} />
-          <Route path="/login" element={<Login />} />
         </Routes>
       </AnimatePresence>
       <Footer />

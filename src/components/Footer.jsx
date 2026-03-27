@@ -31,7 +31,6 @@ export default function Footer() {
             <h5>Unternehmen</h5>
             <Link to="/about">Über uns</Link>
             <Link to="/contact">Kontakt</Link>
-            <Link to="/login">Login</Link>
           </div>
           <div className="footer-col">
             <h5>Rechtliches</h5>
