@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEAM LAZER | Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style/global.css">
+    <link rel="stylesheet" href="../style/shop.css">
+</head>
+<body>
+    <div class="global-bg"></div>
+    <header class="navbar">
+        <div class="container nav-container">
+            <a class="nav-logo" href="../index.html">
+                <img src="../images/tl-logo-nobg.webp" alt="Logo" />
+                <span class="logo-text">TEAM LAZER</span>
+            </a>
+            <nav class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="about.html">Über uns</a>
+                <a href="shop.html" class="active">Shop</a>
+                <a href="contact.html">Kontakt</a>
+                <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
+            </nav>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <a href="login.html" class="nav-cart" title="Login" style="font-size:1rem;">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+                <a href="cart.html" class="nav-cart" title="Anfrageliste">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+                <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="../index.html" class="mobile-link"><i class="fa-solid fa-layer-group"></i> Home</a>
+        <a href="about.html" class="mobile-link"><i class="fa-solid fa-users-gear"></i> Über uns</a>
+        <a href="shop.html" class="mobile-link active"><i class="fa-solid fa-bag-shopping"></i> Shop</a>
+        <a href="contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+        <a href="login.html" class="mobile-link"><i class="fa-solid fa-user"></i> Login</a>
+        <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="mobile-link discord-highlight"><i class="fa-brands fa-discord"></i> Discord</a>
+    </div>
+
+    <section class="shop-hero">
+        <div class="shop-hero-glow"></div>
+        <div class="container">
+            <div class="hero-tag"><span class="highlight-text">TEAM LAZER SERVICES</span></div>
+            <h1>PROFESSIONELLE <span class="highlight">LEISTUNGEN</span></h1>
+            <p>Von Discord-Infrastruktur über individuelle Entwicklung bis hin zu exklusiven Gaming-Paketen – wir realisieren, was deine Community braucht. Preise auf Anfrage.</p>
+            <div class="trust-bar">
+                <div class="trust-item">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Professionelle Umsetzung</span>
+                </div>
+                <div class="trust-item">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Vertrauensvoller Partner</span>
+                </div>
+                <div class="trust-item">
+                    <i class="fa-solid fa-headset"></i>
+                    <span>Direkter Discord-Support</span>
+                </div>
+                <div class="trust-item">
+                    <i class="fa-brands fa-discord"></i>
+                    <span>457+ Community-Mitglieder</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMING SOON OVERLAY – entfernen sobald Gewerbe angemeldet -->
+    <section class="coming-soon-section">
+        <div class="container">
+            <div class="coming-soon-box">
+                <div class="cs-icon"><i class="fa-solid fa-store-slash"></i></div>
+                <h2>Shop derzeit nicht verfügbar</h2>
+                <p>Wir sind noch in der Aufbauphase und können aktuell keine Leistungen verbindlich anbieten. Sobald wir unseren Betrieb offiziell aufnehmen, findest du hier unser vollständiges Angebot.</p>
+                <div class="cs-divider"></div>
+                <p class="cs-hint"><i class="fa-solid fa-clock"></i> <strong>Coming Soon</strong> – bis dahin erreichst du uns gerne direkt:</p>
+                <div class="cs-actions">
+                    <a href="contact.html" class="btn btn-primary"><i class="fa-solid fa-envelope"></i> Kontakt aufnehmen</a>
+                    <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="btn btn-discord"><i class="fa-brands fa-discord"></i> Discord beitreten</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOP INHALT (noch nicht aktiv – für spätere Aktivierung bereit) -->
+    <section class="category-section" style="display:none;" id="shopContent">
+        <div class="container">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">
+                    <i class="fa-solid fa-border-all"></i>
+                    Alle Leistungen
+                </button>
+                <button class="filter-tab" data-filter="discord">
+                    <i class="fa-brands fa-discord"></i>
+                    Discord Services
+                </button>
+                <button class="filter-tab" data-filter="gaming">
+                    <i class="fa-solid fa-gamepad"></i>
+                    Gaming Pakete
+                </button>
+                <button class="filter-tab" data-filter="development">
+                    <i class="fa-solid fa-code"></i>
+                    Development
+                </button>
+            </div>
+            <div id="productsGrid" class="products-grid"></div>
+        </div>
+    </section>
+    <!-- ENDE SHOP INHALT -->
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="../images/tl-logo-nobg.webp" alt="Logo" class="footer-logo" />
+                    <p>Excellence in Gaming & Development.</p>
+                    <div class="social-links">
+                        <a href="https://discord.gg/dCxU6KqWFz"><i class="fa-brands fa-discord"></i></a>
+                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="https://www.tiktok.com/@team.lazer.de"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="https://www.instagram.com/team_lazer.de"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://wa.me/491794406720" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html">Alle Leistungen</a></li>
+                        <li><a href="cart.html">Anfrageliste</a></li>
+                        <li><a href="contact.html">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Rechtliches</h4>
+                    <ul>
+                        <li><a href="impressum.html">Impressum</a></li>
+                        <li><a href="agb.html">AGB</a></li>
+                        <li><a href="privacy.html">Datenschutz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TEAM LAZER. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script/products.js"></script>
+    <script src="../script/cart.js"></script>
+    <script src="../script/main.js"></script>
+    <script src="../script/cookie.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts('all');
+            setupFilterTabs();
+        });
+
+        function setupFilterTabs() {
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const filter = this.getAttribute('data-filter');
+                    renderProducts(filter);
+                });
+            });
+        }
+
+        function renderProducts(filter) {
+            const container = document.getElementById('productsGrid');
+            container.innerHTML = '';
+
+            const products = getProductsByCategory(filter);
+
+            if (products.length === 0) {
+                container.innerHTML = `
+                  <div class="empty-state">
+                    <i class="fa-solid fa-box-open"></i>
+                    <h3>Keine Leistungen gefunden</h3>
+                    <p>In dieser Kategorie gibt es aktuell keine Einträge.</p>
+                  </div>`;
+                return;
+            }
+
+            products.forEach(product => {
+                const badgeHtml = product.badge ? `<div class="product-badge ${getBadgeClass(product.badge)}">${product.badge}</div>` : '';
+                const card = document.createElement('a');
+                card.href = `product.html?id=${product.id}`;
+                card.className = 'product-card scroll-reveal';
+                card.innerHTML = `
+                    <div class="product-img" style="background:${product.gradient};">
+                        ${badgeHtml}
+                        <div class="product-img-noise"></div>
+                        <div class="product-img-shine"></div>
+                        <i class="${product.icon} product-img-icon"></i>
+                    </div>
+                    <div class="product-body">
+                        <div class="product-category-tag">${product.categoryName}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-tagline">${product.tagline}</div>
+                        <div class="product-footer">
+                            <span class="price-na">Auf Anfrage</span>
+                            <span class="btn-inquiry"><i class="fa-solid fa-envelope"></i> Anfragen</span>
+                        </div>
+                    </div>`;
+                container.appendChild(card);
+            });
+
+            // Scroll-Reveal
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+            }, { threshold: 0.05 });
+            container.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
+        }
+
+        function getBadgeClass(badge) {
+            const map = { 'Neu': 'badge-new', 'Beliebt': 'badge-beliebt', 'Premium': 'badge-premium', 'Empfohlen': 'badge-empfohlen' };
+            return map[badge] || '';
+        }
+    </script>
+</body>
+</html>

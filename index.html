@@ -9,6 +9,7 @@
 
   <link rel="stylesheet" href="./style/global.css" />
   <link rel="stylesheet" href="./style/home.css" />
+  <link rel="stylesheet" href="./style/shop.css" />
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
@@ -33,10 +34,20 @@
       <nav class="nav-links">
         <a href="index.html" class="active">Home</a>
         <a href="./pages/about.html">Über uns</a>
+        <a href="./pages/shop.html">Shop</a>
         <a href="./pages/contact.html">Kontakt</a>
         <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
       </nav>
-      <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <a href="./pages/login.html" class="nav-cart" title="Login" style="font-size:1rem;">
+          <i class="fa-solid fa-user"></i>
+        </a>
+        <a href="./pages/cart.html" class="nav-cart" title="Anfrageliste">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="cart-badge">0</span>
+        </a>
+        <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
+      </div>
     </div>
   </header>
 
@@ -44,7 +55,9 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html" class="mobile-link active"><i class="fa-solid fa-layer-group"></i> Home</a>
     <a href="./pages/about.html" class="mobile-link"><i class="fa-solid fa-users-gear"></i> Über uns</a>
+    <a href="./pages/shop.html" class="mobile-link"><i class="fa-solid fa-bag-shopping"></i> Shop</a>
     <a href="./pages/contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+    <a href="./pages/login.html" class="mobile-link"><i class="fa-solid fa-user"></i> Login</a>
     <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="mobile-link discord-highlight"><i class="fa-brands fa-discord"></i> Discord</a>
   </div>
 
@@ -55,7 +68,7 @@
       <div class="hero-text">
         <span class="hero-tag">NEXT LEVEL GAMING</span>
         <h1>UNLOCK YOUR <br><span class="highlight">DIGITAL FUTURE</span></h1>
-        <p>Wir schaffen mehr als nur Spielraum. TEAM LAZER vereint professionelle <strong>Discord-Architektur</strong> und eigene <strong>Server-Netzwerke</strong> mit High-End <strong>Gaming</strong>. Egal ob du eine Community suchst, Events dominieren oder dein Ingame-Level auffrischen willst – wir liefern die Infrastruktur für deinen Aufstieg.</p>
+        <p>TEAM LAZER verbindet professionelle <strong>Discord-Infrastruktur</strong>, maßgeschneiderte <strong>Softwareentwicklung</strong> und eine aktive <strong>Gaming-Community</strong>. Wir schaffen digitale Räume, in denen Communitys wachsen, Projekte entstehen und echte Verbindungen geknüpft werden.</p>
 
         <div class="hero-btns">
           <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="btn btn-primary glow-anim">
@@ -113,23 +126,23 @@
           <div class="u-icon-wrapper"><i class="fa-solid fa-clapperboard"></i></div>
           <div class="u-content">
             <h3>Media Production</h3>
-            <p>Unsere Content Creator stellen euch den besten Content zur Verfügung. Von Glitches, Tricks und Tipps bis hin zu Livestreams und Community Events.</p>
+            <p>Unsere Content Creator liefern Gaming-Content auf höchstem Niveau – Guides, Highlights, Livestreams und Community Events. Immer nah an der Community, immer mit Leidenschaft.</p>
           </div>
           <div class="u-bg-glow"></div>
         </a>
         <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="universe-card scroll-reveal delay-1 color-2">
           <div class="u-icon-wrapper"><i class="fa-brands fa-discord"></i></div>
           <div class="u-content">
-            <h3>Discord</h3>
-            <p>Du suchst Mitspieler oder willst auf dem Laufenden bleiben? Kein Problem – wir bieten dir eine Vielzahl an Discords und eine starke Community.</p>
+            <h3>Discord-Netzwerk</h3>
+            <p>Über 457 Mitglieder, strukturierte Server-Architektur und ein engagiertes Moderationsteam. Finde Mitspieler, tausch dich aus und bleib immer auf dem neuesten Stand.</p>
           </div>
           <div class="u-bg-glow"></div>
         </a>
         <div class="universe-card scroll-reveal delay-2 color-3 cursor-default">
           <div class="u-icon-wrapper"><i class="fa-solid fa-code"></i></div>
           <div class="u-content">
-            <h3>Entwicklung</h3>
-            <p>Wir sind stets bemüht unserer Community nur das Beste zu bieten. Daher sind wir ständig beschäftigt unsere Systeme zu updaten und euch neue Erlebnisse zu bieten.</p>
+            <h3>Development</h3>
+            <p>Von individuellen Discord-Bots über Website-Entwicklung bis hin zu Security-Audits – wir entwickeln Lösungen, die wir selbst einsetzen wollen. Qualität ist bei uns kein Zufall.</p>
           </div>
           <div class="u-bg-glow"></div>
         </div>
@@ -141,23 +154,40 @@
   <section class="section-padding bg-darker" id="features" data-ladder-title="Standards">
     <div class="container">
       <div class="section-header scroll-reveal">
-        <h2>UNSERE <span class="highlight">STANDARDS</span></h2>
+        <h2>WARUM <span class="highlight">TEAM LAZER</span></h2>
       </div>
       <div class="features-wrapper">
         <div class="feature-box slide-left">
-          <div class="icon-box"><i class="fa-solid fa-gamepad"></i></div>
-          <h3>High-End Gaming</h3>
-          <p>Professionelle Server und Infrastruktur für dein Next-Level Erlebnis.</p>
+          <div class="icon-box"><i class="fa-solid fa-bolt"></i></div>
+          <h3>Professionelle Umsetzung</h3>
+          <p>Jedes Projekt wird mit dem gleichen Anspruch angegangen: sauber, dokumentiert und langfristig skalierbar.</p>
         </div>
         <div class="feature-box scroll-reveal delay-1">
           <div class="icon-box"><i class="fa-solid fa-layer-group"></i></div>
           <h3>Quality First</h3>
-          <p>Klasse statt Masse. Wir setzen auf hochwertige Interaktion.</p>
+          <p>Wir setzen auf Qualität statt Quantität. Lieber weniger, aber dafür besser – in jeder Hinsicht.</p>
         </div>
         <div class="feature-box slide-right delay-2">
-          <div class="icon-box"><i class="fa-solid fa-rocket"></i></div>
-          <h3>Innovation</h3>
-          <p>Stetige Weiterentwicklung unserer Plattform und Services.</p>
+          <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+          <h3>Vertrauen & Sicherheit</h3>
+          <p>Deine Daten, dein Server, deine Community – wir behandeln alles mit der nötigen Sorgfalt und Diskretion.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOP TEASER -->
+  <section class="section-padding scroll-reveal" id="shop-teaser" data-ladder-title="Shop">
+    <div class="container">
+      <div style="background:linear-gradient(135deg,rgba(124,58,237,0.12) 0%,rgba(88,101,242,0.08) 100%);border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:60px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:400px;height:200px;background:radial-gradient(ellipse,rgba(124,58,237,0.2) 0%,transparent 70%);pointer-events:none;"></div>
+        <span class="hero-tag" style="margin-bottom:20px;display:inline-block;">TEAM LAZER STORE</span>
+        <h2 style="font-family:'Rajdhani',sans-serif;font-size:2.5rem;font-weight:700;text-transform:uppercase;margin-bottom:15px;">ENTDECKE UNSERE <span class="highlight">LEISTUNGEN</span></h2>
+        <p style="color:var(--text-muted);max-width:520px;margin:0 auto 35px;font-size:1rem;">Discord Services, Gaming Pakete und maßgeschneiderte Entwicklung – alle Preise auf Anfrage. Wir erstellen dir ein individuelles Angebot.</p>
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+          <a href="./pages/shop.html" class="btn btn-primary glow-anim">
+            <i class="fa-solid fa-bag-shopping"></i> Zum Shop
+          </a>
         </div>
       </div>
     </div>
@@ -166,7 +196,7 @@
   <!-- CTA -->
   <section class="cta-section scroll-reveal" id="join" data-ladder-title="Connect">
     <div class="container cta-content">
-      <h2>Jetzt Beitreten</h2>
+      <h2>Werde Teil der <span class="highlight">Community</span></h2>
       <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="btn btn-primary glow-anim scale-hover">Join Discord</a>
     </div>
   </section>
@@ -190,6 +220,7 @@
           <h4>Allgemein</h4>
           <ul>
             <li><a href="./pages/about.html">Über uns</a></li>
+            <li><a href="./pages/shop.html">Shop</a></li>
             <li><a href="./pages/contact.html">Kontakt</a></li>
           </ul>
         </div>
@@ -197,6 +228,7 @@
           <h4>Rechtliches</h4>
           <ul>
             <li><a href="./pages/impressum.html">Impressum</a></li>
+            <li><a href="./pages/agb.html">AGB</a></li>
             <li><a href="./pages/privacy.html">Datenschutz</a></li>
           </ul>
         </div>
@@ -207,8 +239,11 @@
     </div>
   </footer>
 
+  <script src="./script/products.js"></script>
+  <script src="./script/cart.js"></script>
   <script src="./script/main.js"></script>
   <script src="./script/ladder.js"></script>
+  <script src="./script/cookie.js"></script>
 
 </body>
 </html>

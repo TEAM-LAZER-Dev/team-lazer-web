@@ -9,6 +9,7 @@
 
   <link rel="stylesheet" href="../style/global.css" />
   <link rel="stylesheet" href="../style/about.css" />
+  <link rel="stylesheet" href="../style/shop.css" />
 
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -33,10 +34,20 @@
       <nav class="nav-links">
         <a href="../index.html">Home</a>
         <a href="about.html" class="active">Über uns</a>
+        <a href="shop.html">Shop</a>
         <a href="contact.html">Kontakt</a>
         <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
       </nav>
-      <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <a href="login.html" class="nav-cart" title="Login" style="font-size:1rem;">
+          <i class="fa-solid fa-user"></i>
+        </a>
+        <a href="cart.html" class="nav-cart" title="Anfrageliste">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="cart-badge">0</span>
+        </a>
+        <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
+      </div>
     </div>
   </header>
 
@@ -44,7 +55,9 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="../index.html" class="mobile-link"><i class="fa-solid fa-layer-group"></i> Home</a>
     <a href="about.html" class="mobile-link active"><i class="fa-solid fa-users-gear"></i> Über uns</a>
+    <a href="shop.html" class="mobile-link"><i class="fa-solid fa-bag-shopping"></i> Shop</a>
     <a href="contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+    <a href="login.html" class="mobile-link"><i class="fa-solid fa-user"></i> Login</a>
     <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="mobile-link discord-highlight"><i class="fa-brands fa-discord"></i> Discord</a>
   </div>
 
@@ -233,17 +246,124 @@
       </div>
     </section>
 
-    <!-- Gallery (Platzhalter) -->
-    <section id="showcase" class="bento-box box-gallery scroll-reveal delay-1" data-ladder-title="Work">
-      <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center;">
+    <!-- Projekte Showcase -->
+    <section id="showcase" class="bento-box box-gallery scroll-reveal delay-1" data-ladder-title="Projekte">
+      <h2 class="bento-title">Unsere <span class="highlight">Projekte</span></h2>
+      <p class="bento-text small" style="margin-bottom: 18px;">Ein Auszug aus dem, was wir gebaut haben und täglich einsetzen.</p>
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="project-icon"><i class="fa-brands fa-discord"></i></div>
+          <div class="project-info">
+            <h5>Community Hub</h5>
+            <p>Vollständige Discord-Serverarchitektur für 400+ Mitglieder inkl. Rollen, Bots und Moderationsstruktur.</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><i class="fa-solid fa-robot"></i></div>
+          <div class="project-info">
+            <h5>TL Bot Suite</h5>
+            <p>Eigene Bot-Entwicklung für Automatisierung, Moderation und Community-Interaktion.</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><i class="fa-solid fa-globe"></i></div>
+          <div class="project-info">
+            <h5>team-lazer.de</h5>
+            <p>Diese Website – vollständig eigenentwickelt, responsiv und stetig weiterentwickelt.</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="project-info">
+            <h5>Security Framework</h5>
+            <p>Umfassendes Sicherheitskonzept für Discord-Server inkl. Rollen-Audits und Zugriffskontrollen.</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- FAQ (Platzhalter) -->
-    <section class="bento-box box-faq scroll-reveal" data-ladder-title=""></section>
+    <!-- FAQ -->
+    <section class="bento-box box-faq scroll-reveal" data-ladder-title="FAQ">
+      <h2 class="bento-title">Häufige <span class="highlight">Fragen</span></h2>
+      <div class="faq-list" style="margin-top: 20px;">
 
-    <!-- Partners (Platzhalter) -->
-    <section id="partners" class="bento-box box-partners scroll-reveal delay-1" data-ladder-title="Partner"></section>
+        <div class="faq-item open">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Wie kann ich Mitglied bei TEAM LAZER werden?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            Am einfachsten über unseren Discord-Server – tritt einfach bei und nimm Kontakt mit unserem Team auf. Alternativ kannst du uns über das Kontaktformular oder per E-Mail erreichen.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Welche Leistungen bietet TEAM LAZER an?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            Wir bieten Discord Server Setup, Bot-Entwicklung, Community-Infrastruktur, Website-Entwicklung, Security-Audits sowie Gaming-Coaching und Community-Events. Alle Leistungen findest du in unserem Shop – Preise auf Anfrage.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Wie erhalte ich ein Angebot?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            Schreib uns über das Kontaktformular oder direkt auf Discord. Nach einer kurzen Anfrage erstellen wir dir ein individuelles Angebot – kostenlos und unverbindlich.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Wie lange dauert die Umsetzung?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            Das hängt von der Komplexität des Projekts ab. Ein einfaches Discord-Server-Setup dauert 2–4 Werktage, ein Custom Bot 7–14 Tage, eine Website 10–21 Tage. Die genaue Timeline klären wir vorab mit dir.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Bietet ihr Support nach Projektabschluss?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            Ja – je nach Paket gibt es Bugfix-Garantien und Nachbetreuung. Für längerfristigen Support bieten wir individuelle Vereinbarungen an. Unser Discord-Team steht dir außerdem jederzeit für Rückfragen zur Verfügung.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Sind eure Leistungen auch für kleine Communitys geeignet?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            Absolut. Wir arbeiten mit Communitys jeder Größe – von der kleinen Friend-Group bis zum großen Esports-Clan. Unsere Lösungen sind skalierbar und wachsen mit dir mit.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Partner -->
+    <section id="partners" class="bento-box box-partners scroll-reveal delay-1" data-ladder-title="Partner">
+      <h2 class="bento-title">Partner & <span class="highlight">Kooperationen</span></h2>
+      <p class="bento-text" style="margin-bottom: 20px;">
+        Wir sind offen für strategische Partnerschaften mit Clans, Communities, Content Creatorn und Unternehmen aus dem Gaming-Umfeld.
+      </p>
+      <div class="partner-cta-box">
+        <h4><i class="fa-solid fa-handshake" style="color:var(--primary);margin-right:8px;"></i>Partner werden</h4>
+        <p>Du hast eine Community, einen Kanal oder ein Produkt, das zur TEAM LAZER Vision passt? Meld dich – wir freuen uns auf den Austausch.</p>
+        <a href="contact.html" class="btn btn-primary" style="display:inline-flex;align-items:center;gap:8px;font-size:0.88rem;padding:10px 22px;">
+          <i class="fa-solid fa-envelope"></i> Jetzt anfragen
+        </a>
+      </div>
+    </section>
 
   </div>
 
@@ -271,9 +391,10 @@
           </div>
         </div>
         <div class="footer-links">
-          <h4>Allgemein</h4>
+          <h4>Navigation</h4>
           <ul>
             <li><a href="../index.html">Startseite</a></li>
+            <li><a href="./shop.html">Shop</a></li>
             <li><a href="./contact.html">Kontakt</a></li>
           </ul>
         </div>
@@ -281,6 +402,7 @@
           <h4>Rechtliches</h4>
           <ul>
             <li><a href="./impressum.html">Impressum</a></li>
+            <li><a href="./agb.html">AGB</a></li>
             <li><a href="./privacy.html">Datenschutz</a></li>
           </ul>
         </div>
@@ -291,8 +413,19 @@
     </div>
   </footer>
 
+  <script src="../script/products.js"></script>
+  <script src="../script/cart.js"></script>
   <script src="../script/main.js"></script>
   <script src="../script/ladder.js"></script>
+  <script src="../script/cookie.js"></script>
+  <script>
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+  </script>
 
 </body>
 </html>

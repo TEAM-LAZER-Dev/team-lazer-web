@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TEAM LAZER | Login</title>
+
+  <link rel="icon" type="image/webp" href="../images/tl-logo-nobg.webp" />
+
+  <link rel="stylesheet" href="../style/global.css" />
+  <link rel="stylesheet" href="../style/shop.css" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+
+  <div class="global-bg"></div>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a class="nav-logo" href="../index.html">
+        <img src="../images/tl-logo-nobg.webp" alt="Logo" />
+        <span class="logo-text">TEAM LAZER</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="about.html">Über uns</a>
+        <a href="shop.html">Shop</a>
+        <a href="contact.html">Kontakt</a>
+        <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <a href="login.html" class="nav-cart" title="Login" style="font-size:1rem;">
+          <i class="fa-solid fa-user"></i>
+        </a>
+        <a href="cart.html" class="nav-cart" title="Anfrageliste">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="cart-badge">0</span>
+        </a>
+        <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="../index.html" class="mobile-link"><i class="fa-solid fa-layer-group"></i> Home</a>
+    <a href="about.html" class="mobile-link"><i class="fa-solid fa-users-gear"></i> Über uns</a>
+    <a href="shop.html" class="mobile-link"><i class="fa-solid fa-bag-shopping"></i> Shop</a>
+    <a href="contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+    <a href="login.html" class="mobile-link active"><i class="fa-solid fa-user"></i> Login</a>
+    <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="mobile-link discord-highlight"><i class="fa-brands fa-discord"></i> Discord</a>
+  </div>
+
+  <!-- LOGIN SECTION -->
+  <section class="login-section">
+    <div class="login-card">
+      <div class="login-glow"></div>
+
+      <!-- Logo -->
+      <div class="login-logo">
+        <img src="../images/tl-logo-nobg.webp" alt="Logo" />
+        <h2>MITGLIEDER-BEREICH</h2>
+        <p>Exklusive Inhalte für registrierte Mitglieder.</p>
+      </div>
+
+      <!-- Tab switcher -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Anmelden</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Registrieren</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="panelLogin">
+        <div class="login-error" id="loginError" style="display:none;">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span>Ungültige Anmeldedaten. Bitte versuche es erneut.</span>
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="loginUser">E-Mail / Benutzername</label>
+            <input type="text" id="loginUser" placeholder="dein@email.de oder @username" autocomplete="username" required />
+          </div>
+
+          <div class="form-group">
+            <label for="loginPass">Passwort</label>
+            <div class="input-with-icon">
+              <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" required />
+              <button type="button" class="pw-toggle-btn" tabindex="-1">
+                <i class="fa-solid fa-eye" id="eyeIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-row-meta">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+              <input type="checkbox" style="cursor:pointer;" />
+              <span>Angemeldet bleiben</span>
+            </label>
+            <a href="#" class="link-muted">Passwort vergessen?</a>
+          </div>
+
+          <button class="btn-login" type="submit">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Anmelden
+          </button>
+        </form>
+
+        <p class="switch-hint">Noch kein Konto? <a href="#" onclick="switchTab('register');return false;">Jetzt registrieren</a></p>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="panelRegister" style="display:none;">
+        <div class="login-error" id="regError" style="display:none;">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span id="regErrorText">Bitte alle Felder ausfüllen.</span>
+        </div>
+        <div class="login-success" id="regSuccess" style="display:none;">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>Anfrage gesendet! Wir melden uns in Kürze bei dir.</span>
+        </div>
+
+        <form id="registerForm">
+          <div class="form-group">
+            <label for="regName">Benutzername / Discord-Tag</label>
+            <input type="text" id="regName" placeholder="z.B. lazer_max" required />
+          </div>
+          <div class="form-group">
+            <label for="regEmail">E-Mail-Adresse</label>
+            <input type="email" id="regEmail" placeholder="dein@email.de" required />
+          </div>
+          <div class="form-group">
+            <label for="regPass">Wunsch-Passwort</label>
+            <div class="input-with-icon">
+              <input type="password" id="regPass" placeholder="••••••••" required />
+              <button type="button" class="pw-toggle-btn" tabindex="-1" onclick="togglePw('regPass', 'eyeIconReg')">
+                <i class="fa-solid fa-eye" id="eyeIconReg"></i>
+              </button>
+            </div>
+          </div>
+
+          <button class="btn-login" type="submit">
+            <i class="fa-solid fa-user-plus"></i> Registrierung anfragen
+          </button>
+        </form>
+
+        <p class="switch-hint reg-note"><i class="fa-solid fa-info-circle"></i> Registrierungen werden manuell geprüft und freigeschaltet.</p>
+        <p class="switch-hint">Bereits registriert? <a href="#" onclick="switchTab('login');return false;">Jetzt anmelden</a></p>
+      </div>
+
+      <div class="login-secure-note">
+        <i class="fa-solid fa-lock"></i> Gesicherte Verbindung
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="../images/tl-logo-nobg.webp" alt="Logo" class="footer-logo" />
+          <p>Excellence in Gaming & Development.</p>
+          <div class="social-links">
+            <a href="https://discord.gg/dCxU6KqWFz"><i class="fa-brands fa-discord"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.tiktok.com/@team.lazer.de"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://www.instagram.com/team_lazer.de"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://wa.me/491794406720" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="about.html">Über uns</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact.html">Kontakt</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Rechtliches</h4>
+          <ul>
+            <li><a href="impressum.html">Impressum</a></li>
+            <li><a href="agb.html">AGB</a></li>
+            <li><a href="privacy.html">Datenschutz</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 TEAM LAZER. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../script/products.js"></script>
+  <script src="../script/cart.js"></script>
+  <script src="../script/main.js"></script>
+  <script src="../script/cookie.js"></script>
+
+  <script>
+    /* ── TAB SWITCHER ── */
+    function switchTab(tab) {
+      document.getElementById('panelLogin').style.display    = tab === 'login'    ? '' : 'none';
+      document.getElementById('panelRegister').style.display = tab === 'register' ? '' : 'none';
+      document.getElementById('tabLogin').classList.toggle('active',    tab === 'login');
+      document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+    }
+
+    /* ── PASSWORD TOGGLE ── */
+    function togglePw(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon  = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-solid fa-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'fa-solid fa-eye';
+      }
+    }
+
+    // Login password toggle button
+    document.querySelector('#panelLogin .pw-toggle-btn').addEventListener('click', function() {
+      togglePw('loginPass', 'eyeIcon');
+    });
+
+    /* ── LOGIN ── */
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const user    = document.getElementById('loginUser').value.trim();
+      const pass    = document.getElementById('loginPass').value;
+      const errorEl = document.getElementById('loginError');
+
+      // Demo-Credentials (für Produktionsbetrieb durch echtes Backend ersetzen)
+      const DEMO_USER = 'admin';
+      const DEMO_PASS = 'teamlazer2026';
+
+      if ((user === DEMO_USER || user === 'admin@team-lazer.de') && pass === DEMO_PASS) {
+        errorEl.style.display = 'none';
+        sessionStorage.setItem('tl_logged_in', '1');
+        sessionStorage.setItem('tl_username', 'Admin');
+        window.location.href = 'members.html';
+      } else {
+        errorEl.style.display = 'flex';
+        document.getElementById('loginPass').value = '';
+      }
+    });
+
+    /* ── REGISTER ── */
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name    = document.getElementById('regName').value.trim();
+      const email   = document.getElementById('regEmail').value.trim();
+      const pass    = document.getElementById('regPass').value;
+      const errorEl = document.getElementById('regError');
+      const errText = document.getElementById('regErrorText');
+      const success = document.getElementById('regSuccess');
+
+      if (!name || !email || !pass) {
+        errText.textContent = 'Bitte alle Felder ausfüllen.';
+        errorEl.style.display = 'flex';
+        return;
+      }
+      if (pass.length < 8) {
+        errText.textContent = 'Passwort muss mindestens 8 Zeichen lang sein.';
+        errorEl.style.display = 'flex';
+        return;
+      }
+
+      const btn = this.querySelector('button[type="submit"]');
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sende...';
+      btn.disabled = true;
+
+      fetch('https://formsubmit.co/ajax/f082d410f13b1bd44226e05f4bc6f364', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'Registrierungsanfrage: ' + name,
+          _template: 'box',
+          'Benutzername': name,
+          'E-Mail': email,
+          'Hinweis': 'Passwort wurde NICHT übermittelt – manuell anlegen.',
+          _replyto: email
+        })
+      })
+      .then(() => {
+        errorEl.style.display = 'none';
+        success.style.display = 'flex';
+        this.reset();
+      })
+      .catch(() => {
+        errText.textContent = 'Fehler beim Senden. Bitte versuche es später.';
+        errorEl.style.display = 'flex';
+      })
+      .finally(() => {
+        btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Registrierung anfragen';
+        btn.disabled = false;
+      });
+    });
+  </script>
+
+</body>
+</html>

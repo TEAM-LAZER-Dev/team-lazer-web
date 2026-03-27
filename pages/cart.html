@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEAM LAZER | Anfrageliste</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../style/global.css">
+    <link rel="stylesheet" href="../style/shop.css">
+    <style>
+        .cart-section {
+            padding: 60px 0;
+            min-height: calc(100vh - 300px);
+        }
+
+        .breadcrumb {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 40px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            align-items: center;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-light);
+        }
+
+        .section-header {
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .section-header .highlight {
+            color: var(--primary);
+        }
+
+        #cartContent {
+            display: grid;
+            gap: 40px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(124, 58, 237, 0.02) 100%);
+            border: 1px solid rgba(124, 58, 237, 0.1);
+            border-radius: 12px;
+        }
+
+        .cart-empty i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .cart-empty h2 {
+            font-size: 2rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .cart-empty p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cart-empty a {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .cart-empty a:hover {
+            background: var(--primary-dark);
+        }
+
+        .cart-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 120px 1fr auto;
+            gap: 20px;
+            padding: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            align-items: center;
+        }
+
+        .cart-item-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(124, 58, 237, 0.05) 100%);
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-info h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .cart-item-category {
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .cart-item-tagline {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-remove {
+            padding: 8px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-remove:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .cart-summary {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            margin-left: auto;
+        }
+
+        .cart-summary h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .cart-summary-text {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-bottom: 12px;
+        }
+
+        .btn-checkout:hover {
+            background: var(--primary-dark);
+        }
+
+        .secondary-link {
+            display: block;
+            text-align: center;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .secondary-link:hover {
+            color: var(--primary-light);
+        }
+
+        .trust-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .trust-badge-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .trust-badge-item i {
+            color: var(--primary);
+            width: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .cart-section {
+                padding: 40px 0;
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .cart-item {
+                grid-template-columns: 100px 1fr;
+                gap: 15px;
+            }
+
+            .cart-item-actions {
+                grid-column: 1 / -1;
+                justify-content: flex-end;
+            }
+
+            .cart-summary {
+                max-width: 100%;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="global-bg"></div>
+    <header class="navbar">
+        <div class="container nav-container">
+            <a class="nav-logo" href="../index.html">
+                <img src="../images/tl-logo-nobg.webp" alt="Logo" />
+                <span class="logo-text">TEAM LAZER</span>
+            </a>
+            <nav class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="about.html">Über uns</a>
+                <a href="shop.html">Shop</a>
+                <a href="contact.html">Kontakt</a>
+                <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="chat-hover"><i class="fa-brands fa-discord"></i> Discord</a>
+            </nav>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <a href="login.html" class="nav-cart" title="Login" style="font-size:1rem;">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+                <a href="cart.html" class="nav-cart" title="Anfrageliste">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+                <button class="burger-btn" id="burgerBtn"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="../index.html" class="mobile-link"><i class="fa-solid fa-layer-group"></i> Home</a>
+        <a href="about.html" class="mobile-link"><i class="fa-solid fa-users-gear"></i> Über uns</a>
+        <a href="shop.html" class="mobile-link"><i class="fa-solid fa-bag-shopping"></i> Shop</a>
+        <a href="contact.html" class="mobile-link"><i class="fa-solid fa-envelope"></i> Kontakt</a>
+        <a href="login.html" class="mobile-link"><i class="fa-solid fa-user"></i> Login</a>
+        <a href="https://discord.gg/dCxU6KqWFz" target="_blank" class="mobile-link discord-highlight"><i class="fa-brands fa-discord"></i> Discord</a>
+    </div>
+
+    <main class="cart-section">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../index.html">Home</a>
+                <span>/</span>
+                <a href="shop.html">Shop</a>
+                <span>/</span>
+                <span>Anfrageliste</span>
+            </div>
+
+            <div class="section-header">
+                <h2>DEINE <span class="highlight">ANFRAGELISTE</span></h2>
+            </div>
+
+            <div id="cartContent"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="../images/tl-logo-nobg.webp" alt="Logo" class="footer-logo" />
+                    <p>Excellence in Gaming & Development.</p>
+                    <div class="social-links">
+                        <a href="https://discord.gg/dCxU6KqWFz"><i class="fa-brands fa-discord"></i></a>
+                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="https://www.tiktok.com/@team.lazer.de"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="https://www.instagram.com/team_lazer.de"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://wa.me/491794406720" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="about.html">Über uns</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="contact.html">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Rechtliches</h4>
+                    <ul>
+                        <li><a href="impressum.html">Impressum</a></li>
+                        <li><a href="agb.html">AGB</a></li>
+                        <li><a href="privacy.html">Datenschutz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TEAM LAZER. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script/products.js"></script>
+    <script src="../script/cart.js"></script>
+    <script src="../script/main.js"></script>
+    <script src="../script/cookie.js"></script>
+    <script>
+        function renderCart() {
+            const cart = cartGet();
+            const cartContent = document.getElementById('cartContent');
+
+            if (!cart || cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="cart-empty">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <h2>Deine Anfrageliste ist leer</h2>
+                        <p>Füge Leistungen hinzu, die dich interessieren. Wir erstellen dir dann ein individuelles Angebot.</p>
+                        <a href="shop.html">Zu den Leistungen</a>
+                    </div>
+                `;
+                return;
+            }
+
+            let cartGrid = '<div class="cart-grid">';
+
+            cart.forEach((item) => {
+                const product = getProductById(item.id);
+                if (!product) return;
+
+                const imageUrl = product.image || '../images/placeholder.webp';
+
+                cartGrid += `
+                    <div class="cart-item">
+                        <div class="cart-item-image">
+                            <img src="${imageUrl}" alt="${product.name}" />
+                        </div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-category">${product.category}</div>
+                            <h3>${product.name}</h3>
+                            <p class="cart-item-tagline">${product.tagline}</p>
+                        </div>
+                        <div class="cart-item-actions">
+                            <button class="btn-remove" onclick="removeItem('${item.id}')">
+                                <i class="fa-solid fa-trash"></i> Entfernen
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartGrid += '</div>';
+
+            const summary = `
+                <div class="cart-summary">
+                    <h3>Anfrage senden</h3>
+                    <p class="cart-summary-text">Du hast ${cart.length} Leistung${cart.length !== 1 ? 'en' : ''} in deiner Liste.</p>
+                    <div class="info-box">
+                        <i class="fa-solid fa-circle-info" style="margin-right: 8px;"></i> Wir erstellen dir auf Basis deiner Auswahl ein individuelles Angebot und melden uns schnellstmöglich. Keine versteckten Kosten, keine Verpflichtung.
+                    </div>
+                    <button class="btn-checkout" onclick="window.location.href = 'contact.html?inquiry=true';">
+                        <i class="fa-solid fa-paper-plane"></i> Anfrage senden
+                    </button>
+                    <a href="shop.html" class="secondary-link">
+                        <i class="fa-solid fa-arrow-left"></i> Weitere Leistungen
+                    </a>
+                    <div class="trust-badges">
+                        <div class="trust-badge-item">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>Sichere Anfrage</span>
+                        </div>
+                        <div class="trust-badge-item">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>Schnelle Antwort</span>
+                        </div>
+                        <div class="trust-badge-item">
+                            <i class="fa-solid fa-handshake"></i>
+                            <span>Keine Verpflichtung</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            cartContent.innerHTML = cartGrid + summary;
+        }
+
+        function removeItem(productId) {
+            cartRemove(productId);
+            renderCart();
+            updateCartBadge();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCart();
+        });
+    </script>
+</body>
+</html>

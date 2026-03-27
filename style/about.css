@@ -36,7 +36,8 @@
 .box-team { grid-column: span 12; padding: 30px; background: rgba(20, 20, 30, 0.3); }
 .box-tech { grid-column: span 12; display: flex; align-items: center; justify-content: space-around; flex-wrap: wrap; gap: 20px; }
 .box-timeline { grid-column: span 5; grid-row: span 2; }
-.box-gallery { grid-column: span 7; grid-row: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.box-gallery { grid-column: span 7; grid-row: span 2; display: flex; flex-direction: column; gap: 15px; }
+.box-gallery .project-grid { flex: 1; }
 .box-faq { grid-column: span 8; }
 .box-partners { grid-column: span 4; text-align: center; }
 
@@ -91,6 +92,6 @@
   .bento-box { grid-column: span 1 !important; grid-row: span 1 !important; padding: 25px; }
   
   .small-hero h1 { font-size: 2.2rem; }
-  .box-gallery { grid-template-columns: 1fr; }
+  .box-gallery .project-grid { grid-template-columns: 1fr; }
   
 }
