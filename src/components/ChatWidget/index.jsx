@@ -147,6 +147,7 @@ export default function ChatWidget() {
       if (conv.status === 'active' && conv.agents) {
         setAgent(conv.agents)
         setPhase('live')
+        subscribeToConversation(conv.id)
       } else if (conv.status === 'waiting') {
         setPhase('connecting')
         subscribeToConversation(conv.id)
@@ -228,7 +229,7 @@ export default function ChatWidget() {
     if (handledRef.current) return   // schon behandelt
     handledRef.current = true
     clearInterval(pollRef.current)
-    if (channelRef.current) supabase.removeChannel(channelRef.current)
+    // NICHT die Subscription entfernen — die brauchen wir für Live-Nachrichten!
 
     const ag = agentData || (await supabase.from('agents').select('*').eq('id', agentId).single()).data
     if (!ag) return
@@ -237,10 +238,7 @@ export default function ChatWidget() {
       .from('messages').select('*').eq('conversation_id', cid).order('created_at')
     setLiveMessages(msgs || [])
 
-    // Agent setzen → spielt die Joined-Animation in ConnectingScreen
     setAgent(ag)
-
-    // Nach Animation → Live-Phase
     setTimeout(() => setPhase('live'), 2800)
   }
 
