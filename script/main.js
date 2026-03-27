@@ -595,3 +595,37 @@ function initLiveChat() {
     );
   }
 }
+
+/* ══════════════════════════════════════════════════
+   NAVBAR SCROLL EFFECT
+   Adds blur and shadow when scrolling
+═══════════════════════════════════════════════════ */
+window.addEventListener('scroll', function() {
+  const navbar = document.querySelector('.navbar');
+  if (navbar) {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  }
+}, { passive: true });
+
+/* ══════════════════════════════════════════════════
+   LIVE CHAT - Tawk.to Integration
+
+   1. Erstelle einen kostenlosen Account auf tawk.to
+   2. Erstelle eine "Property" für team-lazer.de
+   3. Ersetze DEINE_PROPERTY_ID und DEIN_WIDGET_ID unten
+   4. Entferne die Kommentare um den Code zu aktivieren
+
+   Tawk.to ist kostenlos und hat eine Mobile App
+   (iOS + Android) mit der du Kunden live antworten kannst.
+═══════════════════════════════════════════════════ */
+/*
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/DEINE_PROPERTY_ID/DEIN_WIDGET_ID';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+})();
+*/
