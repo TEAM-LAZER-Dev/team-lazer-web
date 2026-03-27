@@ -24,25 +24,14 @@ function Avatar({ agent, size = 36 }) {
 }
 
 /* ── Connecting / Agent-Joined Animation ─────────── */
-function ConnectingScreen({ agent, onDone }) {
-  const [animPhase, setAnimPhase] = useState('rings')
-  const doneCalledRef = useRef(false)
-
-  useEffect(() => {
-    if (agent && !doneCalledRef.current) {
-      setAnimPhase('joined')
-      doneCalledRef.current = true
-      const t = setTimeout(onDone, 2800)
-      return () => clearTimeout(t)
-    }
-  }, [agent]) // eslint-disable-line
-
+// Einfach: reagiert nur auf agent-Prop, kein callback nötig
+function ConnectingScreen({ agent }) {
   return (
     <div className="chat-connecting-screen">
       <AnimatePresence mode="wait">
-        {animPhase === 'rings' ? (
+        {!agent ? (
           <motion.div key="rings" className="connecting-rings-wrap"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.2 } }}>
             <div className="connecting-rings">
               {[0, 1, 2].map(i => (
                 <motion.div key={i} className="connecting-ring"
@@ -54,13 +43,11 @@ function ConnectingScreen({ agent, onDone }) {
               </div>
             </div>
             <p className="connecting-label">Verbinde mit Team Lazer…</p>
-            <div className="typing-dots">
-              <span /><span /><span />
-            </div>
+            <div className="typing-dots"><span /><span /><span /></div>
           </motion.div>
         ) : (
           <motion.div key="joined" className="agent-joined-wrap"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <motion.div className="agent-joined-avatar"
               initial={{ scale: 0.3, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -75,7 +62,7 @@ function ConnectingScreen({ agent, onDone }) {
             <motion.p className="agent-joined-name"
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55 }}>
-              {agent?.name}
+              {agent.name}
             </motion.p>
             <motion.p className="agent-joined-sub"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
@@ -95,9 +82,7 @@ function TypingIndicator() {
     <motion.div className="chat-msg bot"
       initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
       <div className="chat-msg-avatar"><i className="fas fa-robot" /></div>
-      <div className="chat-bubble typing-bubble">
-        <span /><span /><span />
-      </div>
+      <div className="chat-bubble typing-bubble"><span /><span /><span /></div>
     </motion.div>
   )
 }
@@ -108,7 +93,7 @@ export default function ChatWidget() {
   const [phase, setPhase]               = useState('bot')
   const [hasUnread, setHasUnread]       = useState(false)
 
-  // Bot state
+  // Bot
   const [botMessages, setBotMessages]   = useState([])
   const [currentStep, setCurrentStep]   = useState(null)
   const [showTyping, setShowTyping]     = useState(false)
@@ -118,27 +103,27 @@ export default function ChatWidget() {
   const [nameInput, setNameInput]       = useState('')
   const [userName, setUserName]         = useState('')
 
-  // Live chat
+  // Live
   const [convId, setConvId]             = useState(null)
   const [liveMessages, setLiveMessages] = useState([])
   const [liveInput, setLiveInput]       = useState('')
   const [agent, setAgent]               = useState(null)
 
-  const sessionId    = useRef(getSessionId())
-  const channelRef   = useRef(null)
-  const pollRef      = useRef(null)
-  const endRef       = useRef(null)
-  const nameRef      = useRef(null)
-  const liveRef      = useRef(null)
-  // Prevent double-init in React StrictMode
-  const botStarted   = useRef(false)
+  const sessionId   = useRef(getSessionId())
+  const channelRef  = useRef(null)
+  const pollRef     = useRef(null)
+  const handledRef  = useRef(false) // verhindert doppelte Übernahme-Logik
+  const botStarted  = useRef(false)
+  const endRef      = useRef(null)
+  const nameRef     = useRef(null)
+  const liveRef     = useRef(null)
 
   const scrollBot  = useCallback(() => setTimeout(() => endRef.current?.scrollIntoView({ behavior: 'smooth' }), 60), [])
   const scrollLive = useCallback(() => setTimeout(() => liveRef.current?.scrollIntoView({ behavior: 'smooth' }), 60), [])
 
-  /* ── Restore existing session on mount ────────── */
+  /* ── Session wiederherstellen ──────────────────── */
   useEffect(() => {
-    async function restoreSession() {
+    async function restore() {
       const { data: conv } = await supabase
         .from('conversations')
         .select('*, agents(*)')
@@ -147,19 +132,17 @@ export default function ChatWidget() {
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
-
       if (!conv) return
 
       const { data: msgs } = await supabase
-        .from('messages')
-        .select('*')
+        .from('messages').select('*')
         .eq('conversation_id', conv.id)
         .order('created_at', { ascending: true })
 
+      botStarted.current = true
       setConvId(conv.id)
       setUserName(conv.user_name)
       setLiveMessages(msgs || [])
-      botStarted.current = true
 
       if (conv.status === 'active' && conv.agents) {
         setAgent(conv.agents)
@@ -170,10 +153,10 @@ export default function ChatWidget() {
         startPolling(conv.id)
       }
     }
-    restoreSession()
+    restore()
   }, []) // eslint-disable-line
 
-  /* ── Start bot — guard against StrictMode double call ── */
+  /* ── Bot starten (StrictMode-sicher) ──────────── */
   useEffect(() => {
     if (phase !== 'bot' || botStarted.current) return
     botStarted.current = true
@@ -183,53 +166,48 @@ export default function ChatWidget() {
   function runStep(stepId) {
     const step = STEPS[stepId]
     if (!step) return
-
     if (step.action === 'connect') {
       setShowOptions(false)
       setPhase('name_input')
       setTimeout(() => nameRef.current?.focus(), 150)
       return
     }
-
     setCurrentStep(stepId)
     setShowOptions(false)
     const msgs = step.messages || []
-
     msgs.forEach((m, i) => {
-      const baseDelay = m.delay ?? i * 900
-      setTimeout(() => setShowTyping(true), baseDelay)
+      const d = m.delay ?? i * 900
+      setTimeout(() => setShowTyping(true), d)
       setTimeout(() => {
         setShowTyping(false)
         setBotMessages(prev => [...prev, { id: `${stepId}-${i}-${Date.now()}`, text: m.text, from: 'bot' }])
         scrollBot()
         if (i === msgs.length - 1) setTimeout(() => setShowOptions(true), 300)
-      }, baseDelay + 700)
+      }, d + 700)
     })
   }
 
   function handleOption(optionId) {
-    const step = STEPS[currentStep]
-    const opt = step?.options?.find(o => o.id === optionId)
+    const opt = STEPS[currentStep]?.options?.find(o => o.id === optionId)
     if (!opt) return
-    setBotMessages(prev => [...prev, { id: `user-${Date.now()}`, text: opt.label.replace(/^.\s/, ''), from: 'user' }])
+    setBotMessages(prev => [...prev, { id: `u-${Date.now()}`, text: opt.label.replace(/^.\s/, ''), from: 'user' }])
     setShowOptions(false)
     scrollBot()
     setTimeout(() => runStep(optionId), 400)
   }
 
-  /* ── Connect to human ──────────────────────────── */
+  /* ── Mit Team verbinden ────────────────────────── */
   async function handleConnectSubmit(e) {
     e.preventDefault()
     const name = nameInput.trim() || 'Besucher'
     setUserName(name)
     setPhase('connecting')
+    handledRef.current = false
 
     const { data: conv } = await supabase
       .from('conversations')
       .insert({ session_id: sessionId.current, user_name: name, status: 'waiting' })
-      .select()
-      .single()
-
+      .select().single()
     if (!conv) return
     setConvId(conv.id)
 
@@ -245,19 +223,39 @@ export default function ChatWidget() {
     startPolling(conv.id)
   }
 
+  /* ── Wenn Agent übernimmt ──────────────────────── */
+  async function onAgentJoined(agentId, cid, agentData = null) {
+    if (handledRef.current) return   // schon behandelt
+    handledRef.current = true
+    clearInterval(pollRef.current)
+    if (channelRef.current) supabase.removeChannel(channelRef.current)
+
+    const ag = agentData || (await supabase.from('agents').select('*').eq('id', agentId).single()).data
+    if (!ag) return
+
+    const { data: msgs } = await supabase
+      .from('messages').select('*').eq('conversation_id', cid).order('created_at')
+    setLiveMessages(msgs || [])
+
+    // Agent setzen → spielt die Joined-Animation in ConnectingScreen
+    setAgent(ag)
+
+    // Nach Animation → Live-Phase
+    setTimeout(() => setPhase('live'), 2800)
+  }
+
   /* ── Realtime subscription ─────────────────────── */
   function subscribeToConversation(cid) {
     if (channelRef.current) supabase.removeChannel(channelRef.current)
-
-    const channel = supabase
+    const ch = supabase
       .channel('conv-' + cid)
       .on('postgres_changes', {
         event: 'UPDATE', schema: 'public', table: 'conversations',
         filter: `id=eq.${cid}`,
-      }, async (payload) => {
-        const updated = payload.new
-        if (updated.status === 'active' && updated.assigned_agent_id) {
-          await handleAgentJoined(updated.assigned_agent_id, cid)
+      }, (payload) => {
+        const c = payload.new
+        if (c.status === 'active' && c.assigned_agent_id) {
+          onAgentJoined(c.assigned_agent_id, cid)
         }
       })
       .on('postgres_changes', {
@@ -266,98 +264,65 @@ export default function ChatWidget() {
       }, (payload) => {
         const msg = payload.new
         if (msg.sender_type === 'agent') {
-          setLiveMessages(prev => {
-            if (prev.find(m => m.id === msg.id)) return prev
-            return [...prev, msg]
-          })
+          setLiveMessages(prev => prev.find(m => m.id === msg.id) ? prev : [...prev, msg])
           if (!isOpen) setHasUnread(true)
           scrollLive()
         }
       })
       .subscribe()
-
-    channelRef.current = channel
+    channelRef.current = ch
   }
 
-  /* ── Polling fallback (if realtime misses the event) ── */
+  /* ── Polling fallback (kein stale closure durch ref) ── */
   function startPolling(cid) {
     clearInterval(pollRef.current)
     pollRef.current = setInterval(async () => {
+      if (handledRef.current) { clearInterval(pollRef.current); return }
       const { data: conv } = await supabase
-        .from('conversations')
-        .select('*, agents(*)')
-        .eq('id', cid)
-        .single()
-
-      if (conv?.status === 'active' && conv?.assigned_agent_id && !agent) {
-        clearInterval(pollRef.current)
-        await handleAgentJoined(conv.assigned_agent_id, cid, conv.agents)
+        .from('conversations').select('*, agents(*)')
+        .eq('id', cid).single()
+      if (conv?.status === 'active' && conv?.assigned_agent_id) {
+        onAgentJoined(conv.assigned_agent_id, cid, conv.agents)
       }
-    }, 3000)
+    }, 2000)
   }
 
-  async function handleAgentJoined(agentId, cid, agentData = null) {
-    const ag = agentData || (await supabase.from('agents').select('*').eq('id', agentId).single()).data
-    if (!ag) return
-    setAgent(ag)
-    clearInterval(pollRef.current)
-
-    const { data: msgs } = await supabase
-      .from('messages').select('*').eq('conversation_id', cid).order('created_at')
-    setLiveMessages(msgs || [])
-  }
-
-  /* ── Send live message ─────────────────────────── */
+  /* ── Nachricht senden ──────────────────────────── */
   async function sendLiveMessage(e) {
     e.preventDefault()
     const text = liveInput.trim()
     if (!text || !convId) return
     setLiveInput('')
-
     const { data } = await supabase.from('messages').insert({
       conversation_id: convId,
       sender_type: 'user',
       sender_name: userName,
       content: text,
     }).select().single()
-
     if (data) { setLiveMessages(prev => [...prev, data]); scrollLive() }
   }
 
-  /* ── Cleanup on unmount ────────────────────────── */
-  useEffect(() => {
-    return () => {
-      clearInterval(pollRef.current)
-      if (channelRef.current) supabase.removeChannel(channelRef.current)
-    }
+  useEffect(() => () => {
+    clearInterval(pollRef.current)
+    if (channelRef.current) supabase.removeChannel(channelRef.current)
   }, [])
-
-  const onConnectingDone = useCallback(() => {
-    setPhase('live')
-    scrollLive()
-  }, [scrollLive])
 
   function toggle() { setIsOpen(v => !v); setHasUnread(false) }
 
-  const headerAgent = agent
-    ? { name: agent.name, status: 'Online' }
-    : { name: 'Team Lazer', status: phase === 'connecting' ? 'Verbinde…' : 'Bot' }
+  const headerName   = agent ? agent.name : 'Team Lazer'
+  const headerStatus = agent ? 'Online' : phase === 'connecting' ? 'Verbinde…' : 'Bot'
 
   /* ── Render ────────────────────────────────────── */
   return (
     <>
-      <motion.button
-        className={`chat-fab ${hasUnread ? 'has-unread' : ''}`}
-        onClick={toggle}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.94 }}
-        aria-label="Chat öffnen">
+      <motion.button className={`chat-fab ${hasUnread ? 'has-unread' : ''}`}
+        onClick={toggle} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.94 }}>
         <AnimatePresence mode="wait">
           {isOpen
             ? <motion.i key="x" className="fas fa-times"
                 initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }} />
-            : <motion.i key="msg" className="fas fa-comments"
+            : <motion.i key="c" className="fas fa-comments"
                 initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.18 }} />
           }
@@ -384,17 +349,15 @@ export default function ChatWidget() {
                   <span className="chat-online-dot" />
                 </div>
                 <div className="chat-header-info">
-                  <strong>{headerAgent.name}</strong>
-                  <span>{headerAgent.status}</span>
+                  <strong>{headerName}</strong>
+                  <span>{headerStatus}</span>
                 </div>
               </div>
               <button className="chat-header-close" onClick={toggle}><i className="fas fa-times" /></button>
             </div>
 
-            {/* Body */}
             <div className="chat-body">
-
-              {/* BOT / NAME INPUT */}
+              {/* BOT */}
               {(phase === 'bot' || phase === 'name_input') && (
                 <div className="chat-messages">
                   <AnimatePresence initial={false}>
@@ -402,13 +365,9 @@ export default function ChatWidget() {
                       <motion.div key={msg.id} className={`chat-msg ${msg.from}`}
                         initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.2 }}>
-                        {msg.from === 'bot' && (
-                          <div className="chat-msg-avatar"><i className="fas fa-robot" /></div>
-                        )}
+                        {msg.from === 'bot' && <div className="chat-msg-avatar"><i className="fas fa-robot" /></div>}
                         <div className="chat-bubble">
-                          {msg.text.split('\n').map((line, i, arr) => (
-                            <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-                          ))}
+                          {msg.text.split('\n').map((l, i, a) => <span key={i}>{l}{i < a.length - 1 && <br />}</span>)}
                         </div>
                       </motion.div>
                     ))}
@@ -418,8 +377,7 @@ export default function ChatWidget() {
                   <AnimatePresence>
                     {showOptions && phase === 'bot' && (
                       <motion.div className="chat-options"
-                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}>
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
                         {STEPS[currentStep]?.options?.map(opt => (
                           <button key={opt.id}
                             className={`chat-option-btn ${opt.highlight ? 'highlight' : ''}`}
@@ -456,9 +414,7 @@ export default function ChatWidget() {
               )}
 
               {/* CONNECTING */}
-              {phase === 'connecting' && (
-                <ConnectingScreen agent={agent} onDone={onConnectingDone} />
-              )}
+              {phase === 'connecting' && <ConnectingScreen agent={agent} />}
 
               {/* LIVE */}
               {phase === 'live' && (
@@ -471,7 +427,9 @@ export default function ChatWidget() {
                         transition={{ duration: 0.2 }}>
                         {msg.sender_type !== 'user' && (
                           <div className="chat-msg-avatar">
-                            <Avatar agent={msg.sender_type === 'agent' ? agent : null} size={28} />
+                            {msg.sender_type === 'agent'
+                              ? <Avatar agent={agent} size={28} />
+                              : <i className="fas fa-robot" />}
                           </div>
                         )}
                         <div className="chat-bubble">{msg.content}</div>
@@ -483,7 +441,6 @@ export default function ChatWidget() {
               )}
             </div>
 
-            {/* Input */}
             {phase === 'live' && (
               <form className="chat-input-bar" onSubmit={sendLiveMessage}>
                 <input type="text" placeholder="Nachricht schreiben…"
@@ -496,9 +453,7 @@ export default function ChatWidget() {
             )}
 
             {phase !== 'live' && (
-              <div className="chat-footer-brand">
-                Powered by <strong>Team Lazer</strong>
-              </div>
+              <div className="chat-footer-brand">Powered by <strong>Team Lazer</strong></div>
             )}
           </motion.div>
         )}
