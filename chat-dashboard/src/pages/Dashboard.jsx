@@ -78,6 +78,15 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const channelRef  = useRef(null)
   const inputRef    = useRef(null)
 
+  /* ── Register Service Worker (Web Push) ─────── */
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(err =>
+        console.warn('SW register failed:', err)
+      )
+    }
+  }, [])
+
   /* ── Load quick replies ──────────────────────── */
   useEffect(() => {
     loadQuickReplies()
