@@ -18,33 +18,139 @@ function playBeep() {
   } catch(e) {}
 }
 
+/* ── VAPID public key (Base64URL → Uint8Array) ───── */
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4)
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
+  const rawData = window.atob(base64)
+  return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)))
+}
+
 export default function Settings({ agent, onAgentUpdate }) {
   const navigate = useNavigate()
 
   /* ── Profile state ───────────────────────────── */
-  const [name, setName]           = useState(agent?.name || '')
-  const [avatarFile, setAvatarFile] = useState(null)
-  const [avatarPreview, setAvatarPreview] = useState(agent?.avatar_url || null)
-  const [saving, setSaving]       = useState(false)
-  const [saveMsg, setSaveMsg]     = useState('')
+  const [name, setName]                     = useState(agent?.name || '')
+  const [avatarFile, setAvatarFile]         = useState(null)
+  const [avatarPreview, setAvatarPreview]   = useState(agent?.avatar_url || null)
+  const [saving, setSaving]                 = useState(false)
+  const [saveMsg, setSaveMsg]               = useState('')
 
   /* ── Notification state ──────────────────────── */
-  const [notifySound, setNotifySound]     = useState(agent?.notify_sound ?? true)
-  const [notifyBrowser, setNotifyBrowser] = useState(agent?.notify_browser ?? true)
-  const [browserPerm, setBrowserPerm]     = useState(Notification?.permission || 'default')
+  const [notifySound, setNotifySound]       = useState(agent?.notify_sound ?? true)
+  const [notifyBrowser, setNotifyBrowser]   = useState(agent?.notify_browser ?? true)
+  const [browserPerm, setBrowserPerm]       = useState(Notification?.permission || 'default')
+
+  /* ── Web Push state ──────────────────────────── */
+  const [pushStatus, setPushStatus]         = useState('idle') // idle | loading | subscribed | unsupported
+  const [pushMsg, setPushMsg]               = useState('')
 
   /* ── Quick replies state ─────────────────────── */
-  const [quickReplies, setQuickReplies] = useState([])
-  const [newTitle, setNewTitle]   = useState('')
-  const [newContent, setNewContent] = useState('')
-  const [editingId, setEditingId] = useState(null)
-  const [editTitle, setEditTitle] = useState('')
-  const [editContent, setEditContent] = useState('')
+  const [quickReplies, setQuickReplies]     = useState([])
+  const [newTitle, setNewTitle]             = useState('')
+  const [newContent, setNewContent]         = useState('')
+  const [editingId, setEditingId]           = useState(null)
+  const [editTitle, setEditTitle]           = useState('')
+  const [editContent, setEditContent]       = useState('')
   const fileRef = useRef(null)
 
   useEffect(() => {
     loadQuickReplies()
-  }, [])
+    checkPushStatus()
+  }, []) // eslint-disable-line
+
+  /* ── Check if already subscribed ─────────────── */
+  async function checkPushStatus() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      setPushStatus('unsupported')
+      return
+    }
+    // Check if agent already has a subscription saved
+    if (agent?.push_subscription) {
+      setPushStatus('subscribed')
+    } else {
+      setPushStatus('idle')
+    }
+  }
+
+  /* ── Subscribe to Web Push ───────────────────── */
+  async function subscribePush() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      setPushMsg('Dein Browser unterstützt keine Push-Benachrichtigungen.')
+      return
+    }
+
+    const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY
+    if (!vapidKey) {
+      setPushMsg('VITE_VAPID_PUBLIC_KEY nicht gesetzt. Siehe Setup-Anleitung.')
+      return
+    }
+
+    setPushStatus('loading')
+    setPushMsg('')
+
+    try {
+      // Request notification permission
+      const perm = await Notification.requestPermission()
+      setBrowserPerm(perm)
+      if (perm !== 'granted') {
+        setPushStatus('idle')
+        setPushMsg('Benachrichtigungen wurden nicht erlaubt.')
+        return
+      }
+
+      // Register / get SW
+      const reg = await navigator.serviceWorker.ready
+
+      // Subscribe
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(vapidKey)
+      })
+
+      // Save to Supabase
+      const subJson = sub.toJSON()
+      const { error } = await supabase
+        .from('agents')
+        .update({ push_subscription: subJson })
+        .eq('id', agent.id)
+
+      if (error) throw error
+
+      onAgentUpdate({ ...agent, push_subscription: subJson })
+      setPushStatus('subscribed')
+      setPushMsg('✓ Push-Benachrichtigungen aktiviert!')
+      setTimeout(() => setPushMsg(''), 4000)
+
+    } catch(e) {
+      console.error('Push subscribe error:', e)
+      setPushStatus('idle')
+      setPushMsg('Fehler: ' + (e.message || 'Unbekannt'))
+    }
+  }
+
+  /* ── Unsubscribe from Web Push ───────────────── */
+  async function unsubscribePush() {
+    setPushStatus('loading')
+    try {
+      const reg = await navigator.serviceWorker.ready
+      const sub = await reg.pushManager.getSubscription()
+      if (sub) await sub.unsubscribe()
+
+      await supabase
+        .from('agents')
+        .update({ push_subscription: null })
+        .eq('id', agent.id)
+
+      onAgentUpdate({ ...agent, push_subscription: null })
+      setPushStatus('idle')
+      setPushMsg('Push-Benachrichtigungen deaktiviert.')
+      setTimeout(() => setPushMsg(''), 3000)
+    } catch(e) {
+      setPushStatus('subscribed')
+      setPushMsg('Fehler beim Deaktivieren.')
+    }
+  }
 
   async function loadQuickReplies() {
     const { data } = await supabase
@@ -68,7 +174,6 @@ export default function Settings({ agent, onAgentUpdate }) {
 
     let avatarUrl = agent.avatar_url
 
-    // Upload avatar if new file selected
     if (avatarFile) {
       const ext = avatarFile.name.split('.').pop()
       const path = `${agent.id}.${ext}`
@@ -83,7 +188,7 @@ export default function Settings({ agent, onAgentUpdate }) {
       }
 
       const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path)
-      avatarUrl = urlData.publicUrl + '?t=' + Date.now() // cache bust
+      avatarUrl = urlData.publicUrl + '?t=' + Date.now()
     }
 
     const { data: updated, error } = await supabase
@@ -195,6 +300,7 @@ export default function Settings({ agent, onAgentUpdate }) {
         <div className="settings-card">
           <h2 className="settings-section-title"><i className="fas fa-bell" /> Benachrichtigungen</h2>
 
+          {/* Sound */}
           <div className="settings-toggle-row">
             <div className="settings-toggle-info">
               <strong>Sound</strong>
@@ -212,10 +318,11 @@ export default function Settings({ agent, onAgentUpdate }) {
             </div>
           </div>
 
+          {/* Browser notifications (in-tab) */}
           <div className="settings-toggle-row">
             <div className="settings-toggle-info">
-              <strong>Browser-Benachrichtigungen</strong>
-              <span>Popup auch wenn Tab im Hintergrund</span>
+              <strong>Tab-Benachrichtigungen</strong>
+              <span>Popup wenn Tab aktiv aber im Hintergrund</span>
             </div>
             <div className="settings-toggle-right">
               {browserPerm === 'denied' && (
@@ -236,19 +343,70 @@ export default function Settings({ agent, onAgentUpdate }) {
             </div>
           </div>
 
-          <div className="settings-info-box">
-            <i className="fas fa-paper-plane" />
-            <div>
-              <strong>Telegram-Benachrichtigungen</strong>
-              <p>Wird über einen Netlify-Webhook gesendet. Einrichten in den Netlify Environment Variables: <code>TELEGRAM_BOT_TOKEN</code> und <code>TELEGRAM_CHAT_ID</code>. Dann Supabase Database Webhook auf <code>/api/notify-telegram</code> zeigen lassen. Siehe <code>CHAT_SETUP.md</code>.</p>
-            </div>
-          </div>
-
-          <div className="settings-save-row">
+          <div className="settings-save-row" style={{ marginBottom: '20px' }}>
             <button className="btn-primary" onClick={saveProfile} disabled={saving}>
               {saving ? <span className="btn-spinner" /> : <><i className="fas fa-save" /> Speichern</>}
             </button>
             {saveMsg && <span className={`save-msg ${saveMsg.startsWith('✓') ? 'ok' : 'err'}`}>{saveMsg}</span>}
+          </div>
+
+          {/* ── Web Push ───────────────────────── */}
+          <div className="push-section">
+            <div className="push-section-header">
+              <div>
+                <strong><i className="fas fa-mobile-alt" /> Push-Benachrichtigungen</strong>
+                <p>Bekomme eine Benachrichtigung egal ob das Dashboard offen ist —
+                  auch auf dem Handy. Klick öffnet direkt den Chat.</p>
+              </div>
+              <div className="push-status-badge">
+                {pushStatus === 'subscribed'
+                  ? <span className="push-badge on"><i className="fas fa-check" /> Aktiv</span>
+                  : pushStatus === 'unsupported'
+                  ? <span className="push-badge off">Nicht unterstützt</span>
+                  : null
+                }
+              </div>
+            </div>
+
+            {pushStatus === 'unsupported' ? (
+              <p className="push-unsupported">Dein Browser unterstützt leider keine Push-Benachrichtigungen.</p>
+            ) : pushStatus === 'subscribed' ? (
+              <div className="push-actions">
+                <div className="push-active-info">
+                  <i className="fas fa-bell" />
+                  <span>Push-Benachrichtigungen sind auf diesem Gerät aktiviert.</span>
+                </div>
+                <button className="btn-secondary-sm" onClick={unsubscribePush}
+                  disabled={pushStatus === 'loading'}>
+                  <i className="fas fa-bell-slash" /> Deaktivieren
+                </button>
+              </div>
+            ) : (
+              <button className="btn-push-activate" onClick={subscribePush}
+                disabled={pushStatus === 'loading'}>
+                {pushStatus === 'loading'
+                  ? <><span className="btn-spinner" /> Aktiviere…</>
+                  : <><i className="fas fa-bell" /> Push-Benachrichtigungen aktivieren</>
+                }
+              </button>
+            )}
+
+            {pushMsg && (
+              <p className={`push-msg ${pushMsg.startsWith('✓') ? 'ok' : ''}`}>{pushMsg}</p>
+            )}
+
+            <div className="settings-info-box" style={{ marginTop: '14px', marginBottom: 0 }}>
+              <i className="fas fa-info-circle" />
+              <div>
+                <strong>Setup erforderlich</strong>
+                <p>
+                  Einmalig VAPID-Keys generieren und als Netlify Env Vars setzen:<br />
+                  <code>VAPID_PUBLIC_KEY</code>, <code>VAPID_PRIVATE_KEY</code>, <code>VAPID_EMAIL</code>, <code>DASHBOARD_URL</code><br />
+                  Außerdem <code>VITE_VAPID_PUBLIC_KEY</code> für den Build.<br />
+                  Dann Supabase Webhook auf <code>/api/notify-push</code> zeigen lassen.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -299,7 +457,6 @@ export default function Settings({ agent, onAgentUpdate }) {
             </AnimatePresence>
           </div>
 
-          {/* New quick reply form */}
           <div className="qr-add-form">
             <h3>Neue Schnellantwort</h3>
             <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)}

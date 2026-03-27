@@ -22,28 +22,37 @@ CREATE POLICY "agents_read_quick_replies" ON quick_replies
   FOR SELECT TO authenticated USING (true);
 CREATE POLICY "agents_write_quick_replies" ON quick_replies
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "anon_read_quick_replies" ON quick_replies
+  FOR SELECT TO anon USING (true);
 
 ALTER PUBLICATION supabase_realtime ADD TABLE quick_replies;
 
 -- ── 3. Agents Tabelle erweitern ───────────────────
-ALTER TABLE agents ADD COLUMN IF NOT EXISTS notify_sound   BOOLEAN DEFAULT TRUE;
-ALTER TABLE agents ADD COLUMN IF NOT EXISTS notify_browser BOOLEAN DEFAULT TRUE;
+ALTER TABLE agents ADD COLUMN IF NOT EXISTS notify_sound     BOOLEAN DEFAULT TRUE;
+ALTER TABLE agents ADD COLUMN IF NOT EXISTS notify_browser   BOOLEAN DEFAULT TRUE;
+ALTER TABLE agents ADD COLUMN IF NOT EXISTS push_subscription JSONB DEFAULT NULL;
 
 -- ── 4. Supabase Storage Bucket für Avatare ────────
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('avatars', 'avatars', true)
 ON CONFLICT (id) DO NOTHING;
 
-CREATE POLICY IF NOT EXISTS "avatars_public_read" ON storage.objects
+-- Storage Policies (DROP first to avoid conflicts)
+DROP POLICY IF EXISTS "avatars_public_read"  ON storage.objects;
+DROP POLICY IF EXISTS "avatars_auth_upload"  ON storage.objects;
+DROP POLICY IF EXISTS "avatars_auth_update"  ON storage.objects;
+DROP POLICY IF EXISTS "avatars_auth_delete"  ON storage.objects;
+
+CREATE POLICY "avatars_public_read" ON storage.objects
   FOR SELECT USING (bucket_id = 'avatars');
 
-CREATE POLICY IF NOT EXISTS "avatars_auth_upload" ON storage.objects
+CREATE POLICY "avatars_auth_upload" ON storage.objects
   FOR INSERT TO authenticated WITH CHECK (bucket_id = 'avatars');
 
-CREATE POLICY IF NOT EXISTS "avatars_auth_update" ON storage.objects
+CREATE POLICY "avatars_auth_update" ON storage.objects
   FOR UPDATE TO authenticated USING (bucket_id = 'avatars');
 
-CREATE POLICY IF NOT EXISTS "avatars_auth_delete" ON storage.objects
+CREATE POLICY "avatars_auth_delete" ON storage.objects
   FOR DELETE TO authenticated USING (bucket_id = 'avatars');
 
 -- ── 5. Standard Quick Replies einfügen ───────────
