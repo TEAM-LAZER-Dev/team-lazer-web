@@ -57,7 +57,7 @@ function PkgCard({ title, desc, features, slug, delay }) {
 const CATEGORIES = [
   {
     icon: 'fa-solid fa-globe', cls: 'ci-blue', title: 'Website Entwicklung',
-    sub: 'Responsiv, schnell, ohne Baukastensystem – Hosting auf Wunsch inklusive',
+    sub: 'Responsiv, schnell, ohne Baukastensystem – Hosting auf Wunsch möglich',
     alt: false,
     cards: [
       { title: 'Landing Page', desc: 'Eine starke Einzelseite für Produkte, Events oder Dienstleistungen. Klar, überzeugend, conversion-optimiert.', features: ['1 Seite, vollständig responsiv', 'Kontaktformular', 'Lieferung in 3–5 Tagen'], slug: 'landing-page' },
@@ -95,7 +95,7 @@ export default function Services() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <span className="section-tag">AUF ANFRAGE</span>
             <h1>Leistungen</h1>
-            <p>Websites, Discord Bots und Automatisierungen – alle Preise auf Anfrage. Kein Risiko, kein Kleingedrucktes.</p>
+            <p>Websites, Discord Bots und Automatisierungen – individuelle Angebote nach Briefing. Hosting und Domains werden separat und transparent aufgeführt.</p>
           </motion.div>
         </div>
       </section>
@@ -118,7 +118,7 @@ export default function Services() {
       <section className="section-pad">
         <div className="container">
           <motion.div className="trust-bar" {...fadeUp()}>
-            {[['fa-solid fa-file-code', 'Source-Code Übergabe'], ['fa-solid fa-shield-halved', '14 Tage Bugfix-Garantie'], ['fa-solid fa-receipt', 'Festpreisangebote'], ['fa-solid fa-server', 'Hosting inklusive'], ['fa-solid fa-clock', '24h Reaktionszeit']].map(([icon, label]) => (
+            {[['fa-solid fa-file-code', 'Source-Code Übergabe'], ['fa-solid fa-shield-halved', '14 Tage Bugfix-Garantie'], ['fa-solid fa-receipt', 'Individuelle Angebote'], ['fa-solid fa-server', 'Hosting auf Wunsch'], ['fa-solid fa-clock', '24h Reaktionszeit']].map(([icon, label]) => (
               <div key={label} className="trust-item"><i className={icon} /> {label}</div>
             ))}
           </motion.div>

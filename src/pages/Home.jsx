@@ -80,7 +80,7 @@ export default function Home() {
               <Typewriter />
               <p className="hero-sub">
                 Von der Landing Page bis zum komplexen Discord Bot –
-                sauberer Code, transparente Festpreise und Hosting auf Wunsch.
+                sauberer Code, individuelle Angebote nach Briefing und Hosting auf Wunsch.
               </p>
               <div className="hero-btns">
                 <Link to="/contact" className="btn btn-primary">
@@ -91,7 +91,7 @@ export default function Home() {
                 </Link>
               </div>
               <div className="hero-trust">
-                {['Festpreisangebot', 'Hosting inklusive', 'Source-Code Übergabe', '14 Tage Bugfix-Garantie'].map(t => (
+                {['Individuelles Angebot', 'Hosting auf Wunsch', 'Source-Code Übergabe', '14 Tage Bugfix-Garantie'].map(t => (
                   <div key={t} className="trust-pill">
                     <i className="fa-solid fa-check" /> {t}
                   </div>
@@ -174,7 +174,7 @@ export default function Home() {
           <div className="process-row">
             {[
               { num: '01', icon: 'fa-solid fa-comments', title: 'Anfrage stellen', desc: 'Kontaktformular ausfüllen oder E-Mail schicken. Kurze Beschreibung genügt – wir melden uns innerhalb von 24 Stunden.' },
-              { num: '02', icon: 'fa-solid fa-file-invoice', title: 'Angebot erhalten', desc: 'Du bekommst ein klares Festpreisangebot: Was wir liefern, bis wann, zu welchem Preis. Kein Kleingedrucktes.' },
+              { num: '02', icon: 'fa-solid fa-file-invoice', title: 'Angebot erhalten', desc: 'Nach einem kurzen Briefing erhältst du ein individuelles Angebot – was wir liefern, bis wann und zu welchem Preis. Ohne Kleingedrucktes.' },
               { num: '03', icon: 'fa-solid fa-code', title: 'Wir entwickeln', desc: 'Nach Freigabe legen wir los. Du bekommst Updates und kannst jederzeit Feedback geben – keine Blackbox.' },
               { num: '04', icon: 'fa-solid fa-rocket', title: 'Übergabe & Launch', desc: 'Vollständiger Source-Code, Deployment oder Hosting nach Wunsch. Fertig in vereinbarter Zeit.' },
             ].map(({ num, icon, title, desc }, idx) => (
@@ -196,7 +196,7 @@ export default function Home() {
         <div className="container">
           <motion.div className="cta-box" {...fadeUp()}>
             <h2>Bereit dein Projekt <span className="highlight">zu starten?</span></h2>
-            <p>Beschreib uns kurz was du brauchst – wir schicken dir innerhalb von 24 Stunden ein unverbindliches Festpreisangebot.</p>
+            <p>Beschreib uns kurz dein Projekt – wir melden uns innerhalb von 24 Stunden und erstellen nach einem kurzen Briefing ein individuelles Angebot.</p>
             <div className="cta-btns">
               <Link to="/contact" className="btn btn-primary">
                 <i className="fa-solid fa-paper-plane" /> Jetzt anfragen
@@ -206,7 +206,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="cta-pills">
-              {['24h Reaktionszeit', 'Hosting inklusive', 'Bugfix-Garantie', 'Source-Code Übergabe'].map(p => (
+              {['24h Reaktionszeit', 'Hosting auf Wunsch', 'Bugfix-Garantie', 'Source-Code Übergabe'].map(p => (
                 <div key={p} className="cta-pill"><i className="fa-solid fa-check" /> {p}</div>
               ))}
             </div>

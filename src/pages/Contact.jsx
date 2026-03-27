@@ -54,7 +54,7 @@ export default function Contact() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <span className="section-tag">KOSTENLOSE ERSTBERATUNG</span>
             <h1>Kontakt</h1>
-            <p>Stell uns dein Projekt vor. Wir melden uns innerhalb von 24 Stunden mit einem unverbindlichen Festpreisangebot.</p>
+            <p>Stell uns dein Projekt vor. Wir melden uns innerhalb von 24 Stunden – nach einem kurzen Briefing erhältst du ein individuelles, unverbindliches Angebot.</p>
           </motion.div>
         </div>
       </section>
@@ -112,8 +112,8 @@ export default function Contact() {
               {[
                 { icon: 'fa-solid fa-envelope', title: 'E-Mail', content: <a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a>, delay: 0 },
                 { icon: 'fa-solid fa-clock', title: 'Reaktionszeit', content: 'Wir antworten innerhalb von 24 Stunden.', delay: 0.1 },
-                { icon: 'fa-solid fa-server', title: 'Hosting inklusive', content: 'Websites und Bots können direkt bei uns gehostet werden.', delay: 0.2 },
-                { icon: 'fa-solid fa-receipt', title: 'Festpreisangebot', content: 'Kein Stundensatz, keine Überraschungen. Preis vor Projektstart.', delay: 0.3 },
+                { icon: 'fa-solid fa-server', title: 'Hosting auf Wunsch', content: 'Websites und Bots können bei uns gehostet werden. Monatliche Kosten werden transparent im Angebot aufgeführt.', delay: 0.2 },
+                { icon: 'fa-solid fa-receipt', title: 'Individuelles Angebot', content: 'Nach einem kurzen Briefing bekommst du ein klares Angebot – alle Kosten inkl. Domain & Hosting offen aufgelistet.', delay: 0.3 },
               ].map(({ icon, title, content, delay }) => (
                 <motion.div key={title} className="info-card" {...fadeUp(delay)}>
                   <div className="info-icon"><i className={icon} /></div>

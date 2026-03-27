@@ -69,9 +69,9 @@ export default function About() {
           <div className="about-intro">
             <motion.div className="about-intro-text" {...fadeUp()}>
               <h2>Entwicklung,<br />auf die du dich <span className="highlight">verlassen kannst</span></h2>
-              <p>TEAM LAZER ist ein kleines, spezialisiertes Entwicklungsstudio aus Deutschland. Wir bauen <strong>Websites, Discord Bots und Automatisierungen</strong> – individuell, sauber im Code und zu Festpreisen.</p>
-              <p>Was uns unterscheidet: Kein Lock-in, kein Baukastensystem, keine versteckten Kosten. Du bekommst deinen <strong>vollständigen Source-Code</strong>, ein klares Angebot und direkten Kontakt – ohne Umwege über Agenturen.</p>
-              <p>Wir betreiben eigene Server-Infrastruktur und können Websites sowie Bots direkt bei uns hosten – <strong>zuverlässig, rund um die Uhr</strong>, ohne zusätzliche Kosten.</p>
+              <p>TEAM LAZER ist ein kleines, spezialisiertes Entwicklungsstudio aus Deutschland. Wir bauen <strong>Websites, Discord Bots und Automatisierungen</strong> – individuell, sauber im Code und mit transparenten Preisen.</p>
+              <p>Was uns unterscheidet: Kein Lock-in, kein Baukastensystem, keine versteckten Kosten. Du bekommst deinen <strong>vollständigen Source-Code</strong>, ein klares individuelles Angebot nach Briefing und direkten Kontakt – ohne Umwege über Agenturen.</p>
+              <p>Wir betreiben eigene Server-Infrastruktur und können Websites sowie Bots direkt bei uns hosten – <strong>zuverlässig, rund um die Uhr</strong>. Hosting- und Domain-Kosten werden transparent im Angebot ausgewiesen.</p>
             </motion.div>
             <motion.div {...fadeUp(0.15)}>
               <div className="about-stats">
@@ -125,7 +125,7 @@ export default function About() {
           <motion.div className="values-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
             {[
               { icon: 'fa-solid fa-file-code', title: 'Source-Code gehört dir', desc: 'Kein Lock-in, kein "nur bei uns erweiterbar". Du erhältst vollständigen, sauber dokumentierten Code.' },
-              { icon: 'fa-solid fa-receipt', title: 'Festpreise, keine Überraschungen', desc: 'Du weißt vorher genau was du zahlst. Kein Stundensatz, keine nachträglichen Rechnungen.' },
+              { icon: 'fa-solid fa-receipt', title: 'Transparente Preise', desc: 'Nach einem kurzen Briefing bekommst du ein individuelles Angebot – alle Kosten klar aufgelistet, inkl. möglicher Hosting- oder Domain-Gebühren.' },
               { icon: 'fa-solid fa-shield-halved', title: '30 Tage Bugfix-Garantie', desc: 'Fehler auf unserer Seite beheben wir kostenlos. 30 Tage nach Übergabe ist das Projekt in sicheren Händen.' },
             ].map(({ icon, title, desc }, i) => (
               <motion.div key={title} className="value-card" variants={staggerItem}>
@@ -143,7 +143,7 @@ export default function About() {
         <div className="container">
           <motion.div className="about-cta" {...fadeUp()}>
             <h3>Bereit zusammenzuarbeiten?</h3>
-            <p>Stell uns dein Projekt vor – wir schicken dir innerhalb von 24 Stunden ein Festpreisangebot.</p>
+            <p>Stell uns dein Projekt vor – wir melden uns innerhalb von 24 Stunden und besprechen alle Details für ein individuelles Angebot.</p>
             <div className="about-cta-btns">
               <Link to="/contact" className="btn btn-primary"><i className="fa-solid fa-paper-plane" /> Projekt anfragen</Link>
               <Link to="/services" className="btn btn-secondary"><i className="fa-solid fa-briefcase" /> Leistungen ansehen</Link>

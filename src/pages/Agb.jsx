@@ -32,7 +32,7 @@ export default function Agb() {
             <h2>§ 3 Leistungsumfang</h2>
             <p>Der genaue Leistungsumfang ergibt sich aus dem individuellen Angebot. Änderungen am vereinbarten Leistungsumfang bedürfen der schriftlichen Zustimmung beider Parteien und können zu Anpassungen des Preises und des Liefertermins führen.</p>
             <h2>§ 4 Preise und Zahlung</h2>
-            <p>Alle Preise sind Nettopreise. Die Zahlung erfolgt gemäß den im Angebot festgelegten Konditionen. Bei Projekten über 200 € kann eine Anzahlung von 50 % bei Auftragserteilung vereinbart werden. Der Restbetrag ist bei Projektabschluss fällig.</p>
+            <p>Alle Preise werden individuell nach Projektbriefing angeboten und im Angebot schriftlich festgehalten. Dabei werden alle anfallenden Kosten transparent aufgeführt – einschließlich einmaliger Entwicklungskosten sowie laufender Kosten für Hosting oder Domains, sofern diese Teil des Auftrags sind. Hosting- und Domain-Kosten können monatlich oder jährlich anfallen und sind abhängig von Anbieter und Laufzeit. Domains können Mindestlaufzeiten haben und sind ggf. erst zum Ablauf der jeweiligen Periode kündbar. Bei Projekten über 200 € kann eine Anzahlung von 50 % bei Auftragserteilung vereinbart werden. Der Restbetrag ist bei Projektabschluss fällig.</p>
             <h2>§ 5 Liefertermine</h2>
             <p>Genannte Liefertermine sind Richtwerte und gelten vorbehaltlich rechtzeitiger Zulieferung von Inhalten und Materialien durch den Auftraggeber. TEAM LAZER haftet nicht für Verzögerungen, die durch den Auftraggeber verursacht werden.</p>
             <h2>§ 6 Abnahme und Übergabe</h2>
