@@ -17,44 +17,188 @@ function isNightHours() {
 }
 function isPeakHours() {
   const now = new Date()
-  const day = now.getDay()           // 0=So … 6=Sa
+  const day = now.getDay()
   const mins = now.getHours() * 60 + now.getMinutes()
-  return day >= 1 && day <= 5 && mins >= 390 && mins < 960  // Mo-Fr 6:30–16:00
-}
-
-/* ── Bot-Antworten (Keyword-basiert) ──────────────── */
-const QUICK_ANSWERS = {
-  website:    ['🚀 Wir bauen moderne Websites mit React — schnell, individuell und ohne versteckte Kosten.', 'Beschreib mir kurz was du dir vorstellst, dann leite ich das ans Team weiter!'],
-  discord:    ['🤖 Discord Bots sind unsere Spezialität — von simplen Utility-Bots bis zu komplexen Systemen mit Datenbank.', 'Sag mir kurz was du brauchst!'],
-  pricing:    ['💡 Preise sind bei uns immer individuell — nach einem kurzen Briefing bekommst du ein konkretes Angebot ohne versteckte Kosten.'],
-  automation: ['⚙️ Automatisierung spart täglich Zeit. Wir bauen API-Verbindungen, Skripte, Webhooks und Cronjobs.', 'Was soll automatisiert werden?'],
-  fallback:   ['Gute Frage! Ich leite das direkt ans Team weiter — die helfen dir am besten. 👇'],
-}
-
-function getBotReply(text) {
-  const t = text.toLowerCase()
-  if (/(website|webseite|seite|landing|shop)/i.test(t))       return QUICK_ANSWERS.website
-  if (/(bot|discord|slash|command)/i.test(t))                  return QUICK_ANSWERS.discord
-  if (/(preis|kosten|was kostet|budget|angebot)/i.test(t))     return QUICK_ANSWERS.pricing
-  if (/(automat|script|api|webhook|cronjob|skript)/i.test(t)) return QUICK_ANSWERS.automation
-  return QUICK_ANSWERS.fallback
+  return day >= 1 && day <= 5 && mins >= 390 && mins < 960
 }
 
 /* ── Verbindungs-Sound ─────────────────────────────── */
 function playConnectedSound() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)()
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.connect(gain); gain.connect(ctx.destination)
-    osc.type = 'sine'
-    osc.frequency.setValueAtTime(523, ctx.currentTime)
-    osc.frequency.setValueAtTime(659, ctx.currentTime + 0.12)
-    osc.frequency.setValueAtTime(784, ctx.currentTime + 0.24)
-    gain.gain.setValueAtTime(0.22, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7)
-    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.7)
+    const notes = [523, 659, 784]
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain); gain.connect(ctx.destination)
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.14)
+      gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.14)
+      gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + i * 0.14 + 0.05)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.14 + 0.4)
+      osc.start(ctx.currentTime + i * 0.14)
+      osc.stop(ctx.currentTime + i * 0.14 + 0.4)
+    })
   } catch(e) {}
+}
+
+/* ══════════════════════════════════════════════════
+   UMFASSENDER BOT
+══════════════════════════════════════════════════ */
+const BOT_KB = {
+  // ── UNTERNEHMEN ──────────────────────────────────
+  about: {
+    keywords: /wer seid ihr|was macht ihr|über euch|team lazer|wer bist du|wer bist|über das team|stellt euch vor|vorstellen/i,
+    reply: [
+      'TEAM LAZER ist ein junges, technisch versiertes Entwicklungsteam. 🚀',
+      'Wir entwickeln:\n\n💻 **Websites & Web-Apps** (React, modern & schnell)\n🤖 **Discord-Bots** (einfach bis komplex)\n⚙️ **Automatisierungen** (APIs, Webhooks, Scripts)\n🖥️ **Server-Setup & DevOps**\n\nKein Projekt zu klein, keine Idee zu groß — wir finden eine Lösung.'
+    ]
+  },
+
+  // ── WEBSITE ──────────────────────────────────────
+  website: {
+    keywords: /website|webseite|homepage|landing page|shop|onlineshop|portfolio|firmenseite|unternehmensseite|one pager|onepager|react|nextjs/i,
+    reply: [
+      '💻 Websites sind unser Kerngeschäft!',
+      'Was wir entwickeln:\n\n🎯 **Landing Pages** — ab 149€, perfekt für Produkte & Events\n🏢 **Business-Websites** — ab 349€, mit Kontaktformular, Blog uvm.\n🛒 **Online-Shops** — auf Anfrage (Stripe, PayPal integrierbar)\n⚡ **Web-Apps** — komplexe Anwendungen mit Dashboard, Login usw.\n\nAlle Seiten:\n✅ Mobil-optimiert (responsive)\n✅ Schnell (Lighthouse Score 90+)\n✅ SEO-ready\n✅ Keine versteckten Kosten\n\nHosting & Domain werden transparent im Angebot aufgeführt.',
+    ],
+    followUp: 'Soll ich dich direkt mit dem Team verbinden für ein kostenloses Briefing?'
+  },
+
+  // ── DISCORD ──────────────────────────────────────
+  discord: {
+    keywords: /discord|bot|slash command|server bot|moderation bot|ticket|leveling|musik bot|music bot|discord server/i,
+    reply: [
+      '🤖 Discord-Bots — unsere absolute Spezialität!',
+      'Was wir bauen:\n\n🛡️ **Moderations-Bots** — Auto-Mod, Warns, Mutes, Bans\n🎫 **Ticket-Systeme** — Support-Tickets mit Logs\n📊 **Leveling-Systeme** — XP, Ränge, Leaderboards\n🎵 **Musik-Bots** — YouTube, Spotify, Playlists\n🎮 **Games & Minispiele** — Custom Commands, Gambling uvm.\n🔗 **API-Integrationen** — verbinde Discord mit allem\n\n**Preise:**\n• Einfacher Bot ab 79€\n• Komplexe Systeme ab 199€\n• Anpassungen ab 25€/h',
+    ],
+    followUp: 'Was genau brauchst du für deinen Server?'
+  },
+
+  // ── AUTOMATION ───────────────────────────────────
+  automation: {
+    keywords: /automat|script|api|webhook|cronjob|daten|workflow|bot ohne discord|n8n|zapier|make|integration|verbind|sync/i,
+    reply: [
+      '⚙️ Automatisierung — hier sparen wir dir täglich Zeit!',
+      'Was wir umsetzen:\n\n🔗 **API-Verbindungen** — verbinde beliebige Tools miteinander\n📊 **Datenverarbeitung** — CSVs, JSONs, Datenbanken automatisch verarbeiten\n🕷️ **Web-Scraping** — Preise, Daten, Listings automatisch sammeln\n📧 **E-Mail-Automatisierung** — Trigger-basierte E-Mails & Newsletter\n⏰ **Geplante Aufgaben** — Cronjobs, tägliche Reports, Backups\n📱 **Telegram/Discord-Bots** — Benachrichtigungen & Steuerung\n\n**Preise ab 79€** je nach Komplexität.',
+    ],
+    followUp: 'Was soll automatisiert werden?'
+  },
+
+  // ── SERVER / DEVOPS ──────────────────────────────
+  server: {
+    keywords: /server|vps|hosting|linux|ubuntu|nginx|apache|docker|deploy|ssl|domain|root|hetzner|digitalocean|cloudflare|devops/i,
+    reply: [
+      '🖥️ Server-Setup & DevOps — wir richten alles ein!',
+      'Unsere Leistungen:\n\n🔧 **Server-Setup** (Ubuntu, Debian) — ab 49€\n🔒 **SSL-Zertifikate** — Let\'s Encrypt oder custom\n🌐 **Domain-Konfiguration** — DNS, Weiterleitung, Subdomains\n🐳 **Docker & Container** — Apps containerisiert deployen\n📦 **CI/CD-Pipelines** — Auto-Deploy mit GitHub Actions\n🛡️ **Firewall & Sicherheit** — Server absichern\n📊 **Monitoring** — Uptime, Alerts, Logs\n\nWir arbeiten mit Hetzner, DigitalOcean, AWS, Cloudflare uvm.',
+    ]
+  },
+
+  // ── PREISE ───────────────────────────────────────
+  pricing: {
+    keywords: /preis|kosten|was kostet|budget|angebot|rechnung|zahlung|bezahl|wie viel|günstig|teuer|rate|stunde/i,
+    reply: [
+      '💰 Unsere Preisübersicht:',
+      '**Websites:**\n• Landing Page ab **149€**\n• Business-Website ab **349€**\n• Custom-Projekt auf Anfrage\n\n**Bots & Apps:**\n• Basis-Bot ab **79€**\n• Advanced-Bot ab **199€**\n• Bot-Anpassung ab **25€/h**\n\n**Server & APIs:**\n• Server-Setup ab **49€**\n• Webhook & API ab **99€**\n• Custom-Skript ab **79€**\n\n💡 Alle Preise sind Richtwerte. Nach einem kurzen Briefing (~15 Min) bekommst du ein **verbindliches Festpreis-Angebot** — keine versteckten Kosten, keine Überraschungen.',
+    ],
+    followUp: 'Möchtest du ein kostenloses Briefing für dein Projekt?'
+  },
+
+  // ── ZEITRAHMEN / DAUER ───────────────────────────
+  timeline: {
+    keywords: /wie lange|dauer|zeitrahmen|wann fertig|deadline|schnell|kurzfristig|express|bis wann|lieferzeit/i,
+    reply: [
+      '⏱️ Typische Umsetzungszeiten:',
+      '• **Landing Page** — 3–7 Tage\n• **Business-Website** — 1–3 Wochen\n• **Einfacher Bot** — 2–5 Tage\n• **Komplexes Projekt** — individuell besprechen\n\nFür **Express-Umsetzung** innerhalb von 24–48h kann ein Aufpreis anfallen. Sag uns einfach deine Deadline — wir schauen was möglich ist!'
+    ]
+  },
+
+  // ── KONTAKT ──────────────────────────────────────
+  contact: {
+    keywords: /kontakt|erreichen|melden|schreiben|email|mail|telefon|anruf|sprechen|termin|meeting|call/i,
+    reply: [
+      '📬 So erreichst du uns:',
+      '✉️ **E-Mail:** info@team-lazer.de\n🌐 **Website:** team-lazer.de\n💬 **Direkt hier im Chat** — ein Klick auf "Mit Mitarbeiter sprechen" und wir sind da!\n\nWir antworten werktags in der Regel innerhalb weniger Stunden.'
+    ]
+  },
+
+  // ── REFERENZEN ───────────────────────────────────
+  portfolio: {
+    keywords: /referenz|portfolio|beispiel|projekt|arbeit|was habt ihr gemacht|was habt ihr gebaut|zeig|zeigen|habt ihr schon/i,
+    reply: [
+      '🖼️ Unsere Referenzen findest du auf team-lazer.de!',
+      'Konkrete Beispiele zeigen wir dir gerne direkt — einfach nachfragen. Wir haben unter anderem gebaut:\n\n✅ Business-Websites für lokale Unternehmen\n✅ Discord-Bots mit Tausenden Nutzern\n✅ Automatisierungssysteme für E-Commerce\n✅ Custom Chat-Systeme (wie dieses hier! 😄)\n\nSprich uns an, wir finden sicher etwas Passendes zum Zeigen.'
+    ]
+  },
+
+  // ── TECHNOLOGIE ──────────────────────────────────
+  tech: {
+    keywords: /technologie|tech stack|womit|welche sprache|programmiersprache|framework|react|vue|node|python|typescript|javascript|php/i,
+    reply: [
+      '💡 Unser Tech-Stack:',
+      '**Frontend:** React 18, TypeScript, Vite, Framer Motion, Tailwind\n**Backend:** Node.js, Python, Supabase, PostgreSQL\n**Bots:** discord.js v14, Python (discord.py)\n**DevOps:** Netlify, Vercel, Hetzner, Docker, Cloudflare\n**APIs:** Stripe, SendGrid, Twilio, OpenAI, uvm.\n\nWir empfehlen immer den Stack, der am besten zu deinem Projekt passt — nicht den, den wir gerade am liebsten mögen. 😄'
+    ]
+  },
+
+  // ── DATENSCHUTZ / DSGVO ──────────────────────────
+  dsgvo: {
+    keywords: /datenschutz|dsgvo|gdpr|impressum|rechtlich|sicher|verschlüssel|ssl/i,
+    reply: [
+      '🔒 Datenschutz & Sicherheit nehmen wir ernst!',
+      'Bei jeder Website die wir bauen:\n\n✅ SSL-Verschlüsselung (HTTPS)\n✅ DSGVO-konformes Kontaktformular\n✅ Cookie-Banner (wenn nötig)\n✅ Datenschutzerklärung & Impressum auf Wunsch\n\nWir helfen dir auch bei der Erstellung rechtssicherer Texte (in Zusammenarbeit mit Juristen).'
+    ]
+  },
+
+  // ── SUPPORT ──────────────────────────────────────
+  support: {
+    keywords: /support|hilfe|problem|fehler|bug|kaputt|funktioniert nicht|geht nicht|absturz|crash|broken/i,
+    reply: [
+      '🆘 Kein Problem, wir helfen!',
+      'Beschreib mir kurz:\n\n1️⃣ Was genau funktioniert nicht?\n2️⃣ Seit wann?\n3️⃣ Hast du Fehlermeldungen?\n\nOder klick direkt auf "Mit Mitarbeiter sprechen" — dann kümmert sich unser Team sofort darum!'
+    ]
+  },
+
+  // ── WARTUNG / UPDATES ────────────────────────────
+  maintenance: {
+    keywords: /wartung|update|maintain|pflege|aktualisier|content|änder|anpass|erweiter/i,
+    reply: [
+      '🔄 Wartung & Updates — wir halten alles am Laufen!',
+      'Wir bieten:\n\n🛠️ **Inhaltspflege** — Texte, Bilder, Preise aktualisieren\n🔄 **Software-Updates** — Dependencies, Security-Patches\n📊 **Performance-Optimierung** — Speed, SEO verbessern\n✨ **Feature-Erweiterungen** — neue Seiten, Funktionen hinzufügen\n\n**Preise:** Stundenweise ab 25€/h oder als Paket auf Anfrage.'
+    ]
+  },
+
+  // ── GRÜSSE ───────────────────────────────────────
+  greeting: {
+    keywords: /^(hallo|hi|hey|guten morgen|guten abend|guten tag|servus|moin|nabend|n abend|jo|joa|na)[\s!?]*$/i,
+    reply: ['Hey! 👋 Schön dass du hier bist. Was kann ich für dich tun?']
+  },
+
+  // ── DANKE ────────────────────────────────────────
+  thanks: {
+    keywords: /danke|dankeschön|danke schön|dankesehr|super|toll|klasse|perfekt|genau das|hilft mir/i,
+    reply: ['Sehr gerne! 😊 Gibt es noch etwas, wobei ich dir helfen kann?']
+  },
+
+  // ── FALLBACK ─────────────────────────────────────
+  fallback: {
+    reply: [
+      'Gute Frage! Ich bin ein einfacher Bot und komme da an meine Grenzen. 🤖',
+      'Am besten sprichst du direkt mit unserem Team — die können dir viel besser weiterhelfen. Klick einfach auf "Mit Mitarbeiter sprechen" hier unten! 👇'
+    ]
+  }
+}
+
+function getBotReply(text, lastTopic) {
+  const t = text.trim()
+  // Check each topic
+  for (const [key, topic] of Object.entries(BOT_KB)) {
+    if (key === 'fallback') continue
+    if (topic.keywords?.test(t)) {
+      return { replies: topic.reply, followUp: topic.followUp, topic: key }
+    }
+  }
+  // Fallback
+  return { replies: BOT_KB.fallback.reply, followUp: null, topic: lastTopic }
 }
 
 /* ── Avatar ───────────────────────────────────────── */
@@ -171,7 +315,7 @@ function ClosedScreen({ byUser, onRestart }) {
       </motion.p>
       <motion.button className="chat-restart-btn" onClick={onRestart}
         initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.6 }}>
-        <i className="fas fa-redo" /> Neuen Chat starten
+        <i className="fas fa-arrow-left" /> Zurück
       </motion.button>
     </motion.div>
   )
@@ -182,7 +326,6 @@ function ClosedScreen({ byUser, onRestart }) {
 ══════════════════════════════════════════════════ */
 export default function ChatWidget() {
   const [isOpen, setIsOpen]               = useState(false)
-  // Phases: bot | name_input | email_input | connecting | live | closed | night
   const [phase, setPhase]                 = useState('bot')
   const [hasUnread, setHasUnread]         = useState(false)
   const [closedByUser, setClosedByUser]   = useState(false)
@@ -193,6 +336,8 @@ export default function ChatWidget() {
   const [showTyping, setShowTyping]       = useState(false)
   const [userInput, setUserInput]         = useState('')
   const [showLiveBtn, setShowLiveBtn]     = useState(false)
+  const [lastTopic, setLastTopic]         = useState(null)
+  const [pendingFollowUp, setPendingFollowUp] = useState(null)
 
   // Formulare
   const [nameInput, setNameInput]         = useState('')
@@ -256,50 +401,58 @@ export default function ChatWidget() {
     restore()
   }, []) // eslint-disable-line
 
-  /* ── Bot starten ───────────────────────────────── */
+  /* ── Bot startet erst wenn Chat geöffnet wird ──── */
   useEffect(() => {
-    if (phase !== 'bot' || botStarted.current) return
+    if (!isOpen || phase !== 'bot' || botStarted.current) return
     botStarted.current = true
-    addBotMessage('Hey! 👋 Willkommen bei TEAM LAZER.', 0)
-    addBotMessage('Wie kann ich dir behilflich sein?', 900, () => setShowLiveBtn(true))
-  }, [phase]) // eslint-disable-line
+    addBotMsg('Hey! 👋 Willkommen bei TEAM LAZER.', 0)
+    addBotMsg('Wie kann ich dir behilflich sein? Stell mir einfach deine Frage — oder klick auf "Mit Mitarbeiter sprechen" wenn du direkt jemanden brauchst.', 900, () => setShowLiveBtn(true))
+  }, [isOpen, phase]) // eslint-disable-line
 
-  function addBotMessage(text, delay = 0, onDone) {
+  /* ── Bot-Nachricht hinzufügen ──────────────────── */
+  function addBotMsg(text, delay = 0, onDone) {
     setTimeout(() => setShowTyping(true), delay)
     setTimeout(() => {
       setShowTyping(false)
-      setBotMessages(prev => [...prev, { id: `${Date.now()}-${Math.random()}`, text, from:'bot' }])
+      setBotMessages(prev => [...prev, { id:`bot-${Date.now()}-${Math.random()}`, text, from:'bot' }])
       scrollBot()
       onDone?.()
-    }, delay + 700)
+    }, delay + 650)
   }
 
-  /* ── User schreibt im Bot-Bereich ──────────────── */
+  /* ── Nutzer schreibt im Bot-Bereich ────────────── */
   function handleUserMessage(e) {
     e.preventDefault()
     const text = userInput.trim()
     if (!text) return
     setUserInput('')
     setShowLiveBtn(false)
+    setPendingFollowUp(null)
     setBotMessages(prev => [...prev, { id:`u-${Date.now()}`, text, from:'user' }])
-    setUserTopic(prev => prev || text.slice(0, 80))
+    if (!userTopic) setUserTopic(text.slice(0, 100))
     scrollBot()
-    // Bot-Antwort mit Verzögerung
-    const replies = getBotReply(text)
-    replies.forEach((reply, i) => addBotMessage(reply, i * 900))
-    // "Mit Mitarbeiter sprechen"-Button nach Antwort wieder zeigen
-    setTimeout(() => setShowLiveBtn(true), replies.length * 900 + 800)
+
+    const { replies, followUp, topic } = getBotReply(text, lastTopic)
+    setLastTopic(topic)
+
+    replies.forEach((reply, i) => addBotMsg(reply, i * 950))
+    const totalDelay = replies.length * 950 + 600
+    setTimeout(() => {
+      setShowLiveBtn(true)
+      if (followUp) setPendingFollowUp(followUp)
+    }, totalDelay)
   }
 
-  /* ── "Mit Mitarbeiter sprechen" geklickt ───────── */
+  /* ── "Mit Mitarbeiter sprechen" ────────────────── */
   function handleLiveChatRequest() {
     if (isNightHours()) { setPhase('night'); return }
     setShowLiveBtn(false)
+    setPendingFollowUp(null)
     setPhase('name_input')
     setTimeout(() => nameRef.current?.focus(), 150)
   }
 
-  /* ── Name abgeschickt → E-Mail ─────────────────── */
+  /* ── Name → E-Mail ─────────────────────────────── */
   function handleNameSubmit(e) {
     e.preventDefault()
     const name = nameInput.trim() || 'Besucher'
@@ -308,29 +461,22 @@ export default function ChatWidget() {
     setTimeout(() => emailRef.current?.focus(), 150)
   }
 
-  /* ── E-Mail abgeschickt → Verbinden ────────────── */
+  /* ── E-Mail → Verbinden ─────────────────────────── */
   async function handleEmailSubmit(e) {
-    e.preventDefault()
-    const email = emailInput.trim()
+    e?.preventDefault()
     setPhase('connecting')
     handledRef.current = false
 
-    const topic = userTopic || botMessages.filter(m => m.from === 'user').map(m => m.text).join(' ').slice(0,100) || ''
+    const topic = userTopic || botMessages.filter(m => m.from === 'user').map(m => m.text).join(' ').slice(0,100)
 
     const { data: conv } = await supabase
       .from('conversations')
-      .insert({
-        session_id: sessionId.current,
-        user_name: userName,
-        user_email: email || null,
-        user_topic: topic || null,
-        status: 'waiting',
-      })
+      .insert({ session_id: sessionId.current, user_name: userName,
+                user_email: emailInput.trim() || null, user_topic: topic || null, status: 'waiting' })
       .select().single()
     if (!conv) return
     setConvId(conv.id)
 
-    // Bisherige Bot-Nachrichten speichern
     const botMsgs = botMessages.map(m => ({
       conversation_id: conv.id,
       sender_type: m.from === 'bot' ? 'bot' : 'user',
@@ -348,19 +494,16 @@ export default function ChatWidget() {
     if (handledRef.current) return
     handledRef.current = true
     clearInterval(pollRef.current)
-
     const ag = agentData || (await supabase.from('agents').select('*').eq('id', agentId).single()).data
     if (!ag) return
-
-    const { data: msgs } = await supabase
-      .from('messages').select('*').eq('conversation_id', cid).order('created_at')
+    const { data: msgs } = await supabase.from('messages').select('*').eq('conversation_id', cid).order('created_at')
     setLiveMessages(msgs || [])
     setAgent(ag)
     playConnectedSound()
     setTimeout(() => setPhase('live'), 2800)
   }
 
-  /* ── Chat beenden (Kunde) ──────────────────────── */
+  /* ── Chat beenden ───────────────────────────────── */
   async function endChatByUser() {
     setShowEndConfirm(false)
     if (convId) await supabase.from('conversations').update({ status:'closed' }).eq('id', convId)
@@ -369,7 +512,7 @@ export default function ChatWidget() {
     setClosedByUser(true); setPhase('closed')
   }
 
-  /* ── Neuer Chat ────────────────────────────────── */
+  /* ── Zurück ────────────────────────────────────── */
   function restartChat() {
     localStorage.removeItem('tl_chat_sid')
     sessionId.current = crypto.randomUUID()
@@ -377,7 +520,7 @@ export default function ChatWidget() {
     clearInterval(pollRef.current)
     if (channelRef.current) supabase.removeChannel(channelRef.current)
     setPhase('bot'); setBotMessages([]); setShowTyping(false)
-    setUserInput(''); setShowLiveBtn(false)
+    setUserInput(''); setShowLiveBtn(false); setPendingFollowUp(null); setLastTopic(null)
     setNameInput(''); setEmailInput(''); setUserName(''); setUserTopic('')
     setConvId(null); setLiveMessages([]); setLiveInput(''); setAgent(null)
     setClosedByUser(false); setShowEndConfirm(false)
@@ -421,7 +564,7 @@ export default function ChatWidget() {
     }, 2000)
   }
 
-  /* ── Nachricht senden (Live) ───────────────────── */
+  /* ── Live-Nachricht senden ─────────────────────── */
   async function sendLiveMessage(e) {
     e.preventDefault()
     const text = liveInput.trim()
@@ -443,10 +586,10 @@ export default function ChatWidget() {
 
   const headerName   = agent ? agent.name : 'TEAM LAZER'
   const headerStatus = phase === 'closed'     ? 'Chat beendet'
-                     : phase === 'night'      ? 'Offline'
-                     : agent                  ? 'Online'
+                     : phase === 'night'      ? 'Offline (22–5 Uhr)'
+                     : agent                  ? 'Verbunden'
                      : phase === 'connecting' ? 'Verbinde…'
-                     : 'Support'
+                     : 'Support-Bot'
 
   /* ── Render ─────────────────────────────────────── */
   return (
@@ -523,7 +666,6 @@ export default function ChatWidget() {
             </AnimatePresence>
 
             <div className="chat-body">
-
               {/* BOT-PHASE */}
               {(phase === 'bot' || phase === 'name_input' || phase === 'email_input') && (
                 <div className="chat-messages">
@@ -543,6 +685,17 @@ export default function ChatWidget() {
                       </motion.div>
                     ))}
                     {showTyping && <TypingIndicator key="typing" />}
+                  </AnimatePresence>
+
+                  {/* Follow-up Frage als Bubble */}
+                  <AnimatePresence>
+                    {pendingFollowUp && phase === 'bot' && (
+                      <motion.div className="chat-msg bot followup"
+                        initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0 }}>
+                        <div className="chat-msg-avatar"><i className="fas fa-robot" /></div>
+                        <div className="chat-bubble chat-bubble-followup">{pendingFollowUp}</div>
+                      </motion.div>
+                    )}
                   </AnimatePresence>
 
                   {/* Name-Input */}
@@ -575,7 +728,7 @@ export default function ChatWidget() {
                         <motion.div className="chat-msg bot"
                           initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }}>
                           <div className="chat-msg-avatar"><i className="fas fa-robot" /></div>
-                          <div className="chat-bubble">Und deine E-Mail-Adresse? (Falls wir dich nicht direkt erreichen)</div>
+                          <div className="chat-bubble">Und deine E-Mail-Adresse? (Für Rückfragen falls du offline gehst)</div>
                         </motion.div>
                         <form className="chat-name-form" onSubmit={handleEmailSubmit}>
                           <input ref={emailRef} type="email" className="chat-name-field"
@@ -585,7 +738,7 @@ export default function ChatWidget() {
                             <i className="fas fa-arrow-right" />
                           </button>
                         </form>
-                        <button className="chat-skip-email" onClick={handleEmailSubmit}>
+                        <button className="chat-skip-email" onClick={() => handleEmailSubmit(null)}>
                           Überspringen
                         </button>
                       </motion.div>
@@ -625,16 +778,15 @@ export default function ChatWidget() {
 
               {/* NIGHT */}
               {phase === 'night' && <NightScreen />}
-
               {/* CLOSED */}
               {phase === 'closed' && <ClosedScreen byUser={closedByUser} onRestart={restartChat} />}
             </div>
 
-            {/* Eingabebereich je nach Phase */}
+            {/* Eingabe */}
             {phase === 'bot' && (
               <div className="chat-bot-input-area">
                 <form className="chat-input-bar" onSubmit={handleUserMessage}>
-                  <input ref={inputRef} type="text" placeholder="Schreib deine Frage…"
+                  <input ref={inputRef} type="text" placeholder="Stell mir eine Frage…"
                     value={userInput} onChange={e => setUserInput(e.target.value)}
                     className="chat-input" />
                   <button type="submit" className="chat-send-btn" disabled={!userInput.trim()}>
@@ -645,7 +797,7 @@ export default function ChatWidget() {
                   {showLiveBtn && (
                     <motion.button className="chat-live-request-btn"
                       onClick={handleLiveChatRequest}
-                      initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0 }}>
+                      initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:6 }}>
                       <i className="fas fa-headset" /> Mit Mitarbeiter sprechen
                     </motion.button>
                   )}

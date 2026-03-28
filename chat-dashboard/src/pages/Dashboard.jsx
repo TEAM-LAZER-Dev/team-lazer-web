@@ -68,12 +68,19 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const [messages, setMessages]     = useState([])
   const [replyInput, setReplyInput] = useState('')
   const [isOnline, setIsOnline]     = useState(true)
-  const [activeTab, setActiveTab]   = useState('active') // 'active' | 'waiting' | 'history'
+  const [activeTab, setActiveTab]   = useState('active')
   const [mobileShowChat, setMobileShowChat] = useState(false)
   const [quickReplies, setQuickReplies] = useState([])
   const [showQR, setShowQR]         = useState(false)
   const [unreadCounts, setUnreadCounts] = useState({})
   const [onlineAgents, setOnlineAgents] = useState([])
+  // Chat-Transfer
+  const [showTransfer, setShowTransfer] = useState(false)
+  // Interne Notizen
+  const [noteInput, setNoteInput]   = useState('')
+  const [showNotes, setShowNotes]   = useState(false)
+  // Kundeninfo-Panel
+  const [showInfo, setShowInfo]     = useState(false)
 
   const endRef      = useRef(null)
   const channelRef  = useRef(null)
@@ -232,6 +239,37 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     if (channelRef.current) { supabase.removeChannel(channelRef.current); channelRef.current = null }
     loadConversations()
     loadHistory()
+  }
+
+  /* ── Transfer chat to another agent ─────────── */
+  async function transferConv(targetAgent) {
+    if (!activeConv || !targetAgent) return
+    await supabase.from('conversations')
+      .update({ assigned_agent_id: targetAgent.id, agents: undefined })
+      .eq('id', activeConv.id)
+    // Interne Notiz: Übergabe dokumentieren
+    await supabase.from('messages').insert({
+      conversation_id: activeConv.id,
+      sender_type: 'system',
+      sender_name: 'System',
+      content: `Chat wurde von ${agent.name} an ${targetAgent.name} übergeben.`,
+    })
+    setActiveConv(prev => ({ ...prev, assigned_agent_id: targetAgent.id, agents: targetAgent }))
+    setShowTransfer(false)
+  }
+
+  /* ── Interne Notiz senden ────────────────────── */
+  async function sendNote(e) {
+    e?.preventDefault()
+    const text = noteInput.trim()
+    if (!text || !activeConv) return
+    setNoteInput('')
+    await supabase.from('messages').insert({
+      conversation_id: activeConv.id,
+      sender_type: 'note',
+      sender_name: agent?.name || 'Team',
+      content: text,
+    })
   }
 
   /* ── Delete conversation (history) ──────────── */
@@ -426,6 +464,25 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                 </div>
               </div>
               <div className="db-chat-header-actions">
+                {/* Kundeninfo */}
+                <button className={`icon-btn ${showInfo ? 'active' : ''}`}
+                  onClick={() => setShowInfo(v => !v)} title="Kundeninfo">
+                  <i className="fas fa-user-circle" />
+                </button>
+                {/* Interne Notiz */}
+                {activeConv.status !== 'closed' && activeConv.assigned_agent_id === agent?.id && (
+                  <button className={`icon-btn ${showNotes ? 'active' : ''}`}
+                    onClick={() => setShowNotes(v => !v)} title="Interne Notiz">
+                    <i className="fas fa-sticky-note" />
+                  </button>
+                )}
+                {/* Transfer */}
+                {activeConv.status === 'active' && activeConv.assigned_agent_id === agent?.id && (
+                  <button className={`icon-btn ${showTransfer ? 'active' : ''}`}
+                    onClick={() => setShowTransfer(v => !v)} title="Chat übergeben">
+                    <i className="fas fa-exchange-alt" />
+                  </button>
+                )}
                 {activeConv.status === 'waiting' && (
                   <button className="db-claim-btn" onClick={() => claimConv(activeConv)}>
                     <i className="fas fa-headset" /> Übernehmen
@@ -442,6 +499,28 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                   </button>
                 )}
               </div>
+
+              {/* Transfer-Dropdown */}
+              <AnimatePresence>
+                {showTransfer && (
+                  <motion.div className="db-transfer-dropdown"
+                    initial={{ opacity:0, y:-8, scale:0.96 }} animate={{ opacity:1, y:0, scale:1 }}
+                    exit={{ opacity:0, y:-8, scale:0.96 }}>
+                    <p className="db-transfer-title"><i className="fas fa-exchange-alt" /> Chat übergeben an:</p>
+                    {onlineAgents.filter(a => a.id !== agent?.id).length === 0
+                      ? <p className="db-transfer-empty">Keine anderen Agenten online</p>
+                      : onlineAgents.filter(a => a.id !== agent?.id).map(a => (
+                          <button key={a.id} className="db-transfer-agent" onClick={() => transferConv(a)}>
+                            <Avatar agent={a} size={28} />
+                            <span>{a.name}</span>
+                            <span className="db-transfer-online-dot" />
+                          </button>
+                        ))
+                    }
+                    <button className="db-transfer-cancel" onClick={() => setShowTransfer(false)}>Abbrechen</button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Messages */}
@@ -449,6 +528,8 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
               {messages.map((msg, i) => {
                 const isOutgoing = msg.sender_type === 'agent'
                 const isBot = msg.sender_type === 'bot'
+                const isNote = msg.sender_type === 'note'
+                const isSystem = msg.sender_type === 'system'
                 const showDate = i === 0 || new Date(messages[i-1].created_at).toDateString() !== new Date(msg.created_at).toDateString()
                 return (
                   <div key={msg.id}>
@@ -457,38 +538,114 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                         {new Date(msg.created_at).toLocaleDateString('de-DE', { weekday:'short', day:'2-digit', month:'2-digit' })}
                       </div>
                     )}
-                    <motion.div className={`db-msg-row ${isOutgoing ? 'outgoing' : 'incoming'}`}
-                      initial={{ opacity:0, y:5 }} animate={{ opacity:1, y:0 }}>
-                      {!isOutgoing && (
-                        <div className="db-msg-avatar-sm">
-                          {isBot
-                            ? <span title="Bot">🤖</span>
-                            : <div className="db-msg-user-dot">{(activeConv.user_name?.[0] || '?').toUpperCase()}</div>
-                          }
-                        </div>
-                      )}
-                      <div className="db-msg-content">
-                        <div className="db-msg-meta">
-                          <span className="db-msg-sender">
-                            {msg.sender_type === 'user' ? activeConv.user_name
-                            : msg.sender_type === 'bot' ? 'Bot'
-                            : msg.sender_name || agent?.name || 'Agent'}
-                          </span>
-                          <span className="db-msg-time">{fmtTime(msg.created_at)}</span>
-                        </div>
-                        <div className={`db-msg-bubble ${isOutgoing ? 'out' : 'in'}`}>{msg.content}</div>
+                    {/* System-Ereignis (Transfer etc.) */}
+                    {isSystem && (
+                      <div className="db-system-msg">
+                        <i className="fas fa-info-circle" /> {msg.content}
                       </div>
-                      {isOutgoing && (
-                        <div className="db-msg-avatar-sm">
-                          <Avatar agent={agent} size={26} />
+                    )}
+                    {/* Interne Notiz */}
+                    {isNote && (
+                      <motion.div className="db-note-msg" initial={{ opacity:0, y:5 }} animate={{ opacity:1, y:0 }}>
+                        <i className="fas fa-sticky-note" />
+                        <div className="db-note-content">
+                          <span className="db-note-author">{msg.sender_name} · Notiz</span>
+                          <span>{msg.content}</span>
                         </div>
-                      )}
-                    </motion.div>
+                        <span className="db-msg-time">{fmtTime(msg.created_at)}</span>
+                      </motion.div>
+                    )}
+                    {/* Normale Nachrichten */}
+                    {!isNote && !isSystem && (
+                      <motion.div className={`db-msg-row ${isOutgoing ? 'outgoing' : 'incoming'}`}
+                        initial={{ opacity:0, y:5 }} animate={{ opacity:1, y:0 }}>
+                        {!isOutgoing && (
+                          <div className="db-msg-avatar-sm">
+                            {isBot
+                              ? <span title="Bot" style={{fontSize:'1.1rem'}}>🤖</span>
+                              : <div className="db-msg-user-dot">{(activeConv.user_name?.[0] || '?').toUpperCase()}</div>
+                            }
+                          </div>
+                        )}
+                        <div className="db-msg-content">
+                          <div className="db-msg-meta">
+                            <span className="db-msg-sender">
+                              {msg.sender_type === 'user' ? activeConv.user_name
+                              : msg.sender_type === 'bot' ? 'Bot'
+                              : msg.sender_name || agent?.name || 'Agent'}
+                            </span>
+                            <span className="db-msg-time">{fmtTime(msg.created_at)}</span>
+                          </div>
+                          <div className={`db-msg-bubble ${isOutgoing ? 'out' : 'in'}`}>{msg.content}</div>
+                        </div>
+                        {isOutgoing && (
+                          <div className="db-msg-avatar-sm">
+                            <Avatar agent={agent} size={26} />
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
                   </div>
                 )
               })}
               <div ref={endRef} />
             </div>
+
+            {/* Kundeninfo Panel */}
+            <AnimatePresence>
+              {showInfo && (
+                <motion.div className="db-info-panel"
+                  initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }}
+                  exit={{ opacity:0, height:0 }}>
+                  <div className="db-info-row">
+                    <i className="fas fa-user" />
+                    <div><span>Name</span><strong>{activeConv.user_name || '—'}</strong></div>
+                  </div>
+                  {activeConv.user_email && (
+                    <div className="db-info-row">
+                      <i className="fas fa-envelope" />
+                      <div><span>E-Mail</span>
+                        <a href={`mailto:${activeConv.user_email}`}>{activeConv.user_email}</a>
+                      </div>
+                    </div>
+                  )}
+                  {activeConv.user_topic && (
+                    <div className="db-info-row">
+                      <i className="fas fa-comment-dots" />
+                      <div><span>Thema</span><strong>{activeConv.user_topic}</strong></div>
+                    </div>
+                  )}
+                  <div className="db-info-row">
+                    <i className="fas fa-clock" />
+                    <div><span>Gestartet</span>
+                      <strong>{new Date(activeConv.created_at).toLocaleString('de-DE', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' })}</strong>
+                    </div>
+                  </div>
+                  <div className="db-info-row">
+                    <i className="fas fa-comment" />
+                    <div><span>Nachrichten</span><strong>{messages.length}</strong></div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Interne Notiz */}
+            <AnimatePresence>
+              {showNotes && (
+                <motion.div className="db-note-area"
+                  initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }}
+                  exit={{ opacity:0, height:0 }}>
+                  <form className="db-note-form" onSubmit={sendNote}>
+                    <input type="text" placeholder="Interne Notiz (nur für das Team sichtbar)…"
+                      value={noteInput} onChange={e => setNoteInput(e.target.value)}
+                      className="db-note-input" />
+                    <button type="submit" className="db-note-btn" disabled={!noteInput.trim()}>
+                      <i className="fas fa-sticky-note" /> Notiz
+                    </button>
+                  </form>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Input area */}
             {activeConv.status === 'active' && activeConv.assigned_agent_id === agent?.id ? (

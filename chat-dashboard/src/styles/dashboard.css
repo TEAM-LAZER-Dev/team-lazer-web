@@ -650,6 +650,58 @@ body {
   animation: spin 0.7s linear infinite;
 }
 
+/* ── Transfer Dropdown ───────────────────────────── */
+.db-chat-header { position: relative; flex-wrap: wrap; }
+.db-transfer-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 12px;
+  z-index: 200;
+  background: #0f0920;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 12px;
+  min-width: 220px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.db-transfer-title { font-size:0.78rem; font-weight:700; color:var(--muted); padding-bottom:6px; border-bottom:1px solid var(--border); margin-bottom:4px; display:flex; align-items:center; gap:6px; }
+.db-transfer-agent { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:10px; background:none; border:1px solid var(--border); color:#fff; cursor:pointer; font-size:0.85rem; font-weight:500; transition:0.2s; }
+.db-transfer-agent:hover { background:rgba(124,58,237,0.12); border-color:rgba(124,58,237,0.3); }
+.db-transfer-online-dot { width:8px; height:8px; border-radius:50%; background:#4ade80; margin-left:auto; }
+.db-transfer-empty { font-size:0.8rem; color:var(--muted); padding:4px 8px; }
+.db-transfer-cancel { background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.78rem; padding:6px; border-radius:6px; transition:0.15s; }
+.db-transfer-cancel:hover { color:#fff; background:rgba(255,255,255,0.05); }
+
+/* ── Kundeninfo Panel ────────────────────────────── */
+.db-info-panel { border-bottom:1px solid var(--border); padding:12px 20px; background:rgba(255,255,255,0.02); display:flex; flex-direction:column; gap:8px; flex-shrink:0; overflow:hidden; }
+.db-info-row { display:flex; align-items:flex-start; gap:10px; font-size:0.82rem; }
+.db-info-row i { color:var(--primary); width:14px; margin-top:3px; flex-shrink:0; }
+.db-info-row div { display:flex; flex-direction:column; gap:1px; }
+.db-info-row span { color:var(--muted); font-size:0.7rem; }
+.db-info-row strong { color:#fff; font-weight:600; }
+.db-info-row a { color:#93c5fd; text-decoration:none; }
+.db-info-row a:hover { text-decoration:underline; }
+
+/* ── Interne Notiz ───────────────────────────────── */
+.db-note-area { border-top:1px solid rgba(251,191,36,0.15); background:rgba(251,191,36,0.04); overflow:hidden; flex-shrink:0; }
+.db-note-form { display:flex; gap:8px; padding:10px 14px; }
+.db-note-input { flex:1; background:rgba(251,191,36,0.06); border:1px solid rgba(251,191,36,0.2); border-radius:10px; padding:8px 12px; color:#fde68a; font-size:0.83rem; outline:none; font-family:'Inter',sans-serif; }
+.db-note-input::placeholder { color:rgba(251,191,36,0.35); }
+.db-note-btn { padding:8px 14px; border-radius:10px; border:1px solid rgba(251,191,36,0.25); background:rgba(251,191,36,0.1); color:#fde68a; font-size:0.8rem; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; transition:0.2s; }
+.db-note-btn:hover:not(:disabled) { background:rgba(251,191,36,0.18); }
+.db-note-btn:disabled { opacity:0.4; cursor:default; }
+.db-note-msg { display:flex; align-items:flex-start; gap:8px; margin:6px 20px; padding:8px 12px; border-radius:10px; background:rgba(251,191,36,0.07); border:1px dashed rgba(251,191,36,0.2); font-size:0.8rem; }
+.db-note-msg i { color:#fde68a; flex-shrink:0; margin-top:2px; }
+.db-note-content { display:flex; flex-direction:column; gap:2px; flex:1; }
+.db-note-author { font-size:0.68rem; color:rgba(253,230,138,0.6); font-weight:600; }
+.db-note-content span:last-child { color:#fde68a; line-height:1.5; }
+.db-system-msg { text-align:center; font-size:0.72rem; color:var(--muted); padding:6px 20px; display:flex; align-items:center; justify-content:center; gap:6px; }
+.db-system-msg i { color:rgba(124,58,237,0.6); }
+.icon-btn.active { background:rgba(124,58,237,0.18); color:#c4b5fd; }
+
 /* ── Sidebar Tabs ────────────────────────────────── */
 .db-tabs {
   display: flex;
