@@ -2593,3 +2593,51 @@ body {
   color: #fbbf24;
   border-color: rgba(251,191,36,0.3);
 }
+
+/* ══════════════════════════════════════════════════
+   MULTI-ROLE CHIPS SYSTEM
+══════════════════════════════════════════════════ */
+/* Colored tag chips for displaying roles */
+.db-role-chips-row {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  align-items: center;
+}
+.db-role-chips-row.small .db-role-chip-tag {
+  font-size: 0.62rem; padding: 1px 7px;
+}
+.db-role-chip-tag {
+  display: inline-flex; align-items: center;
+  font-size: 0.68rem; font-weight: 700;
+  border: 1px solid; border-radius: 20px; padding: 2px 9px;
+  white-space: nowrap;
+}
+
+/* Multi-select role chips in contact card */
+.db-role-chips-select {
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+.db-role-chip-btn {
+  font-size: 0.7rem; font-weight: 600; border-radius: 20px; padding: 3px 10px;
+  border: 1px solid var(--border); background: none; color: var(--muted);
+  cursor: pointer; transition: 0.15s; font-family: 'Inter', sans-serif;
+  display: inline-flex; align-items: center; gap: 3px;
+}
+.db-role-chip-btn:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+.db-role-chip-btn.active { font-weight: 700; }
+.db-role-chip-btn.protected { opacity: 0.6; cursor: not-allowed; }
+
+/* Roles display in ProfileModal */
+.pm-roles-display {
+  display: flex; flex-wrap: wrap; gap: 5px; padding: 6px 0;
+}
+
+/* ── Online status toggle (Admin) in ProfileModal ─ */
+.pm-online-badge.toggleable {
+  cursor: pointer; background: none; border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px; padding: 3px 10px; transition: 0.15s;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'Inter', sans-serif; font-size: 0.72rem;
+}
+.pm-online-badge.toggleable:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); }
+.pm-online-badge.toggleable.online { border-color: rgba(74,222,128,0.4); }
+.pm-toggle-icon { font-size: 0.55rem; opacity: 0.6; }

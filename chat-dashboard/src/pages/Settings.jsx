@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
@@ -26,229 +26,173 @@ function urlBase64ToUint8Array(base64String) {
   return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)))
 }
 
+/* ── Preset colors ───────────────────────────────── */
+const PRESET_COLORS = [
+  '#7c3aed','#2563eb','#0891b2','#059669','#16a34a',
+  '#ca8a04','#ea580c','#dc2626','#db2777','#9333ea',
+  '#fbbf24','#34d399','#60a5fa','#f472b6','#a78bfa',
+]
+
 export default function Settings({ agent, onAgentUpdate }) {
   const navigate = useNavigate()
 
-  /* ── Profile state ───────────────────────────── */
-  const [name, setName]                     = useState(agent?.name || '')
-  const [avatarFile, setAvatarFile]         = useState(null)
-  const [avatarPreview, setAvatarPreview]   = useState(agent?.avatar_url || null)
-  const [saving, setSaving]                 = useState(false)
-  const [saveMsg, setSaveMsg]               = useState('')
+  /* ── Notification state ──────────────────────────── */
+  const [notifySound, setNotifySound]   = useState(agent?.notify_sound ?? true)
+  const [notifyBrowser, setNotifyBrowser] = useState(agent?.notify_browser ?? true)
+  const [browserPerm, setBrowserPerm]   = useState(Notification?.permission || 'default')
+  const [notifySaving, setNotifySaving] = useState(false)
+  const [notifyMsg, setNotifyMsg]       = useState('')
 
-  /* ── Notification state ──────────────────────── */
-  const [notifySound, setNotifySound]       = useState(agent?.notify_sound ?? true)
-  const [notifyBrowser, setNotifyBrowser]   = useState(agent?.notify_browser ?? true)
-  const [browserPerm, setBrowserPerm]       = useState(Notification?.permission || 'default')
+  /* ── Web Push state ──────────────────────────────── */
+  const [pushStatus, setPushStatus] = useState('idle')
+  const [pushMsg, setPushMsg]       = useState('')
 
-  /* ── Web Push state ──────────────────────────── */
-  const [pushStatus, setPushStatus]         = useState('idle') // idle | loading | subscribed | unsupported
-  const [pushMsg, setPushMsg]               = useState('')
+  /* ── Quick replies state ─────────────────────────── */
+  const [quickReplies, setQuickReplies] = useState([])
+  const [newTitle, setNewTitle]         = useState('')
+  const [newContent, setNewContent]     = useState('')
+  const [editingId, setEditingId]       = useState(null)
+  const [editTitle, setEditTitle]       = useState('')
+  const [editContent, setEditContent]   = useState('')
 
-  /* ── Quick replies state ─────────────────────── */
-  const [quickReplies, setQuickReplies]     = useState([])
-  const [newTitle, setNewTitle]             = useState('')
-  const [newContent, setNewContent]         = useState('')
-  const [editingId, setEditingId]           = useState(null)
-  const [editTitle, setEditTitle]           = useState('')
-  const [editContent, setEditContent]       = useState('')
-  const fileRef = useRef(null)
+  /* ── Roles state (admin only) ────────────────────── */
+  const [roles, setRoles]           = useState([])
+  const [newRoleName, setNewRoleName] = useState('')
+  const [newRoleColor, setNewRoleColor] = useState('#7c3aed')
+  const [rolesSaving, setRolesSaving] = useState(false)
+  const [rolesMsg, setRolesMsg]       = useState('')
+  const [editRoleId, setEditRoleId]   = useState(null)
+  const [editRoleName, setEditRoleName] = useState('')
+  const [editRoleColor, setEditRoleColor] = useState('#7c3aed')
 
   useEffect(() => {
     loadQuickReplies()
     checkPushStatus()
+    if (agent?.is_admin) loadRoles()
   }, []) // eslint-disable-line
 
-  /* ── Check if already subscribed ─────────────── */
+  /* ── Push ───────────────────────────────────────── */
   async function checkPushStatus() {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-      setPushStatus('unsupported')
-      return
+      setPushStatus('unsupported'); return
     }
-    // Check if agent already has a subscription saved
-    if (agent?.push_subscription) {
-      setPushStatus('subscribed')
-    } else {
-      setPushStatus('idle')
-    }
+    setPushStatus(agent?.push_subscription ? 'subscribed' : 'idle')
   }
 
-  /* ── Subscribe to Web Push ───────────────────── */
   async function subscribePush() {
-    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-      setPushMsg('Dein Browser unterstützt keine Push-Benachrichtigungen.')
-      return
-    }
-
     const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY
     if (!vapidKey) {
-      setPushStatus('idle')
-      setPushMsg('⚠️ VAPID-Key fehlt im Build! Bitte Netlify neu deployen (Deploys → Trigger deploy → Deploy site).')
+      setPushMsg('⚠️ VAPID-Key fehlt im Build! Bitte Netlify neu deployen.')
       return
     }
-
-    setPushStatus('loading')
-    setPushMsg('')
-
+    setPushStatus('loading'); setPushMsg('')
     try {
-      // Request notification permission
       const perm = await Notification.requestPermission()
       setBrowserPerm(perm)
-      if (perm !== 'granted') {
-        setPushStatus('idle')
-        setPushMsg('Benachrichtigungen wurden nicht erlaubt.')
-        return
-      }
-
-      // Register / get SW
+      if (perm !== 'granted') { setPushStatus('idle'); setPushMsg('Nicht erlaubt.'); return }
       const reg = await navigator.serviceWorker.ready
-
-      // Subscribe
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(vapidKey)
       })
-
-      // Save to Supabase
       const subJson = sub.toJSON()
-      const { error } = await supabase
-        .from('agents')
-        .update({ push_subscription: subJson })
-        .eq('id', agent.id)
-
-      if (error) throw error
-
+      await supabase.from('agents').update({ push_subscription: subJson }).eq('id', agent.id)
       onAgentUpdate({ ...agent, push_subscription: subJson })
-      setPushStatus('subscribed')
-      setPushMsg('✓ Push-Benachrichtigungen aktiviert!')
+      setPushStatus('subscribed'); setPushMsg('✓ Push aktiviert!')
       setTimeout(() => setPushMsg(''), 4000)
-
     } catch(e) {
-      console.error('Push subscribe error:', e)
-      setPushStatus('idle')
-      setPushMsg('Fehler: ' + (e.message || 'Unbekannt'))
+      setPushStatus('idle'); setPushMsg('Fehler: ' + (e.message || 'Unbekannt'))
     }
   }
 
-  /* ── Unsubscribe from Web Push ───────────────── */
   async function unsubscribePush() {
     setPushStatus('loading')
     try {
       const reg = await navigator.serviceWorker.ready
       const sub = await reg.pushManager.getSubscription()
       if (sub) await sub.unsubscribe()
-
-      await supabase
-        .from('agents')
-        .update({ push_subscription: null })
-        .eq('id', agent.id)
-
+      await supabase.from('agents').update({ push_subscription: null }).eq('id', agent.id)
       onAgentUpdate({ ...agent, push_subscription: null })
-      setPushStatus('idle')
-      setPushMsg('Push-Benachrichtigungen deaktiviert.')
+      setPushStatus('idle'); setPushMsg('Deaktiviert.')
       setTimeout(() => setPushMsg(''), 3000)
     } catch(e) {
-      setPushStatus('subscribed')
-      setPushMsg('Fehler beim Deaktivieren.')
+      setPushStatus('subscribed'); setPushMsg('Fehler beim Deaktivieren.')
     }
   }
 
-  async function loadQuickReplies() {
-    const { data } = await supabase
-      .from('quick_replies').select('*').order('sort_order')
-    setQuickReplies(data || [])
-  }
-
-  /* ── Avatar select ───────────────────────────── */
-  function handleAvatarSelect(e) {
-    const file = e.target.files[0]
-    if (!file) return
-    setAvatarFile(file)
-    setAvatarPreview(URL.createObjectURL(file))
-  }
-
-  /* ── Save profile ────────────────────────────── */
-  async function saveProfile() {
-    if (!agent) return
-    setSaving(true)
-    setSaveMsg('')
-
-    let avatarUrl = agent.avatar_url
-
-    if (avatarFile) {
-      const ext = avatarFile.name.split('.').pop()
-      const path = `${agent.id}.${ext}`
-      const { error: upErr } = await supabase.storage
-        .from('avatars')
-        .upload(path, avatarFile, { upsert: true, contentType: avatarFile.type })
-
-      if (upErr) {
-        setSaveMsg('Fehler beim Hochladen: ' + upErr.message)
-        setSaving(false)
-        return
-      }
-
-      const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path)
-      avatarUrl = urlData.publicUrl + '?t=' + Date.now()
-    }
-
+  /* ── Notifications save ─────────────────────────── */
+  async function saveNotifications() {
+    setNotifySaving(true); setNotifyMsg('')
     const { data: updated, error } = await supabase
       .from('agents')
-      .update({ name, avatar_url: avatarUrl, notify_sound: notifySound, notify_browser: notifyBrowser })
-      .eq('id', agent.id)
-      .select()
-      .single()
-
-    if (error) {
-      setSaveMsg('Fehler: ' + error.message)
-    } else {
-      setSaveMsg('✓ Gespeichert!')
-      onAgentUpdate(updated)
-      setTimeout(() => setSaveMsg(''), 3000)
-    }
-    setSaving(false)
+      .update({ notify_sound: notifySound, notify_browser: notifyBrowser })
+      .eq('id', agent.id).select().single()
+    setNotifySaving(false)
+    if (error) { setNotifyMsg('Fehler: ' + error.message); return }
+    onAgentUpdate(updated)
+    setNotifyMsg('✓ Gespeichert!')
+    setTimeout(() => setNotifyMsg(''), 3000)
   }
 
-  /* ── Browser notification permission ────────── */
   async function requestBrowserPerm() {
     const perm = await Notification.requestPermission()
     setBrowserPerm(perm)
     setNotifyBrowser(perm === 'granted')
   }
 
-  /* ── Quick replies CRUD ──────────────────────── */
+  /* ── Quick replies ──────────────────────────────── */
+  async function loadQuickReplies() {
+    const { data } = await supabase.from('quick_replies').select('*').order('sort_order')
+    setQuickReplies(data || [])
+  }
   async function addQuickReply() {
     if (!newTitle.trim() || !newContent.trim()) return
     const maxOrder = quickReplies.reduce((m, r) => Math.max(m, r.sort_order), 0)
-    const { data } = await supabase
-      .from('quick_replies')
+    const { data } = await supabase.from('quick_replies')
       .insert({ title: newTitle.trim(), content: newContent.trim(), sort_order: maxOrder + 1 })
       .select().single()
     if (data) setQuickReplies(prev => [...prev, data])
     setNewTitle(''); setNewContent('')
   }
-
   async function deleteQuickReply(id) {
     await supabase.from('quick_replies').delete().eq('id', id)
     setQuickReplies(prev => prev.filter(r => r.id !== id))
   }
-
   async function saveEdit(id) {
-    const { data } = await supabase
-      .from('quick_replies')
-      .update({ title: editTitle, content: editContent })
-      .eq('id', id).select().single()
+    const { data } = await supabase.from('quick_replies')
+      .update({ title: editTitle, content: editContent }).eq('id', id).select().single()
     if (data) setQuickReplies(prev => prev.map(r => r.id === id ? data : r))
     setEditingId(null)
   }
 
-  function startEdit(r) {
-    setEditingId(r.id)
-    setEditTitle(r.title)
-    setEditContent(r.content)
+  /* ── Roles (admin only) ─────────────────────────── */
+  async function loadRoles() {
+    const { data } = await supabase.from('roles').select('*').order('name')
+    setRoles(data || [])
+  }
+  async function addRole() {
+    if (!newRoleName.trim()) return
+    setRolesSaving(true); setRolesMsg('')
+    const { data, error } = await supabase.from('roles')
+      .insert({ name: newRoleName.trim(), color: newRoleColor }).select().single()
+    setRolesSaving(false)
+    if (error) { setRolesMsg('Fehler: Name bereits vergeben?'); return }
+    setRoles(prev => [...prev, data].sort((a,b) => a.name.localeCompare(b.name)))
+    setNewRoleName(''); setNewRoleColor('#7c3aed')
+    setRolesMsg('✓ Rolle erstellt!'); setTimeout(() => setRolesMsg(''), 2000)
+  }
+  async function deleteRole(id) {
+    await supabase.from('roles').delete().eq('id', id)
+    setRoles(prev => prev.filter(r => r.id !== id))
+  }
+  async function saveRoleEdit(id) {
+    const { data, error } = await supabase.from('roles')
+      .update({ name: editRoleName.trim(), color: editRoleColor }).eq('id', id).select().single()
+    if (!error && data) setRoles(prev => prev.map(r => r.id === id ? data : r))
+    setEditRoleId(null)
   }
 
-  /* ── Render ──────────────────────────────────── */
+  /* ── Render ──────────────────────────────────────── */
   return (
     <div className="settings-page">
       <div className="settings-header">
@@ -260,48 +204,10 @@ export default function Settings({ agent, onAgentUpdate }) {
 
       <div className="settings-body">
 
-        {/* ── Profil ──────────────────────────── */}
-        <div className="settings-card">
-          <h2 className="settings-section-title"><i className="fas fa-user" /> Profil</h2>
-
-          <div className="avatar-upload-row">
-            <div className="avatar-upload-preview" onClick={() => fileRef.current?.click()}>
-              {avatarPreview
-                ? <img src={avatarPreview} alt="Avatar" />
-                : <div className="avatar-placeholder-lg">{(name[0] || '?').toUpperCase()}</div>
-              }
-              <div className="avatar-upload-overlay"><i className="fas fa-camera" /></div>
-            </div>
-            <div className="avatar-upload-info">
-              <p>Profilbild</p>
-              <span>Wird im Chat-Widget beim User angezeigt</span>
-              <button className="btn-secondary-sm" onClick={() => fileRef.current?.click()}>
-                <i className="fas fa-upload" /> Bild wählen
-              </button>
-            </div>
-            <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }}
-              onChange={handleAvatarSelect} />
-          </div>
-
-          <div className="settings-field">
-            <label>Anzeigename</label>
-            <input type="text" value={name} onChange={e => setName(e.target.value)}
-              placeholder="Dein Name" />
-          </div>
-
-          <div className="settings-save-row">
-            <button className="btn-primary" onClick={saveProfile} disabled={saving}>
-              {saving ? <span className="btn-spinner" /> : <><i className="fas fa-save" /> Speichern</>}
-            </button>
-            {saveMsg && <span className={`save-msg ${saveMsg.startsWith('✓') ? 'ok' : 'err'}`}>{saveMsg}</span>}
-          </div>
-        </div>
-
-        {/* ── Benachrichtigungen ───────────────── */}
+        {/* ── Benachrichtigungen ───────────────────── */}
         <div className="settings-card">
           <h2 className="settings-section-title"><i className="fas fa-bell" /> Benachrichtigungen</h2>
 
-          {/* Sound */}
           <div className="settings-toggle-row">
             <div className="settings-toggle-info">
               <strong>Sound</strong>
@@ -312,123 +218,96 @@ export default function Settings({ agent, onAgentUpdate }) {
                 <i className="fas fa-play" />
               </button>
               <label className="toggle-switch">
-                <input type="checkbox" checked={notifySound}
-                  onChange={e => setNotifySound(e.target.checked)} />
+                <input type="checkbox" checked={notifySound} onChange={e => setNotifySound(e.target.checked)} />
                 <span className="toggle-slider" />
               </label>
             </div>
           </div>
 
-          {/* Browser notifications (in-tab) */}
           <div className="settings-toggle-row">
             <div className="settings-toggle-info">
               <strong>Tab-Benachrichtigungen</strong>
               <span>Popup wenn Tab aktiv aber im Hintergrund</span>
             </div>
             <div className="settings-toggle-right">
-              {browserPerm === 'denied' && (
-                <span className="perm-denied">Blockiert im Browser</span>
-              )}
+              {browserPerm === 'denied' && <span className="perm-denied">Blockiert im Browser</span>}
               {browserPerm !== 'granted' && browserPerm !== 'denied' && (
-                <button className="btn-secondary-sm" onClick={requestBrowserPerm}>
-                  Erlauben
-                </button>
+                <button className="btn-secondary-sm" onClick={requestBrowserPerm}>Erlauben</button>
               )}
               {browserPerm === 'granted' && (
                 <label className="toggle-switch">
-                  <input type="checkbox" checked={notifyBrowser}
-                    onChange={e => setNotifyBrowser(e.target.checked)} />
+                  <input type="checkbox" checked={notifyBrowser} onChange={e => setNotifyBrowser(e.target.checked)} />
                   <span className="toggle-slider" />
                 </label>
               )}
             </div>
           </div>
 
-          <div className="settings-save-row" style={{ marginBottom: '20px' }}>
-            <button className="btn-primary" onClick={saveProfile} disabled={saving}>
-              {saving ? <span className="btn-spinner" /> : <><i className="fas fa-save" /> Speichern</>}
+          <div className="settings-save-row" style={{ marginBottom: 20 }}>
+            <button className="btn-primary" onClick={saveNotifications} disabled={notifySaving}>
+              {notifySaving ? <span className="btn-spinner" /> : <><i className="fas fa-save" /> Speichern</>}
             </button>
-            {saveMsg && <span className={`save-msg ${saveMsg.startsWith('✓') ? 'ok' : 'err'}`}>{saveMsg}</span>}
+            {notifyMsg && <span className={`save-msg ${notifyMsg.startsWith('✓') ? 'ok' : 'err'}`}>{notifyMsg}</span>}
           </div>
 
-          {/* ── Web Push ───────────────────────── */}
+          {/* Web Push */}
           <div className="push-section">
             <div className="push-section-header">
               <div>
                 <strong><i className="fas fa-mobile-alt" /> Push-Benachrichtigungen</strong>
-                <p>Bekomme eine Benachrichtigung egal ob das Dashboard offen ist —
-                  auch auf dem Handy. Klick öffnet direkt den Chat.</p>
+                <p>Bekomme eine Benachrichtigung egal ob das Dashboard offen ist — auch auf dem Handy.</p>
                 {!import.meta.env.VITE_VAPID_PUBLIC_KEY && (
                   <p style={{ color: '#f87171', fontSize: '0.78rem', marginTop: 6 }}>
                     <i className="fas fa-exclamation-triangle" /> VAPID-Key fehlt im Build!
-                    Gehe zu Netlify → Deploys → "Trigger deploy" → "Deploy site" um das zu fixen.
+                    Gehe zu Netlify → Deploys → "Trigger deploy" → "Deploy site".
                   </p>
                 )}
               </div>
-              <div className="push-status-badge">
-                {pushStatus === 'subscribed'
-                  ? <span className="push-badge on"><i className="fas fa-check" /> Aktiv</span>
-                  : pushStatus === 'unsupported'
-                  ? <span className="push-badge off">Nicht unterstützt</span>
-                  : null
-                }
+              <div>
+                {pushStatus === 'subscribed' && <span className="push-badge on"><i className="fas fa-check" /> Aktiv</span>}
+                {pushStatus === 'unsupported' && <span className="push-badge off">Nicht unterstützt</span>}
               </div>
             </div>
-
             {pushStatus === 'unsupported' ? (
-              <p className="push-unsupported">Dein Browser unterstützt leider keine Push-Benachrichtigungen.</p>
+              <p className="push-unsupported">Dein Browser unterstützt keine Push-Benachrichtigungen.</p>
             ) : pushStatus === 'subscribed' ? (
               <div className="push-actions">
                 <div className="push-active-info">
                   <i className="fas fa-bell" />
                   <span>Push-Benachrichtigungen sind auf diesem Gerät aktiviert.</span>
                 </div>
-                <button className="btn-secondary-sm" onClick={unsubscribePush}
-                  disabled={pushStatus === 'loading'}>
+                <button className="btn-secondary-sm" onClick={unsubscribePush} disabled={pushStatus === 'loading'}>
                   <i className="fas fa-bell-slash" /> Deaktivieren
                 </button>
               </div>
             ) : (
-              <button className="btn-push-activate" onClick={subscribePush}
-                disabled={pushStatus === 'loading'}>
+              <button className="btn-push-activate" onClick={subscribePush} disabled={pushStatus === 'loading'}>
                 {pushStatus === 'loading'
                   ? <><span className="btn-spinner" /> Aktiviere…</>
-                  : <><i className="fas fa-bell" /> Push-Benachrichtigungen aktivieren</>
-                }
+                  : <><i className="fas fa-bell" /> Push-Benachrichtigungen aktivieren</>}
               </button>
             )}
-
-            {pushMsg && (
-              <p className={`push-msg ${pushMsg.startsWith('✓') ? 'ok' : ''}`}>{pushMsg}</p>
-            )}
-
+            {pushMsg && <p className={`push-msg ${pushMsg.startsWith('✓') ? 'ok' : ''}`}>{pushMsg}</p>}
           </div>
         </div>
 
-        {/* ── Schnellantworten ─────────────────── */}
+        {/* ── Schnellantworten ─────────────────────── */}
         <div className="settings-card">
           <h2 className="settings-section-title"><i className="fas fa-bolt" /> Schnellantworten</h2>
           <p className="settings-desc">Stehen im Chat-Dashboard für alle Mitarbeiter zur Verfügung.</p>
-
           <div className="qr-list">
             <AnimatePresence initial={false}>
               {quickReplies.map(r => (
                 <motion.div key={r.id} className="qr-item"
-                  initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, height: 0, marginBottom: 0 }} layout>
+                  initial={{ opacity:0, y:-6 }} animate={{ opacity:1, y:0 }}
+                  exit={{ opacity:0, height:0, marginBottom:0 }} layout>
                   {editingId === r.id ? (
                     <div className="qr-edit-form">
-                      <input value={editTitle} onChange={e => setEditTitle(e.target.value)}
-                        placeholder="Titel" className="qr-input-sm" />
-                      <textarea value={editContent} onChange={e => setEditContent(e.target.value)}
-                        placeholder="Inhalt" className="qr-textarea" rows={3} />
+                      <input value={editTitle} onChange={e => setEditTitle(e.target.value)} placeholder="Titel" className="qr-input-sm" />
+                      <textarea value={editContent} onChange={e => setEditContent(e.target.value)} placeholder="Inhalt" className="qr-textarea" rows={3} />
                       <div className="qr-edit-actions">
-                        <button className="btn-primary-sm" onClick={() => saveEdit(r.id)}>
-                          <i className="fas fa-check" /> Speichern
-                        </button>
-                        <button className="btn-ghost-sm" onClick={() => setEditingId(null)}>
-                          Abbrechen
-                        </button>
+                        <button className="btn-primary-sm" onClick={() => saveEdit(r.id)}><i className="fas fa-check" /> Speichern</button>
+                        <button className="btn-ghost-sm" onClick={() => setEditingId(null)}>Abbrechen</button>
                       </div>
                     </div>
                   ) : (
@@ -438,7 +317,7 @@ export default function Settings({ agent, onAgentUpdate }) {
                         <p>{r.content}</p>
                       </div>
                       <div className="qr-item-actions">
-                        <button onClick={() => startEdit(r)} title="Bearbeiten">
+                        <button onClick={() => { setEditingId(r.id); setEditTitle(r.title); setEditContent(r.content) }} title="Bearbeiten">
                           <i className="fas fa-pen" />
                         </button>
                         <button onClick={() => deleteQuickReply(r.id)} title="Löschen" className="del">
@@ -451,19 +330,93 @@ export default function Settings({ agent, onAgentUpdate }) {
               ))}
             </AnimatePresence>
           </div>
-
           <div className="qr-add-form">
             <h3>Neue Schnellantwort</h3>
-            <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)}
-              placeholder="Titel (z.B. Begrüßung)" className="qr-input" />
-            <textarea value={newContent} onChange={e => setNewContent(e.target.value)}
-              placeholder="Text der Schnellantwort..." className="qr-textarea" rows={3} />
-            <button className="btn-primary" onClick={addQuickReply}
-              disabled={!newTitle.trim() || !newContent.trim()}>
+            <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="Titel (z.B. Begrüßung)" className="qr-input" />
+            <textarea value={newContent} onChange={e => setNewContent(e.target.value)} placeholder="Text der Schnellantwort..." className="qr-textarea" rows={3} />
+            <button className="btn-primary" onClick={addQuickReply} disabled={!newTitle.trim() || !newContent.trim()}>
               <i className="fas fa-plus" /> Hinzufügen
             </button>
           </div>
         </div>
+
+        {/* ── Rollen verwalten (nur Admin) ─────────── */}
+        {agent?.is_admin && (
+          <div className="settings-card">
+            <h2 className="settings-section-title">
+              <i className="fas fa-shield-alt" /> Rollen verwalten
+              <span className="admin-only-badge">Admin</span>
+            </h2>
+            <p className="settings-desc">Erstelle und bearbeite Rollen für dein Team. Rollen können Teammitgliedern in den Kontakten zugewiesen werden.</p>
+
+            <div className="roles-list">
+              <AnimatePresence initial={false}>
+                {roles.map(role => (
+                  <motion.div key={role.id} className="role-item"
+                    initial={{ opacity:0, y:-6 }} animate={{ opacity:1, y:0 }}
+                    exit={{ opacity:0, height:0 }} layout>
+                    {editRoleId === role.id ? (
+                      <div className="role-edit-form">
+                        <input value={editRoleName} onChange={e => setEditRoleName(e.target.value)}
+                          placeholder="Rollenname" className="qr-input-sm" style={{ flex:1 }} />
+                        <div className="color-picker-row">
+                          {PRESET_COLORS.map(c => (
+                            <button key={c} className={`color-dot ${editRoleColor===c?'selected':''}`}
+                              style={{ background: c }} onClick={() => setEditRoleColor(c)} />
+                          ))}
+                          <input type="color" value={editRoleColor} onChange={e => setEditRoleColor(e.target.value)}
+                            className="color-input-custom" title="Eigene Farbe" />
+                        </div>
+                        <div className="qr-edit-actions">
+                          <button className="btn-primary-sm" onClick={() => saveRoleEdit(role.id)}><i className="fas fa-check" /> Speichern</button>
+                          <button className="btn-ghost-sm" onClick={() => setEditRoleId(null)}>Abbrechen</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="role-chip-preview" style={{ background: role.color + '22', color: role.color, borderColor: role.color + '55' }}>
+                          {role.name}
+                        </span>
+                        <div className="role-item-actions">
+                          <button onClick={() => { setEditRoleId(role.id); setEditRoleName(role.name); setEditRoleColor(role.color) }} title="Bearbeiten">
+                            <i className="fas fa-pen" />
+                          </button>
+                          <button onClick={() => deleteRole(role.id)} title="Löschen" className="del">
+                            <i className="fas fa-trash" />
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              {roles.length === 0 && <p className="qr-item-content" style={{ color: 'var(--muted)', fontSize: '0.82rem', padding: '8px 0' }}>Noch keine Rollen erstellt.</p>}
+            </div>
+
+            <div className="role-add-form">
+              <h3>Neue Rolle</h3>
+              <div className="role-add-row">
+                <input type="text" value={newRoleName} onChange={e => setNewRoleName(e.target.value)}
+                  placeholder="Rollenname (z.B. Design, HR…)" className="qr-input" style={{ flex:1 }} />
+                <div className="role-preview-chip" style={{ background: newRoleColor + '22', color: newRoleColor, borderColor: newRoleColor + '55' }}>
+                  {newRoleName || 'Vorschau'}
+                </div>
+              </div>
+              <div className="color-picker-row">
+                {PRESET_COLORS.map(c => (
+                  <button key={c} className={`color-dot ${newRoleColor===c?'selected':''}`}
+                    style={{ background: c }} onClick={() => setNewRoleColor(c)} />
+                ))}
+                <input type="color" value={newRoleColor} onChange={e => setNewRoleColor(e.target.value)}
+                  className="color-input-custom" title="Eigene Farbe" />
+              </div>
+              {rolesMsg && <span className={`save-msg ${rolesMsg.startsWith('✓')?'ok':'err'}`}>{rolesMsg}</span>}
+              <button className="btn-primary" onClick={addRole} disabled={!newRoleName.trim() || rolesSaving}>
+                <i className="fas fa-plus" /> Rolle erstellen
+              </button>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>

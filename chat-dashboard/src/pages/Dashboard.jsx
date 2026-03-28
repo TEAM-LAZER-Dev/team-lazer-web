@@ -69,15 +69,39 @@ function Avatar({ agent, size = 36, name }) {
   )
 }
 
+/* ── Role chips display ──────────────────────────── */
+function RoleChips({ roleIds, allRoles, small }) {
+  if (!roleIds?.length || !allRoles?.length) return null
+  const chips = roleIds.map(id => allRoles.find(r => r.id === id)).filter(Boolean)
+  if (!chips.length) return null
+  return (
+    <div className={`db-role-chips-row${small ? ' small' : ''}`}>
+      {chips.map(r => (
+        <span key={r.id} className="db-role-chip-tag"
+          style={{ background: r.color + '22', color: r.color, borderColor: r.color + '55' }}>
+          {r.name}
+        </span>
+      ))}
+    </div>
+  )
+}
+
 /* ── Profile Modal ───────────────────────────────── */
-function ProfileModal({ agent, onSave, onClose }) {
+function ProfileModal({ agent, roles, onSave, onClose }) {
   const [name, setName]           = useState(agent?.name || '')
-  const [role, setRole]           = useState(agent?.role || 'Support')
   const [saving, setSaving]       = useState(false)
   const [msg, setMsg]             = useState('')
   const [avatarFile, setAvatarFile] = useState(null)
   const [avatarPreview, setAvatarPreview] = useState(agent?.avatar_url || null)
+  const [localOnline, setLocalOnline] = useState(!!agent?.is_online)
   const avatarRef = useRef(null)
+
+  async function toggleOnlineStatus() {
+    const next = !localOnline
+    setLocalOnline(next)
+    await supabase.from('agents').update({ is_online: next }).eq('id', agent.id)
+    onSave({ ...agent, name: name.trim() || agent.name, is_online: next })
+  }
 
   async function save() {
     if (!name.trim()) return
@@ -91,7 +115,7 @@ function ProfileModal({ agent, onSave, onClose }) {
       avatar_url = publicUrl + '?t=' + Date.now()
     }
     const { data, error } = await supabase.from('agents')
-      .update({ name: name.trim(), role: role.trim(), avatar_url })
+      .update({ name: name.trim(), avatar_url, is_online: localOnline })
       .eq('id', agent.id).select().single()
     setSaving(false)
     if (error) { setMsg('Fehler: ' + error.message); return }
@@ -101,6 +125,8 @@ function ProfileModal({ agent, onSave, onClose }) {
   }
 
   const initials = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase() || '?'
+  const myRoles = (agent?.role_ids || []).map(id => roles?.find(r => r.id === id)).filter(Boolean)
+
   return (
     <div className="pm-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="pm-modal">
@@ -117,9 +143,16 @@ function ProfileModal({ agent, onSave, onClose }) {
           </div>
           <input ref={avatarRef} type="file" accept="image/*" style={{ display:'none' }}
             onChange={e => { const f = e.target.files[0]; if(!f) return; setAvatarFile(f); setAvatarPreview(URL.createObjectURL(f)) }} />
-          <div className={`pm-online-badge ${agent?.is_online ? 'online' : ''}`}>
-            {agent?.is_online ? '● Online' : '○ Offline'}
-          </div>
+          {agent?.is_admin ? (
+            <button className={`pm-online-badge toggleable ${localOnline ? 'online' : ''}`}
+              onClick={toggleOnlineStatus} title="Status umschalten">
+              {localOnline ? '● Online' : '○ Offline'} <i className="fas fa-pencil-alt pm-toggle-icon" />
+            </button>
+          ) : (
+            <div className={`pm-online-badge ${localOnline ? 'online' : ''}`}>
+              {localOnline ? '● Online' : '○ Offline'}
+            </div>
+          )}
           {agent?.is_admin && (
             <div className="pm-admin-badge"><i className="fas fa-shield-alt" /> Admin</div>
           )}
@@ -129,15 +162,19 @@ function ProfileModal({ agent, onSave, onClose }) {
             <label>Name</label>
             <input value={name} onChange={e => setName(e.target.value)} placeholder="Dein Name" />
           </div>
-          <div className="pm-field">
-            <label>Aufgabenbereich</label>
-            <input value={role}
-              onChange={e => agent?.is_admin ? setRole(e.target.value) : undefined}
-              placeholder="z.B. Support, Developer, Marketing…"
-              readOnly={!agent?.is_admin}
-              className={!agent?.is_admin ? 'pm-disabled' : ''}
-              title={!agent?.is_admin ? 'Nur Admins können Rollen ändern' : ''} />
-          </div>
+          {myRoles.length > 0 && (
+            <div className="pm-field">
+              <label>Rollen</label>
+              <div className="pm-roles-display">
+                {myRoles.map(r => (
+                  <span key={r.id} className="db-role-chip-tag"
+                    style={{ background: r.color + '22', color: r.color, borderColor: r.color + '55' }}>
+                    {r.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
           {agent?.email && (
             <div className="pm-field">
               <label>E-Mail</label>
@@ -226,7 +263,7 @@ function ConvItem({ conv, active, unread, onSelect, onDelete, accent }) {
 }
 
 /* ── Contact item ────────────────────────────────── */
-function ContactItem({ agent, selected, unread, onSelect, onChat }) {
+function ContactItem({ agent, selected, unread, onSelect, onChat, allRoles }) {
   return (
     <motion.div className={`db-contact-item ${selected?'selected':''}`}
       initial={{ opacity:0, x:-6 }} animate={{ opacity:1, x:0 }}>
@@ -240,7 +277,9 @@ function ContactItem({ agent, selected, unread, onSelect, onChat }) {
             {agent.name}
             {agent.is_admin && <span className="db-admin-crown" title="Admin"><i className="fas fa-shield-alt" /></span>}
           </strong>
-          <span className="db-team-role">{agent.role || 'Support'}</span>
+          {agent.role_ids?.length > 0
+            ? <RoleChips roleIds={agent.role_ids} allRoles={allRoles} small />
+            : <span className="db-team-role">{agent.role || 'Support'}</span>}
         </div>
         {unread > 0 && <span className="db-team-unread">{unread}</span>}
       </button>
@@ -289,6 +328,9 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const [unreadTeam, setUnreadTeam]     = useState({})
   const [contactInfo, setContactInfo]   = useState(null)
 
+  /* ── Roles ───────────────────────────────────── */
+  const [roles, setRoles] = useState([])
+
   /* ── Profile modal ───────────────────────────── */
   const [showProfileModal, setShowProfileModal] = useState(false)
 
@@ -308,6 +350,20 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{})
   }, [])
 
+  /* ── Roles ───────────────────────────────────── */
+  useEffect(() => {
+    loadRoles()
+    const ch = supabase.channel('roles-watch')
+      .on('postgres_changes', { event:'*', schema:'public', table:'roles' }, loadRoles)
+      .subscribe()
+    return () => supabase.removeChannel(ch)
+  }, [])
+
+  async function loadRoles() {
+    const { data } = await supabase.from('roles').select('*').order('name')
+    setRoles(data || [])
+  }
+
   /* ── Agents ──────────────────────────────────── */
   useEffect(() => {
     loadAllAgents()
@@ -318,16 +374,28 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   }, [])
 
   async function loadAllAgents() {
-    const { data } = await supabase.from('agents').select('id,name,avatar_url,is_online,role,email,is_admin').order('name')
+    const { data } = await supabase.from('agents').select('id,name,avatar_url,is_online,role,role_ids,email,is_admin,is_owner').order('name')
     const seen = new Set()
     const unique = (data||[]).filter(a => { if (seen.has(a.id)) return false; seen.add(a.id); return true })
     setAllAgents(unique)
     setOnlineAgents(unique.filter(a => a.is_online))
   }
 
-  async function updateAgentRole(agentId, newRole) {
-    await supabase.from('agents').update({ role: newRole }).eq('id', agentId)
-    setAllAgents(prev => prev.map(a => a.id===agentId ? {...a, role:newRole} : a))
+  async function updateAgentRoleIds(agentId, newRoleIds, allRolesData) {
+    // Check if Agent being modified is owner — owner can't lose admin
+    const target = allAgents.find(a => a.id === agentId)
+    if (target?.is_owner && !newRoleIds.includes(allRolesData.find(r => r.name === 'Admin')?.id)) {
+      // Owner always keeps admin — silently add Admin back
+      const adminRole = allRolesData.find(r => r.name.toLowerCase() === 'admin')
+      if (adminRole && !newRoleIds.includes(adminRole.id)) newRoleIds = [...newRoleIds, adminRole.id]
+    }
+    // Cascade: if "Admin" role in newRoleIds → is_admin = true, else false (unless owner)
+    const adminRole = allRolesData.find(r => r.name.toLowerCase() === 'admin')
+    const hasAdminRole = adminRole && newRoleIds.includes(adminRole.id)
+    const newIsAdmin = hasAdminRole || target?.is_owner
+    await supabase.from('agents').update({ role_ids: newRoleIds, is_admin: newIsAdmin }).eq('id', agentId)
+    setAllAgents(prev => prev.map(a => a.id===agentId ? {...a, role_ids:newRoleIds, is_admin:newIsAdmin} : a))
+    setContactInfo(prev => prev?.id===agentId ? {...prev, role_ids:newRoleIds, is_admin:newIsAdmin} : prev)
   }
 
   /* ── Own status ──────────────────────────────── */
@@ -625,7 +693,9 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                           {a.name}
                           {a.is_admin && <span className="db-admin-crown" title="Admin"><i className="fas fa-shield-alt" /></span>}
                         </strong>
-                        <span className={a.is_online?'text-online':'text-offline'}>{a.is_online?'● Online':'○ Offline'}</span>
+                        {a.role_ids?.length > 0
+                          ? <RoleChips roleIds={a.role_ids} allRoles={roles} small />
+                          : <span className={a.is_online?'text-online':'text-offline'}>{a.is_online?'● Online':'○ Offline'}</span>}
                       </div>
                       {unreadTeam[a.id]>0 && <span className="db-team-unread">{unreadTeam[a.id]}</span>}
                     </motion.button>
@@ -648,7 +718,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
               )}
               {onlineAgents.filter(a=>a.id!==agent?.id).map(a => (
                 <ContactItem key={a.id} agent={a} selected={contactInfo?.id===a.id}
-                  unread={unreadTeam[a.id]||0}
+                  unread={unreadTeam[a.id]||0} allRoles={roles}
                   onSelect={() => setContactInfo(prev => prev?.id===a.id ? null : a)}
                   onChat={() => { openTeamChat(a); setNavSection('team') }} />
               ))}
@@ -673,13 +743,16 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                       {contactInfo.name}
                       {contactInfo.is_admin && <span className="db-admin-crown" title="Admin"><i className="fas fa-shield-alt" /></span>}
                     </h3>
-                    {contactInfo.role && (
-                      <span className={`db-contact-role-chip ${contactInfo.is_admin?'admin':''}`}>
-                        {contactInfo.is_admin && <i className="fas fa-shield-alt" />}
-                        {!contactInfo.is_admin && <i className="fas fa-tag" />}
-                        {contactInfo.role}
-                      </span>
-                    )}
+                    {contactInfo.role_ids?.length > 0
+                      ? <RoleChips roleIds={contactInfo.role_ids} allRoles={roles} />
+                      : contactInfo.role && (
+                          <span className={`db-contact-role-chip ${contactInfo.is_admin?'admin':''}`}>
+                            {contactInfo.is_admin && <i className="fas fa-shield-alt" />}
+                            {!contactInfo.is_admin && <i className="fas fa-tag" />}
+                            {contactInfo.role}
+                          </span>
+                        )
+                    }
                     <span className={`db-contact-status-badge ${contactInfo.is_online?'online':'offline'}`}>
                       {contactInfo.is_online ? '● Online' : '○ Offline'}
                     </span>
@@ -688,21 +761,32 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                         <i className="fas fa-envelope" /> {contactInfo.email}
                       </a>
                     )}
-                    {/* Admin: Role assignment */}
-                    {agent?.is_admin && (
+                    {/* Admin: Multi-select role assignment */}
+                    {agent?.is_admin && roles.length > 0 && (
                       <div className="db-contact-role-assign">
-                        <label><i className="fas fa-shield-alt" /> Rolle vergeben</label>
-                        <div className="db-role-chips">
-                          {['Support','Developer','Marketing','Vertrieb','Admin'].map(r => (
-                            <button key={r}
-                              className={`db-role-chip ${contactInfo.role===r?'active':''}`}
-                              onClick={async () => {
-                                await updateAgentRole(contactInfo.id, r)
-                                setContactInfo(prev => ({...prev, role:r}))
-                              }}>
-                              {r}
-                            </button>
-                          ))}
+                        <label><i className="fas fa-shield-alt" /> Rollen vergeben</label>
+                        <div className="db-role-chips-select">
+                          {roles.map(r => {
+                            const isActive = (contactInfo.role_ids || []).includes(r.id)
+                            const isOwnerProtected = contactInfo.is_owner && r.name.toLowerCase() === 'admin'
+                            return (
+                              <button key={r.id}
+                                className={`db-role-chip-btn ${isActive ? 'active' : ''} ${isOwnerProtected ? 'protected' : ''}`}
+                                style={isActive ? { background: r.color + '33', color: r.color, borderColor: r.color } : {}}
+                                title={isOwnerProtected ? 'Owner — kann Admin-Rolle nicht verlieren' : r.name}
+                                onClick={async () => {
+                                  if (isOwnerProtected) return
+                                  const currentIds = contactInfo.role_ids || []
+                                  const newIds = isActive
+                                    ? currentIds.filter(id => id !== r.id)
+                                    : [...currentIds, r.id]
+                                  await updateAgentRoleIds(contactInfo.id, newIds, roles)
+                                }}>
+                                {isOwnerProtected && <i className="fas fa-lock" style={{marginRight:4,fontSize:'0.7rem'}} />}
+                                {r.name}
+                              </button>
+                            )
+                          })}
                         </div>
                       </div>
                     )}
@@ -1028,6 +1112,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
         {showProfileModal && (
           <ProfileModal
             agent={agent}
+            roles={roles}
             onSave={(updated) => { onAgentUpdate(updated); setIsOnline(updated.is_online) }}
             onClose={() => setShowProfileModal(false)}
           />
