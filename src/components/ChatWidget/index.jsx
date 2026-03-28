@@ -3,6 +3,26 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
 import '../../styles/chat.css'
 
+/* ── Content renderer (images + links) ───────────── */
+function renderWidgetContent(content) {
+  if (!content) return null
+  if (content.startsWith('[img]')) {
+    const url = content.slice(5)
+    return (
+      <img src={url} alt="Bild"
+        style={{ maxWidth:'100%', maxHeight:200, borderRadius:8, display:'block', cursor:'pointer' }}
+        onClick={() => window.open(url, '_blank')} />
+    )
+  }
+  const parts = content.split(/(https?:\/\/\S+)/g)
+  return parts.map((part, i) =>
+    /^https?:\/\//.test(part)
+      ? <a key={i} href={part} target="_blank" rel="noreferrer"
+          style={{ color:'#93c5fd', wordBreak:'break-all' }}>{part}</a>
+      : part
+  )
+}
+
 /* ── Session ──────────────────────────────────────── */
 function getSessionId() {
   let id = localStorage.getItem('tl_chat_sid')
@@ -768,7 +788,7 @@ export default function ChatWidget() {
                               : <i className="fas fa-robot" />}
                           </div>
                         )}
-                        <div className="chat-bubble">{msg.content}</div>
+                        <div className="chat-bubble">{renderWidgetContent(msg.content)}</div>
                       </motion.div>
                     ))}
                   </AnimatePresence>

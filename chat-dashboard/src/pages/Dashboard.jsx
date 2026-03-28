@@ -54,11 +54,28 @@ function fmtTime(d) {
   return new Date(d).toLocaleTimeString('de-DE', { hour:'2-digit', minute:'2-digit' })
 }
 
+/* ── Default icon set ────────────────────────────── */
+const AVATAR_ICONS = [
+  'user','user-astronaut','user-ninja','user-secret','user-tie',
+  'robot','ghost','skull','fire','bolt','star','crown',
+  'gamepad','dragon','cat','dog','dove','spider','fish','horse',
+]
+
 /* ── Avatar ──────────────────────────────────────── */
 function Avatar({ agent, size = 36, name }) {
   const displayName = agent?.name || name || '?'
-  if (agent?.avatar_url) return (
-    <img src={agent.avatar_url} alt={displayName}
+  const av = agent?.avatar_url || ''
+  // Icon-based avatar
+  if (av.startsWith('icon:')) {
+    const iconName = av.slice(5)
+    return (
+      <div className="avatar-placeholder" style={{ width:size, height:size, fontSize:size*0.42 }}>
+        <i className={`fas fa-${iconName}`} />
+      </div>
+    )
+  }
+  if (av) return (
+    <img src={av} alt={displayName}
       style={{ width:size, height:size, borderRadius:'50%', objectFit:'cover', flexShrink:0 }} />
   )
   const initials = displayName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()
@@ -87,13 +104,17 @@ function RoleChips({ roleIds, allRoles, small }) {
 }
 
 /* ── Profile Modal ───────────────────────────────── */
-function ProfileModal({ agent, roles, onSave, onClose }) {
-  const [name, setName]           = useState(agent?.name || '')
-  const [saving, setSaving]       = useState(false)
-  const [msg, setMsg]             = useState('')
+function ProfileModal({ agent, roles, onSave, onClose, onUpdateRoleIds }) {
+  const [name, setName]             = useState(agent?.name || '')
+  const [saving, setSaving]         = useState(false)
+  const [msg, setMsg]               = useState('')
   const [avatarFile, setAvatarFile] = useState(null)
   const [avatarPreview, setAvatarPreview] = useState(agent?.avatar_url || null)
   const [localOnline, setLocalOnline] = useState(!!agent?.is_online)
+  const [showIconPicker, setShowIconPicker] = useState(false)
+  const [selectedIcon, setSelectedIcon] = useState(
+    agent?.avatar_url?.startsWith('icon:') ? agent.avatar_url.slice(5) : null
+  )
   const avatarRef = useRef(null)
 
   async function toggleOnlineStatus() {
@@ -103,11 +124,25 @@ function ProfileModal({ agent, roles, onSave, onClose }) {
     onSave({ ...agent, name: name.trim() || agent.name, is_online: next })
   }
 
+  function pickIcon(icon) {
+    setSelectedIcon(icon)
+    setAvatarFile(null)
+    setAvatarPreview('icon:' + icon)
+    setShowIconPicker(false)
+  }
+
+  function pickPhoto() {
+    setShowIconPicker(false)
+    avatarRef.current?.click()
+  }
+
   async function save() {
     if (!name.trim()) return
     setSaving(true); setMsg('')
     let avatar_url = agent?.avatar_url
-    if (avatarFile) {
+    if (avatarPreview?.startsWith('icon:')) {
+      avatar_url = avatarPreview
+    } else if (avatarFile) {
       const ext = avatarFile.name.split('.').pop()
       const path = `avatars/${agent.id}.${ext}`
       await supabase.storage.from('agent-avatars').upload(path, avatarFile, { upsert: true })
@@ -125,7 +160,17 @@ function ProfileModal({ agent, roles, onSave, onClose }) {
   }
 
   const initials = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase() || '?'
-  const myRoles = (agent?.role_ids || []).map(id => roles?.find(r => r.id === id)).filter(Boolean)
+  const myRoleIds = agent?.role_ids || []
+  const myRoles = myRoleIds.map(id => roles?.find(r => r.id === id)).filter(Boolean)
+
+  function renderAvatarPreview() {
+    if (avatarPreview?.startsWith('icon:')) {
+      const icon = avatarPreview.slice(5)
+      return <div className="avatar-placeholder pm-avatar-initials" style={{fontSize:'2rem'}}><i className={`fas fa-${icon}`} /></div>
+    }
+    if (avatarPreview) return <img src={avatarPreview} alt="Avatar" />
+    return <div className="avatar-placeholder pm-avatar-initials">{initials}</div>
+  }
 
   return (
     <div className="pm-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
@@ -135,14 +180,27 @@ function ProfileModal({ agent, roles, onSave, onClose }) {
           <button className="pm-close" onClick={onClose}><i className="fas fa-times" /></button>
         </div>
         <div className="pm-avatar-area">
-          <div className="pm-avatar-preview" onClick={() => avatarRef.current?.click()}>
-            {avatarPreview
-              ? <img src={avatarPreview} alt="Avatar" />
-              : <div className="avatar-placeholder pm-avatar-initials">{initials}</div>}
-            <div className="pm-avatar-overlay"><i className="fas fa-camera" /> Foto ändern</div>
+          <div className="pm-avatar-preview" onClick={() => setShowIconPicker(v => !v)}>
+            {renderAvatarPreview()}
+            <div className="pm-avatar-overlay"><i className="fas fa-camera" /> Ändern</div>
           </div>
           <input ref={avatarRef} type="file" accept="image/*" style={{ display:'none' }}
-            onChange={e => { const f = e.target.files[0]; if(!f) return; setAvatarFile(f); setAvatarPreview(URL.createObjectURL(f)) }} />
+            onChange={e => { const f = e.target.files[0]; if(!f) return; setAvatarFile(f); setAvatarPreview(URL.createObjectURL(f)); setSelectedIcon(null) }} />
+          {showIconPicker && (
+            <div className="pm-icon-picker">
+              <button className="pm-icon-picker-photo" onClick={pickPhoto}>
+                <i className="fas fa-camera" /> Foto hochladen
+              </button>
+              <div className="pm-icon-grid">
+                {AVATAR_ICONS.map(ic => (
+                  <button key={ic} className={`pm-icon-btn ${selectedIcon===ic?'active':''}`}
+                    onClick={() => pickIcon(ic)} title={ic}>
+                    <i className={`fas fa-${ic}`} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           {agent?.is_admin ? (
             <button className={`pm-online-badge toggleable ${localOnline ? 'online' : ''}`}
               onClick={toggleOnlineStatus} title="Status umschalten">
@@ -162,7 +220,35 @@ function ProfileModal({ agent, roles, onSave, onClose }) {
             <label>Name</label>
             <input value={name} onChange={e => setName(e.target.value)} placeholder="Dein Name" />
           </div>
-          {myRoles.length > 0 && (
+          {/* Self role assignment for admins */}
+          {agent?.is_admin && roles?.length > 0 && (
+            <div className="pm-field">
+              <label>Rollen</label>
+              <div className="pm-roles-display">
+                {roles.map(r => {
+                  const isActive = myRoleIds.includes(r.id)
+                  const isProtected = agent?.is_owner && r.name.toLowerCase() === 'admin'
+                  return (
+                    <button key={r.id}
+                      className={`db-role-chip-btn ${isActive ? 'active' : ''} ${isProtected ? 'protected' : ''}`}
+                      style={isActive ? { background: r.color + '33', color: r.color, borderColor: r.color } : {}}
+                      onClick={async () => {
+                        if (isProtected) return
+                        const newIds = isActive
+                          ? myRoleIds.filter(id => id !== r.id)
+                          : [...myRoleIds, r.id]
+                        if (onUpdateRoleIds) await onUpdateRoleIds(agent.id, newIds, roles)
+                      }}>
+                      {isProtected && <i className="fas fa-lock" style={{marginRight:4,fontSize:'0.7rem'}} />}
+                      {r.name}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+          {/* Non-admin: show roles read-only */}
+          {!agent?.is_admin && myRoles.length > 0 && (
             <div className="pm-field">
               <label>Rollen</label>
               <div className="pm-roles-display">
@@ -216,7 +302,10 @@ function Section({ title, count, accent, open, onToggle, children }) {
         <span className={`db-section-dot ${accent}`} />
         <i className={`fas fa-${icons[accent]||'circle'} db-section-icon`} />
         <span className="db-section-title">{title}</span>
-        {count > 0 && <span className={`db-section-badge ${accent}`}>{count}</span>}
+        <span className="db-section-spacer" />
+        {count > 0 && (
+          <span className={`db-section-dot-badge ${accent}`}>{count > 9 ? '9+' : count}</span>
+        )}
         <i className={`fas fa-chevron-${open?'up':'down'} db-section-arrow`} />
       </button>
       <AnimatePresence initial={false}>
@@ -425,6 +514,37 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     return () => supabase.removeChannel(ch)
   }, [agent]) // eslint-disable-line
 
+  /* ── Global unread message tracker ───────────── */
+  useEffect(() => {
+    if (!agent?.id) return
+    const ch = supabase.channel('global-msgs-unread')
+      .on('postgres_changes', { event:'INSERT', schema:'public', table:'messages' }, (payload) => {
+        const msg = payload.new
+        if (msg.sender_type === 'agent' || msg.sender_type === 'note' || msg.sender_type === 'system') return
+        // Only count if not currently viewing this conversation
+        setUnreadCounts(prev => {
+          const convId = msg.conversation_id
+          // activeConv ref is stale in closures, so use functional update
+          return prev
+        })
+        // Use a custom event to check active conv from outside closure
+        window.dispatchEvent(new CustomEvent('new-customer-msg', { detail: { convId: msg.conversation_id } }))
+      }).subscribe()
+    return () => supabase.removeChannel(ch)
+  }, [agent?.id])
+
+  useEffect(() => {
+    function handleNewMsg(e) {
+      const { convId } = e.detail
+      setUnreadCounts(prev => {
+        if (activeConv?.id === convId) return prev
+        return { ...prev, [convId]: (prev[convId] || 0) + 1 }
+      })
+    }
+    window.addEventListener('new-customer-msg', handleNewMsg)
+    return () => window.removeEventListener('new-customer-msg', handleNewMsg)
+  }, [activeConv?.id])
+
   async function loadConversations() {
     const { data } = await supabase.from('conversations').select('*, agents(*)')
       .in('status',['waiting','active']).order('last_message_at',{ascending:false})
@@ -609,10 +729,10 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           <img src="/icon-192.png" alt="TL" />
         </div>
         <div className="db-rail-items">
-          <NavBtn icon="comments" label="Chats" active={navSection==='chats'}
+          <NavBtn icon="headset" label="Support" active={navSection==='chats'}
             badge={totalUnread+waitingList.length}
             onClick={() => { setNavSection('chats'); setMobileShowChat(false) }} />
-          <NavBtn icon="user-friends" label="Team" active={navSection==='team'}
+          <NavBtn icon="comments" label="Intern" active={navSection==='team'}
             badge={totalTeamUnread}
             onClick={() => { setNavSection('team'); setMobileShowChat(false) }} />
           <NavBtn icon="address-book" label="Kontakte" active={navSection==='contacts'}
@@ -693,9 +813,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                           {a.name}
                           {a.is_admin && <span className="db-admin-crown" title="Admin"><i className="fas fa-shield-alt" /></span>}
                         </strong>
-                        {a.role_ids?.length > 0
-                          ? <RoleChips roleIds={a.role_ids} allRoles={roles} small />
-                          : <span className={a.is_online?'text-online':'text-offline'}>{a.is_online?'● Online':'○ Offline'}</span>}
+                        <span className={a.is_online?'text-online':'text-offline'}>{a.is_online?'● Online':'○ Offline'}</span>
                       </div>
                       {unreadTeam[a.id]>0 && <span className="db-team-unread">{unreadTeam[a.id]}</span>}
                     </motion.button>
@@ -1087,12 +1205,12 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
       {/* MOBILE BOTTOM NAV */}
       <nav className="db-mobile-nav">
         <button className={mobileTab==='chats'&&!mobileShowChat?'active':''} onClick={() => {setMobileTab('chats');setNavSection('chats');setMobileShowChat(false)}}>
-          <div className="db-nav-icon-wrap"><i className="fas fa-comments" />{(totalUnread+waitingList.length)>0&&<span className="db-nav-badge">{totalUnread+waitingList.length}</span>}</div>
-          <span>Chats</span>
+          <div className="db-nav-icon-wrap"><i className="fas fa-headset" />{(totalUnread+waitingList.length)>0&&<span className="db-nav-badge">{totalUnread+waitingList.length}</span>}</div>
+          <span>Support</span>
         </button>
         <button className={mobileTab==='team'&&!mobileShowChat?'active':''} onClick={() => {setMobileTab('team');setNavSection('team');setMobileShowChat(false)}}>
-          <div className="db-nav-icon-wrap"><i className="fas fa-user-friends" />{totalTeamUnread>0&&<span className="db-nav-badge">{totalTeamUnread}</span>}</div>
-          <span>Team</span>
+          <div className="db-nav-icon-wrap"><i className="fas fa-comments" />{totalTeamUnread>0&&<span className="db-nav-badge">{totalTeamUnread}</span>}</div>
+          <span>Intern</span>
         </button>
         <button className={mobileTab==='contacts'&&!mobileShowChat?'active':''} onClick={() => {setMobileTab('contacts');setNavSection('contacts');setMobileShowChat(false)}}>
           <div className="db-nav-icon-wrap"><i className="fas fa-address-book" /></div>
@@ -1115,6 +1233,10 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
             roles={roles}
             onSave={(updated) => { onAgentUpdate(updated); setIsOnline(updated.is_online) }}
             onClose={() => setShowProfileModal(false)}
+            onUpdateRoleIds={async (id, newIds, allRoles) => {
+              await updateAgentRoleIds(id, newIds, allRoles)
+              onAgentUpdate({ ...agent, role_ids: newIds })
+            }}
           />
         )}
       </AnimatePresence>
