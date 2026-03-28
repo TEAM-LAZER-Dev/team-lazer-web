@@ -366,12 +366,6 @@ footer {
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
   .footer-brand { grid-column: 1 / -1; }
   .footer-brand p { max-width: 100%; }
-  /* Navbar: always frosted on mobile so it's always legible */
-  .navbar {
-    background: rgba(5,0,10,0.92);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 1px 0 rgba(255,255,255,0.05);
-  }
   /* Better nav container spacing on mobile */
   .nav-container { padding: 0 18px; gap: 12px; }
   .nav-logo { gap: 8px; }
