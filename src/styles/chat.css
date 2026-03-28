@@ -438,6 +438,140 @@
 }
 .chat-footer-brand strong { color: rgba(255,255,255,0.35); }
 
+/* ── Header Actions (live phase) ─────────────────── */
+.chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.chat-end-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.3);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 4px 7px;
+  border-radius: 6px;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chat-end-btn:hover {
+  color: #f87171;
+  background: rgba(248,113,113,0.1);
+}
+/* Header when chat is closed */
+.chat-header-closed .chat-online-dot {
+  background: rgba(255,255,255,0.2);
+  animation: none;
+}
+
+/* ── End Chat Confirm Bar ────────────────────────── */
+.chat-end-confirm {
+  padding: 10px 14px;
+  border-top: 1px solid rgba(248,113,113,0.2);
+  background: rgba(248,113,113,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.chat-end-confirm span {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.65);
+  flex: 1;
+}
+.chat-end-confirm-btns {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+.chat-end-confirm-yes {
+  padding: 6px 13px;
+  border-radius: 8px;
+  border: none;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.chat-end-confirm-yes:hover { background: #dc2626; }
+.chat-end-confirm-no {
+  padding: 6px 13px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.chat-end-confirm-no:hover { background: rgba(255,255,255,0.06); color: #fff; }
+
+/* ── Closed Screen ───────────────────────────────── */
+.chat-closed-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 28px 24px;
+  text-align: center;
+}
+.chat-closed-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(74,222,128,0.12);
+  border: 2px solid rgba(74,222,128,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  color: #4ade80;
+}
+.chat-closed-title,
+.chat-closed-screen h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+.chat-closed-sub,
+.chat-closed-screen p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.55;
+  margin: 0;
+  max-width: 240px;
+}
+.chat-restart-btn {
+  margin-top: 4px;
+  padding: 10px 22px;
+  border-radius: 12px;
+  border: 1px solid rgba(124,58,237,0.35);
+  background: rgba(124,58,237,0.12);
+  color: #c4b5fd;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chat-restart-btn:hover {
+  background: rgba(124,58,237,0.22);
+  border-color: rgba(124,58,237,0.55);
+  color: #fff;
+}
+
 /* ── Mobile ──────────────────────────────────────── */
 @media (max-width: 480px) {
   .chat-window {

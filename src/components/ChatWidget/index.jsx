@@ -24,7 +24,6 @@ function Avatar({ agent, size = 36 }) {
 }
 
 /* ── Connecting / Agent-Joined Animation ─────────── */
-// Einfach: reagiert nur auf agent-Prop, kein callback nötig
 function ConnectingScreen({ agent }) {
   return (
     <div className="chat-connecting-screen">
@@ -42,7 +41,7 @@ function ConnectingScreen({ agent }) {
                 <i className="fas fa-comments" />
               </div>
             </div>
-            <p className="connecting-label">Verbinde mit Team Lazer…</p>
+            <p className="connecting-label">Verbinde mit TEAM LAZER…</p>
             <div className="typing-dots"><span /><span /><span /></div>
           </motion.div>
         ) : (
@@ -87,11 +86,40 @@ function TypingIndicator() {
   )
 }
 
+/* ── Chat Beendet Screen ─────────────────────────── */
+function ClosedScreen({ byUser, onRestart }) {
+  return (
+    <motion.div className="chat-closed-screen"
+      initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+      <motion.div className="chat-closed-icon"
+        initial={{ scale: 0 }} animate={{ scale: 1 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 18, delay: 0.15 }}>
+        <i className="fas fa-check-circle" />
+      </motion.div>
+      <motion.h3 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+        Chat beendet
+      </motion.h3>
+      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 }}>
+        {byUser
+          ? 'Du hast den Chat beendet. Danke für deine Nachricht!'
+          : 'Das Team hat den Chat beendet. Danke für dein Vertrauen!'
+        }
+      </motion.p>
+      <motion.button className="chat-restart-btn" onClick={onRestart}
+        initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+        <i className="fas fa-redo" /> Neuen Chat starten
+      </motion.button>
+    </motion.div>
+  )
+}
+
 /* ── Main Widget ──────────────────────────────────── */
 export default function ChatWidget() {
   const [isOpen, setIsOpen]             = useState(false)
   const [phase, setPhase]               = useState('bot')
   const [hasUnread, setHasUnread]       = useState(false)
+  const [closedByUser, setClosedByUser] = useState(false)
+  const [showEndConfirm, setShowEndConfirm] = useState(false)
 
   // Bot
   const [botMessages, setBotMessages]   = useState([])
@@ -112,7 +140,7 @@ export default function ChatWidget() {
   const sessionId   = useRef(getSessionId())
   const channelRef  = useRef(null)
   const pollRef     = useRef(null)
-  const handledRef  = useRef(false) // verhindert doppelte Übernahme-Logik
+  const handledRef  = useRef(false)
   const botStarted  = useRef(false)
   const endRef      = useRef(null)
   const nameRef     = useRef(null)
@@ -128,11 +156,20 @@ export default function ChatWidget() {
         .from('conversations')
         .select('*, agents(*)')
         .eq('session_id', sessionId.current)
-        .neq('status', 'closed')
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
       if (!conv) return
+
+      // Bereits geschlossen → closed screen zeigen
+      if (conv.status === 'closed') {
+        botStarted.current = true
+        setConvId(conv.id)
+        setUserName(conv.user_name)
+        setClosedByUser(false)
+        setPhase('closed')
+        return
+      }
 
       const { data: msgs } = await supabase
         .from('messages').select('*')
@@ -215,7 +252,7 @@ export default function ChatWidget() {
     const botMsgs = botMessages.map(m => ({
       conversation_id: conv.id,
       sender_type: m.from === 'bot' ? 'bot' : 'user',
-      sender_name: m.from === 'bot' ? 'Team Lazer Bot' : name,
+      sender_name: m.from === 'bot' ? 'TEAM LAZER Bot' : name,
       content: m.text,
     }))
     if (botMsgs.length > 0) await supabase.from('messages').insert(botMsgs)
@@ -226,10 +263,9 @@ export default function ChatWidget() {
 
   /* ── Wenn Agent übernimmt ──────────────────────── */
   async function onAgentJoined(agentId, cid, agentData = null) {
-    if (handledRef.current) return   // schon behandelt
+    if (handledRef.current) return
     handledRef.current = true
     clearInterval(pollRef.current)
-    // NICHT die Subscription entfernen — die brauchen wir für Live-Nachrichten!
 
     const ag = agentData || (await supabase.from('agents').select('*').eq('id', agentId).single()).data
     if (!ag) return
@@ -240,6 +276,43 @@ export default function ChatWidget() {
 
     setAgent(ag)
     setTimeout(() => setPhase('live'), 2800)
+  }
+
+  /* ── Chat beenden (vom Kunden) ─────────────────── */
+  async function endChatByUser() {
+    setShowEndConfirm(false)
+    if (convId) {
+      await supabase.from('conversations').update({ status: 'closed' }).eq('id', convId)
+    }
+    clearInterval(pollRef.current)
+    if (channelRef.current) supabase.removeChannel(channelRef.current)
+    setClosedByUser(true)
+    setPhase('closed')
+  }
+
+  /* ── Neuen Chat starten ────────────────────────── */
+  function restartChat() {
+    localStorage.removeItem('tl_chat_sid')
+    sessionId.current = crypto.randomUUID()
+    localStorage.setItem('tl_chat_sid', sessionId.current)
+    clearInterval(pollRef.current)
+    if (channelRef.current) supabase.removeChannel(channelRef.current)
+    // Reset all state
+    setPhase('bot')
+    setBotMessages([])
+    setCurrentStep(null)
+    setShowTyping(false)
+    setShowOptions(false)
+    setNameInput('')
+    setUserName('')
+    setConvId(null)
+    setLiveMessages([])
+    setLiveInput('')
+    setAgent(null)
+    setClosedByUser(false)
+    setShowEndConfirm(false)
+    handledRef.current = false
+    botStarted.current = false
   }
 
   /* ── Realtime subscription ─────────────────────── */
@@ -254,6 +327,13 @@ export default function ChatWidget() {
         const c = payload.new
         if (c.status === 'active' && c.assigned_agent_id) {
           onAgentJoined(c.assigned_agent_id, cid)
+        }
+        // Team hat den Chat beendet
+        if (c.status === 'closed') {
+          clearInterval(pollRef.current)
+          setClosedByUser(false)
+          setPhase('closed')
+          setIsOpen(true) // Widget öffnen damit User es sieht
         }
       })
       .on('postgres_changes', {
@@ -271,7 +351,7 @@ export default function ChatWidget() {
     channelRef.current = ch
   }
 
-  /* ── Polling fallback (kein stale closure durch ref) ── */
+  /* ── Polling fallback ──────────────────────────── */
   function startPolling(cid) {
     clearInterval(pollRef.current)
     pollRef.current = setInterval(async () => {
@@ -307,8 +387,10 @@ export default function ChatWidget() {
 
   function toggle() { setIsOpen(v => !v); setHasUnread(false) }
 
-  const headerName   = agent ? agent.name : 'Team Lazer'
-  const headerStatus = agent ? 'Online' : phase === 'connecting' ? 'Verbinde…' : 'Bot'
+  const headerName   = agent ? agent.name : 'TEAM LAZER'
+  const headerStatus = phase === 'closed' ? 'Chat beendet'
+                     : agent ? 'Online'
+                     : phase === 'connecting' ? 'Verbinde…' : 'Bot'
 
   /* ── Render ────────────────────────────────────── */
   return (
@@ -337,22 +419,49 @@ export default function ChatWidget() {
             transition={{ duration: 0.22, ease: 'easeOut' }}>
 
             {/* Header */}
-            <div className="chat-header">
+            <div className={`chat-header ${phase === 'closed' ? 'chat-header-closed' : ''}`}>
               <div className="chat-header-left">
                 <div className="chat-header-avatar">
                   {agent
                     ? <Avatar agent={agent} size={38} />
-                    : <div className="chat-header-bot-icon"><i className="fas fa-robot" /></div>
+                    : <div className="chat-header-bot-icon">
+                        <i className={phase === 'closed' ? 'fas fa-check-circle' : 'fas fa-robot'} />
+                      </div>
                   }
-                  <span className="chat-online-dot" />
+                  {phase !== 'closed' && <span className="chat-online-dot" />}
                 </div>
                 <div className="chat-header-info">
                   <strong>{headerName}</strong>
                   <span>{headerStatus}</span>
                 </div>
               </div>
-              <button className="chat-header-close" onClick={toggle}><i className="fas fa-times" /></button>
+              <div className="chat-header-actions">
+                {/* "Chat beenden" Button — nur im Live-Chat */}
+                {phase === 'live' && !showEndConfirm && (
+                  <button className="chat-end-btn" onClick={() => setShowEndConfirm(true)} title="Chat beenden">
+                    <i className="fas fa-phone-slash" />
+                  </button>
+                )}
+                <button className="chat-header-close" onClick={toggle}>
+                  <i className="fas fa-times" />
+                </button>
+              </div>
             </div>
+
+            {/* Bestätigungs-Dialog "Chat wirklich beenden?" */}
+            <AnimatePresence>
+              {showEndConfirm && (
+                <motion.div className="chat-end-confirm"
+                  initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}>
+                  <span><i className="fas fa-exclamation-triangle" /> Chat wirklich beenden?</span>
+                  <div className="chat-end-confirm-btns">
+                    <button className="chat-end-confirm-yes" onClick={endChatByUser}>Ja, beenden</button>
+                    <button className="chat-end-confirm-no" onClick={() => setShowEndConfirm(false)}>Abbrechen</button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <div className="chat-body">
               {/* BOT */}
@@ -437,6 +546,11 @@ export default function ChatWidget() {
                   <div ref={liveRef} />
                 </div>
               )}
+
+              {/* CLOSED */}
+              {phase === 'closed' && (
+                <ClosedScreen byUser={closedByUser} onRestart={restartChat} />
+              )}
             </div>
 
             {phase === 'live' && (
@@ -450,8 +564,8 @@ export default function ChatWidget() {
               </form>
             )}
 
-            {phase !== 'live' && (
-              <div className="chat-footer-brand">Powered by <strong>Team Lazer</strong></div>
+            {(phase !== 'live' && phase !== 'closed') && (
+              <div className="chat-footer-brand">Powered by <strong>TEAM LAZER</strong></div>
             )}
           </motion.div>
         )}
