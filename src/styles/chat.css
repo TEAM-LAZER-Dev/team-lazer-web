@@ -445,21 +445,25 @@
   gap: 6px;
 }
 .chat-end-btn {
-  background: none;
-  border: none;
-  color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.45);
   cursor: pointer;
-  font-size: 0.9rem;
-  padding: 4px 7px;
-  border-radius: 6px;
+  font-size: 0.73rem;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 7px;
   transition: 0.2s;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 5px;
+  letter-spacing: 0.2px;
 }
+.chat-end-btn i { font-size: 0.8rem; }
 .chat-end-btn:hover {
   color: #f87171;
   background: rgba(248,113,113,0.1);
+  border-color: rgba(248,113,113,0.25);
 }
 /* Header when chat is closed */
 .chat-header-closed .chat-online-dot {

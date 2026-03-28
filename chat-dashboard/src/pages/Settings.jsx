@@ -82,7 +82,7 @@ export default function Settings({ agent, onAgentUpdate }) {
 
     const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY
     if (!vapidKey) {
-      setPushMsg('VITE_VAPID_PUBLIC_KEY nicht gesetzt. Siehe Setup-Anleitung.')
+      setPushMsg('Env Var ist gesetzt — bitte einen neuen Deploy in Netlify auslösen (Site → Deploys → Trigger deploy), damit der Build den Key einbettet.')
       return
     }
 
@@ -395,18 +395,6 @@ export default function Settings({ agent, onAgentUpdate }) {
               <p className={`push-msg ${pushMsg.startsWith('✓') ? 'ok' : ''}`}>{pushMsg}</p>
             )}
 
-            <div className="settings-info-box" style={{ marginTop: '14px', marginBottom: 0 }}>
-              <i className="fas fa-info-circle" />
-              <div>
-                <strong>Setup erforderlich</strong>
-                <p>
-                  Einmalig VAPID-Keys generieren und als Netlify Env Vars setzen:<br />
-                  <code>VAPID_PUBLIC_KEY</code>, <code>VAPID_PRIVATE_KEY</code>, <code>VAPID_EMAIL</code>, <code>DASHBOARD_URL</code><br />
-                  Außerdem <code>VITE_VAPID_PUBLIC_KEY</code> für den Build.<br />
-                  Dann Supabase Webhook auf <code>/api/notify-push</code> zeigen lassen.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
 

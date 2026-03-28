@@ -135,7 +135,13 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
             }
           }
           // Status closed → aus Liste entfernen, history neu laden
-          if (payload.new?.status === 'closed') loadHistory()
+          if (payload.new?.status === 'closed') {
+            loadHistory()
+            // Falls der Agente gerade diese Konversation offen hat → Status aktualisieren
+            setActiveConv(prev =>
+              prev?.id === payload.new.id ? { ...prev, status: 'closed' } : prev
+            )
+          }
         })
       .subscribe()
     return () => supabase.removeChannel(ch)
@@ -204,8 +210,8 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   /* ── Close conversation ──────────────────────── */
   async function closeConv(convId) {
     await supabase.from('conversations').update({ status:'closed' }).eq('id', convId)
-    setActiveConv(null)
-    setMessages([])
+    // Sofort im UI als geschlossen markieren → "Chat wurde beendet" Banner erscheint
+    setActiveConv(prev => prev?.id === convId ? { ...prev, status: 'closed' } : prev)
     setMobileShowChat(false)
     if (channelRef.current) { supabase.removeChannel(channelRef.current); channelRef.current = null }
     loadConversations()

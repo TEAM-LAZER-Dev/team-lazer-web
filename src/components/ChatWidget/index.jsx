@@ -438,8 +438,9 @@ export default function ChatWidget() {
               <div className="chat-header-actions">
                 {/* "Chat beenden" Button — nur im Live-Chat */}
                 {phase === 'live' && !showEndConfirm && (
-                  <button className="chat-end-btn" onClick={() => setShowEndConfirm(true)} title="Chat beenden">
-                    <i className="fas fa-phone-slash" />
+                  <button className="chat-end-btn" onClick={() => setShowEndConfirm(true)}>
+                    <i className="fas fa-times-circle" />
+                    <span>Beenden</span>
                   </button>
                 )}
                 <button className="chat-header-close" onClick={toggle}>
