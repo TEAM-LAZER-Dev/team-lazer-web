@@ -131,7 +131,12 @@ function ProfileModal({ agent, onSave, onClose }) {
           </div>
           <div className="pm-field">
             <label>Aufgabenbereich</label>
-            <input value={role} onChange={e => setRole(e.target.value)} placeholder="z.B. Support, Developer, Marketing…" />
+            <input value={role}
+              onChange={e => agent?.is_admin ? setRole(e.target.value) : undefined}
+              placeholder="z.B. Support, Developer, Marketing…"
+              readOnly={!agent?.is_admin}
+              className={!agent?.is_admin ? 'pm-disabled' : ''}
+              title={!agent?.is_admin ? 'Nur Admins können Rollen ändern' : ''} />
           </div>
           {agent?.email && (
             <div className="pm-field">
@@ -231,7 +236,10 @@ function ContactItem({ agent, selected, unread, onSelect, onChat }) {
           <span className={`db-online-dot-sm ${agent.is_online?'online':''}`} />
         </div>
         <div className="db-team-info">
-          <strong>{agent.name}</strong>
+          <strong>
+            {agent.name}
+            {agent.is_admin && <span className="db-admin-crown" title="Admin"><i className="fas fa-shield-alt" /></span>}
+          </strong>
           <span className="db-team-role">{agent.role || 'Support'}</span>
         </div>
         {unread > 0 && <span className="db-team-unread">{unread}</span>}
@@ -547,6 +555,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
             <div className={`db-rail-status ${isOnline?'online':''}`} />
             <Avatar agent={agent} size={32} />
           </div>
+          <NavBtn icon="cog" label="Einst." onClick={() => navigate('/settings')} />
           <NavBtn icon="sign-out-alt" label="Logout" danger onClick={logout} />
         </div>
       </nav>
