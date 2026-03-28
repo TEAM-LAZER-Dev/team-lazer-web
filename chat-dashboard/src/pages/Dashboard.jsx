@@ -73,6 +73,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const [quickReplies, setQuickReplies] = useState([])
   const [showQR, setShowQR]         = useState(false)
   const [unreadCounts, setUnreadCounts] = useState({})
+  const [onlineAgents, setOnlineAgents] = useState([])
 
   const endRef      = useRef(null)
   const channelRef  = useRef(null)
@@ -96,6 +97,21 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
       .subscribe()
     return () => supabase.removeChannel(ch)
   }, [])
+
+  /* ── Online Agents ───────────────────────────── */
+  useEffect(() => {
+    loadOnlineAgents()
+    const ch = supabase.channel('agents-online')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'agents' },
+        () => loadOnlineAgents())
+      .subscribe()
+    return () => supabase.removeChannel(ch)
+  }, [])
+
+  async function loadOnlineAgents() {
+    const { data } = await supabase.from('agents').select('id, name, avatar_url, is_online').eq('is_online', true)
+    setOnlineAgents(data || [])
+  }
 
   async function loadQuickReplies() {
     const { data } = await supabase.from('quick_replies').select('*').order('sort_order')
@@ -218,6 +234,15 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     loadHistory()
   }
 
+  /* ── Delete conversation (history) ──────────── */
+  async function deleteConv(convId, e) {
+    e.stopPropagation()
+    await supabase.from('messages').delete().eq('conversation_id', convId)
+    await supabase.from('conversations').delete().eq('id', convId)
+    setHistory(prev => prev.filter(c => c.id !== convId))
+    if (activeConv?.id === convId) { setActiveConv(null); setMessages([]) }
+  }
+
   /* ── Send message ────────────────────────────── */
   async function sendMessage(e) {
     e?.preventDefault()
@@ -304,6 +329,19 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           </button>
         </div>
 
+        {/* Online Team */}
+        {onlineAgents.length > 0 && (
+          <div className="db-online-team">
+            <span className="db-online-label">Online</span>
+            {onlineAgents.map(a => (
+              <div key={a.id} className="db-online-agent" title={a.name}>
+                <Avatar agent={a} size={24} />
+                <span className="db-online-dot-sm" />
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Conversation list */}
         <div className="db-conv-list">
           <AnimatePresence initial={false}>
@@ -339,6 +377,11 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                     {conv.agents && <span className="db-conv-agent">→ {conv.agents.name}</span>}
                   </div>
                 </div>
+                {activeTab === 'history' && (
+                  <button className="db-conv-delete" onClick={e => deleteConv(conv.id, e)} title="Löschen">
+                    <i className="fas fa-trash" />
+                  </button>
+                )}
               </motion.div>
             ))}
           </AnimatePresence>
@@ -388,6 +431,11 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                     <i className="fas fa-headset" /> Übernehmen
                   </button>
                 )}
+                {activeConv.status === 'active' && activeConv.assigned_agent_id && activeConv.assigned_agent_id !== agent?.id && (
+                  <span className="db-locked-badge">
+                    <i className="fas fa-lock" /> Besetzt
+                  </span>
+                )}
                 {activeConv.status !== 'closed' && (
                   <button className="db-end-btn" onClick={() => closeConv(activeConv.id)} title="Chat beenden">
                     <i className="fas fa-times-circle" /> Beenden
@@ -399,6 +447,8 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
             {/* Messages */}
             <div className="db-messages">
               {messages.map((msg, i) => {
+                const isOutgoing = msg.sender_type === 'agent'
+                const isBot = msg.sender_type === 'bot'
                 const showDate = i === 0 || new Date(messages[i-1].created_at).toDateString() !== new Date(msg.created_at).toDateString()
                 return (
                   <div key={msg.id}>
@@ -407,17 +457,32 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                         {new Date(msg.created_at).toLocaleDateString('de-DE', { weekday:'short', day:'2-digit', month:'2-digit' })}
                       </div>
                     )}
-                    <motion.div className={`db-msg ${msg.sender_type}`}
+                    <motion.div className={`db-msg-row ${isOutgoing ? 'outgoing' : 'incoming'}`}
                       initial={{ opacity:0, y:5 }} animate={{ opacity:1, y:0 }}>
-                      <div className="db-msg-header">
-                        <span className="db-msg-sender">
-                          {msg.sender_type === 'user'  ? activeConv.user_name
-                          :msg.sender_type === 'bot'   ? '🤖 Bot'
-                          :msg.sender_name || 'Agent'}
-                        </span>
-                        <span className="db-msg-time">{fmtTime(msg.created_at)}</span>
+                      {!isOutgoing && (
+                        <div className="db-msg-avatar-sm">
+                          {isBot
+                            ? <span title="Bot">🤖</span>
+                            : <div className="db-msg-user-dot">{(activeConv.user_name?.[0] || '?').toUpperCase()}</div>
+                          }
+                        </div>
+                      )}
+                      <div className="db-msg-content">
+                        <div className="db-msg-meta">
+                          <span className="db-msg-sender">
+                            {msg.sender_type === 'user' ? activeConv.user_name
+                            : msg.sender_type === 'bot' ? 'Bot'
+                            : msg.sender_name || agent?.name || 'Agent'}
+                          </span>
+                          <span className="db-msg-time">{fmtTime(msg.created_at)}</span>
+                        </div>
+                        <div className={`db-msg-bubble ${isOutgoing ? 'out' : 'in'}`}>{msg.content}</div>
                       </div>
-                      <div className="db-msg-bubble">{msg.content}</div>
+                      {isOutgoing && (
+                        <div className="db-msg-avatar-sm">
+                          <Avatar agent={agent} size={26} />
+                        </div>
+                      )}
                     </motion.div>
                   </div>
                 )

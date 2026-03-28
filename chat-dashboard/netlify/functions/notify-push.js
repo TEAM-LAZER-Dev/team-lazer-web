@@ -57,11 +57,12 @@ exports.handler = async (event) => {
   }
 
   const userName = record.user_name || 'Ein Besucher'
+  const topic    = record.user_topic ? ` · "${record.user_topic.slice(0,60)}"` : ''
   const dashUrl  = DASHBOARD_URL || 'https://chat.team-lazer.de'
 
   const payload = JSON.stringify({
-    title: `Neuer Chat! 💬`,
-    body:  `${userName} wartet auf Antwort`,
+    title: `💬 Kunde wartet — ${userName}`,
+    body:  `Wartet auf Antwort${topic}`,
     url:   dashUrl
   })
 

@@ -82,7 +82,7 @@ export default function Settings({ agent, onAgentUpdate }) {
 
     const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY
     if (!vapidKey) {
-      setPushMsg('Env Var ist gesetzt — bitte einen neuen Deploy in Netlify auslösen (Site → Deploys → Trigger deploy), damit der Build den Key einbettet.')
+      // Env Var noch nicht im Build — nach Netlify-Redeploy behoben
       return
     }
 
