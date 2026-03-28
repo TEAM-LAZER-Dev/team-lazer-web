@@ -72,13 +72,15 @@ export default function Home() {
                 <span className="hero-pill-dot" />
                 Development aus Deutschland
               </div>
-              <div style={{ display: 'flex', alignItems: 'stretch', gap: '52px', marginBottom: '0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '44px' }}>
                 <h1 style={{ margin: 0 }}>
                   Professionelle<br />
                   <span className="highlight">Entwicklung</span>.<br />
                   Ohne Umwege.
                 </h1>
-                <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" style={{ height: '100%', width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+                {/* 3 Zeilen × 3.8rem × 1.06 line-height ≈ 12rem */}
+                <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER"
+                  style={{ height: '12rem', width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
               </div>
               <Typewriter />
               <p className="hero-sub">
