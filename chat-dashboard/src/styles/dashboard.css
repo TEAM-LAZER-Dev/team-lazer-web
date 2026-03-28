@@ -2578,3 +2578,18 @@ body {
 .db-msg-img:hover { opacity: 0.9; border-color: rgba(255,255,255,0.2); }
 .db-msg-link { color: #93c5fd; word-break: break-all; text-decoration: none; }
 .db-msg-link:hover { text-decoration: underline; }
+
+/* ── Admin Crown Badge ───────────────────────────── */
+.db-admin-crown {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 5px;
+  font-size: 0.65rem;
+  color: #fbbf24;
+  vertical-align: middle;
+}
+.db-contact-role-chip.admin {
+  background: rgba(251,191,36,0.12);
+  color: #fbbf24;
+  border-color: rgba(251,191,36,0.3);
+}

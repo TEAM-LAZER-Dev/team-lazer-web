@@ -621,7 +621,10 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                         <span className={`db-online-dot-sm ${a.is_online?'online':''}`} />
                       </div>
                       <div className="db-team-info">
-                        <strong>{a.name}</strong>
+                        <strong>
+                          {a.name}
+                          {a.is_admin && <span className="db-admin-crown" title="Admin"><i className="fas fa-shield-alt" /></span>}
+                        </strong>
                         <span className={a.is_online?'text-online':'text-offline'}>{a.is_online?'● Online':'○ Offline'}</span>
                       </div>
                       {unreadTeam[a.id]>0 && <span className="db-team-unread">{unreadTeam[a.id]}</span>}
@@ -666,9 +669,16 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                       <i className="fas fa-times" />
                     </button>
                     <Avatar agent={contactInfo} size={56} />
-                    <h3>{contactInfo.name}</h3>
+                    <h3>
+                      {contactInfo.name}
+                      {contactInfo.is_admin && <span className="db-admin-crown" title="Admin"><i className="fas fa-shield-alt" /></span>}
+                    </h3>
                     {contactInfo.role && (
-                      <span className="db-contact-role-chip"><i className="fas fa-tag" /> {contactInfo.role}</span>
+                      <span className={`db-contact-role-chip ${contactInfo.is_admin?'admin':''}`}>
+                        {contactInfo.is_admin && <i className="fas fa-shield-alt" />}
+                        {!contactInfo.is_admin && <i className="fas fa-tag" />}
+                        {contactInfo.role}
+                      </span>
                     )}
                     <span className={`db-contact-status-badge ${contactInfo.is_online?'online':'offline'}`}>
                       {contactInfo.is_online ? '● Online' : '○ Offline'}
