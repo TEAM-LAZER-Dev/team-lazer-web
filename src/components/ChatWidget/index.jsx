@@ -138,7 +138,7 @@ const BOT_KB = {
     keywords: /kontakt|erreichen|melden|schreiben|email|mail|telefon|anruf|sprechen|termin|meeting|call/i,
     reply: [
       '📬 So erreichst du uns:',
-      '✉️ **E-Mail:** info@team-lazer.de\n🌐 **Website:** team-lazer.de\n💬 **Direkt hier im Chat** — ein Klick auf "Mit Mitarbeiter sprechen" und wir sind da!\n\nWir antworten werktags in der Regel innerhalb weniger Stunden.'
+      '✉️ **E-Mail:** kontakt@team-lazer.de\n🌐 **Website:** team-lazer.de\n💬 **Direkt hier im Chat** — ein Klick auf "Mit Mitarbeiter sprechen" und wir sind da!\n\nWir antworten werktags in der Regel innerhalb weniger Stunden.'
     ]
   },
 
@@ -299,7 +299,7 @@ function ConnectingScreen({ agent }) {
 }
 
 /* ── Nachtmodus-Screen ────────────────────────────── */
-function NightScreen() {
+function NightScreen({ onClose }) {
   return (
     <div className="chat-night-screen">
       <motion.div className="chat-night-inner"
@@ -307,9 +307,12 @@ function NightScreen() {
         <div className="chat-night-icon"><i className="fas fa-moon" /></div>
         <h3>Wir sind gerade offline</h3>
         <p>Zwischen 22:00 und 5:00 Uhr ist kein Team-Mitglied erreichbar. Schreib uns eine E-Mail — wir melden uns am nächsten Werktag!</p>
-        <a className="chat-email-btn" href="mailto:info@team-lazer.de">
+        <a className="chat-email-btn" href="mailto:kontakt@team-lazer.de">
           <i className="fas fa-envelope" /> E-Mail schreiben
         </a>
+        <button className="chat-restart-btn" onClick={onClose} style={{ marginTop: '10px' }}>
+          <i className="fas fa-times" /> Schließen
+        </button>
       </motion.div>
     </div>
   )
@@ -797,7 +800,7 @@ export default function ChatWidget() {
               )}
 
               {/* NIGHT */}
-              {phase === 'night' && <NightScreen />}
+              {phase === 'night' && <NightScreen onClose={toggle} />}
               {/* CLOSED */}
               {phase === 'closed' && <ClosedScreen byUser={closedByUser} onRestart={restartChat} />}
             </div>
