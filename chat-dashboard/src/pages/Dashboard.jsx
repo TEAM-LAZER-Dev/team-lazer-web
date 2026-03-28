@@ -20,12 +20,12 @@ function playSound() {
 
 function showBrowserNotification(title, body) {
   if (Notification?.permission === 'granted') {
-    const n = new Notification(title, { body, icon: '/favicon.ico', badge: '/favicon.ico' })
+    const n = new Notification(title, { body, icon: '/icon-192.png', badge: '/icon-192.png' })
     setTimeout(() => n.close(), 6000)
   }
 }
 
-/* ── Time helper ─────────────────────────────────── */
+/* ── Time helpers ────────────────────────────────── */
 function timeAgo(d) {
   const diff = Math.floor((Date.now() - new Date(d)) / 1000)
   if (diff < 60)   return 'Jetzt'
@@ -33,7 +33,6 @@ function timeAgo(d) {
   if (diff < 86400) return `${Math.floor(diff/3600)}h`
   return new Date(d).toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit' })
 }
-
 function fmtTime(d) {
   return new Date(d).toLocaleTimeString('de-DE', { hour:'2-digit', minute:'2-digit' })
 }
@@ -56,6 +55,72 @@ function Avatar({ agent, size = 36, name }) {
 const STATUS_LABEL = { waiting:'Wartend', active:'Aktiv', bot:'Bot', closed:'Geschlossen' }
 const STATUS_CLS   = { waiting:'status-waiting', active:'status-active', bot:'status-bot', closed:'status-closed' }
 
+/* ── ConvItem ────────────────────────────────────── */
+function ConvItem({ conv, activeConv, unreadCounts, onSelect, onDelete, showDelete }) {
+  return (
+    <motion.div
+      className={`db-conv-item ${activeConv?.id === conv.id ? 'selected' : ''} ${conv.status === 'waiting' ? 'is-waiting' : ''}`}
+      onClick={() => onSelect(conv)}
+      initial={{ opacity:0, x:-8 }} animate={{ opacity:1, x:0 }}
+      exit={{ opacity:0, x:-8 }} layout>
+      <div className="db-conv-avatar-wrap">
+        <div className="db-conv-avatar">
+          <span>{(conv.user_name?.[0] || '?').toUpperCase()}</span>
+        </div>
+        {unreadCounts[conv.id] > 0 && (
+          <span className="unread-dot">{unreadCounts[conv.id]}</span>
+        )}
+        {conv.status === 'waiting' && <span className="db-conv-waiting-dot" />}
+      </div>
+      <div className="db-conv-info">
+        <div className="db-conv-top">
+          <strong>{conv.user_name || 'Besucher'}</strong>
+          <span className="db-conv-time">{timeAgo(conv.last_message_at)}</span>
+        </div>
+        <div className="db-conv-preview">
+          {conv.user_topic
+            ? <span className="db-conv-topic-preview"><i className="fas fa-tag" />{conv.user_topic}</span>
+            : <span className={`db-status-badge ${STATUS_CLS[conv.status]}`}>{STATUS_LABEL[conv.status]}</span>
+          }
+          {conv.agents && <span className="db-conv-agent-tag">→ {conv.agents.name}</span>}
+        </div>
+      </div>
+      {showDelete && (
+        <button className="db-conv-delete" onClick={e => onDelete(conv.id, e)} title="Löschen">
+          <i className="fas fa-trash" />
+        </button>
+      )}
+    </motion.div>
+  )
+}
+
+/* ── Section ─────────────────────────────────────── */
+function Section({ icon, title, badge, badgeWarn, open, onToggle, children, emptyText }) {
+  return (
+    <div className="db-section">
+      <button className="db-section-hdr" onClick={onToggle}>
+        <i className={`fas fa-${icon}`} />
+        <span>{title}</span>
+        {badge > 0 && <span className={`db-section-badge ${badgeWarn ? 'warn' : ''}`}>{badge}</span>}
+        <i className={`fas fa-chevron-${open ? 'up' : 'down'} db-section-arrow`} />
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}
+            style={{ overflow: 'hidden' }}>
+            {children}
+            {!children?.length && (
+              <p className="db-section-empty">{emptyText}</p>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
 /* ══════════════════════════════════════════════════
    MAIN DASHBOARD
 ══════════════════════════════════════════════════ */
@@ -68,49 +133,47 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const [messages, setMessages]     = useState([])
   const [replyInput, setReplyInput] = useState('')
   const [isOnline, setIsOnline]     = useState(true)
-  const [activeTab, setActiveTab]   = useState('active')
+  const [activeTab, setActiveTab]   = useState('active')  // mobile only
   const [mobileShowChat, setMobileShowChat] = useState(false)
   const [quickReplies, setQuickReplies] = useState([])
   const [showQR, setShowQR]         = useState(false)
   const [unreadCounts, setUnreadCounts] = useState({})
   const [onlineAgents, setOnlineAgents] = useState([])
-  // Chat-Transfer
   const [showTransfer, setShowTransfer] = useState(false)
-  // Interne Notizen
   const [noteInput, setNoteInput]   = useState('')
   const [showNotes, setShowNotes]   = useState(false)
-  // Kundeninfo-Panel
   const [showInfo, setShowInfo]     = useState(false)
+  const [sectionsOpen, setSectionsOpen] = useState({ waiting: true, active: true, history: false })
 
   const endRef      = useRef(null)
   const channelRef  = useRef(null)
   const inputRef    = useRef(null)
 
-  /* ── Register Service Worker (Web Push) ─────── */
+  function toggleSection(key) {
+    setSectionsOpen(prev => ({ ...prev, [key]: !prev[key] }))
+  }
+
+  /* ── Service Worker ──────────────────────────── */
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(err =>
-        console.warn('SW register failed:', err)
-      )
+      navigator.serviceWorker.register('/sw.js').catch(() => {})
     }
   }, [])
 
-  /* ── Load quick replies ──────────────────────── */
+  /* ── Quick replies ───────────────────────────── */
   useEffect(() => {
     loadQuickReplies()
     const ch = supabase.channel('qr-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'quick_replies' },
-        () => loadQuickReplies())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'quick_replies' }, () => loadQuickReplies())
       .subscribe()
     return () => supabase.removeChannel(ch)
   }, [])
 
-  /* ── Online Agents ───────────────────────────── */
+  /* ── Online agents ───────────────────────────── */
   useEffect(() => {
     loadOnlineAgents()
     const ch = supabase.channel('agents-online')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'agents' },
-        () => loadOnlineAgents())
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'agents' }, () => loadOnlineAgents())
       .subscribe()
     return () => supabase.removeChannel(ch)
   }, [])
@@ -125,47 +188,30 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     setQuickReplies(data || [])
   }
 
-  /* ── Online status + cleanup ─────────────────── */
+  /* ── Own online status ───────────────────────── */
   useEffect(() => {
-    if (agent?.id) {
-      supabase.from('agents').update({ is_online: true }).eq('id', agent.id)
-    }
-    const off = () => {
-      if (agent?.id) supabase.from('agents').update({ is_online: false }).eq('id', agent.id)
-    }
+    if (agent?.id) supabase.from('agents').update({ is_online: true }).eq('id', agent.id)
+    const off = () => { if (agent?.id) supabase.from('agents').update({ is_online: false }).eq('id', agent.id) }
     window.addEventListener('beforeunload', off)
-    return () => {
-      window.removeEventListener('beforeunload', off)
-      if (agent?.id) supabase.from('agents').update({ is_online: false }).eq('id', agent.id)
-    }
+    return () => { window.removeEventListener('beforeunload', off); off() }
   }, [agent?.id])
 
   /* ── Load + subscribe conversations ─────────── */
   useEffect(() => {
-    loadConversations()
-    loadHistory()
-
+    loadConversations(); loadHistory()
     const ch = supabase.channel('db-convs')
-      .on('postgres_changes', { event: '*', schema:'public', table:'conversations' },
-        (payload) => {
-          loadConversations()
-          // Neue wartende Conversation → Benachrichtigung
-          if (payload.eventType === 'INSERT' && payload.new.status === 'waiting') {
-            const name = payload.new.user_name || 'Besucher'
-            if (agent?.notify_sound !== false) playSound()
-            if (agent?.notify_browser !== false) {
-              showBrowserNotification('Neuer Chat! 💬', `${name} wartet auf Antwort`)
-            }
-          }
-          // Status closed → aus Liste entfernen, history neu laden
-          if (payload.new?.status === 'closed') {
-            loadHistory()
-            // Falls der Agente gerade diese Konversation offen hat → Status aktualisieren
-            setActiveConv(prev =>
-              prev?.id === payload.new.id ? { ...prev, status: 'closed' } : prev
-            )
-          }
-        })
+      .on('postgres_changes', { event: '*', schema:'public', table:'conversations' }, (payload) => {
+        loadConversations()
+        if (payload.eventType === 'INSERT' && payload.new.status === 'waiting') {
+          const name = payload.new.user_name || 'Besucher'
+          if (agent?.notify_sound !== false) playSound()
+          if (agent?.notify_browser !== false) showBrowserNotification('Neuer Chat! 💬', `${name} wartet auf Antwort`)
+        }
+        if (payload.new?.status === 'closed') {
+          loadHistory()
+          setActiveConv(prev => prev?.id === payload.new.id ? { ...prev, status: 'closed' } : prev)
+        }
+      })
       .subscribe()
     return () => supabase.removeChannel(ch)
   }, [agent]) // eslint-disable-line
@@ -191,30 +237,19 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const selectConv = useCallback(async (conv) => {
     setActiveConv(conv)
     setMobileShowChat(true)
-    setReplyInput('')
-    setShowQR(false)
-
+    setReplyInput(''); setShowQR(false); setShowNotes(false)
     const { data: msgs } = await supabase
-      .from('messages').select('*')
-      .eq('conversation_id', conv.id)
-      .order('created_at', { ascending: true })
+      .from('messages').select('*').eq('conversation_id', conv.id).order('created_at', { ascending: true })
     setMessages(msgs || [])
-
-    // Clear unread
     setUnreadCounts(prev => ({ ...prev, [conv.id]: 0 }))
     setTimeout(() => endRef.current?.scrollIntoView({ behavior:'instant' }), 60)
-
-    // Subscribe to messages
     if (channelRef.current) supabase.removeChannel(channelRef.current)
     const ch = supabase.channel('dash-msgs-' + conv.id)
-      .on('postgres_changes', {
-        event:'INSERT', schema:'public', table:'messages',
-        filter:`conversation_id=eq.${conv.id}`
-      }, (payload) => {
-        setMessages(prev => prev.find(m => m.id === payload.new.id)
-          ? prev : [...prev, payload.new])
-        setTimeout(() => endRef.current?.scrollIntoView({ behavior:'smooth' }), 60)
-      })
+      .on('postgres_changes', { event:'INSERT', schema:'public', table:'messages', filter:`conversation_id=eq.${conv.id}` },
+        (payload) => {
+          setMessages(prev => prev.find(m => m.id === payload.new.id) ? prev : [...prev, payload.new])
+          setTimeout(() => endRef.current?.scrollIntoView({ behavior:'smooth' }), 60)
+        })
       .subscribe()
     channelRef.current = ch
   }, [])
@@ -222,9 +257,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   /* ── Claim ───────────────────────────────────── */
   async function claimConv(conv) {
     if (!agent) return
-    await supabase.from('conversations').update({
-      status: 'active', assigned_agent_id: agent.id
-    }).eq('id', conv.id)
+    await supabase.from('conversations').update({ status: 'active', assigned_agent_id: agent.id }).eq('id', conv.id)
     const updated = { ...conv, status:'active', assigned_agent_id:agent.id, agents:agent }
     setActiveConv(updated)
     setConversations(prev => prev.map(c => c.id === conv.id ? updated : c))
@@ -233,46 +266,37 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   /* ── Close conversation ──────────────────────── */
   async function closeConv(convId) {
     await supabase.from('conversations').update({ status:'closed' }).eq('id', convId)
-    // Sofort im UI als geschlossen markieren → "Chat wurde beendet" Banner erscheint
     setActiveConv(prev => prev?.id === convId ? { ...prev, status: 'closed' } : prev)
     setMobileShowChat(false)
     if (channelRef.current) { supabase.removeChannel(channelRef.current); channelRef.current = null }
-    loadConversations()
-    loadHistory()
+    loadConversations(); loadHistory()
   }
 
-  /* ── Transfer chat to another agent ─────────── */
+  /* ── Transfer ────────────────────────────────── */
   async function transferConv(targetAgent) {
     if (!activeConv || !targetAgent) return
-    await supabase.from('conversations')
-      .update({ assigned_agent_id: targetAgent.id, agents: undefined })
-      .eq('id', activeConv.id)
-    // Interne Notiz: Übergabe dokumentieren
+    await supabase.from('conversations').update({ assigned_agent_id: targetAgent.id }).eq('id', activeConv.id)
     await supabase.from('messages').insert({
-      conversation_id: activeConv.id,
-      sender_type: 'system',
-      sender_name: 'System',
-      content: `Chat wurde von ${agent.name} an ${targetAgent.name} übergeben.`,
+      conversation_id: activeConv.id, sender_type: 'system', sender_name: 'System',
+      content: `Chat wurde von ${agent.name} an ${targetAgent.name} übergeben.`
     })
     setActiveConv(prev => ({ ...prev, assigned_agent_id: targetAgent.id, agents: targetAgent }))
     setShowTransfer(false)
   }
 
-  /* ── Interne Notiz senden ────────────────────── */
+  /* ── Internal note ───────────────────────────── */
   async function sendNote(e) {
     e?.preventDefault()
     const text = noteInput.trim()
     if (!text || !activeConv) return
     setNoteInput('')
     await supabase.from('messages').insert({
-      conversation_id: activeConv.id,
-      sender_type: 'note',
-      sender_name: agent?.name || 'Team',
-      content: text,
+      conversation_id: activeConv.id, sender_type: 'note',
+      sender_name: agent?.name || 'Team', content: text
     })
   }
 
-  /* ── Delete conversation (history) ──────────── */
+  /* ── Delete conv ─────────────────────────────── */
   async function deleteConv(convId, e) {
     e.stopPropagation()
     await supabase.from('messages').delete().eq('conversation_id', convId)
@@ -286,44 +310,34 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     e?.preventDefault()
     const text = replyInput.trim()
     if (!text || !activeConv || !agent) return
-    setReplyInput('')
-    setShowQR(false)
+    setReplyInput(''); setShowQR(false)
     await supabase.from('messages').insert({
-      conversation_id: activeConv.id,
-      sender_type: 'agent',
-      sender_name: agent.name,
-      sender_avatar: agent.avatar_url,
-      content: text,
+      conversation_id: activeConv.id, sender_type: 'agent',
+      sender_name: agent.name, sender_avatar: agent.avatar_url, content: text
     })
     setTimeout(() => inputRef.current?.focus(), 50)
   }
 
-  /* ── Quick reply insert ──────────────────────── */
   function insertQR(content) {
-    setReplyInput(content)
-    setShowQR(false)
+    setReplyInput(content); setShowQR(false)
     setTimeout(() => inputRef.current?.focus(), 50)
   }
 
-  /* ── Toggle online ───────────────────────────── */
   async function toggleOnline() {
     const next = !isOnline
     setIsOnline(next)
     if (agent) await supabase.from('agents').update({ is_online: next }).eq('id', agent.id)
   }
 
-  /* ── Logout ──────────────────────────────────── */
   async function logout() {
     if (agent) await supabase.from('agents').update({ is_online: false }).eq('id', agent.id)
     await supabase.auth.signOut()
   }
 
-  /* ── Tab data ────────────────────────────────── */
+  /* ── Computed ────────────────────────────────── */
   const waitingList = conversations.filter(c => c.status === 'waiting')
   const activeList  = conversations.filter(c => c.status === 'active')
-  const tabList     = activeTab === 'history' ? history
-                    : activeTab === 'waiting' ? waitingList
-                    : activeList
+  const tabList = activeTab === 'history' ? history : activeTab === 'waiting' ? waitingList : activeList
 
   /* ════════════════════════════════════════════════
      RENDER
@@ -332,19 +346,15 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     <div className="db-root">
 
       {/* ════ SIDEBAR ════ */}
-      <div className={`db-sidebar ${mobileShowChat ? 'mobile-hidden' : ''}`}>
+      <aside className={`db-sidebar ${mobileShowChat ? 'mobile-hidden' : ''}`}>
 
-        {/* Sidebar header */}
-        <div className="db-sidebar-header">
-          <div className="db-brand"><i className="fas fa-bolt" /><span>Chat Dashboard</span></div>
-          <div className="db-agent-row">
-            <Avatar agent={agent} size={32} />
-            <div className="db-agent-info">
-              <strong>{agent?.name || '…'}</strong>
-              <button className={`online-toggle ${isOnline ? 'online' : 'offline'}`} onClick={toggleOnline}>
-                <span className="online-dot" />{isOnline ? 'Online' : 'Offline'}
-              </button>
-            </div>
+        {/* Brand */}
+        <div className="db-sidebar-top">
+          <div className="db-brand">
+            <img src="/icon-192.png" alt="TL" className="db-brand-logo" />
+            <span>TEAM LAZER</span>
+          </div>
+          <div className="db-brand-actions">
             <button className="icon-btn" onClick={() => navigate('/settings')} title="Einstellungen">
               <i className="fas fa-cog" />
             </button>
@@ -354,87 +364,99 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="db-tabs">
-          <button className={activeTab === 'active' ? 'active' : ''} onClick={() => setActiveTab('active')}>
-            Aktiv {activeList.length > 0 && <span className="tab-badge">{activeList.length}</span>}
-          </button>
-          <button className={activeTab === 'waiting' ? 'active' : ''} onClick={() => setActiveTab('waiting')}>
-            Wartend {waitingList.length > 0 && <span className="tab-badge warn">{waitingList.length}</span>}
-          </button>
-          <button className={activeTab === 'history' ? 'active' : ''} onClick={() => setActiveTab('history')}>
-            Verlauf
-          </button>
+        {/* Agent */}
+        <div className="db-agent-bar">
+          <Avatar agent={agent} size={34} />
+          <div className="db-agent-info">
+            <strong>{agent?.name || '…'}</strong>
+            <button className={`online-toggle ${isOnline ? 'online' : 'offline'}`} onClick={toggleOnline}>
+              <span className="online-dot" />{isOnline ? 'Online' : 'Offline'}
+            </button>
+          </div>
+          {onlineAgents.length > 1 && (
+            <div className="db-online-mini">
+              {onlineAgents.filter(a => a.id !== agent?.id).slice(0,3).map(a => (
+                <div key={a.id} className="db-online-mini-avatar" title={a.name}>
+                  <Avatar agent={a} size={22} />
+                  <span className="db-online-dot-sm" />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Online Team */}
-        {onlineAgents.length > 0 && (
-          <div className="db-online-team">
-            <span className="db-online-label">Online</span>
-            {onlineAgents.map(a => (
-              <div key={a.id} className="db-online-agent" title={a.name}>
-                <Avatar agent={a} size={24} />
-                <span className="db-online-dot-sm" />
-              </div>
-            ))}
+        {/* Stats */}
+        <div className="db-stats-strip">
+          <div className="db-stat">
+            <span className="db-stat-num">{waitingList.length + activeList.length}</span>
+            <span className="db-stat-lbl">Offene Chats</span>
           </div>
-        )}
+          <div className="db-stat-divider" />
+          <div className="db-stat">
+            <span className={`db-stat-num ${waitingList.length > 0 ? 'warn' : ''}`}>{waitingList.length}</span>
+            <span className="db-stat-lbl">Wartend</span>
+          </div>
+          <div className="db-stat-divider" />
+          <div className="db-stat">
+            <span className="db-stat-num">{onlineAgents.length}</span>
+            <span className="db-stat-lbl">Online</span>
+          </div>
+        </div>
 
-        {/* Conversation list */}
-        <div className="db-conv-list">
+        {/* ── Desktop: collapsible sections ── */}
+        <div className="db-conv-list db-desktop-only">
+          <Section icon="clock" title="Wartend" badge={waitingList.length} badgeWarn
+            open={sectionsOpen.waiting} onToggle={() => toggleSection('waiting')}
+            emptyText="Keine wartenden Chats">
+            {waitingList.length > 0 && waitingList.map(conv => (
+              <ConvItem key={conv.id} conv={conv} activeConv={activeConv}
+                unreadCounts={unreadCounts} onSelect={selectConv} onDelete={deleteConv} />
+            ))}
+          </Section>
+          <Section icon="comment-dots" title="Aktiv" badge={activeList.length}
+            open={sectionsOpen.active} onToggle={() => toggleSection('active')}
+            emptyText="Keine aktiven Chats">
+            {activeList.length > 0 && activeList.map(conv => (
+              <ConvItem key={conv.id} conv={conv} activeConv={activeConv}
+                unreadCounts={unreadCounts} onSelect={selectConv} onDelete={deleteConv} />
+            ))}
+          </Section>
+          <Section icon="history" title="Verlauf"
+            open={sectionsOpen.history} onToggle={() => toggleSection('history')}
+            emptyText="Keine abgeschlossenen Chats">
+            {history.length > 0 && history.map(conv => (
+              <ConvItem key={conv.id} conv={conv} activeConv={activeConv}
+                unreadCounts={unreadCounts} onSelect={selectConv} onDelete={deleteConv} showDelete />
+            ))}
+          </Section>
+        </div>
+
+        {/* ── Mobile: tab-filtered list ── */}
+        <div className="db-conv-list db-mobile-only">
           <AnimatePresence initial={false}>
-            {tabList.length === 0 && (
+            {tabList.length === 0 ? (
               <motion.div className="db-empty" initial={{ opacity:0 }} animate={{ opacity:1 }}>
                 <i className={`fas fa-${activeTab === 'history' ? 'history' : 'comment-slash'}`} />
                 <p>{activeTab === 'history' ? 'Keine abgeschlossenen Chats' : 'Keine Chats'}</p>
               </motion.div>
-            )}
-            {tabList.map(conv => (
-              <motion.div key={conv.id}
-                className={`db-conv-item ${activeConv?.id === conv.id ? 'selected' : ''} ${conv.status === 'waiting' ? 'is-waiting' : ''}`}
-                onClick={() => selectConv(conv)}
-                initial={{ opacity:0, x:-10 }} animate={{ opacity:1, x:0 }}
-                exit={{ opacity:0, x:-10 }} layout>
-                <div className="db-conv-avatar-wrap">
-                  <div className="db-conv-avatar">
-                    <span>{(conv.user_name?.[0] || '?').toUpperCase()}</span>
-                  </div>
-                  {unreadCounts[conv.id] > 0 && (
-                    <span className="unread-dot">{unreadCounts[conv.id]}</span>
-                  )}
-                </div>
-                <div className="db-conv-info">
-                  <div className="db-conv-top">
-                    <strong>{conv.user_name}</strong>
-                    <span className="db-conv-time">{timeAgo(conv.last_message_at)}</span>
-                  </div>
-                  <div className="db-conv-bottom">
-                    <span className={`db-status-badge ${STATUS_CLS[conv.status]}`}>
-                      {STATUS_LABEL[conv.status]}
-                    </span>
-                    {conv.agents && <span className="db-conv-agent">→ {conv.agents.name}</span>}
-                  </div>
-                </div>
-                {activeTab === 'history' && (
-                  <button className="db-conv-delete" onClick={e => deleteConv(conv.id, e)} title="Löschen">
-                    <i className="fas fa-trash" />
-                  </button>
-                )}
-              </motion.div>
+            ) : tabList.map(conv => (
+              <ConvItem key={conv.id} conv={conv} activeConv={activeConv}
+                unreadCounts={unreadCounts} onSelect={selectConv} onDelete={deleteConv}
+                showDelete={activeTab === 'history'} />
             ))}
           </AnimatePresence>
         </div>
-      </div>
+      </aside>
 
-      {/* ════ MAIN AREA ════ */}
+      {/* ════ MAIN ════ */}
       <div className={`db-main ${mobileShowChat ? '' : 'mobile-hidden-main'}`}>
         {!activeConv ? (
           <div className="db-main-empty">
-            <i className="fas fa-comments" />
+            <img src="/icon-192.png" alt="TL" className="db-empty-logo" />
             <p>Wähle einen Chat aus der Liste</p>
             {waitingList.length > 0 && (
               <button className="db-claim-btn" onClick={() => selectConv(waitingList[0])}>
-                <i className="fas fa-headset" /> {waitingList.length} wartende{waitingList.length > 1 ? 'r' : ''} Chat
+                <i className="fas fa-headset" /> {waitingList.length} wartende{waitingList.length > 1 ? '' : 'r'} Chat{waitingList.length > 1 ? 's' : ''}
               </button>
             )}
           </div>
@@ -445,38 +467,38 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
               <button className="db-back-btn" onClick={() => { setMobileShowChat(false); setActiveConv(null) }}>
                 <i className="fas fa-arrow-left" />
               </button>
-              <Avatar name={activeConv.user_name} size={34} />
+              <Avatar name={activeConv.user_name} size={36} />
               <div className="db-chat-header-info">
                 <strong>{activeConv.user_name}</strong>
                 <div className="db-chat-meta">
                   <span className={`db-status-badge ${STATUS_CLS[activeConv.status]}`}>
                     {STATUS_LABEL[activeConv.status]}
                   </span>
+                  {activeConv.user_topic && (
+                    <span className="db-conv-topic-tag">
+                      <i className="fas fa-tag" /> {activeConv.user_topic}
+                    </span>
+                  )}
                   {activeConv.agents && (
                     <span className="db-assigned">
-                      <Avatar agent={activeConv.agents} size={16} />
+                      <Avatar agent={activeConv.agents} size={14} />
                       {activeConv.agents.name}
                     </span>
                   )}
-                  <span className="db-chat-since">
-                    {fmtTime(activeConv.created_at)}
-                  </span>
+                  <span className="db-chat-since">{fmtTime(activeConv.created_at)}</span>
                 </div>
               </div>
               <div className="db-chat-header-actions">
-                {/* Kundeninfo */}
                 <button className={`icon-btn ${showInfo ? 'active' : ''}`}
                   onClick={() => setShowInfo(v => !v)} title="Kundeninfo">
                   <i className="fas fa-user-circle" />
                 </button>
-                {/* Interne Notiz */}
                 {activeConv.status !== 'closed' && activeConv.assigned_agent_id === agent?.id && (
                   <button className={`icon-btn ${showNotes ? 'active' : ''}`}
                     onClick={() => setShowNotes(v => !v)} title="Interne Notiz">
                     <i className="fas fa-sticky-note" />
                   </button>
                 )}
-                {/* Transfer */}
                 {activeConv.status === 'active' && activeConv.assigned_agent_id === agent?.id && (
                   <button className={`icon-btn ${showTransfer ? 'active' : ''}`}
                     onClick={() => setShowTransfer(v => !v)} title="Chat übergeben">
@@ -489,18 +511,16 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                   </button>
                 )}
                 {activeConv.status === 'active' && activeConv.assigned_agent_id && activeConv.assigned_agent_id !== agent?.id && (
-                  <span className="db-locked-badge">
-                    <i className="fas fa-lock" /> Besetzt
-                  </span>
+                  <span className="db-locked-badge"><i className="fas fa-lock" /> Besetzt</span>
                 )}
                 {activeConv.status !== 'closed' && (
-                  <button className="db-end-btn" onClick={() => closeConv(activeConv.id)} title="Chat beenden">
+                  <button className="db-end-btn" onClick={() => closeConv(activeConv.id)}>
                     <i className="fas fa-times-circle" /> Beenden
                   </button>
                 )}
               </div>
 
-              {/* Transfer-Dropdown */}
+              {/* Transfer dropdown */}
               <AnimatePresence>
                 {showTransfer && (
                   <motion.div className="db-transfer-dropdown"
@@ -538,13 +558,11 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                         {new Date(msg.created_at).toLocaleDateString('de-DE', { weekday:'short', day:'2-digit', month:'2-digit' })}
                       </div>
                     )}
-                    {/* System-Ereignis (Transfer etc.) */}
                     {isSystem && (
                       <div className="db-system-msg">
                         <i className="fas fa-info-circle" /> {msg.content}
                       </div>
                     )}
-                    {/* Interne Notiz */}
                     {isNote && (
                       <motion.div className="db-note-msg" initial={{ opacity:0, y:5 }} animate={{ opacity:1, y:0 }}>
                         <i className="fas fa-sticky-note" />
@@ -555,14 +573,13 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                         <span className="db-msg-time">{fmtTime(msg.created_at)}</span>
                       </motion.div>
                     )}
-                    {/* Normale Nachrichten */}
                     {!isNote && !isSystem && (
                       <motion.div className={`db-msg-row ${isOutgoing ? 'outgoing' : 'incoming'}`}
                         initial={{ opacity:0, y:5 }} animate={{ opacity:1, y:0 }}>
                         {!isOutgoing && (
                           <div className="db-msg-avatar-sm">
                             {isBot
-                              ? <span title="Bot" style={{fontSize:'1.1rem'}}>🤖</span>
+                              ? <span style={{fontSize:'1.1rem'}}>🤖</span>
                               : <div className="db-msg-user-dot">{(activeConv.user_name?.[0] || '?').toUpperCase()}</div>
                             }
                           </div>
@@ -591,45 +608,18 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
               <div ref={endRef} />
             </div>
 
-            {/* Kundeninfo Panel */}
+            {/* Info panel (mobile / small desktop — above input) */}
             <AnimatePresence>
               {showInfo && (
-                <motion.div className="db-info-panel"
+                <motion.div className="db-info-panel db-info-inline"
                   initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }}
                   exit={{ opacity:0, height:0 }}>
-                  <div className="db-info-row">
-                    <i className="fas fa-user" />
-                    <div><span>Name</span><strong>{activeConv.user_name || '—'}</strong></div>
-                  </div>
-                  {activeConv.user_email && (
-                    <div className="db-info-row">
-                      <i className="fas fa-envelope" />
-                      <div><span>E-Mail</span>
-                        <a href={`mailto:${activeConv.user_email}`}>{activeConv.user_email}</a>
-                      </div>
-                    </div>
-                  )}
-                  {activeConv.user_topic && (
-                    <div className="db-info-row">
-                      <i className="fas fa-comment-dots" />
-                      <div><span>Thema</span><strong>{activeConv.user_topic}</strong></div>
-                    </div>
-                  )}
-                  <div className="db-info-row">
-                    <i className="fas fa-clock" />
-                    <div><span>Gestartet</span>
-                      <strong>{new Date(activeConv.created_at).toLocaleString('de-DE', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' })}</strong>
-                    </div>
-                  </div>
-                  <div className="db-info-row">
-                    <i className="fas fa-comment" />
-                    <div><span>Nachrichten</span><strong>{messages.length}</strong></div>
-                  </div>
+                  <CustomerInfoContent conv={activeConv} messages={messages} />
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Interne Notiz */}
+            {/* Internal notes */}
             <AnimatePresence>
               {showNotes && (
                 <motion.div className="db-note-area"
@@ -650,27 +640,22 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
             {/* Input area */}
             {activeConv.status === 'active' && activeConv.assigned_agent_id === agent?.id ? (
               <div className="db-input-area">
-                {/* Quick replies panel */}
                 <AnimatePresence>
                   {showQR && quickReplies.length > 0 && (
                     <motion.div className="qr-panel"
                       initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }}
                       exit={{ opacity:0, height:0 }}>
                       {quickReplies.map(r => (
-                        <button key={r.id} className="qr-chip" onClick={() => insertQR(r.content)}
-                          title={r.content}>
+                        <button key={r.id} className="qr-chip" onClick={() => insertQR(r.content)} title={r.content}>
                           <i className="fas fa-bolt" /> {r.title}
                         </button>
                       ))}
                     </motion.div>
                   )}
                 </AnimatePresence>
-
                 <form className="db-reply-bar" onSubmit={sendMessage}>
-                  <button type="button"
-                    className={`qr-toggle-btn ${showQR ? 'active' : ''}`}
-                    onClick={() => setShowQR(v => !v)}
-                    title="Schnellantworten">
+                  <button type="button" className={`qr-toggle-btn ${showQR ? 'active' : ''}`}
+                    onClick={() => setShowQR(v => !v)} title="Schnellantworten">
                     <i className="fas fa-bolt" />
                   </button>
                   <input ref={inputRef} type="text"
@@ -678,7 +663,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                     value={replyInput} onChange={e => setReplyInput(e.target.value)}
                     className="db-reply-input" />
                   <button type="submit" className="db-send-btn" disabled={!replyInput.trim()}>
-                    <i className="fas fa-paper-plane" /> Senden
+                    <i className="fas fa-paper-plane" />
                   </button>
                 </form>
               </div>
@@ -700,6 +685,93 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
             )}
           </>
         )}
+      </div>
+
+      {/* ════ RIGHT PANEL (Desktop) ════ */}
+      <AnimatePresence>
+        {activeConv && showInfo && (
+          <motion.aside className="db-right-panel"
+            initial={{ width: 0, opacity: 0 }} animate={{ width: 280, opacity: 1 }}
+            exit={{ width: 0, opacity: 0 }} transition={{ duration: 0.22, ease: 'easeOut' }}>
+            <div className="db-right-panel-inner">
+              <div className="db-right-panel-avatar">
+                <Avatar name={activeConv.user_name} size={64} />
+                <h3>{activeConv.user_name}</h3>
+                <span className={`db-status-badge ${STATUS_CLS[activeConv.status]}`}>
+                  {STATUS_LABEL[activeConv.status]}
+                </span>
+              </div>
+              <CustomerInfoContent conv={activeConv} messages={messages} />
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
+
+      {/* ════ MOBILE BOTTOM NAV ════ */}
+      <nav className="db-mobile-nav">
+        <button className={activeTab === 'active' && !mobileShowChat ? 'active' : ''}
+          onClick={() => { setActiveTab('active'); setMobileShowChat(false) }}>
+          <div className="db-nav-icon-wrap">
+            <i className="fas fa-comments" />
+            {activeList.length > 0 && <span className="db-nav-badge">{activeList.length}</span>}
+          </div>
+          <span>Aktiv</span>
+        </button>
+        <button className={activeTab === 'waiting' && !mobileShowChat ? 'active' : ''}
+          onClick={() => { setActiveTab('waiting'); setMobileShowChat(false) }}>
+          <div className="db-nav-icon-wrap">
+            <i className="fas fa-clock" />
+            {waitingList.length > 0 && <span className="db-nav-badge warn">{waitingList.length}</span>}
+          </div>
+          <span>Wartend</span>
+        </button>
+        <button className={activeTab === 'history' && !mobileShowChat ? 'active' : ''}
+          onClick={() => { setActiveTab('history'); setMobileShowChat(false) }}>
+          <div className="db-nav-icon-wrap">
+            <i className="fas fa-history" />
+          </div>
+          <span>Verlauf</span>
+        </button>
+        <button onClick={() => navigate('/settings')}>
+          <div className="db-nav-icon-wrap">
+            <i className="fas fa-cog" />
+          </div>
+          <span>Einst.</span>
+        </button>
+      </nav>
+    </div>
+  )
+}
+
+/* ── Customer info content (reused in inline + right panel) ── */
+function CustomerInfoContent({ conv, messages }) {
+  return (
+    <div className="db-info-rows">
+      {conv.user_email && (
+        <div className="db-info-row">
+          <i className="fas fa-envelope" />
+          <div>
+            <span>E-Mail</span>
+            <a href={`mailto:${conv.user_email}`}>{conv.user_email}</a>
+          </div>
+        </div>
+      )}
+      {conv.user_topic && (
+        <div className="db-info-row">
+          <i className="fas fa-tag" />
+          <div><span>Thema</span><strong>{conv.user_topic}</strong></div>
+        </div>
+      )}
+      <div className="db-info-row">
+        <i className="fas fa-clock" />
+        <div>
+          <span>Gestartet</span>
+          <strong>{new Date(conv.created_at).toLocaleString('de-DE', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' })}</strong>
+        </div>
+      </div>
+      <div className="db-info-row">
+        <i className="fas fa-comment" />
+        <div><span>Nachrichten</span><strong>{messages.length}</strong></div>
       </div>
     </div>
   )
