@@ -55,15 +55,63 @@ export default function Navbar() {
         </div>
       </header>
 
-      <nav className={`mobile-nav${menuOpen ? ' open' : ''}`}>
-        <NavLink to="/" end><i className="fa-solid fa-house" /> Home</NavLink>
-        <NavLink to="/about"><i className="fa-solid fa-users" /> Über uns</NavLink>
-        <NavLink to="/services"><i className="fa-solid fa-briefcase" /> Leistungen</NavLink>
-        <NavLink to="/contact"><i className="fa-solid fa-envelope" /> Kontakt</NavLink>
+      {/* Dimmed backdrop */}
+      <div
+        className={`mobile-nav-backdrop${menuOpen ? ' open' : ''}`}
+        onClick={toggleMenu}
+        aria-hidden="true"
+      />
+
+      {/* Full-screen slide-in nav */}
+      <nav className={`mobile-nav${menuOpen ? ' open' : ''}`} aria-hidden={!menuOpen}>
+        <div className="mobile-nav-head">
+          <Link className="nav-logo" to="/">
+            <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
+            TEAM LAZER
+          </Link>
+          <button className="mobile-nav-close" onClick={toggleMenu} aria-label="Schließen">
+            <i className="fa-solid fa-xmark" />
+          </button>
+        </div>
+
+        <div className="mobile-nav-body">
+          <NavLink to="/" end className={navLinkClass}>
+            <span className="mnav-num">01</span>
+            <span className="mnav-label">Home</span>
+            <i className="fa-solid fa-arrow-right mnav-arrow" />
+          </NavLink>
+          <NavLink to="/about" className={navLinkClass}>
+            <span className="mnav-num">02</span>
+            <span className="mnav-label">Über uns</span>
+            <i className="fa-solid fa-arrow-right mnav-arrow" />
+          </NavLink>
+          <NavLink to="/services" className={navLinkClass}>
+            <span className="mnav-num">03</span>
+            <span className="mnav-label">Leistungen</span>
+            <i className="fa-solid fa-arrow-right mnav-arrow" />
+          </NavLink>
+          <NavLink to="/contact" className={navLinkClass}>
+            <span className="mnav-num">04</span>
+            <span className="mnav-label">Kontakt</span>
+            <i className="fa-solid fa-arrow-right mnav-arrow" />
+          </NavLink>
+        </div>
+
         <div className="mobile-nav-footer">
           <Link to="/contact" className="btn btn-primary">
             <i className="fa-solid fa-paper-plane" /> Projekt anfragen
           </Link>
+          <div className="mnav-social">
+            <a href="https://instagram.com/teamlazer" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <i className="fa-brands fa-instagram" />
+            </a>
+            <a href="https://linkedin.com/company/teamlazer" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <i className="fa-brands fa-linkedin-in" />
+            </a>
+            <a href="mailto:hallo@team-lazer.de" aria-label="E-Mail">
+              <i className="fa-solid fa-envelope" />
+            </a>
+          </div>
         </div>
       </nav>
     </>

@@ -1748,19 +1748,19 @@ body {
   .db-desktop-only { display: none !important; }
   .db-mobile-only  { display: flex !important; flex-direction: column; }
 
-  /* Bottom nav */
+  /* ── Bottom nav ── */
   .db-mobile-nav {
     display: flex;
     position: fixed;
     bottom: 0; left: 0; right: 0;
     z-index: 30;
-    background: #070310;
-    border-top: 1px solid var(--border);
-    height: 64px;
-    align-items: stretch;
-    padding: 0 4px;
-    safe-area-inset-bottom: env(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
+    background: rgba(5, 2, 14, 0.97);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    height: 62px;
+    align-items: center;
+    padding: 0 8px env(safe-area-inset-bottom);
+    gap: 2px;
   }
   .db-mobile-nav button {
     flex: 1;
@@ -1768,55 +1768,122 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 4px;
     background: none;
     border: none;
-    color: var(--muted);
-    font-size: 0.6rem;
-    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: 0.15s;
-    border-radius: 10px;
-    padding: 6px 2px;
+    transition: color 0.15s;
+    border-radius: 12px;
+    padding: 8px 4px;
     position: relative;
   }
-  .db-mobile-nav button i { font-size: 1.1rem; }
-  .db-mobile-nav button.active { color: #a78bfa; }
-  .db-mobile-nav button.active i { color: #7c3aed; }
+  .db-mobile-nav button i { font-size: 1.15rem; transition: color 0.15s; }
+  /* Active pill indicator */
+  .db-mobile-nav button.active {
+    color: #a78bfa;
+  }
+  .db-mobile-nav button.active i { color: #a78bfa; }
+  .db-mobile-nav button.active::before {
+    content: '';
+    position: absolute; top: 4px; left: 50%;
+    transform: translateX(-50%);
+    width: 28px; height: 3px;
+    background: #7c3aed;
+    border-radius: 2px;
+  }
   .db-nav-icon-wrap {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
   }
   .db-nav-badge {
     position: absolute;
-    top: -6px; right: -10px;
+    top: -5px; right: -9px;
     background: #7c3aed;
     color: #fff;
-    font-size: 0.58rem;
+    font-size: 0.56rem;
     font-weight: 800;
     border-radius: 20px;
     padding: 1px 5px;
     min-width: 16px;
     text-align: center;
+    border: 2px solid rgba(5, 2, 14, 0.97);
   }
   .db-nav-badge.warn { background: #d97706; }
 
-  /* Chat header on mobile */
-  .db-chat-header { padding: 12px 14px; gap: 8px; }
-  .db-end-btn span,
-  .db-end-btn { font-size: 0; width: 34px; height: 34px; padding: 0; border-radius: 10px; justify-content: center; }
+  /* ── Chat header on mobile ── */
+  .db-chat-header {
+    padding: 10px 14px; gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .db-end-btn span { display: none; }
+  .db-end-btn { width: 34px; height: 34px; padding: 0; border-radius: 10px; justify-content: center; }
   .db-end-btn i { font-size: 0.9rem; margin: 0; }
 
-  /* Input on mobile */
-  .db-reply-bar { padding: 10px 12px; gap: 8px; }
-  .db-reply-input { font-size: 0.9rem; }
-  .db-send-btn { padding: 9px 14px; }
+  /* ── Chat messages on mobile ── */
+  .db-messages { padding: 14px 12px; gap: 10px; }
+  .db-bubble {
+    max-width: 86%;
+    font-size: 0.88rem;
+    padding: 10px 13px;
+    border-radius: 16px;
+  }
+  .db-bubble.agent { border-bottom-left-radius: 6px; }
+  .db-bubble.customer { border-bottom-right-radius: 6px; }
+  .db-msg-meta { font-size: 0.65rem; gap: 5px; }
 
-  /* Settings */
-  .settings-body { padding: 16px; }
-  .settings-card { padding: 18px 16px; }
+  /* ── Input bar on mobile — floating style ── */
+  .db-reply-bar {
+    padding: 10px 12px;
+    gap: 8px;
+    background: rgba(5, 2, 14, 0.97);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .db-reply-input {
+    font-size: 0.93rem;
+    padding: 10px 14px;
+    border-radius: 22px;
+  }
+  .db-send-btn {
+    width: 42px; height: 42px; padding: 0;
+    border-radius: 50%; flex-shrink: 0;
+    justify-content: center;
+    font-size: 0;
+  }
+  .db-send-btn i { font-size: 0.9rem; margin: 0; }
+
+  /* ── Conversation list items on mobile ── */
+  .db-conv-item {
+    padding: 12px 14px;
+    gap: 12px;
+  }
+  .db-conv-avatar { width: 42px; height: 42px; border-radius: 13px; font-size: 1rem; }
+  .db-conv-name { font-size: 0.88rem; }
+  .db-conv-preview { font-size: 0.77rem; }
+  .db-conv-time { font-size: 0.68rem; }
+
+  /* ── Settings on mobile ── */
+  .settings-body { padding: 14px; }
+  .settings-card { padding: 16px 14px; }
+  .st2-layout { flex-direction: column; height: auto; }
+  .st2-sidebar {
+    width: 100%; flex-direction: row; flex-wrap: wrap;
+    border-right: none; border-bottom: 1px solid var(--border);
+    padding: 10px; gap: 6px; height: auto; min-height: auto;
+  }
+  .st2-nav-item {
+    flex: 1; min-width: 80px; justify-content: center;
+    padding: 10px 8px; gap: 6px; border-radius: 10px;
+    font-size: 0.73rem; text-align: center;
+  }
+  .st2-nav-item i { font-size: 1rem; }
+  .st2-content { padding: 16px; }
+  .st2-card { padding: 16px 14px; }
 }
 
 /* ── Tablet adjustment ───────────────────────────── */
