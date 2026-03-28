@@ -4,6 +4,7 @@ import { supabase } from './lib/supabase'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
+import InstallPrompt from './components/InstallPrompt'
 
 export default function App() {
   const [session, setSession] = useState(undefined)
@@ -32,18 +33,21 @@ export default function App() {
   )
 
   return (
-    <Routes>
-      <Route path="/login" element={session ? <Navigate to="/" /> : <Login />} />
-      <Route path="/settings" element={
-        session
-          ? <Settings agent={agent} onAgentUpdate={setAgent} />
-          : <Navigate to="/login" />
-      } />
-      <Route path="/*" element={
-        session
-          ? <Dashboard session={session} agent={agent} onAgentUpdate={setAgent} />
-          : <Navigate to="/login" />
-      } />
-    </Routes>
+    <>
+      <InstallPrompt />
+      <Routes>
+        <Route path="/login" element={session ? <Navigate to="/" /> : <Login />} />
+        <Route path="/settings" element={
+          session
+            ? <Settings agent={agent} onAgentUpdate={setAgent} />
+            : <Navigate to="/login" />
+        } />
+        <Route path="/*" element={
+          session
+            ? <Dashboard session={session} agent={agent} onAgentUpdate={setAgent} />
+            : <Navigate to="/login" />
+        } />
+      </Routes>
+    </>
   )
 }

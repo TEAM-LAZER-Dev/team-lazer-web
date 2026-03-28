@@ -1397,6 +1397,96 @@ body {
 .push-msg.ok { color: #4ade80; }
 .push-unsupported { font-size: 0.8rem; color: var(--muted); font-style: italic; }
 
+/* ── Install Prompt ──────────────────────────────── */
+.install-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 440px;
+  background: #12082a;
+  border: 1px solid rgba(124,58,237,0.35);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 9999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(124,58,237,0.15);
+}
+.install-prompt-icon img {
+  width: 52px;
+  height: 52px;
+  border-radius: 13px;
+  flex-shrink: 0;
+}
+.install-prompt-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.install-prompt-body strong {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+}
+.install-prompt-body span {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.4;
+}
+.install-prompt-body em {
+  font-style: normal;
+  color: #a78bfa;
+  font-weight: 600;
+}
+.install-share-icon {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255,255,255,0.1);
+  border-radius: 5px;
+  padding: 1px 5px;
+  font-size: 0.72rem;
+  color: #a78bfa;
+}
+.install-prompt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.install-btn-primary {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+.install-btn-primary:hover { filter: brightness(1.15); }
+.install-btn-dismiss {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+.install-btn-dismiss:hover { border-color: rgba(255,255,255,0.2); color: #fff; }
+
 /* ── Mobile ──────────────────────────────────────── */
 @media (max-width: 700px) {
   .db-sidebar { width: 100%; min-width: 100%; border-right: none; }
