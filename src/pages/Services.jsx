@@ -37,7 +37,7 @@ const pageStyle = `
   .trust-item{display:flex;align-items:center;gap:8px;padding:10px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:.82rem;font-weight:500;color:rgba(255,255,255,.55);}
   .trust-item i{color:var(--primary);font-size:.85rem;}
   @media(max-width:900px){.pkg-grid{grid-template-columns:1fr;gap:12px;}}
-  @media(max-width:600px){.cat-header{flex-direction:column;align-items:flex-start;gap:10px;}.trust-bar{flex-direction:column;align-items:center;}}
+  @media(max-width:600px){.cat-header{flex-direction:column;align-items:flex-start;gap:10px;}.trust-bar{display:none;}}
 `
 
 function PkgCard({ title, desc, features, slug, price }) {

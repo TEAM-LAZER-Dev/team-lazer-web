@@ -464,3 +464,6 @@ footer {
 
 /* ── PAGE TRANSITION WRAPPER ── */
 .page-wrapper { min-height: 100vh; }
+
+/* ── Hide chat FAB when mobile nav is open ── */
+body.nav-open .chat-fab { opacity: 0 !important; pointer-events: none !important; transform: scale(0.8) !important; transition: opacity 0.2s, transform 0.2s !important; }

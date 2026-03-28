@@ -22,6 +22,7 @@ export default function Navbar() {
     const next = !menuOpen
     setMenuOpen(next)
     document.body.style.overflow = next ? 'hidden' : ''
+    document.body.classList.toggle('nav-open', next)
   }
 
   const navLinkClass = ({ isActive }) => isActive ? 'active' : ''
