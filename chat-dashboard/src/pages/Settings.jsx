@@ -82,7 +82,8 @@ export default function Settings({ agent, onAgentUpdate }) {
 
     const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY
     if (!vapidKey) {
-      // Env Var noch nicht im Build — nach Netlify-Redeploy behoben
+      setPushStatus('idle')
+      setPushMsg('⚠️ VAPID-Key fehlt im Build! Bitte Netlify neu deployen (Deploys → Trigger deploy → Deploy site).')
       return
     }
 
@@ -357,6 +358,12 @@ export default function Settings({ agent, onAgentUpdate }) {
                 <strong><i className="fas fa-mobile-alt" /> Push-Benachrichtigungen</strong>
                 <p>Bekomme eine Benachrichtigung egal ob das Dashboard offen ist —
                   auch auf dem Handy. Klick öffnet direkt den Chat.</p>
+                {!import.meta.env.VITE_VAPID_PUBLIC_KEY && (
+                  <p style={{ color: '#f87171', fontSize: '0.78rem', marginTop: 6 }}>
+                    <i className="fas fa-exclamation-triangle" /> VAPID-Key fehlt im Build!
+                    Gehe zu Netlify → Deploys → "Trigger deploy" → "Deploy site" um das zu fixen.
+                  </p>
+                )}
               </div>
               <div className="push-status-badge">
                 {pushStatus === 'subscribed'
