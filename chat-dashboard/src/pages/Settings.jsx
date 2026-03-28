@@ -91,10 +91,10 @@ export default function Settings({ agent, onAgentUpdate }) {
 
   /* ── Chat behavior state ─────────────────────────── */
   const [autoClaimWaiting, setAutoClaimWaiting] = useState(
-    agent?.settings?.auto_claim ?? false
+    () => localStorage.getItem('tl_auto_claim') === 'true'
   )
   const [showClosedCount, setShowClosedCount] = useState(
-    agent?.settings?.closed_limit ?? 50
+    () => Number(localStorage.getItem('tl_closed_limit') || 50)
   )
   const [chatSaving, setChatSaving] = useState(false)
   const [chatMsg,    setChatMsg]    = useState('')
@@ -133,7 +133,23 @@ export default function Settings({ agent, onAgentUpdate }) {
     loadQuickReplies()
     checkPushStatus()
     if (agent?.is_admin) loadRoles()
+    // Apply saved appearance on load
+    const compact = localStorage.getItem('tl_compact') === 'true'
+    const density = localStorage.getItem('tl_msg_density') || 'normal'
+    document.documentElement.classList.toggle('tl-compact', compact)
+    document.documentElement.classList.remove('tl-density-compact','tl-density-normal','tl-density-relaxed')
+    document.documentElement.classList.add(`tl-density-${density}`)
   }, []) // eslint-disable-line
+
+  // Live preview: apply immediately when toggles change
+  useEffect(() => {
+    document.documentElement.classList.toggle('tl-compact', compactMode)
+  }, [compactMode])
+
+  useEffect(() => {
+    document.documentElement.classList.remove('tl-density-compact','tl-density-normal','tl-density-relaxed')
+    document.documentElement.classList.add(`tl-density-${msgDensity}`)
+  }, [msgDensity])
 
   /* ── Push ───────────────────────────────────────── */
   async function checkPushStatus() {
@@ -187,15 +203,12 @@ export default function Settings({ agent, onAgentUpdate }) {
     setNotifyBrowser(perm === 'granted')
   }
 
-  /* ── Chat behavior save ─────────────────────────── */
-  async function saveChatSettings() {
+  /* ── Chat behavior save (localStorage) ─────────── */
+  function saveChatSettings() {
     setChatSaving(true); setChatMsg('')
-    const newSettings = { ...(agent?.settings || {}), auto_claim: autoClaimWaiting, closed_limit: showClosedCount }
-    const { data: updated, error } = await supabase.from('agents')
-      .update({ settings: newSettings }).eq('id', agent.id).select().single()
+    localStorage.setItem('tl_auto_claim', autoClaimWaiting)
+    localStorage.setItem('tl_closed_limit', showClosedCount)
     setChatSaving(false)
-    if (error) { setChatMsg('Fehler: ' + error.message); return }
-    onAgentUpdate(updated)
     setChatMsg('✓ Gespeichert!'); setTimeout(() => setChatMsg(''), 3000)
   }
 
@@ -204,8 +217,15 @@ export default function Settings({ agent, onAgentUpdate }) {
     localStorage.setItem('tl_compact', compactMode)
     localStorage.setItem('tl_show_avatars', showAvatarsInList)
     localStorage.setItem('tl_msg_density', msgDensity)
-    document.body.classList.toggle('compact-mode', compactMode)
-    setAppearanceMsg('✓ Gespeichert!'); setTimeout(() => setAppearanceMsg(''), 2500)
+    // Apply immediately
+    applyAppearanceSettings(compactMode, msgDensity)
+    setAppearanceMsg('✓ Angewendet!'); setTimeout(() => setAppearanceMsg(''), 2500)
+  }
+
+  function applyAppearanceSettings(compact, density) {
+    document.documentElement.classList.toggle('tl-compact', compact)
+    document.documentElement.classList.remove('tl-density-compact','tl-density-normal','tl-density-relaxed')
+    document.documentElement.classList.add(`tl-density-${density}`)
   }
 
   /* ── Quick replies ──────────────────────────────── */

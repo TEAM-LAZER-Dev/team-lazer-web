@@ -439,6 +439,25 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{})
   }, [])
 
+  /* ── Apply appearance & chat settings ────────── */
+  useEffect(() => {
+    const compact  = localStorage.getItem('tl_compact') === 'true'
+    const density  = localStorage.getItem('tl_msg_density') || 'normal'
+    document.documentElement.classList.toggle('tl-compact', compact)
+    document.documentElement.classList.remove('tl-density-compact','tl-density-normal','tl-density-relaxed')
+    document.documentElement.classList.add(`tl-density-${density}`)
+    // Listen for storage changes from Settings page
+    function onStorage(e) {
+      if (e.key === 'tl_compact')      document.documentElement.classList.toggle('tl-compact', e.newValue === 'true')
+      if (e.key === 'tl_msg_density') {
+        document.documentElement.classList.remove('tl-density-compact','tl-density-normal','tl-density-relaxed')
+        document.documentElement.classList.add(`tl-density-${e.newValue}`)
+      }
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
+
   /* ── Roles ───────────────────────────────────── */
   useEffect(() => {
     loadRoles()
