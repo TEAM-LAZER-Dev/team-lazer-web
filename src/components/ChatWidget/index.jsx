@@ -182,8 +182,8 @@ const BOT_KB = {
   // ── FALLBACK ─────────────────────────────────────
   fallback: {
     reply: [
-      'Gute Frage! Ich bin ein einfacher Bot und komme da an meine Grenzen. 🤖',
-      'Am besten sprichst du direkt mit unserem Team — die können dir viel besser weiterhelfen. Klick einfach auf "Mit Mitarbeiter sprechen" hier unten! 👇'
+      'Danke für deine Nachricht! Zu diesem Thema kann ich dir leider keine direkte Auskunft geben.',
+      'Unser Team steht dir gerne persönlich zur Verfügung und beantwortet deine Frage schnell und kompetent. Klick einfach auf "Mit Mitarbeiter sprechen" — wir sind für dich da! 💬'
     ]
   }
 }

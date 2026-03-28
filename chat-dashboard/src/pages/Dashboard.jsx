@@ -3,6 +3,25 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
+/* ── Content renderer: Images + clickable Links ──── */
+function renderContent(content) {
+  if (!content) return null
+  if (content.startsWith('[img]')) {
+    const url = content.slice(5)
+    return (
+      <img src={url} alt="Bild" className="db-msg-img"
+        onClick={() => window.open(url, '_blank')} />
+    )
+  }
+  // Split on URLs, keep delimiters
+  const parts = content.split(/(https?:\/\/\S+)/g)
+  return parts.map((part, i) =>
+    /^https?:\/\//.test(part)
+      ? <a key={i} href={part} target="_blank" rel="noreferrer" className="db-msg-link">{part}</a>
+      : part
+  )
+}
+
 /* ── Audio ───────────────────────────────────────── */
 function playSound() {
   try {
@@ -46,6 +65,89 @@ function Avatar({ agent, size = 36, name }) {
   return (
     <div className="avatar-placeholder" style={{ width:size, height:size, fontSize:size*0.36 }}>
       {initials}
+    </div>
+  )
+}
+
+/* ── Profile Modal ───────────────────────────────── */
+function ProfileModal({ agent, onSave, onClose }) {
+  const [name, setName]           = useState(agent?.name || '')
+  const [role, setRole]           = useState(agent?.role || 'Support')
+  const [saving, setSaving]       = useState(false)
+  const [msg, setMsg]             = useState('')
+  const [avatarFile, setAvatarFile] = useState(null)
+  const [avatarPreview, setAvatarPreview] = useState(agent?.avatar_url || null)
+  const avatarRef = useRef(null)
+
+  async function save() {
+    if (!name.trim()) return
+    setSaving(true); setMsg('')
+    let avatar_url = agent?.avatar_url
+    if (avatarFile) {
+      const ext = avatarFile.name.split('.').pop()
+      const path = `avatars/${agent.id}.${ext}`
+      await supabase.storage.from('agent-avatars').upload(path, avatarFile, { upsert: true })
+      const { data: { publicUrl } } = supabase.storage.from('agent-avatars').getPublicUrl(path)
+      avatar_url = publicUrl + '?t=' + Date.now()
+    }
+    const { data, error } = await supabase.from('agents')
+      .update({ name: name.trim(), role: role.trim(), avatar_url })
+      .eq('id', agent.id).select().single()
+    setSaving(false)
+    if (error) { setMsg('Fehler: ' + error.message); return }
+    setMsg('✓ Gespeichert!')
+    onSave(data)
+    setTimeout(onClose, 900)
+  }
+
+  const initials = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase() || '?'
+  return (
+    <div className="pm-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="pm-modal">
+        <div className="pm-header">
+          <h3><i className="fas fa-user-circle" /> Mein Profil</h3>
+          <button className="pm-close" onClick={onClose}><i className="fas fa-times" /></button>
+        </div>
+        <div className="pm-avatar-area">
+          <div className="pm-avatar-preview" onClick={() => avatarRef.current?.click()}>
+            {avatarPreview
+              ? <img src={avatarPreview} alt="Avatar" />
+              : <div className="avatar-placeholder pm-avatar-initials">{initials}</div>}
+            <div className="pm-avatar-overlay"><i className="fas fa-camera" /> Foto ändern</div>
+          </div>
+          <input ref={avatarRef} type="file" accept="image/*" style={{ display:'none' }}
+            onChange={e => { const f = e.target.files[0]; if(!f) return; setAvatarFile(f); setAvatarPreview(URL.createObjectURL(f)) }} />
+          <div className={`pm-online-badge ${agent?.is_online ? 'online' : ''}`}>
+            {agent?.is_online ? '● Online' : '○ Offline'}
+          </div>
+          {agent?.is_admin && (
+            <div className="pm-admin-badge"><i className="fas fa-shield-alt" /> Admin</div>
+          )}
+        </div>
+        <div className="pm-fields">
+          <div className="pm-field">
+            <label>Name</label>
+            <input value={name} onChange={e => setName(e.target.value)} placeholder="Dein Name" />
+          </div>
+          <div className="pm-field">
+            <label>Aufgabenbereich</label>
+            <input value={role} onChange={e => setRole(e.target.value)} placeholder="z.B. Support, Developer, Marketing…" />
+          </div>
+          {agent?.email && (
+            <div className="pm-field">
+              <label>E-Mail</label>
+              <input value={agent.email} disabled className="pm-disabled" />
+            </div>
+          )}
+        </div>
+        <div className="pm-actions">
+          {msg && <span className={`pm-msg ${msg.startsWith('✓')?'ok':'err'}`}>{msg}</span>}
+          <button className="btn-secondary-sm" onClick={onClose}>Abbrechen</button>
+          <button className="btn-primary-sm" onClick={save} disabled={saving || !name.trim()}>
+            {saving ? <span className="btn-spinner" /> : <><i className="fas fa-save" /> Speichern</>}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -130,9 +232,7 @@ function ContactItem({ agent, selected, unread, onSelect, onChat }) {
         </div>
         <div className="db-team-info">
           <strong>{agent.name}</strong>
-          <span className={agent.is_online ? 'text-online' : 'text-offline'}>
-            {agent.is_online ? '● Online' : '○ Offline'}
-          </span>
+          <span className="db-team-role">{agent.role || 'Support'}</span>
         </div>
         {unread > 0 && <span className="db-team-unread">{unread}</span>}
       </button>
@@ -181,12 +281,19 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const [unreadTeam, setUnreadTeam]     = useState({})
   const [contactInfo, setContactInfo]   = useState(null)
 
-  const endRef      = useRef(null)
-  const teamEndRef  = useRef(null)
-  const channelRef  = useRef(null)
-  const teamChanRef = useRef(null)
-  const inputRef    = useRef(null)
+  /* ── Profile modal ───────────────────────────── */
+  const [showProfileModal, setShowProfileModal] = useState(false)
+
+  /* ── Image upload ────────────────────────────── */
+  const [imageUploading, setImageUploading] = useState(false)
+
+  const endRef       = useRef(null)
+  const teamEndRef   = useRef(null)
+  const channelRef   = useRef(null)
+  const teamChanRef  = useRef(null)
+  const inputRef     = useRef(null)
   const teamInputRef = useRef(null)
+  const fileInputRef = useRef(null)
 
   /* ── SW ──────────────────────────────────────── */
   useEffect(() => {
@@ -203,9 +310,16 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   }, [])
 
   async function loadAllAgents() {
-    const { data } = await supabase.from('agents').select('id,name,avatar_url,is_online').order('name')
-    setAllAgents(data || [])
-    setOnlineAgents((data||[]).filter(a => a.is_online))
+    const { data } = await supabase.from('agents').select('id,name,avatar_url,is_online,role,email,is_admin').order('name')
+    const seen = new Set()
+    const unique = (data||[]).filter(a => { if (seen.has(a.id)) return false; seen.add(a.id); return true })
+    setAllAgents(unique)
+    setOnlineAgents(unique.filter(a => a.is_online))
+  }
+
+  async function updateAgentRole(agentId, newRole) {
+    await supabase.from('agents').update({ role: newRole }).eq('id', agentId)
+    setAllAgents(prev => prev.map(a => a.id===agentId ? {...a, role:newRole} : a))
   }
 
   /* ── Own status ──────────────────────────────── */
@@ -323,6 +437,25 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     })
   }
 
+  /* ── Image upload ────────────────────────────── */
+  async function handleImageSend(e) {
+    const file = e.target.files?.[0]
+    if (!file || !activeConv || !agent) return
+    e.target.value = ''
+    setImageUploading(true)
+    const ext = file.name.split('.').pop().toLowerCase()
+    const path = `messages/${activeConv.id}/${Date.now()}.${ext}`
+    const { error } = await supabase.storage.from('chat-images').upload(path, file)
+    if (error) { setImageUploading(false); return }
+    const { data: { publicUrl } } = supabase.storage.from('chat-images').getPublicUrl(path)
+    await supabase.from('messages').insert({
+      conversation_id: activeConv.id, sender_type: 'agent',
+      sender_name: agent.name, sender_avatar: agent.avatar_url,
+      content: `[img]${publicUrl}`
+    })
+    setImageUploading(false)
+  }
+
   /* ── Team DMs ────────────────────────────────── */
   async function openTeamChat(targetAgent) {
     setTeamChatWith(targetAgent); setActiveConv(null)
@@ -410,11 +543,10 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
             onClick={() => { setNavSection('contacts'); setMobileShowChat(false) }} />
         </div>
         <div className="db-rail-bottom">
-          <div className="db-rail-agent" onClick={toggleOnline} title={isOnline?'Klick für Offline':'Klick für Online'}>
+          <div className="db-rail-agent" onClick={() => setShowProfileModal(true)} title="Profil bearbeiten">
             <div className={`db-rail-status ${isOnline?'online':''}`} />
             <Avatar agent={agent} size={32} />
           </div>
-          <NavBtn icon="cog" label="Einst." onClick={() => navigate('/settings')} />
           <NavBtn icon="sign-out-alt" label="Logout" danger onClick={logout} />
         </div>
       </nav>
@@ -496,7 +628,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           <div className="db-panel-content">
             <div className="db-panel-header">
               <h2>Kontakte</h2>
-              <p className="db-panel-sub">{onlineAgents.length} online</p>
+              <p className="db-panel-sub">{onlineAgents.filter(a=>a.id!==agent?.id).length} online</p>
             </div>
             <div className="db-panel-list">
               {onlineAgents.filter(a=>a.id!==agent?.id).length>0 && (
@@ -524,11 +656,37 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                     <button className="db-contact-card-close" onClick={() => setContactInfo(null)}>
                       <i className="fas fa-times" />
                     </button>
-                    <Avatar agent={contactInfo} size={52} />
+                    <Avatar agent={contactInfo} size={56} />
                     <h3>{contactInfo.name}</h3>
+                    {contactInfo.role && (
+                      <span className="db-contact-role-chip"><i className="fas fa-tag" /> {contactInfo.role}</span>
+                    )}
                     <span className={`db-contact-status-badge ${contactInfo.is_online?'online':'offline'}`}>
                       {contactInfo.is_online ? '● Online' : '○ Offline'}
                     </span>
+                    {contactInfo.email && (
+                      <a href={`mailto:${contactInfo.email}`} className="db-contact-email">
+                        <i className="fas fa-envelope" /> {contactInfo.email}
+                      </a>
+                    )}
+                    {/* Admin: Role assignment */}
+                    {agent?.is_admin && (
+                      <div className="db-contact-role-assign">
+                        <label><i className="fas fa-shield-alt" /> Rolle vergeben</label>
+                        <div className="db-role-chips">
+                          {['Support','Developer','Marketing','Vertrieb','Admin'].map(r => (
+                            <button key={r}
+                              className={`db-role-chip ${contactInfo.role===r?'active':''}`}
+                              onClick={async () => {
+                                await updateAgentRole(contactInfo.id, r)
+                                setContactInfo(prev => ({...prev, role:r}))
+                              }}>
+                              {r}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     <button className="db-contact-chat-btn"
                       onClick={() => { openTeamChat(contactInfo); setNavSection('team') }}>
                       <i className="fas fa-comment-dots" /> Nachricht senden
@@ -656,7 +814,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                             <span className="db-msg-sender">{msg.sender_type==='user'?activeConv.user_name:msg.sender_type==='bot'?'Bot':msg.sender_name||'Agent'}</span>
                             <span className="db-msg-time">{fmtTime(msg.created_at)}</span>
                           </div>
-                          <div className={`db-msg-bubble ${isOut?'out':'in'}`}>{msg.content}</div>
+                          <div className={`db-msg-bubble ${isOut?'out':'in'}`}>{renderContent(msg.content)}</div>
                         </div>
                         {isOut && <div className="db-msg-avatar-sm"><Avatar agent={agent} size={26} /></div>}
                       </motion.div>
@@ -678,7 +836,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
               )}
             </AnimatePresence>
 
-            {activeConv.status==='active' && activeConv.assigned_agent_id===agent?.id ? (
+            {activeConv.status==='active' && (activeConv.assigned_agent_id===agent?.id || agent?.is_admin) ? (
               <div className="db-input-area">
                 <AnimatePresence>
                   {showQR && quickReplies.length>0 && (
@@ -689,6 +847,12 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                 </AnimatePresence>
                 <form className="db-reply-bar" onSubmit={sendMessage}>
                   {quickReplies.length>0 && <button type="button" className={`qr-toggle-btn ${showQR?'active':''}`} onClick={() => setShowQR(v=>!v)}><i className="fas fa-bolt" /></button>}
+                  {/* Image upload */}
+                  <input ref={fileInputRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleImageSend} />
+                  <button type="button" className="qr-toggle-btn" onClick={() => fileInputRef.current?.click()}
+                    disabled={imageUploading} title="Bild senden">
+                    {imageUploading ? <span className="btn-spinner" style={{width:14,height:14}} /> : <i className="fas fa-image" />}
+                  </button>
                   <input ref={inputRef} type="text" placeholder={`Antworten als ${agent?.name}…`} value={replyInput} onChange={e=>setReplyInput(e.target.value)} className="db-reply-input" />
                   <button type="submit" className="db-send-btn" disabled={!replyInput.trim()}><i className="fas fa-paper-plane" /></button>
                 </form>
@@ -698,9 +862,21 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                 <button className="db-claim-btn large" onClick={() => claimConv(activeConv)}><i className="fas fa-headset" /> Übernehmen</button>
               </div>
             ) : activeConv.status==='closed' ? (
-              <div className="db-claim-bar muted"><p><i className="fas fa-lock" /> Chat beendet</p></div>
+              <div className="db-claim-bar muted"><p><i className="fas fa-lock" /> Chat beendet</p>
+                {agent?.is_admin && (
+                  <button className="db-end-btn" onClick={() => deleteConv(activeConv.id)} title="Chat löschen">
+                    <i className="fas fa-trash" /> Löschen
+                  </button>
+                )}
+              </div>
             ) : (
-              <div className="db-claim-bar muted"><p><i className="fas fa-info-circle" /> Wird von <strong>{activeConv.agents?.name}</strong> bearbeitet</p></div>
+              <div className="db-claim-bar muted"><p><i className="fas fa-info-circle" /> Wird von <strong>{activeConv.agents?.name}</strong> bearbeitet</p>
+                {agent?.is_admin && (
+                  <button className="db-claim-btn" onClick={() => claimConv(activeConv)} title="Als Admin übernehmen">
+                    <i className="fas fa-shield-alt" /> Übernehmen
+                  </button>
+                )}
+              </div>
             )}
           </>
         )}
@@ -819,11 +995,25 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           <div className="db-nav-icon-wrap"><i className="fas fa-address-book" /></div>
           <span>Kontakte</span>
         </button>
-        <button onClick={() => navigate('/settings')}>
-          <div className="db-nav-icon-wrap"><i className="fas fa-cog" /></div>
-          <span>Einst.</span>
+        <button onClick={() => setShowProfileModal(true)}>
+          <div className="db-nav-icon-wrap" style={{position:'relative'}}>
+            <Avatar agent={agent} size={26} />
+            <span style={{position:'absolute',bottom:-1,right:-3,width:8,height:8,borderRadius:'50%',background:isOnline?'#4ade80':'#555',border:'1.5px solid #070310'}} />
+          </div>
+          <span>Profil</span>
         </button>
       </nav>
+
+      {/* PROFILE MODAL */}
+      <AnimatePresence>
+        {showProfileModal && (
+          <ProfileModal
+            agent={agent}
+            onSave={(updated) => { onAgentUpdate(updated); setIsOnline(updated.is_online) }}
+            onClose={() => setShowProfileModal(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
