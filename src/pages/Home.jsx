@@ -72,11 +72,14 @@ export default function Home() {
                 <span className="hero-pill-dot" />
                 Development aus Deutschland
               </div>
-              <h1>
-                Professionelle<br />
-                <span className="highlight">Entwicklung</span>.<br />
-                Ohne Umwege.
-              </h1>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '28px', marginBottom: '0' }}>
+                <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" style={{ width: '90px', height: '90px', objectFit: 'contain', flexShrink: 0 }} />
+                <h1 style={{ margin: 0 }}>
+                  Professionelle<br />
+                  <span className="highlight">Entwicklung</span>.<br />
+                  Ohne Umwege.
+                </h1>
+              </div>
               <Typewriter />
               <p className="hero-sub">
                 Von der Landing Page bis zum komplexen Discord Bot –
