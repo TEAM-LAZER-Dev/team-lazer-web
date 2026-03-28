@@ -42,8 +42,26 @@ const pageStyle = `
     .values-grid{grid-template-columns:1fr;gap:12px;}
   }
   @media(max-width:600px){
-    .about-stats{grid-template-columns:1fr;}
-    .about-cta{padding:32px 20px;}
+    /* Keep stats as 3 columns — compact pill layout */
+    .about-stats{grid-template-columns:repeat(3,1fr);}
+    .about-stat{padding:18px 10px;}
+    .about-stat strong{font-size:1.6rem;}
+    .about-stat span{font-size:.72rem;}
+    /* Intro: tighter spacing */
+    .about-intro{padding:0 0 40px;gap:28px;}
+    .about-intro-text h2{font-size:1.55rem;}
+    .about-intro-text p{font-size:.88rem;}
+    /* Skills: compact tags */
+    .skill-tag{font-size:.76rem;padding:4px 10px;}
+    /* Values: single col already, just tighter */
+    .value-card{padding:20px 16px;}
+    .value-card h4{font-size:.95rem;}
+    .value-card p{font-size:.82rem;}
+    /* CTA */
+    .about-cta{padding:28px 18px;}
+    .about-cta h3{font-size:1.35rem;}
+    .about-cta-btns{flex-direction:column;gap:10px;}
+    .about-cta-btns .btn{width:100%;justify-content:center;}
   }
 `
 

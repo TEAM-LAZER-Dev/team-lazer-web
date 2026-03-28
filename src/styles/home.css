@@ -280,138 +280,92 @@
   /* ── Hero ── */
   .hero {
     padding-top: calc(var(--nav-h) + 28px);
-    padding-bottom: 0;
-    overflow: visible;
+    padding-bottom: 48px;
   }
-  .hero-inner { gap: 36px; }
+  .hero-inner { gap: 0; }
+
+  /* Hide the right-side project cards — not needed on mobile */
+  .hero-visual { display: none !important; }
+
+  /* Hero text */
   .hero-text { text-align: center; }
   .hero-text h1 {
-    font-size: clamp(2.2rem, 10vw, 3rem);
+    font-size: clamp(2.1rem, 9.5vw, 2.8rem);
     letter-spacing: -0.5px;
-    line-height: 1.02;
+    line-height: 1.03;
   }
-  .hero-pill { font-size: 0.72rem; padding: 4px 12px; }
-  .hero-tw-row { font-size: 1.2rem; margin-bottom: 18px; }
-  .hero-sub { font-size: 0.9rem; line-height: 1.7; margin-bottom: 28px; }
-  .hero-btns {
-    flex-direction: column; gap: 10px; margin-bottom: 20px;
-  }
-  .hero-btns .btn { width: 100%; justify-content: center; padding: 14px 22px; font-size: 0.93rem; }
+  .hero-pill { font-size: 0.72rem; padding: 4px 12px; margin-bottom: 18px; }
+  .hero-tw-row { font-size: 1.15rem; margin-bottom: 16px; }
+  .hero-sub { font-size: 0.9rem; line-height: 1.7; margin-bottom: 24px; max-width: 100%; }
 
-  /* Trust pills — horizontal scroll strip */
-  .hero-trust {
-    overflow-x: auto; flex-wrap: nowrap;
-    gap: 8px; padding-bottom: 4px; justify-content: flex-start;
-    margin: 0 calc(-1 * (100vw - 94vw) / 2);
-    padding-left: calc((100vw - 94vw) / 2);
-    padding-right: calc((100vw - 94vw) / 2);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+  /* Buttons: primary full-width, secondary hidden */
+  .hero-btns { flex-direction: column; gap: 0; margin-bottom: 0; }
+  .hero-btns .btn-primary {
+    width: 100%; justify-content: center;
+    padding: 14px 20px; font-size: 0.9rem;
   }
-  .hero-trust::-webkit-scrollbar { display: none; }
-  .trust-pill { flex-shrink: 0; font-size: 0.72rem; padding: 5px 12px; }
+  .hero-btns .btn-secondary { display: none; }
 
-  /* Hero visual — horizontal scroll strip */
-  .hero-visual {
-    flex-direction: row;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    gap: 12px;
-    padding: 0 20px 28px;
-    margin: 0 -20px;
-    max-width: none;
-    align-items: stretch;
-  }
-  .hero-visual::-webkit-scrollbar { display: none; }
-  .hv-card {
-    flex: 0 0 78vw; max-width: 280px;
-    scroll-snap-align: start;
-    padding: 16px 18px; gap: 14px;
-    border-radius: 16px;
-    /* kill the staggered margin indents */
-    margin-left: 0 !important;
-    /* kill float animations on mobile */
-    animation: none !important;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .hv-card:nth-child(3) { display: flex; } /* show 3rd card in scroll */
-  .hv-icon { width: 40px; height: 40px; border-radius: 11px; font-size: 1rem; }
-  .hv-info { width: 100%; }
-  .hv-info strong { font-size: 0.84rem; }
-  .hv-info span { font-size: 0.74rem; }
-  .hv-status { font-size: 0.68rem; padding: 3px 8px; }
+  /* Trust pills — hide, not useful on mobile */
+  .hero-trust { display: none; }
 
-  /* ── Services — horizontal scroll ── */
+  /* ── Services — clean 1-column ── */
   .services-grid {
-    display: flex; flex-direction: row;
-    overflow-x: auto; scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    gap: 14px;
-    padding: 0 20px 12px;
-    margin: 0 -20px;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    overflow-x: visible;
+    padding: 0; margin: 0;
   }
-  .services-grid::-webkit-scrollbar { display: none; }
   .services-grid > div {
-    flex: 0 0 82vw; max-width: 300px;
-    scroll-snap-align: start;
-    display: flex; flex-direction: column;
+    flex: none; max-width: none;
+    scroll-snap-align: none;
   }
-  .svc-card {
-    flex: 1; padding: 24px 20px; border-radius: 16px;
-  }
-  .svc-icon { width: 46px; height: 46px; border-radius: 12px; font-size: 1.1rem; }
-  .svc-card h3 { font-size: 1.2rem; }
-  .svc-card p { font-size: 0.85rem; }
-  .svc-list li { font-size: 0.8rem; }
+  .svc-card { padding: 20px 18px; border-radius: 14px; gap: 10px; }
+  .svc-icon { width: 42px; height: 42px; border-radius: 11px; font-size: 1rem; }
+  .svc-card h3 { font-size: 1.1rem; }
+  .svc-card p { font-size: 0.84rem; }
+  /* Hide feature list on mobile — keeps cards compact */
+  .svc-list { display: none; }
 
   /* ── Process — vertical timeline ── */
   .process-row {
     flex-direction: column; gap: 0;
     position: relative;
-    padding-left: 36px;
+    padding-left: 40px;
     align-items: stretch;
   }
-  /* Vertical line */
   .process-row::before {
     content: '';
     position: absolute;
-    left: 23px; top: 28px; bottom: 28px;
+    left: 24px; top: 30px; bottom: 30px;
     width: 2px;
-    background: linear-gradient(180deg, var(--primary) 0%, rgba(124,58,237,0.08) 100%);
+    background: linear-gradient(180deg, var(--primary) 0%, rgba(124,58,237,0.06) 100%);
   }
   .process-line { display: none; }
   .process-step {
-    flex-direction: row; gap: 18px;
+    flex-direction: row; gap: 16px;
     align-items: flex-start; text-align: left;
-    padding: 0 0 32px !important;
+    padding: 0 0 30px !important;
     background: none; border: none; border-radius: 0;
   }
   .process-step:last-child { padding-bottom: 0 !important; }
   .ps-num { display: none; }
   .ps-icon {
     width: 48px; height: 48px; border-radius: 14px;
-    font-size: 1.15rem; flex-shrink: 0;
-    margin-bottom: 0;
-    /* Sit on top of the timeline line */
+    font-size: 1.1rem; flex-shrink: 0; margin-bottom: 0;
     position: relative; z-index: 2;
     box-shadow: 0 0 0 5px var(--bg);
   }
-  .process-step h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
-  .process-step p { font-size: 0.83rem; }
+  .process-step h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 5px; }
+  .process-step p { font-size: 0.82rem; }
 
   /* ── CTA ── */
-  .cta-box {
-    padding: 36px 22px 30px; border-radius: 20px;
-  }
-  .cta-box h2 { font-size: 1.65rem; line-height: 1.1; }
-  .cta-box p { font-size: 0.9rem; margin-bottom: 22px; }
+  .cta-box { padding: 32px 20px 28px; border-radius: 18px; }
+  .cta-box h2 { font-size: 1.55rem; line-height: 1.1; }
+  .cta-box p { font-size: 0.88rem; margin-bottom: 20px; }
   .cta-btns { flex-direction: column; gap: 10px; }
   .cta-btns .btn { width: 100%; justify-content: center; }
-  .cta-pills { gap: 6px; margin-top: 18px; }
-  .cta-pill { font-size: 0.7rem; padding: 4px 10px; }
+  /* Hide info pills at bottom of CTA — not needed on mobile */
+  .cta-pills { display: none; }
 }

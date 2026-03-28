@@ -166,7 +166,7 @@ img { max-width: 100%; }
   width: min(340px, 88vw);
   background: #07020f;
   border-left: 1px solid rgba(124,58,237,0.18);
-  z-index: 999;
+  z-index: 1001; /* above navbar (1000) */
   transform: translateX(105%);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
@@ -366,6 +366,15 @@ footer {
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
   .footer-brand { grid-column: 1 / -1; }
   .footer-brand p { max-width: 100%; }
+  /* Navbar: always frosted on mobile so it's always legible */
+  .navbar {
+    background: rgba(5,0,10,0.92);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+  }
+  /* Better nav container spacing on mobile */
+  .nav-container { padding: 0 18px; gap: 12px; }
+  .nav-logo { gap: 8px; }
 }
 
 @media (max-width: 600px) {

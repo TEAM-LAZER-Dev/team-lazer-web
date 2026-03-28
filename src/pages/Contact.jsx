@@ -24,8 +24,22 @@ const pageStyle = `
   .info-text span{font-size:.82rem;color:var(--muted);}
   .info-text a{color:var(--primary);}
   .form-success{padding:20px;border-radius:12px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);text-align:center;color:#4ade80;font-size:.9rem;margin-bottom:18px;}
-  @media(max-width:900px){.contact-layout{grid-template-columns:1fr;gap:24px;}.contact-info{order:-1;flex-direction:row;flex-wrap:wrap;}.info-card{flex:1;min-width:200px;}}
-  @media(max-width:600px){.form-row{grid-template-columns:1fr;}.contact-form-card{padding:24px 18px;}.contact-info{flex-direction:column;}}
+  @media(max-width:900px){
+    .contact-layout{grid-template-columns:1fr;gap:20px;}
+    /* Form first on mobile — info cards go below */
+    .contact-form-card{order:1;}
+    .contact-info{order:2;flex-direction:column;}
+    .info-card{flex:none;}
+  }
+  @media(max-width:600px){
+    .form-row{grid-template-columns:1fr;}
+    .contact-form-card{padding:22px 16px;}
+    .contact-form-card h2{font-size:1.25rem;margin-bottom:16px;}
+    .info-card{padding:16px;}
+    .info-icon{width:36px;height:36px;font-size:.9rem;}
+    .info-text strong{font-size:.84rem;}
+    .info-text span{font-size:.78rem;}
+  }
 `
 
 const PROJECT_MAP = {
