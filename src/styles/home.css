@@ -298,13 +298,12 @@
   .hero-tw-row { font-size: 1.15rem; margin-bottom: 16px; }
   .hero-sub { font-size: 0.9rem; line-height: 1.7; margin-bottom: 24px; max-width: 100%; }
 
-  /* Buttons: primary full-width, secondary hidden */
-  .hero-btns { flex-direction: column; gap: 0; margin-bottom: 0; }
-  .hero-btns .btn-primary {
-    width: 100%; justify-content: center;
-    padding: 14px 20px; font-size: 0.9rem;
+  /* Buttons: both visible, side by side */
+  .hero-btns { flex-direction: row; gap: 10px; margin-bottom: 0; flex-wrap: nowrap; }
+  .hero-btns .btn {
+    flex: 1; justify-content: center;
+    padding: 13px 10px; font-size: 0.82rem;
   }
-  .hero-btns .btn-secondary { display: none; }
 
   /* Trust pills — hide, not useful on mobile */
   .hero-trust { display: none; }
