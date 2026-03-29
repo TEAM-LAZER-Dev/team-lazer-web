@@ -32,7 +32,7 @@ export default function Agb() {
             <h2>§ 3 Leistungsumfang</h2>
             <p>Der genaue Leistungsumfang ergibt sich aus dem individuellen Angebot. Änderungen am vereinbarten Leistungsumfang bedürfen der schriftlichen Zustimmung beider Parteien und können zu Anpassungen des Preises und des Liefertermins führen.</p>
             <h2>§ 4 Preise und Zahlung</h2>
-            <p>Alle Preise werden individuell nach Projektbriefing angeboten und im Angebot schriftlich festgehalten. Gemäß § 19 UStG wird keine Umsatzsteuer erhoben. Dabei werden alle anfallenden Kosten transparent aufgeführt – einschließlich einmaliger Entwicklungskosten sowie laufender Kosten für Hosting oder Domains, sofern diese Teil des Auftrags sind. Hosting- und Domain-Kosten können monatlich oder jährlich anfallen und sind abhängig von Anbieter und Laufzeit. Domains können Mindestlaufzeiten haben und sind ggf. erst zum Ablauf der jeweiligen Periode kündbar. Bei Projekten über 200 € kann eine Anzahlung von 50 % bei Auftragserteilung vereinbart werden. Der Restbetrag ist bei Projektabschluss fällig.</p>
+            <p>Alle Preise werden individuell nach Projektbriefing angeboten und im Angebot schriftlich festgehalten. Alle angegebenen Preise sind Endpreise. Gemäß § 19 UStG wird keine Umsatzsteuer erhoben und daher nicht ausgewiesen. Dabei werden alle anfallenden Kosten transparent aufgeführt – einschließlich einmaliger Entwicklungskosten sowie laufender Kosten für Hosting oder Domains, sofern diese Teil des Auftrags sind. Hosting- und Domain-Kosten können monatlich oder jährlich anfallen und sind abhängig von Anbieter und Laufzeit. Domains können Mindestlaufzeiten haben und sind ggf. erst zum Ablauf der jeweiligen Periode kündbar. Bei Projekten über 200 € kann eine Anzahlung von 50 % bei Auftragserteilung vereinbart werden. Der Restbetrag ist bei Projektabschluss fällig.</p>
             <h2>§ 5 Liefertermine</h2>
             <p>Genannte Liefertermine sind Richtwerte und gelten vorbehaltlich rechtzeitiger Zulieferung von Inhalten und Materialien durch den Auftraggeber. TEAM LAZER haftet nicht für Verzögerungen, die durch den Auftraggeber verursacht werden.</p>
             <h2>§ 6 Abnahme und Übergabe</h2>
@@ -45,8 +45,10 @@ export default function Agb() {
             <p>TEAM LAZER haftet nur für Schäden, die durch grobe Fahrlässigkeit oder Vorsatz entstanden sind. Die Haftung ist auf den Auftragswert begrenzt. Für indirekte Schäden oder Folgeschäden wird keine Haftung übernommen.</p>
             <h2>§ 10 Datenschutz</h2>
             <p>Personenbezogene Daten werden ausschließlich zur Vertragserfüllung verwendet. Weitere Informationen finden sich in unserer Datenschutzerklärung.</p>
-            <h2>§ 11 Schlussbestimmungen</h2>
-            <p>Es gilt deutsches Recht. Gerichtsstand ist Dresden, sofern gesetzlich zulässig. Sollten einzelne Bestimmungen unwirksam sein, bleibt der Vertrag im Übrigen wirksam.</p>
+            <h2>§ 11 Widerrufsrecht für Verbraucher</h2>
+            <p>Verbraucher haben bei Fernabsatzverträgen grundsätzlich ein Widerrufsrecht von 14 Tagen. Da es sich bei unseren Leistungen um individuell angefertigte digitale Produkte handelt, kann das Widerrufsrecht erlöschen, sobald mit der Ausführung der Leistung begonnen wurde und der Verbraucher dem zuvor ausdrücklich zugestimmt hat (§ 356 Abs. 5 BGB).</p>
+            <h2>§ 12 Schlussbestimmungen</h2>
+            <p>Es gilt das Recht der Bundesrepublik Deutschland. Ist der Auftraggeber Verbraucher, gilt der gesetzliche Gerichtsstand. Ist der Auftraggeber Unternehmer, ist Gerichtsstand Dresden. Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.</p>
           </motion.div>
         </div>
       </section>

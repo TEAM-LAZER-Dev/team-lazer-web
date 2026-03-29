@@ -28,17 +28,19 @@ export default function Impressum() {
             <h2>Angaben gemäß § 5 DDG</h2>
             <p>{`TEAM LAZER\nJon Wagner\nScheibenmühlenstr. 20\n01833 Stolpen\nDeutschland`}</p>
             <h2>Kontakt</h2>
-            <p>E-Mail: <a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a></p>
+            <p>{`E-Mail: kontakt@team-lazer.de\nKontaktformular: team-lazer.de/kontakt`}</p>
             <h2>Umsatzsteuer</h2>
-            <p>Kleinunternehmer gemäß § 19 UStG. Es wird keine Umsatzsteuer erhoben und daher auch nicht ausgewiesen.</p>
-            <h2>Inhaltlich Verantwortlicher</h2>
-            <p>Jon Wagner (Adresse wie oben)</p>
+            <p>Gemäß § 19 UStG (Kleinunternehmerregelung) wird keine Umsatzsteuer erhoben und daher auch nicht ausgewiesen. Eine Umsatzsteuer-Identifikationsnummer nach § 27a UStG wurde nicht erteilt.</p>
+            <h2>Inhaltlich Verantwortlicher gemäß § 18 Abs. 2 MStV</h2>
+            <p>{`Jon Wagner\nScheibenmühlenstr. 20\n01833 Stolpen`}</p>
+            <h2>EU-Streitschlichtung</h2>
+            <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a>. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
             <h2>Haftung für Inhalte</h2>
-            <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.</p>
+            <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
             <h2>Haftung für Links</h2>
-            <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.</p>
+            <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
             <h2>Urheberrecht</h2>
-            <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>
+            <p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
           </motion.div>
         </div>
       </section>
