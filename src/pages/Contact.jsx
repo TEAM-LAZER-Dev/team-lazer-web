@@ -62,9 +62,9 @@ export default function Contact() {
       <section className="small-hero">
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-            <span className="section-tag">KOSTENLOSE ERSTBERATUNG</span>
+            <span className="section-tag">SCHREIB UNS</span>
             <h1>Kontakt</h1>
-            <p>Stell uns dein Projekt vor. Wir melden uns innerhalb von 24 Stunden – nach einem kurzen Briefing erhältst du ein individuelles, unverbindliches Angebot.</p>
+            <p>Fragen, Projektideen oder einfach Hallo – wir melden uns innerhalb von 24 Stunden.</p>
           </motion.div>
         </div>
       </section>
@@ -73,7 +73,7 @@ export default function Contact() {
         <div className="container">
           <div className="contact-layout">
             <motion.div className="contact-form-card" {...fadeUp()}>
-              <h2>Projektanfrage</h2>
+              <h2>Kontaktformular</h2>
               {submitted && (
                 <div className="form-success">
                   <i className="fa-solid fa-circle-check" style={{ fontSize: '1.4rem', marginBottom: '8px', display: 'block' }} />
@@ -86,7 +86,7 @@ export default function Contact() {
                 onSubmit={() => setSubmitted(true)}
               >
                 <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_subject" value="Neue Projektanfrage – TEAM LAZER" />
+                <input type="hidden" name="_subject" value="Neue Anfrage – TEAM LAZER" />
                 <input type="text" name="_honey" style={{ display: 'none' }} />
                 <div className="form-row">
                   <div className="form-group">
@@ -99,20 +99,21 @@ export default function Contact() {
                   </div>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="ftyp">Art des Projekts *</label>
-                  <select id="ftyp" name="projekttyp" required defaultValue={prefill}>
-                    <option value="" disabled>– Bitte wählen –</option>
+                  <label htmlFor="ftyp">Betreff</label>
+                  <select id="ftyp" name="betreff" defaultValue={prefill}>
+                    <option value="">– Bitte wählen –</option>
                     {Object.values(PROJECT_MAP).map(v => <option key={v} value={v}>{v}</option>)}
+                    <option>Allgemeine Frage</option>
                     <option>Sonstiges</option>
                   </select>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="fmsg">Beschreibung *</label>
-                  <textarea id="fmsg" name="nachricht" placeholder="Beschreib kurz dein Projekt oder was du brauchst..." required />
+                  <label htmlFor="fmsg">Nachricht *</label>
+                  <textarea id="fmsg" name="nachricht" placeholder="Wie können wir dir helfen?" required />
                 </div>
                 <div className="form-submit">
                   <button type="submit" className="btn btn-primary">
-                    <i className="fa-solid fa-paper-plane" /> Anfrage abschicken
+                    <i className="fa-solid fa-paper-plane" /> Nachricht senden
                   </button>
                 </div>
               </form>
@@ -122,7 +123,7 @@ export default function Contact() {
               {[
                 { icon: 'fa-solid fa-envelope', title: 'E-Mail', content: <a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a>, delay: 0 },
                 { icon: 'fa-solid fa-clock', title: 'Reaktionszeit', content: 'Wir antworten innerhalb von 24 Stunden.', delay: 0.1 },
-                { icon: 'fa-solid fa-server', title: 'Hosting auf Wunsch', content: 'Websites und Bots können bei uns gehostet werden. Monatliche Kosten werden transparent im Angebot aufgeführt.', delay: 0.2 },
+                { icon: 'fa-solid fa-server', title: 'Hosting auf Wunsch', content: 'Websites und Web-Apps können bei uns gehostet werden. Monatliche Kosten werden transparent im Angebot aufgeführt.', delay: 0.2 },
                 { icon: 'fa-solid fa-receipt', title: 'Individuelles Angebot', content: 'Nach einem kurzen Briefing bekommst du ein klares Angebot – alle Kosten inkl. Domain & Hosting offen aufgelistet.', delay: 0.3 },
               ].map(({ icon, title, content, delay }) => (
                 <motion.div key={title} className="info-card" {...fadeUp(delay)}>
