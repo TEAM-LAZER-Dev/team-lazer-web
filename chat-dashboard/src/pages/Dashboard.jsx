@@ -295,7 +295,7 @@ function NavBtn({ icon, label, active, badge, danger, onClick }) {
 
 /* ── Collapsible Section ─────────────────────────── */
 function Section({ title, count, accent, open, onToggle, children }) {
-  const icons = { waiting:'clock', active:'bolt', closed:'times-circle' }
+  const icons = { waiting:'clock', active:'bolt', hold:'pause-circle', closed:'times-circle' }
   return (
     <div className={`db-section db-section-${accent}`}>
       <button className="db-section-hdr" onClick={onToggle}>
@@ -403,7 +403,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const [showNotes, setShowNotes]   = useState(false)
   const [noteInput, setNoteInput]   = useState('')
   const [showInfo, setShowInfo]     = useState(false)
-  const [sectionsOpen, setSectionsOpen] = useState({ waiting:true, active:true, closed:false })
+  const [sectionsOpen, setSectionsOpen] = useState({ waiting:true, active:true, hold:true, closed:false })
 
   /* ── Team ────────────────────────────────────── */
   const [allAgents, setAllAgents]     = useState([])
@@ -514,6 +514,24 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     return () => { window.removeEventListener('beforeunload', off); off() }
   }, [agent?.id])
 
+  /* ── DSGVO auto-cleanup on login ────────────── */
+  useEffect(() => {
+    if (!agent?.is_admin) return
+    const retentionDays = Number(localStorage.getItem('tl_retention_days') || 90)
+    async function runAutoCleanup() {
+      const cutoff = new Date()
+      cutoff.setDate(cutoff.getDate() - retentionDays)
+      const { data: oldConvs } = await supabase
+        .from('conversations').select('id').eq('status','closed')
+        .lt('last_message_at', cutoff.toISOString())
+      if (!oldConvs?.length) return
+      const ids = oldConvs.map(c => c.id)
+      await supabase.from('messages').delete().in('conversation_id', ids)
+      await supabase.from('conversations').delete().in('id', ids)
+    }
+    runAutoCleanup()
+  }, [agent?.is_admin]) // eslint-disable-line
+
   /* ── Customer convs ──────────────────────────── */
   useEffect(() => {
     loadConversations(); loadHistory(); loadQuickReplies()
@@ -525,9 +543,14 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           if (agent?.notify_sound!==false) playSound()
           if (agent?.notify_browser!==false) showBrowserNotification('Neuer Chat! 💬', `${name} wartet`)
         }
-        if (payload.new?.status==='closed') {
+        if (payload.new?.status==='closed' && payload.old?.status!=='closed') {
           loadHistory()
           setActiveConv(prev => prev?.id===payload.new.id ? {...prev, status:'closed'} : prev)
+          // Check if this was an active chat (customer left)
+          if (payload.old?.status === 'active' || payload.old?.status === 'waiting') {
+            const name = payload.new.user_name || 'Besucher'
+            if (agent?.notify_browser!==false) showBrowserNotification('Chat beendet 👋', `${name} hat den Chat verlassen`)
+          }
         }
       }).subscribe()
     return () => supabase.removeChannel(ch)
@@ -566,7 +589,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
 
   async function loadConversations() {
     const { data } = await supabase.from('conversations').select('*, agents(*)')
-      .in('status',['waiting','active']).order('last_message_at',{ascending:false})
+      .in('status',['waiting','active','hold']).order('last_message_at',{ascending:false})
     setConversations(data||[])
   }
   async function loadHistory() {
@@ -614,14 +637,36 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     loadConversations(); loadHistory()
   }
 
+  async function holdConv(convId) {
+    await supabase.from('conversations').update({status:'hold'}).eq('id',convId)
+    await supabase.from('messages').insert({
+      conversation_id:convId, sender_type:'system', sender_name:'System',
+      content:'Kunde wurde in die Warteschleife gesetzt.'
+    })
+    setActiveConv(prev => prev?.id===convId ? {...prev, status:'hold'} : prev)
+    setConversations(prev => prev.map(c => c.id===convId ? {...c, status:'hold'} : c))
+  }
+
+  async function unholdConv(convId) {
+    await supabase.from('conversations').update({status:'active'}).eq('id',convId)
+    await supabase.from('messages').insert({
+      conversation_id:convId, sender_type:'system', sender_name:'System',
+      content:'Warteschleife beendet — Chat wieder aktiv.'
+    })
+    setActiveConv(prev => prev?.id===convId ? {...prev, status:'active'} : prev)
+    setConversations(prev => prev.map(c => c.id===convId ? {...c, status:'active'} : c))
+  }
+
   async function transferConv(targetAgent) {
     if (!activeConv) return
-    await supabase.from('conversations').update({assigned_agent_id:targetAgent.id}).eq('id',activeConv.id)
+    // Auto-hold: put into hold state while transferring, then reassign
+    await supabase.from('conversations').update({status:'hold', assigned_agent_id:targetAgent.id}).eq('id',activeConv.id)
     await supabase.from('messages').insert({
       conversation_id:activeConv.id, sender_type:'system', sender_name:'System',
-      content:`Chat von ${agent.name} an ${targetAgent.name} übergeben.`
+      content:`Chat von ${agent.name} an ${targetAgent.name} übergeben — kurze Wartezeit.`
     })
-    setActiveConv(prev => ({...prev, assigned_agent_id:targetAgent.id, agents:targetAgent}))
+    setActiveConv(prev => ({...prev, status:'hold', assigned_agent_id:targetAgent.id, agents:targetAgent}))
+    setConversations(prev => prev.map(c => c.id===activeConv.id ? {...c, status:'hold', assigned_agent_id:targetAgent.id, agents:targetAgent} : c))
     setShowTransfer(false)
   }
 
@@ -733,6 +778,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   /* ── Computed ────────────────────────────────── */
   const waitingList   = conversations.filter(c => c.status==='waiting')
   const activeList    = conversations.filter(c => c.status==='active')
+  const holdList      = conversations.filter(c => c.status==='hold')
   const totalUnread   = Object.values(unreadCounts).reduce((a,b)=>a+b,0)
   const totalTeamUnread = Object.values(unreadTeam).reduce((a,b)=>a+b,0)
 
@@ -797,6 +843,13 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                       active={activeConv?.id===conv.id} unread={unreadCounts[conv.id]||0} onSelect={selectConv} />)
                 }
               </Section>
+              {holdList.length > 0 && (
+                <Section title="Warteschleife" count={holdList.length} accent="hold"
+                  open={sectionsOpen.hold} onToggle={() => setSectionsOpen(p=>({...p,hold:!p.hold}))}>
+                  {holdList.map(conv => <ConvItem key={conv.id} conv={conv} accent="hold"
+                    active={activeConv?.id===conv.id} unread={unreadCounts[conv.id]||0} onSelect={selectConv} />)}
+                </Section>
+              )}
               <Section title="Beendet" count={history.length} accent="closed"
                 open={sectionsOpen.closed} onToggle={() => setSectionsOpen(p=>({...p,closed:!p.closed}))}>
                 {history.length===0
@@ -979,6 +1032,16 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                     <i className="fas fa-exchange-alt" />
                   </button>
                 )}
+                {activeConv.status==='active' && activeConv.assigned_agent_id===agent?.id && (
+                  <button className="icon-btn db-hold-btn" onClick={() => holdConv(activeConv.id)} title="In Warteschleife setzen">
+                    <i className="fas fa-pause-circle" />
+                  </button>
+                )}
+                {activeConv.status==='hold' && activeConv.assigned_agent_id===agent?.id && (
+                  <button className="db-claim-btn db-unhold-btn" onClick={() => unholdConv(activeConv.id)}>
+                    <i className="fas fa-play-circle" /> Fortsetzen
+                  </button>
+                )}
                 {activeConv.status==='waiting' && (
                   <button className="db-claim-btn" onClick={() => claimConv(activeConv)}>
                     <i className="fas fa-headset" /> Übernehmen
@@ -989,7 +1052,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                 )}
                 {activeConv.status!=='closed' && (
                   <button className="db-end-btn" onClick={() => closeConv(activeConv.id)}>
-                    <i className="fas fa-times-circle" /> Beenden
+                    <i className="fas fa-times-circle" /><span> Beenden</span>
                   </button>
                 )}
               </div>
@@ -1101,6 +1164,15 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
               <div className="db-claim-bar"><p><i className="fas fa-clock" /> Wartet</p>
                 <button className="db-claim-btn large" onClick={() => claimConv(activeConv)}><i className="fas fa-headset" /> Übernehmen</button>
               </div>
+            ) : activeConv.status==='hold' ? (
+              <div className="db-claim-bar" style={{background:'rgba(37,99,235,0.08)',borderColor:'rgba(96,165,250,0.2)'}}>
+                <p><i className="fas fa-pause-circle" style={{color:'#60a5fa'}} /> <span style={{color:'#93c5fd'}}>Warteschleife aktiv</span></p>
+                {(activeConv.assigned_agent_id===agent?.id || agent?.is_admin) && (
+                  <button className="db-claim-btn db-unhold-btn" onClick={() => unholdConv(activeConv.id)}>
+                    <i className="fas fa-play-circle" /> Fortsetzen
+                  </button>
+                )}
+              </div>
             ) : activeConv.status==='closed' ? (
               <div className="db-claim-bar muted"><p><i className="fas fa-lock" /> Chat beendet</p>
                 {agent?.is_admin && (
@@ -1207,7 +1279,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                 <Avatar name={activeConv.user_name} size={56} />
                 <h3>{activeConv.user_name}</h3>
                 <span className={`db-conv-status-chip ${activeConv.status}`}>
-                  {activeConv.status==='waiting'?'Wartend':activeConv.status==='active'?'Aktiv':'Beendet'}
+                  {activeConv.status==='waiting'?'Wartend':activeConv.status==='active'?'Aktiv':activeConv.status==='hold'?'Warteschleife':'Beendet'}
                 </span>
               </div>
               <div className="db-info-rows">
@@ -1231,16 +1303,20 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           <div className="db-nav-icon-wrap"><i className="fas fa-comments" />{totalTeamUnread>0&&<span className="db-nav-badge">{totalTeamUnread}</span>}</div>
           <span>Intern</span>
         </button>
-        <button className={mobileTab==='contacts'&&!mobileShowChat?'active':''} onClick={() => {setMobileTab('contacts');setNavSection('contacts');setMobileShowChat(false)}}>
-          <div className="db-nav-icon-wrap"><i className="fas fa-address-book" /></div>
-          <span>Kontakte</span>
-        </button>
         <button onClick={() => setShowProfileModal(true)}>
           <div className="db-nav-icon-wrap" style={{position:'relative'}}>
             <Avatar agent={agent} size={26} />
             <span style={{position:'absolute',bottom:-1,right:-3,width:8,height:8,borderRadius:'50%',background:isOnline?'#4ade80':'#555',border:'1.5px solid #070310'}} />
           </div>
           <span>Profil</span>
+        </button>
+        <button onClick={() => navigate('/settings')}>
+          <div className="db-nav-icon-wrap"><i className="fas fa-cog" /></div>
+          <span>Einst.</span>
+        </button>
+        <button className="db-mobile-nav-danger" onClick={logout}>
+          <div className="db-nav-icon-wrap"><i className="fas fa-sign-out-alt" /></div>
+          <span>Logout</span>
         </button>
       </nav>
 

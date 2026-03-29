@@ -344,6 +344,30 @@ function ClosedScreen({ byUser, onRestart }) {
   )
 }
 
+/* ── Warteschleife-Screen ──────────────────────────── */
+function HoldScreen() {
+  return (
+    <motion.div className="chat-closed-screen"
+      initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }}>
+      <motion.div className="chat-closed-icon" style={{ color: '#60a5fa' }}
+        initial={{ scale:0 }} animate={{ scale:1 }}
+        transition={{ type:'spring', stiffness:260, damping:18, delay:0.15 }}>
+        <i className="fas fa-pause-circle" />
+      </motion.div>
+      <motion.h3 initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.3 }}>
+        Kurze Wartezeit
+      </motion.h3>
+      <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.45 }}>
+        Du wurdest kurz in die Warteschleife gesetzt. Wir sind gleich wieder für dich da! 🙏
+      </motion.p>
+      <motion.div className="typing-dots" style={{ marginTop: '16px' }}
+        initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.7 }}>
+        <span /><span /><span />
+      </motion.div>
+    </motion.div>
+  )
+}
+
 /* ══════════════════════════════════════════════════
    MAIN WIDGET
 ══════════════════════════════════════════════════ */
@@ -415,6 +439,10 @@ export default function ChatWidget() {
 
       if (conv.status === 'active' && conv.agents) {
         setAgent(conv.agents); setPhase('live')
+        subscribeToConversation(conv.id)
+      } else if (conv.status === 'hold') {
+        if (conv.agents) setAgent(conv.agents)
+        setPhase('hold')
         subscribeToConversation(conv.id)
       } else if (conv.status === 'waiting') {
         setPhase('connecting')
@@ -529,7 +557,13 @@ export default function ChatWidget() {
   /* ── Chat beenden ───────────────────────────────── */
   async function endChatByUser() {
     setShowEndConfirm(false)
-    if (convId) await supabase.from('conversations').update({ status:'closed' }).eq('id', convId)
+    if (convId) {
+      await supabase.from('messages').insert({
+        conversation_id: convId, sender_type:'system', sender_name:'System',
+        content:'Kunde hat den Chat verlassen.'
+      })
+      await supabase.from('conversations').update({ status:'closed' }).eq('id', convId)
+    }
     clearInterval(pollRef.current)
     if (channelRef.current) supabase.removeChannel(channelRef.current)
     setClosedByUser(true); setPhase('closed')
@@ -557,7 +591,16 @@ export default function ChatWidget() {
       .on('postgres_changes', { event:'UPDATE', schema:'public', table:'conversations', filter:`id=eq.${cid}` },
         (payload) => {
           const c = payload.new
-          if (c.status === 'active' && c.assigned_agent_id) onAgentJoined(c.assigned_agent_id, cid)
+          if (c.status === 'active' && c.assigned_agent_id) {
+            setPhase(prev => {
+              if (prev === 'hold') return 'live'  // unhold — return to live without re-animation
+              if (prev !== 'live') { onAgentJoined(c.assigned_agent_id, cid); return prev }
+              return prev
+            })
+          }
+          if (c.status === 'hold') {
+            setIsOpen(true); setPhase('hold')
+          }
           if (c.status === 'closed') {
             clearInterval(pollRef.current)
             setClosedByUser(false); setPhase('closed'); setIsOpen(true)
@@ -610,6 +653,7 @@ export default function ChatWidget() {
   const headerName   = agent ? agent.name : 'TEAM LAZER'
   const headerStatus = phase === 'closed'     ? 'Chat beendet'
                      : phase === 'night'      ? 'Offline (22–5 Uhr)'
+                     : phase === 'hold'       ? 'Warteschleife…'
                      : agent                  ? 'Verbunden'
                      : phase === 'connecting' ? 'Verbinde…'
                      : 'Support-Bot'
@@ -801,6 +845,8 @@ export default function ChatWidget() {
 
               {/* NIGHT */}
               {phase === 'night' && <NightScreen onClose={toggle} />}
+              {/* HOLD */}
+              {phase === 'hold' && <HoldScreen />}
               {/* CLOSED */}
               {phase === 'closed' && <ClosedScreen byUser={closedByUser} onRestart={restartChat} />}
             </div>

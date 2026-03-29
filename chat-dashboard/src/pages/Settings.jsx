@@ -35,6 +35,7 @@ const NAV_ITEMS = [
   { id: 'notifications', icon: 'bell',         label: 'Benachrichtigungen' },
   { id: 'chat',          icon: 'comments',      label: 'Chat-Verhalten'     },
   { id: 'appearance',    icon: 'palette',       label: 'Darstellung'        },
+  { id: 'dsgvo',         icon: 'shield-alt',    label: 'DSGVO & Daten',  adminOnly: true },
   { id: 'quickreplies',  icon: 'bolt',          label: 'Schnellantworten'   },
   { id: 'roles',         icon: 'shield-alt',    label: 'Rollen',  adminOnly: true },
 ]
@@ -128,6 +129,14 @@ export default function Settings({ agent, onAgentUpdate }) {
   const [editRoleId,    setEditRoleId]    = useState(null)
   const [editRoleName,  setEditRoleName]  = useState('')
   const [editRoleColor, setEditRoleColor] = useState('#7c3aed')
+
+  /* ── DSGVO state ─────────────────────────────────── */
+  const [retentionDays, setRetentionDays] = useState(
+    () => Number(localStorage.getItem('tl_retention_days') || 90)
+  )
+  const [dsgvoSaving,   setDsgvoSaving]   = useState(false)
+  const [dsgvoMsg,      setDsgvoMsg]      = useState('')
+  const [deleteCount,   setDeleteCount]   = useState(null)
 
   useEffect(() => {
     loadQuickReplies()
@@ -277,6 +286,35 @@ export default function Settings({ agent, onAgentUpdate }) {
       .update({ name: editRoleName.trim(), color: editRoleColor }).eq('id', id).select().single()
     if (!error && data) setRoles(prev => prev.map(r => r.id === id ? data : r))
     setEditRoleId(null)
+  }
+
+  /* ── DSGVO functions ─────────────────────────────── */
+  function saveDsgvoSettings() {
+    setDsgvoSaving(true)
+    localStorage.setItem('tl_retention_days', retentionDays)
+    setDsgvoSaving(false)
+    setDsgvoMsg('✓ Gespeichert!'); setTimeout(() => setDsgvoMsg(''), 3000)
+  }
+
+  async function runManualCleanup() {
+    setDsgvoSaving(true); setDsgvoMsg(''); setDeleteCount(null)
+    const cutoff = new Date()
+    cutoff.setDate(cutoff.getDate() - retentionDays)
+    const cutoffStr = cutoff.toISOString()
+    // Get old closed conversations
+    const { data: oldConvs } = await supabase
+      .from('conversations').select('id').eq('status', 'closed')
+      .lt('last_message_at', cutoffStr)
+    if (!oldConvs?.length) {
+      setDsgvoMsg('Keine alten Chats gefunden.'); setDsgvoSaving(false); return
+    }
+    const ids = oldConvs.map(c => c.id)
+    await supabase.from('messages').delete().in('conversation_id', ids)
+    await supabase.from('conversations').delete().in('id', ids)
+    setDeleteCount(ids.length)
+    setDsgvoMsg(`✓ ${ids.length} Chat${ids.length>1?'s':''} dauerhaft gelöscht.`)
+    setDsgvoSaving(false)
+    setTimeout(() => { setDsgvoMsg(''); setDeleteCount(null) }, 6000)
   }
 
   const visibleTabs = NAV_ITEMS.filter(t => !t.adminOnly || agent?.is_admin)
@@ -540,6 +578,63 @@ export default function Settings({ agent, onAgentUpdate }) {
                       placeholder="Text der Schnellantwort..." className="qr-textarea" rows={3} />
                     <button className="btn-primary" onClick={addQuickReply} disabled={!newTitle.trim() || !newContent.trim()}>
                       <i className="fas fa-plus" /> Hinzufügen
+                    </button>
+                  </Card>
+                </div>
+              )}
+
+              {/* ════ DSGVO & DATEN (Admin) ════ */}
+              {activeTab === 'dsgvo' && agent?.is_admin && (
+                <div className="st2-section">
+                  <div className="st2-section-intro">
+                    <h2><i className="fas fa-shield-alt" /> DSGVO & Datenschutz</h2>
+                    <p>Verwalte die automatische Löschung alter Chat-Daten gemäß DSGVO-Anforderungen.</p>
+                  </div>
+
+                  <Card title="Aufbewahrungsfrist" icon="clock">
+                    <div className="st2-field-row">
+                      <div className="st2-toggle-info">
+                        <strong>Chat-Daten löschen nach</strong>
+                        <span>Abgeschlossene Chats werden nach dieser Zeit dauerhaft aus der Datenbank entfernt</span>
+                      </div>
+                      <div className="st2-select-wrap">
+                        <select className="st2-select" value={retentionDays}
+                          onChange={e => setRetentionDays(Number(e.target.value))}>
+                          <option value={30}>30 Tage</option>
+                          <option value={60}>60 Tage</option>
+                          <option value={90}>90 Tage</option>
+                          <option value={180}>180 Tage</option>
+                          <option value={365}>1 Jahr</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="st2-info-box" style={{marginTop: '12px'}}>
+                      <i className="fas fa-info-circle" />
+                      <span>Die Aufbewahrungsfrist wird bei jedem Dashboard-Login automatisch angewendet. Chats, die älter als die eingestellte Frist sind, werden dauerhaft gelöscht.</span>
+                    </div>
+                    <div className="st2-save-row">
+                      <button className="btn-primary" onClick={saveDsgvoSettings} disabled={dsgvoSaving}>
+                        <i className="fas fa-save" /> Speichern
+                      </button>
+                      {dsgvoMsg && !deleteCount && <span className={`save-msg ${dsgvoMsg.startsWith('✓')?'ok':'err'}`}>{dsgvoMsg}</span>}
+                    </div>
+                  </Card>
+
+                  <Card title="Manuelle Bereinigung" icon="trash-alt">
+                    <div className="st2-toggle-info" style={{marginBottom:'14px'}}>
+                      <span>Führe die DSGVO-Bereinigung sofort durch und lösche alle abgeschlossenen Chats, die älter als <strong>{retentionDays} Tage</strong> sind, dauerhaft aus der Datenbank.</span>
+                    </div>
+                    {deleteCount !== null && (
+                      <div className="st2-info-box" style={{marginBottom:'12px',borderColor:'rgba(74,222,128,0.3)',background:'rgba(74,222,128,0.06)'}}>
+                        <i className="fas fa-check-circle" style={{color:'#4ade80'}} />
+                        <span style={{color:'#4ade80'}}>{dsgvoMsg}</span>
+                      </div>
+                    )}
+                    <button className="btn-danger" onClick={runManualCleanup} disabled={dsgvoSaving}
+                      style={{background:'rgba(248,113,113,0.1)',border:'1px solid rgba(248,113,113,0.3)',color:'#f87171',
+                        borderRadius:'10px',padding:'10px 18px',fontFamily:'Inter,sans-serif',fontWeight:600,
+                        fontSize:'0.85rem',cursor:'pointer',display:'flex',alignItems:'center',gap:'8px',transition:'0.15s'}}>
+                      {dsgvoSaving ? <><span className="btn-spinner" /> Lösche…</> : <><i className="fas fa-trash-alt" /> Jetzt bereinigen</>}
                     </button>
                   </Card>
                 </div>

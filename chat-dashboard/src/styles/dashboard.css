@@ -1814,6 +1814,9 @@ body {
     border: 2px solid rgba(5, 2, 14, 0.97);
   }
   .db-nav-badge.warn { background: #d97706; }
+  .db-mobile-nav-danger { color: rgba(248,113,113,0.6) !important; }
+  .db-mobile-nav-danger i { color: rgba(248,113,113,0.6) !important; }
+  .db-mobile-nav-danger:hover { color: #f87171 !important; }
 
   /* ── Chat header on mobile ── */
   .db-chat-header {
@@ -2215,7 +2218,17 @@ body {
 
 /* Conv item accent variants — border-left highlight */
 .db-conv-item.accent-waiting {
-  border-left: 3px solid rgba(255,255,255,0.25);
+  border-left: 3px solid rgba(167,139,250,0.8);
+  background: rgba(124,58,237,0.07);
+  animation: db-waiting-pulse 2.5s ease-in-out infinite;
+}
+.db-conv-item.accent-waiting:hover {
+  background: rgba(124,58,237,0.14);
+  animation: none;
+}
+@keyframes db-waiting-pulse {
+  0%, 100% { box-shadow: inset 3px 0 0 rgba(167,139,250,0.8), 0 0 0 rgba(124,58,237,0); }
+  50% { box-shadow: inset 3px 0 0 rgba(167,139,250,0.8), 0 0 12px rgba(124,58,237,0.22); }
 }
 .db-conv-item.accent-active {
   border-left: 3px solid rgba(251,191,36,0.55);
@@ -2225,6 +2238,37 @@ body {
   opacity: 0.75;
 }
 .db-conv-item.accent-closed:hover { opacity: 1; }
+
+/* Waiting section header highlight */
+.db-section.db-section-waiting .db-section-hdr {
+  background: rgba(124,58,237,0.06);
+  border-radius: 8px;
+}
+.db-section-dot.waiting {
+  background: #a78bfa;
+  box-shadow: 0 0 6px rgba(167,139,250,0.7);
+  animation: db-dot-pulse 2s ease-in-out infinite;
+}
+@keyframes db-dot-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(167,139,250,0.6); }
+  50% { box-shadow: 0 0 10px rgba(167,139,250,0.95); }
+}
+.db-section-dot-badge.waiting { background: rgba(167,139,250,0.25); color: #c4b5fd; }
+.db-section-dot.hold  { background: #60a5fa; }
+.db-section-dot-badge.hold  { background: rgba(96,165,250,0.2); color: #60a5fa; }
+
+/* Hold conv item */
+.db-conv-item.accent-hold {
+  border-left: 3px solid rgba(96,165,250,0.6);
+  background: rgba(37,99,235,0.06);
+}
+.db-conv-item.accent-hold:hover { background: rgba(37,99,235,0.1); }
+
+/* Hold/Unhold buttons */
+.db-hold-btn { color: #60a5fa !important; }
+.db-hold-btn:hover { background: rgba(37,99,235,0.12) !important; }
+.db-unhold-btn { background: rgba(37,99,235,0.15); border-color: rgba(37,99,235,0.35); color: #93c5fd; }
+.db-unhold-btn:hover { background: rgba(37,99,235,0.25); }
 
 /* Status chip in chat header */
 .db-conv-status-chip {
@@ -2248,6 +2292,11 @@ body {
   background: rgba(248,113,113,0.08);
   color: #f87171;
   border-color: rgba(248,113,113,0.18);
+}
+.db-conv-status-chip.hold {
+  background: rgba(96,165,250,0.1);
+  color: #60a5fa;
+  border-color: rgba(96,165,250,0.25);
 }
 
 /* Info inline row */
@@ -2714,10 +2763,10 @@ body {
 ══════════════════════════════════════════════════ */
 .db-section-spacer { flex: 1; }
 .db-section-dot-badge {
-  min-width: 18px; height: 18px; border-radius: 99px;
+  width: 18px; height: 18px; border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 0.65rem; font-weight: 800; padding: 0 5px;
-  margin-right: 4px; line-height: 1;
+  font-size: 0.6rem; font-weight: 800; padding: 0;
+  margin-right: 4px; line-height: 1; flex-shrink: 0;
 }
 .db-section-dot-badge.waiting { background: rgba(255,255,255,0.15); color: #fff; }
 .db-section-dot-badge.active  { background: rgba(251,191,36,0.25); color: #fbbf24; }
