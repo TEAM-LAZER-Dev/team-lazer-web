@@ -7,14 +7,8 @@ export default function Footer() {
         <div className="footer-grid">
           <div className="footer-brand">
             <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
-            <p>Websites · Discord Bots · Automatisierung.<br />Entwickelt in Deutschland.</p>
+            <p>Websites · Automatisierung · Individuelle Entwicklung.<br />Entwickelt in Deutschland.</p>
             <div className="footer-social">
-              <a href="https://discord.gg/dCxU6KqWFz" title="Discord" target="_blank" rel="noreferrer">
-                <i className="fa-brands fa-discord" />
-              </a>
-              <a href="https://www.tiktok.com/@team.lazer.de" title="TikTok" target="_blank" rel="noreferrer">
-                <i className="fa-brands fa-tiktok" />
-              </a>
               <a href="https://www.instagram.com/team_lazer.de" title="Instagram" target="_blank" rel="noreferrer">
                 <i className="fa-brands fa-instagram" />
               </a>
@@ -24,8 +18,7 @@ export default function Footer() {
             <h5>Leistungen</h5>
             <Link to="/services">Alle Leistungen</Link>
             <Link to="/services">Website Entwicklung</Link>
-            <Link to="/services">Discord Bots</Link>
-            <Link to="/services">Automation</Link>
+            <Link to="/services">Automation & Skripte</Link>
           </div>
           <div className="footer-col">
             <h5>Unternehmen</h5>

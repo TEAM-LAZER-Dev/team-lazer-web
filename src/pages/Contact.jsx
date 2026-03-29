@@ -45,11 +45,7 @@ const pageStyle = `
 const PROJECT_MAP = {
   'landing-page': 'Landing Page',
   'business-website': 'Business Website',
-  'custom-website': 'Custom Website',
-  'basic-bot': 'Discord Bot (Basic)',
-  'advanced-bot': 'Discord Bot (Advanced)',
-  'bot-anpassung': 'Bot Anpassung',
-  'server-setup': 'Discord Server Setup',
+  'custom-website': 'Custom Website / Web-App',
   'webhook-api': 'Webhook / API Integration',
   'custom-skript': 'Custom Skript / Automation',
 }

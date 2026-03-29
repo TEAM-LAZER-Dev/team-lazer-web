@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import '../styles/home.css'
 
-const WORDS = ['Websites', 'Discord Bots', 'Landing Pages', 'Automatisierungen', 'Bots']
+const WORDS = ['Websites', 'Landing Pages', 'Automatisierungen', 'Skripte', 'Web-Apps']
 
 function Typewriter() {
   const [wi, setWi] = useState(0)
@@ -79,7 +79,7 @@ export default function Home() {
               </h1>
               <Typewriter />
               <p className="hero-sub">
-                Von der Landing Page bis zum komplexen Discord Bot –
+                Von der Landing Page bis zur komplexen Automatisierung –
                 sauberer Code, individuelle Angebote nach Briefing und Hosting auf Wunsch.
               </p>
               <div className="hero-btns">
@@ -108,7 +108,7 @@ export default function Home() {
           >
             {[
               { icon: 'fa-solid fa-globe', cls: 'c-blue', title: 'Business Website', sub: 'Responsiv · Schnell · Individuell', status: 'Live' },
-              { icon: 'fa-brands fa-discord', cls: 'c-purple', title: 'Discord Bot', sub: 'Moderation · Leveling · Custom', status: 'Aktiv' },
+              { icon: 'fa-solid fa-code', cls: 'c-purple', title: 'Custom Web-App', sub: 'React · Node.js · API', status: 'Aktiv' },
               { icon: 'fa-solid fa-gears', cls: 'c-green', title: 'Automatisierung', sub: 'Webhooks · APIs · Skripte', status: 'Läuft' },
             ].map(({ icon, cls, title, sub, status }) => (
               <div key={title} className="hv-card">
@@ -143,8 +143,8 @@ export default function Home() {
           >
             {[
               { to: '/services', sc: '#2563eb', icon: 'fa-solid fa-globe', tag: 'Hosting inklusive', title: 'Website Entwicklung', desc: 'Landing Pages, Business-Websites und Community-Sites – responsiv, ohne Baukastensystem.', items: ['Landing Pages & Business Sites', 'Individuelles Design', 'Hosting auf Wunsch'] },
-              { to: '/services', sc: '#7c3aed', icon: 'fa-brands fa-discord', tag: '24/7 Hosting möglich', title: 'Discord Bot Entwicklung', desc: 'Individuelle Bots nach Maß – vom einfachen Command-Bot bis zum komplexen System.', items: ['Basic bis Advanced Bots', 'Datenbank & Automatisierungen', '24/7 Hosting möglich'] },
-              { to: '/services', sc: '#10b981', icon: 'fa-solid fa-gears', tag: 'Schnelle Umsetzung', title: 'Automation & Skripte', desc: 'Webhooks, API-Integrationen und Skripte – wir automatisieren repetitive Aufgaben.', items: ['Discord Webhooks & APIs', 'Python & JavaScript', 'Datenverarbeitung'] },
+              { to: '/services', sc: '#7c3aed', icon: 'fa-solid fa-code', tag: 'Individuell nach Maß', title: 'Custom Web-Apps', desc: 'Komplexe Webanwendungen, Dashboards und Portale – individuell entwickelt, ohne Baukastensystem.', items: ['React & Node.js', 'Datenbank & API-Integration', 'Hosting auf Wunsch'] },
+              { to: '/services', sc: '#10b981', icon: 'fa-solid fa-gears', tag: 'Schnelle Umsetzung', title: 'Automation & Skripte', desc: 'Webhooks, API-Integrationen und Skripte – wir automatisieren repetitive Aufgaben.', items: ['Webhooks & APIs', 'Python & JavaScript', 'Datenverarbeitung'] },
             ].map(({ to, sc, icon, tag, title, desc, items }) => (
               <motion.div key={title} variants={staggerItem}>
                 <Link to={to} className="svc-card" style={{ '--sc': sc }}>

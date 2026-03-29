@@ -87,7 +87,7 @@ export default function About() {
           <div className="about-intro">
             <motion.div className="about-intro-text" {...fadeUp()}>
               <h2>Entwicklung,<br />auf die du dich <span className="highlight">verlassen kannst</span></h2>
-              <p>TEAM LAZER ist ein kleines, spezialisiertes Entwicklungsstudio aus Deutschland. Wir bauen <strong>Websites, Discord Bots und Automatisierungen</strong> – individuell, sauber im Code und mit transparenten Preisen.</p>
+              <p>TEAM LAZER ist ein kleines, spezialisiertes Entwicklungsstudio aus Deutschland. Wir bauen <strong>Websites, Web-Apps und Automatisierungen</strong> – individuell, sauber im Code und mit transparenten Preisen.</p>
               <p>Was uns unterscheidet: Kein Lock-in, kein Baukastensystem, keine versteckten Kosten. Du bekommst deinen <strong>vollständigen Source-Code</strong>, ein klares individuelles Angebot nach Briefing und direkten Kontakt – ohne Umwege über Agenturen.</p>
               <p>Wir betreiben eigene Server-Infrastruktur und können Websites sowie Bots direkt bei uns hosten – <strong>zuverlässig, rund um die Uhr</strong>. Hosting- und Domain-Kosten werden transparent im Angebot ausgewiesen.</p>
             </motion.div>
@@ -117,7 +117,7 @@ export default function About() {
             {[
               { title: 'Frontend', tags: [['HTML / CSS / JS', true], ['Responsive Design', false], ['Animations', false], ['React', false]] },
               { title: 'Backend & Scripting', tags: [['Python', true], ['Node.js', true], ['REST APIs', false], ['Datenbanken', false]] },
-              { title: 'Discord Entwicklung', tags: [['discord.py', true], ['discord.js', true], ['Slash Commands', false], ['Webhooks', false]] },
+              { title: 'APIs & Integration', tags: [['REST APIs', true], ['Webhooks', true], ['Datenbanken', false], ['Node.js', false]] },
               { title: 'Hosting & Tools', tags: [['Linux Server', false], ['Netlify', false], ['Git', false], ['VS Code', false]] },
             ].map(({ title, tags }) => (
               <motion.div key={title} className="skill-group" variants={staggerItem}>

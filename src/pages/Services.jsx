@@ -67,24 +67,14 @@ const CATEGORIES = [
     cards: [
       { title: 'Landing Page', desc: 'Eine starke Einzelseite für Produkte, Events oder Dienstleistungen. Klar, überzeugend, conversion-optimiert.', features: ['1 Seite, vollständig responsiv', 'Kontaktformular', 'Lieferung in 3–5 Tagen'], slug: 'landing-page', price: '149 €' },
       { title: 'Business Website', desc: 'Mehrseiter für Unternehmen, Freelancer oder Dienstleister. Mit Über-uns, Leistungen, Kontakt und mehr.', features: ['3–6 Seiten, individuelles Design', 'Kontaktformular + SEO-Basis', 'Lieferung in 7–14 Tagen'], slug: 'business-website', price: '349 €' },
-      { title: 'Custom Projekt', desc: 'Portfolio, Community-Site, Event-Seite oder alles andere – wir entwickeln nach Briefing genau was du brauchst.', features: ['Individuell nach Absprache', 'Discord-Integration möglich', 'Zeitplan nach Projektgröße'], slug: 'custom-website', price: 'Anfrage' },
-    ],
-  },
-  {
-    icon: 'fa-brands fa-discord', cls: 'ci-purple', title: 'Discord Bots',
-    sub: 'Individuelle Bots nach Maß – 24/7 Hosting bei uns möglich', alt: true,
-    cards: [
-      { title: 'Basic Bot', desc: 'Commands, Willkommensnachrichten, Auto-Rollen, einfache Moderationsfunktionen.', features: ['Bis zu 10 Custom-Commands', 'Welcome-System', 'Lieferung in 3–5 Tagen'], slug: 'basic-bot', price: '79 €' },
-      { title: 'Advanced Bot', desc: 'Ticket-System, Leveling & XP, Economy, Datenbank-Anbindung, eigenes Dashboard.', features: ['Datenbank (SQLite / MongoDB)', 'Leveling, Tickets, Economy', 'Lieferung in 7–14 Tagen'], slug: 'advanced-bot', price: '199 €' },
-      { title: 'Bot Anpassung', desc: 'Du hast bereits einen Bot und möchtest Funktionen erweitern oder Bugs beheben?', features: ['Erweiterung bestehender Bots', 'Bugfixing & Optimierung', 'Auf Stundenpreisbasis'], slug: 'bot-anpassung', price: '25 €/h' },
+      { title: 'Custom Projekt', desc: 'Portfolio, Community-Site, Event-Seite oder alles andere – wir entwickeln nach Briefing genau was du brauchst.', features: ['Individuell nach Absprache', 'API-Integration möglich', 'Zeitplan nach Projektgröße'], slug: 'custom-website', price: 'Anfrage' },
     ],
   },
   {
     icon: 'fa-solid fa-gears', cls: 'ci-green', title: 'Automation & Skripte',
     sub: 'Webhooks, APIs und Skripte – repetitive Aufgaben automatisiert', alt: false,
     cards: [
-      { title: 'Discord Server Setup', desc: 'Professioneller Server-Aufbau mit Kategorien, Rollen, Berechtigungen und Bot-Integration.', features: ['Struktur nach Briefing', 'Rollen & Berechtigungen', 'Lieferung in 1–3 Tagen'], slug: 'server-setup', price: '49 €' },
-      { title: 'Webhook & API', desc: 'Automatische Benachrichtigungen, Datenübertragungen zwischen Diensten oder externe API-Anbindungen.', features: ['Discord Webhooks', 'API-Integration', 'Python / Node.js'], slug: 'webhook-api', price: '99 €' },
+      { title: 'Webhook & API', desc: 'Automatische Benachrichtigungen, Datenübertragungen zwischen Diensten oder externe API-Anbindungen.', features: ['Webhook-Integration', 'API-Anbindung', 'Python / Node.js'], slug: 'webhook-api', price: '99 €' },
       { title: 'Custom Skript', desc: 'Datenverarbeitung, Scheduler, Scraper oder ein ganz eigenes Automatisierungstool.', features: ['Python oder JavaScript', 'Vollständiger Source-Code', 'Zeitplan nach Absprache'], slug: 'custom-skript', price: '79 €' },
     ],
   },
@@ -100,7 +90,7 @@ export default function Services() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <span className="section-tag">AUF ANFRAGE</span>
             <h1>Leistungen</h1>
-            <p>Websites, Discord Bots und Automatisierungen – individuelle Angebote nach Briefing. Hosting und Domains werden separat und transparent aufgeführt.</p>
+            <p>Websites, Web-Apps und Automatisierungen – individuelle Angebote nach Briefing. Hosting und Domains werden separat und transparent aufgeführt.</p>
           </motion.div>
         </div>
       </section>
