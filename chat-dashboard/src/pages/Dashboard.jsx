@@ -634,7 +634,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           setTimeout(() => endRef.current?.scrollIntoView({behavior:'smooth'}), 60)
         }).subscribe()
     channelRef.current = ch
-    // Typing broadcast channel
+    // Typing broadcast channel + customer-left detection
     let customerTypingTimer = null
     const tch = supabase.channel('typing-conv-'+conv.id)
       .on('broadcast', { event: 'typing' }, ({ payload }) => {
@@ -645,7 +645,31 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           customerTypingTimer = setTimeout(() => setCustomerTyping(false), 3000)
           setTimeout(() => endRef.current?.scrollIntoView({behavior:'smooth'}), 60)
         }
-      }).subscribe()
+      })
+      .on('broadcast', { event: 'customer-left' }, ({ payload }) => {
+        // Kunde hat den Chat beendet — zuverlässig über Broadcast statt postgres_changes!
+        setCustomerTyping(false)
+        setActiveConv(prev => prev?.id === payload?.convId ? { ...prev, status: 'closed' } : prev)
+        // System-Nachricht lokal hinzufügen damit der Agent es sofort im Chat sieht
+        setMessages(prev => [
+          ...prev,
+          {
+            id: 'customer-left-' + Date.now(),
+            conversation_id: payload?.convId,
+            sender_type: 'system',
+            sender_name: 'System',
+            content: '⚠️ ' + (payload?.userName || 'Kunde') + ' hat den Chat verlassen.',
+            created_at: new Date().toISOString()
+          }
+        ])
+        setTimeout(() => endRef.current?.scrollIntoView({ behavior: 'smooth' }), 60)
+        // Sound + Browser-Notification
+        if (agent?.notify_sound !== false) playSound()
+        if (agent?.notify_browser !== false) showBrowserNotification('Chat beendet 👋', (payload?.userName || 'Kunde') + ' hat den Chat verlassen')
+        loadConversations()
+        loadHistory()
+      })
+      .subscribe()
     typingChanRef.current = tch
   }, []) // eslint-disable-line
 

@@ -563,14 +563,29 @@ export default function ChatWidget() {
   async function endChatByUser() {
     setShowEndConfirm(false)
     if (convId) {
+      // 1) System-Nachricht in DB
       await supabase.from('messages').insert({
         conversation_id: convId, sender_type:'system', sender_name:'System',
         content:'Kunde hat den Chat verlassen.'
       })
+      // 2) Broadcast über den bereits funktionierenden Typing-Kanal
+      //    (unabhängig von postgres_changes — zuverlässig!)
+      if (typingChanRef.current) {
+        typingChanRef.current.send({
+          type: 'broadcast', event: 'customer-left',
+          payload: { convId, userName: userName || 'Besucher' }
+        })
+      }
+      // 3) DB-Status update
       await supabase.from('conversations').update({ status:'closed' }).eq('id', convId)
     }
     clearInterval(pollRef.current)
-    if (channelRef.current) supabase.removeChannel(channelRef.current)
+    clearTimeout(userTypingTimer.current)
+    if (channelRef.current) { supabase.removeChannel(channelRef.current); channelRef.current = null }
+    // Typing-Kanal NACH dem Broadcast entfernen
+    setTimeout(() => {
+      if (typingChanRef.current) { supabase.removeChannel(typingChanRef.current); typingChanRef.current = null }
+    }, 500)
     setClosedByUser(true); setPhase('closed')
   }
 
