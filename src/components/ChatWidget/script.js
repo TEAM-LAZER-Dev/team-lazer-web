@@ -13,7 +13,7 @@ export const STEPS = {
     ],
     options: [
       { id: 'website',    label: '💻 Website entwickeln' },
-      { id: 'discord',    label: '🤖 Discord Bot' },
+      { id: 'webapp',     label: '🖥️ Web-App / Dashboard' },
       { id: 'automation', label: '⚙️ Automation & Skripte' },
       { id: 'pricing',    label: '💰 Preise & Angebote' },
       { id: 'connect',    label: '💬 Direkt mit Team sprechen', highlight: true },
@@ -33,14 +33,14 @@ export const STEPS = {
     ],
   },
 
-  discord: {
+  webapp: {
     messages: [
-      { delay: 0,    text: 'Discord Bots sind unsere Spezialität! 🤖' },
-      { delay: 800,  text: 'Von simplen Utility-Bots bis zu komplexen Systemen:\n\n✅ Moderations-Bots\n✅ Custom Commands & Slash Commands\n✅ Leveling-Systeme mit Datenbank\n✅ Ticket-Systeme\n✅ Musik, Games, API-Integrationen\n\nWir bauen genau das, was dein Server braucht.' },
+      { delay: 0,    text: 'Custom Web-Apps sind unser Ding! 🖥️' },
+      { delay: 800,  text: 'Was wir bauen:\n\n✅ Dashboards & Admin-Panels\n✅ Kunden-Portale mit Login\n✅ Datenbank-Anwendungen\n✅ API-gestützte Tools\n✅ Interne Business-Tools\n\nAlles individuell auf deine Anforderungen zugeschnitten.' },
     ],
     options: [
-      { id: 'connect',    label: '📞 Bot anfragen', highlight: true },
-      { id: 'pricing',    label: '💰 Was kostet ein Bot?' },
+      { id: 'connect',    label: '📞 Projekt anfragen', highlight: true },
+      { id: 'pricing',    label: '💰 Was kostet das?' },
       { id: 'welcome',    label: '↩ Zurück' },
     ],
   },
@@ -48,7 +48,7 @@ export const STEPS = {
   automation: {
     messages: [
       { delay: 0,    text: 'Mit der richtigen Automatisierung sparst du täglich Zeit ⚙️' },
-      { delay: 900,  text: 'Was wir bauen können:\n\n✅ Daten-Automatisierung & Verarbeitung\n✅ Web Scraping\n✅ API-Verbindungen zwischen Tools\n✅ Batch-Verarbeitung großer Dateien\n✅ Geplante Aufgaben & Cronjobs\n✅ Discord/Telegram Bots mit Datenbank\n\nSag uns einfach was du brauchst — wir finden eine Lösung.' },
+      { delay: 900,  text: 'Was wir bauen können:\n\n✅ Daten-Automatisierung & Verarbeitung\n✅ Web Scraping\n✅ API-Verbindungen zwischen Tools\n✅ Batch-Verarbeitung großer Dateien\n✅ Geplante Aufgaben & Cronjobs\n✅ Telegram-Bots mit Datenbank\n\nSag uns einfach was du brauchst — wir finden eine Lösung.' },
     ],
     options: [
       { id: 'connect',    label: '📞 Projekt besprechen', highlight: true },

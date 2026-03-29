@@ -89,7 +89,7 @@ export default function About() {
               <h2>Entwicklung,<br />auf die du dich <span className="highlight">verlassen kannst</span></h2>
               <p>TEAM LAZER ist ein kleines, spezialisiertes Entwicklungsstudio aus Deutschland. Wir bauen <strong>Websites, Web-Apps und Automatisierungen</strong> – individuell, sauber im Code und mit transparenten Preisen.</p>
               <p>Was uns unterscheidet: Kein Lock-in, kein Baukastensystem, keine versteckten Kosten. Du bekommst deinen <strong>vollständigen Source-Code</strong>, ein klares individuelles Angebot nach Briefing und direkten Kontakt – ohne Umwege über Agenturen.</p>
-              <p>Wir betreiben eigene Server-Infrastruktur und können Websites sowie Bots direkt bei uns hosten – <strong>zuverlässig, rund um die Uhr</strong>. Hosting- und Domain-Kosten werden transparent im Angebot ausgewiesen.</p>
+              <p>Wir betreiben eigene Server-Infrastruktur und können Websites sowie Web-Apps direkt bei uns hosten – <strong>zuverlässig, rund um die Uhr</strong>. Hosting- und Domain-Kosten werden transparent im Angebot ausgewiesen.</p>
             </motion.div>
             <motion.div {...fadeUp(0.15)}>
               <div className="about-stats">
@@ -144,7 +144,7 @@ export default function About() {
             {[
               { icon: 'fa-solid fa-file-code', title: 'Source-Code gehört dir', desc: 'Kein Lock-in, kein "nur bei uns erweiterbar". Du erhältst vollständigen, sauber dokumentierten Code.' },
               { icon: 'fa-solid fa-receipt', title: 'Transparente Preise', desc: 'Nach einem kurzen Briefing bekommst du ein individuelles Angebot – alle Kosten klar aufgelistet, inkl. möglicher Hosting- oder Domain-Gebühren.' },
-              { icon: 'fa-solid fa-shield-halved', title: '30 Tage Bugfix-Garantie', desc: 'Fehler auf unserer Seite beheben wir kostenlos. 30 Tage nach Übergabe ist das Projekt in sicheren Händen.' },
+              { icon: 'fa-solid fa-shield-halved', title: '14 Tage Bugfix-Garantie', desc: 'Fehler auf unserer Seite beheben wir kostenlos. 14 Tage nach Übergabe ist das Projekt in sicheren Händen.' },
             ].map(({ icon, title, desc }, i) => (
               <motion.div key={title} className="value-card" variants={staggerItem}>
                 <div className="value-icon"><i className={icon} /></div>

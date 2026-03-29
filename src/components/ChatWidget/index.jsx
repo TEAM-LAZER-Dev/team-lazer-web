@@ -71,7 +71,7 @@ const BOT_KB = {
     keywords: /wer seid ihr|was macht ihr|über euch|team lazer|wer bist du|wer bist|über das team|stellt euch vor|vorstellen/i,
     reply: [
       'TEAM LAZER ist ein junges, technisch versiertes Entwicklungsteam. 🚀',
-      'Wir entwickeln:\n\n💻 **Websites & Web-Apps** (React, modern & schnell)\n🤖 **Discord-Bots** (einfach bis komplex)\n⚙️ **Automatisierungen** (APIs, Webhooks, Scripts)\n🖥️ **Server-Setup & DevOps**\n\nKein Projekt zu klein, keine Idee zu groß — wir finden eine Lösung.'
+      'Wir entwickeln:\n\n💻 **Websites & Web-Apps** (React, modern & schnell)\n⚙️ **Automatisierungen** (APIs, Webhooks, Scripts)\n🖥️ **Server-Setup & DevOps**\n\nKein Projekt zu klein, keine Idee zu groß — wir finden eine Lösung.'
     ]
   },
 
@@ -85,22 +85,22 @@ const BOT_KB = {
     followUp: 'Soll ich dich direkt mit dem Team verbinden für ein kostenloses Briefing?'
   },
 
-  // ── DISCORD ──────────────────────────────────────
-  discord: {
-    keywords: /discord|bot|slash command|server bot|moderation bot|ticket|leveling|musik bot|music bot|discord server/i,
+  // ── WEB-APPS ────────────────────────────────────
+  webapp: {
+    keywords: /web.?app|dashboard|portal|admin.?panel|login.?system|datenbank.?app|tool|plattform/i,
     reply: [
-      '🤖 Discord-Bots — unsere absolute Spezialität!',
-      'Was wir bauen:\n\n🛡️ **Moderations-Bots** — Auto-Mod, Warns, Mutes, Bans\n🎫 **Ticket-Systeme** — Support-Tickets mit Logs\n📊 **Leveling-Systeme** — XP, Ränge, Leaderboards\n🎵 **Musik-Bots** — YouTube, Spotify, Playlists\n🎮 **Games & Minispiele** — Custom Commands, Gambling uvm.\n🔗 **API-Integrationen** — verbinde Discord mit allem\n\n**Preise:**\n• Einfacher Bot ab 79€\n• Komplexe Systeme ab 199€\n• Anpassungen ab 25€/h',
+      '🖥️ Custom Web-Apps — individuell für dich entwickelt!',
+      'Was wir bauen:\n\n📊 **Dashboards & Admin-Panels** — Daten übersichtlich verwalten\n🔐 **Kunden-Portale** — Login, Rollen, Berechtigungen\n🗄️ **Datenbank-Anwendungen** — CRUD, Filter, Export\n🔗 **API-gestützte Tools** — verbinde deine Systeme\n⚡ **Interne Business-Tools** — genau auf deine Workflows zugeschnitten\n\nAlles mit React, Node.js und modernen Technologien.',
     ],
-    followUp: 'Was genau brauchst du für deinen Server?'
+    followUp: 'Was für eine App schwebt dir vor?'
   },
 
   // ── AUTOMATION ───────────────────────────────────
   automation: {
-    keywords: /automat|script|api|webhook|cronjob|daten|workflow|bot ohne discord|n8n|zapier|make|integration|verbind|sync/i,
+    keywords: /automat|script|api|webhook|cronjob|daten|workflow|n8n|zapier|make|integration|verbind|sync/i,
     reply: [
       '⚙️ Automatisierung — hier sparen wir dir täglich Zeit!',
-      'Was wir umsetzen:\n\n🔗 **API-Verbindungen** — verbinde beliebige Tools miteinander\n📊 **Datenverarbeitung** — CSVs, JSONs, Datenbanken automatisch verarbeiten\n🕷️ **Web-Scraping** — Preise, Daten, Listings automatisch sammeln\n📧 **E-Mail-Automatisierung** — Trigger-basierte E-Mails & Newsletter\n⏰ **Geplante Aufgaben** — Cronjobs, tägliche Reports, Backups\n📱 **Telegram/Discord-Bots** — Benachrichtigungen & Steuerung\n\n**Preise ab 79€** je nach Komplexität.',
+      'Was wir umsetzen:\n\n🔗 **API-Verbindungen** — verbinde beliebige Tools miteinander\n📊 **Datenverarbeitung** — CSVs, JSONs, Datenbanken automatisch verarbeiten\n🕷️ **Web-Scraping** — Preise, Daten, Listings automatisch sammeln\n📧 **E-Mail-Automatisierung** — Trigger-basierte E-Mails & Newsletter\n⏰ **Geplante Aufgaben** — Cronjobs, tägliche Reports, Backups\n📱 **Telegram-Bots** — Benachrichtigungen & Steuerung\n\n**Preise ab 79€** je nach Komplexität.',
     ],
     followUp: 'Was soll automatisiert werden?'
   },
@@ -119,7 +119,7 @@ const BOT_KB = {
     keywords: /preis|kosten|was kostet|budget|angebot|rechnung|zahlung|bezahl|wie viel|günstig|teuer|rate|stunde/i,
     reply: [
       '💰 Unsere Preisübersicht:',
-      '**Websites:**\n• Landing Page ab **149€**\n• Business-Website ab **349€**\n• Custom-Projekt auf Anfrage\n\n**Bots & Apps:**\n• Basis-Bot ab **79€**\n• Advanced-Bot ab **199€**\n• Bot-Anpassung ab **25€/h**\n\n**Server & APIs:**\n• Server-Setup ab **49€**\n• Webhook & API ab **99€**\n• Custom-Skript ab **79€**\n\n💡 Alle Preise sind Richtwerte. Nach einem kurzen Briefing (~15 Min) bekommst du ein **verbindliches Festpreis-Angebot** — keine versteckten Kosten, keine Überraschungen.',
+      '**Websites:**\n• Landing Page ab **149€**\n• Business-Website ab **349€**\n• Custom-Projekt auf Anfrage\n\n**Web-Apps:**\n• Einfache App ab **199€**\n• Komplexe App auf Anfrage\n\n**Server & APIs:**\n• Server-Setup ab **49€**\n• Webhook & API ab **99€**\n• Custom-Skript ab **79€**\n\n💡 Alle Preise sind Richtwerte. Nach einem kurzen Briefing (~15 Min) bekommst du ein **verbindliches Festpreis-Angebot** — keine versteckten Kosten, keine Überraschungen.',
     ],
     followUp: 'Möchtest du ein kostenloses Briefing für dein Projekt?'
   },
@@ -147,7 +147,7 @@ const BOT_KB = {
     keywords: /referenz|portfolio|beispiel|projekt|arbeit|was habt ihr gemacht|was habt ihr gebaut|zeig|zeigen|habt ihr schon/i,
     reply: [
       '🖼️ Unsere Referenzen findest du auf team-lazer.de!',
-      'Konkrete Beispiele zeigen wir dir gerne direkt — einfach nachfragen. Wir haben unter anderem gebaut:\n\n✅ Business-Websites für lokale Unternehmen\n✅ Discord-Bots mit Tausenden Nutzern\n✅ Automatisierungssysteme für E-Commerce\n✅ Custom Chat-Systeme (wie dieses hier! 😄)\n\nSprich uns an, wir finden sicher etwas Passendes zum Zeigen.'
+      'Konkrete Beispiele zeigen wir dir gerne direkt — einfach nachfragen. Wir haben unter anderem gebaut:\n\n✅ Business-Websites für lokale Unternehmen\n✅ Custom Web-Apps und Dashboards\n✅ Automatisierungssysteme für E-Commerce\n✅ Custom Chat-Systeme (wie dieses hier! 😄)\n\nSprich uns an, wir finden sicher etwas Passendes zum Zeigen.'
     ]
   },
 
@@ -156,7 +156,7 @@ const BOT_KB = {
     keywords: /technologie|tech stack|womit|welche sprache|programmiersprache|framework|react|vue|node|python|typescript|javascript|php/i,
     reply: [
       '💡 Unser Tech-Stack:',
-      '**Frontend:** React 18, TypeScript, Vite, Framer Motion, Tailwind\n**Backend:** Node.js, Python, Supabase, PostgreSQL\n**Bots:** discord.js v14, Python (discord.py)\n**DevOps:** Netlify, Vercel, Hetzner, Docker, Cloudflare\n**APIs:** Stripe, SendGrid, Twilio, OpenAI, uvm.\n\nWir empfehlen immer den Stack, der am besten zu deinem Projekt passt — nicht den, den wir gerade am liebsten mögen. 😄'
+      '**Frontend:** React 18, TypeScript, Vite, Framer Motion, Tailwind\n**Backend:** Node.js, Python, Supabase, PostgreSQL\n**Tools:** Supabase, Stripe, OpenAI\n**DevOps:** Netlify, Vercel, Hetzner, Docker, Cloudflare\n**APIs:** Stripe, SendGrid, Twilio, OpenAI, uvm.\n\nWir empfehlen immer den Stack, der am besten zu deinem Projekt passt — nicht den, den wir gerade am liebsten mögen. 😄'
     ]
   },
 

@@ -26,19 +26,19 @@ export default function Agb() {
           <motion.div className="legal-body" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.1 }}>
             <div className="legal-date">Stand: März 2026</div>
             <h2>§ 1 Geltungsbereich</h2>
-            <p>Diese Allgemeinen Geschäftsbedingungen gelten für alle Verträge zwischen TEAM LAZER (Jon Wagner, Scheibenmühlenstr. 20, 01833 Stolpen) und dem Auftraggeber bezüglich der Entwicklung von Websites, Discord Bots und verwandten digitalen Dienstleistungen.</p>
+            <p>Diese Allgemeinen Geschäftsbedingungen gelten für alle Verträge zwischen TEAM LAZER (Jon Wagner, Scheibenmühlenstr. 20, 01833 Stolpen) und dem Auftraggeber bezüglich der Entwicklung von Websites, Web-Apps, Automatisierungen und verwandten digitalen Dienstleistungen.</p>
             <h2>§ 2 Vertragsschluss</h2>
             <p>Ein Vertrag kommt zustande, wenn TEAM LAZER ein schriftliches Angebot unterbreitet und der Auftraggeber dieses schriftlich (per E-Mail) annimmt. Mündliche Absprachen sind nur bindend, wenn sie schriftlich bestätigt werden.</p>
             <h2>§ 3 Leistungsumfang</h2>
             <p>Der genaue Leistungsumfang ergibt sich aus dem individuellen Angebot. Änderungen am vereinbarten Leistungsumfang bedürfen der schriftlichen Zustimmung beider Parteien und können zu Anpassungen des Preises und des Liefertermins führen.</p>
             <h2>§ 4 Preise und Zahlung</h2>
-            <p>Alle Preise werden individuell nach Projektbriefing angeboten und im Angebot schriftlich festgehalten. Dabei werden alle anfallenden Kosten transparent aufgeführt – einschließlich einmaliger Entwicklungskosten sowie laufender Kosten für Hosting oder Domains, sofern diese Teil des Auftrags sind. Hosting- und Domain-Kosten können monatlich oder jährlich anfallen und sind abhängig von Anbieter und Laufzeit. Domains können Mindestlaufzeiten haben und sind ggf. erst zum Ablauf der jeweiligen Periode kündbar. Bei Projekten über 200 € kann eine Anzahlung von 50 % bei Auftragserteilung vereinbart werden. Der Restbetrag ist bei Projektabschluss fällig.</p>
+            <p>Alle Preise werden individuell nach Projektbriefing angeboten und im Angebot schriftlich festgehalten. Gemäß § 19 UStG wird keine Umsatzsteuer erhoben. Dabei werden alle anfallenden Kosten transparent aufgeführt – einschließlich einmaliger Entwicklungskosten sowie laufender Kosten für Hosting oder Domains, sofern diese Teil des Auftrags sind. Hosting- und Domain-Kosten können monatlich oder jährlich anfallen und sind abhängig von Anbieter und Laufzeit. Domains können Mindestlaufzeiten haben und sind ggf. erst zum Ablauf der jeweiligen Periode kündbar. Bei Projekten über 200 € kann eine Anzahlung von 50 % bei Auftragserteilung vereinbart werden. Der Restbetrag ist bei Projektabschluss fällig.</p>
             <h2>§ 5 Liefertermine</h2>
             <p>Genannte Liefertermine sind Richtwerte und gelten vorbehaltlich rechtzeitiger Zulieferung von Inhalten und Materialien durch den Auftraggeber. TEAM LAZER haftet nicht für Verzögerungen, die durch den Auftraggeber verursacht werden.</p>
             <h2>§ 6 Abnahme und Übergabe</h2>
             <p>Nach Fertigstellung wird das Projekt zur Abnahme übergeben. Der Auftraggeber hat 7 Werktage Zeit, festgestellte Mängel schriftlich zu melden. Nach Ablauf dieser Frist gilt das Projekt als abgenommen.</p>
             <h2>§ 7 Gewährleistung</h2>
-            <p>TEAM LAZER gewährt eine 30-tägige Bugfix-Garantie ab Übergabe für Fehler, die auf die Entwicklungsleistung zurückzuführen sind. Nicht enthalten sind Fehler durch Drittdienste, Hosting-Probleme oder Änderungen durch den Auftraggeber.</p>
+            <p>TEAM LAZER gewährt eine 14-tägige Bugfix-Garantie ab Übergabe für Fehler, die auf die Entwicklungsleistung zurückzuführen sind. Nicht enthalten sind Fehler durch Drittdienste, Hosting-Probleme oder Änderungen durch den Auftraggeber.</p>
             <h2>§ 8 Urheberrecht und Nutzungsrechte</h2>
             <p>Nach vollständiger Bezahlung erhält der Auftraggeber alle Nutzungsrechte am erstellten Werk inklusive vollständigem Source-Code. TEAM LAZER behält das Recht, das Projekt im Portfolio zu nennen, sofern nicht ausdrücklich anders vereinbart.</p>
             <h2>§ 9 Haftungsbeschränkung</h2>
