@@ -2112,8 +2112,8 @@ body {
   border-radius: 50%;
   flex-shrink: 0;
 }
-.db-section-dot.waiting { background: rgba(255,255,255,0.7); }
-.db-section-dot.active  { background: #fbbf24; }
+.db-section-dot.waiting { background: #fbbf24; }
+.db-section-dot.active  { background: #4ade80; }
 .db-section-dot.closed  { background: #f87171; }
 .db-section-icon {
   font-size: 0.68rem !important;
@@ -2156,17 +2156,17 @@ body {
   font-weight: 700;
   color: rgba(255,255,255,0.6);
 }
-/* Waiting = subtle white */
+/* Waiting = gelb */
 .db-conv-av.accent-waiting {
-  border-color: rgba(255,255,255,0.35);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.8);
-}
-/* Active = gold */
-.db-conv-av.accent-active {
   border-color: rgba(251,191,36,0.55);
   background: rgba(251,191,36,0.08);
   color: #fbbf24;
+}
+/* Active = grün */
+.db-conv-av.accent-active {
+  border-color: rgba(74,222,128,0.55);
+  background: rgba(74,222,128,0.08);
+  color: #4ade80;
 }
 /* Closed = red */
 .db-conv-av.accent-closed {
@@ -2205,6 +2205,22 @@ body {
   text-overflow: ellipsis;
 }
 .db-conv-sub i { margin-right: 3px; font-size: 0.62rem; }
+
+/* Timer in conv items */
+.db-conv-timer {
+  font-size: 0.62rem;
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.db-conv-timer i { font-size: 0.55rem; }
+.db-conv-timer.accent-waiting { color: #fbbf24; }
+.db-conv-timer.accent-active  { color: #4ade80; }
+.db-conv-timer.accent-hold    { color: #60a5fa; }
+.db-conv-timer.accent-closed  { color: rgba(248,113,113,0.7); }
 .db-conv-del {
   flex-shrink: 0;
   width: 26px; height: 26px;
@@ -2222,21 +2238,23 @@ body {
 .db-conv-del:hover { color: #f87171; background: rgba(248,113,113,0.08); }
 
 /* Conv item accent variants — border-left highlight */
+/* Wartend = gelb */
 .db-conv-item.accent-waiting {
-  border-left: 3px solid rgba(167,139,250,0.8);
-  background: rgba(124,58,237,0.07);
+  border-left: 3px solid rgba(251,191,36,0.8);
+  background: rgba(251,191,36,0.06);
   animation: db-waiting-pulse 2.5s ease-in-out infinite;
 }
 .db-conv-item.accent-waiting:hover {
-  background: rgba(124,58,237,0.14);
+  background: rgba(251,191,36,0.12);
   animation: none;
 }
 @keyframes db-waiting-pulse {
-  0%, 100% { box-shadow: inset 3px 0 0 rgba(167,139,250,0.8), 0 0 0 rgba(124,58,237,0); }
-  50% { box-shadow: inset 3px 0 0 rgba(167,139,250,0.8), 0 0 12px rgba(124,58,237,0.22); }
+  0%, 100% { box-shadow: inset 3px 0 0 rgba(251,191,36,0.8), 0 0 0 rgba(251,191,36,0); }
+  50% { box-shadow: inset 3px 0 0 rgba(251,191,36,0.8), 0 0 12px rgba(251,191,36,0.22); }
 }
+/* Aktiv = grün */
 .db-conv-item.accent-active {
-  border-left: 3px solid rgba(251,191,36,0.55);
+  border-left: 3px solid rgba(74,222,128,0.55);
 }
 .db-conv-item.accent-closed {
   border-left: 3px solid rgba(248,113,113,0.35);
@@ -2244,21 +2262,21 @@ body {
 }
 .db-conv-item.accent-closed:hover { opacity: 1; }
 
-/* Waiting section header highlight */
+/* Waiting section header highlight — gelb */
 .db-section.db-section-waiting .db-section-hdr {
-  background: rgba(124,58,237,0.06);
+  background: rgba(251,191,36,0.06);
   border-radius: 8px;
 }
 .db-section-dot.waiting {
-  background: #a78bfa;
-  box-shadow: 0 0 6px rgba(167,139,250,0.7);
+  background: #fbbf24;
+  box-shadow: 0 0 6px rgba(251,191,36,0.7);
   animation: db-dot-pulse 2s ease-in-out infinite;
 }
 @keyframes db-dot-pulse {
-  0%, 100% { box-shadow: 0 0 4px rgba(167,139,250,0.6); }
-  50% { box-shadow: 0 0 10px rgba(167,139,250,0.95); }
+  0%, 100% { box-shadow: 0 0 4px rgba(251,191,36,0.6); }
+  50% { box-shadow: 0 0 10px rgba(251,191,36,0.95); }
 }
-.db-section-dot-badge.waiting { background: rgba(167,139,250,0.25); color: #c4b5fd; }
+.db-section-dot-badge.waiting { background: rgba(251,191,36,0.25); color: #fbbf24; }
 .db-section-dot.hold  { background: #60a5fa; }
 .db-section-dot-badge.hold  { background: rgba(96,165,250,0.2); color: #60a5fa; }
 
@@ -2284,14 +2302,14 @@ body {
   border: 1px solid transparent;
 }
 .db-conv-status-chip.waiting {
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.6);
-  border-color: rgba(255,255,255,0.12);
-}
-.db-conv-status-chip.active {
   background: rgba(251,191,36,0.1);
   color: #fbbf24;
   border-color: rgba(251,191,36,0.25);
+}
+.db-conv-status-chip.active {
+  background: rgba(74,222,128,0.1);
+  color: #4ade80;
+  border-color: rgba(74,222,128,0.25);
 }
 .db-conv-status-chip.closed {
   background: rgba(248,113,113,0.08);
@@ -2823,8 +2841,8 @@ body {
   margin-right: 4px; line-height: 1; flex-shrink: 0;
   overflow: hidden;
 }
-.db-section-dot-badge.waiting { background: rgba(255,255,255,0.15); color: #fff; }
-.db-section-dot-badge.active  { background: rgba(251,191,36,0.25); color: #fbbf24; }
+.db-section-dot-badge.waiting { background: rgba(251,191,36,0.25); color: #fbbf24; }
+.db-section-dot-badge.active  { background: rgba(74,222,128,0.25); color: #4ade80; }
 .db-section-dot-badge.closed  { background: rgba(248,113,113,0.2); color: #f87171; }
 
 /* ══════════════════════════════════════════════════

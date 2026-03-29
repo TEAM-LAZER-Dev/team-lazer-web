@@ -320,8 +320,39 @@ function Section({ title, count, accent, open, onToggle, children }) {
   )
 }
 
+/* ── Elapsed timer helper ─────────────────────────── */
+function useElapsed(since) {
+  const [now, setNow] = useState(Date.now())
+  useEffect(() => {
+    if (!since) return
+    const iv = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(iv)
+  }, [since])
+  if (!since) return null
+  const sec = Math.max(0, Math.floor((now - new Date(since).getTime()) / 1000))
+  const h = Math.floor(sec / 3600)
+  const m = Math.floor((sec % 3600) / 60)
+  const s = sec % 60
+  if (h > 0) return `${h}h ${String(m).padStart(2,'0')}m`
+  return `${m}:${String(s).padStart(2,'0')}`
+}
+
+/* ── Duration formatter (static, no timer) ─────── */
+function formatDuration(startISO, endISO) {
+  if (!startISO || !endISO) return null
+  const sec = Math.max(0, Math.floor((new Date(endISO) - new Date(startISO)) / 1000))
+  const h = Math.floor(sec / 3600)
+  const m = Math.floor((sec % 3600) / 60)
+  const s = sec % 60
+  if (h > 0) return `${h}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`
+  if (m > 0) return `${m}m ${String(s).padStart(2,'0')}s`
+  return `${s}s`
+}
+
 /* ── Customer conv item ──────────────────────────── */
 function ConvItem({ conv, active, unread, onSelect, onDelete, accent }) {
+  const elapsed = useElapsed(accent !== 'closed' ? conv.created_at : null)
+  const duration = accent === 'closed' ? formatDuration(conv.created_at, conv.last_message_at) : null
   return (
     <motion.div className={`db-conv-item accent-${accent} ${active?'selected':''}`}
       onClick={() => onSelect(conv)} layout
@@ -340,6 +371,8 @@ function ConvItem({ conv, active, unread, onSelect, onDelete, accent }) {
             {conv.user_topic ? <><i className="fas fa-tag" /> {conv.user_topic}</>
               : conv.agents?.name ? `→ ${conv.agents.name}` : 'Kein Thema'}
           </span>
+          {elapsed && <span className={`db-conv-timer accent-${accent}`}><i className="fas fa-clock" /> {elapsed}</span>}
+          {duration && <span className="db-conv-timer accent-closed"><i className="fas fa-hourglass-end" /> {duration}</span>}
         </div>
       </div>
       {onDelete && (
@@ -427,6 +460,14 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   /* ── Image upload ────────────────────────────── */
   const [imageUploading, setImageUploading] = useState(false)
 
+  /* ── Live elapsed timer for active chat header ── */
+  const [headerNow, setHeaderNow] = useState(Date.now())
+  useEffect(() => {
+    if (!activeConv || activeConv.status === 'closed') return
+    const iv = setInterval(() => setHeaderNow(Date.now()), 1000)
+    return () => clearInterval(iv)
+  }, [activeConv?.id, activeConv?.status])
+
   const endRef            = useRef(null)
   const teamEndRef        = useRef(null)
   const channelRef        = useRef(null)
@@ -484,12 +525,16 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   /* ── Agents ──────────────────────────────────── */
   useEffect(() => {
     loadAllAgents()
-    loadTeamConvPartners()
     const ch = supabase.channel('agents-watch')
       .on('postgres_changes', { event:'UPDATE', schema:'public', table:'agents' }, loadAllAgents)
       .subscribe()
     return () => supabase.removeChannel(ch)
   }, []) // eslint-disable-line
+
+  // Team-Conv-Partners erst laden wenn agent.id verfügbar ist
+  useEffect(() => {
+    if (agent?.id) loadTeamConvPartners()
+  }, [agent?.id]) // eslint-disable-line
 
   async function loadAllAgents() {
     const { data } = await supabase.from('agents').select('id,name,avatar_url,is_online,role,role_ids,email,is_admin,is_owner').order('name')
@@ -697,6 +742,10 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
       conversation_id:convId, sender_type:'system', sender_name:'System',
       content:'Kunde wurde in die Warteschleife gesetzt.'
     })
+    // Broadcast an den Kunden — zuverlässig ohne postgres_changes
+    if (typingChanRef.current) {
+      typingChanRef.current.send({ type:'broadcast', event:'conv-hold', payload:{ convId } })
+    }
     setActiveConv(prev => prev?.id===convId ? {...prev, status:'hold'} : prev)
     setConversations(prev => prev.map(c => c.id===convId ? {...c, status:'hold'} : c))
   }
@@ -707,6 +756,10 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
       conversation_id:convId, sender_type:'system', sender_name:'System',
       content:'Warteschleife beendet — Chat wieder aktiv.'
     })
+    // Broadcast an den Kunden — zuverlässig ohne postgres_changes
+    if (typingChanRef.current) {
+      typingChanRef.current.send({ type:'broadcast', event:'conv-unhold', payload:{ convId } })
+    }
     setActiveConv(prev => prev?.id===convId ? {...prev, status:'active'} : prev)
     setConversations(prev => prev.map(c => c.id===convId ? {...c, status:'active'} : c))
   }
@@ -719,16 +772,30 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
       conversation_id:activeConv.id, sender_type:'system', sender_name:'System',
       content:`Chat von ${agent.name} an ${targetAgent.name} übergeben — kurze Wartezeit.`
     })
+    // Broadcast hold an Kunden
+    if (typingChanRef.current) {
+      typingChanRef.current.send({ type:'broadcast', event:'conv-hold', payload:{ convId: activeConv.id } })
+    }
     setActiveConv(prev => ({...prev, status:'hold', assigned_agent_id:targetAgent.id, agents:targetAgent}))
     setConversations(prev => prev.map(c => c.id===activeConv.id ? {...c, status:'hold', assigned_agent_id:targetAgent.id, agents:targetAgent} : c))
     setShowTransfer(false)
   }
 
   async function deleteConv(convId) {
-    await supabase.from('messages').delete().eq('conversation_id',convId)
-    await supabase.from('conversations').delete().eq('id',convId)
-    setHistory(prev => prev.filter(c => c.id!==convId))
-    if (activeConv?.id===convId) { setActiveConv(null); setMessages([]) }
+    // Erst Nachrichten löschen, dann Conversation
+    const { error: msgErr } = await supabase.from('messages').delete().eq('conversation_id', convId)
+    const { error: convErr } = await supabase.from('conversations').delete().eq('id', convId)
+
+    if (convErr || msgErr) {
+      // Fallback: Wenn RLS das Löschen blockiert, Status auf 'deleted' setzen
+      // So taucht der Chat weder in loadConversations noch in loadHistory auf
+      console.warn('Hard-delete fehlgeschlagen, nutze soft-delete:', convErr?.message || msgErr?.message)
+      await supabase.from('conversations').update({ status: 'deleted' }).eq('id', convId)
+    }
+
+    setHistory(prev => prev.filter(c => c.id !== convId))
+    setConversations(prev => prev.filter(c => c.id !== convId))
+    if (activeConv?.id === convId) { setActiveConv(null); setMessages([]) }
   }
 
   async function sendMessage(e) {
@@ -1110,7 +1177,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                 <strong>{activeConv.user_name}</strong>
                 <div className="db-chat-meta">
                   <span className={`db-conv-status-chip ${activeConv.status}`}>
-                    {activeConv.status==='waiting'?'Wartend':activeConv.status==='active'?'Aktiv':'Beendet'}
+                    {activeConv.status==='waiting'?'Wartend':activeConv.status==='active'?'Aktiv':activeConv.status==='hold'?'Pausiert':'Beendet'}
                   </span>
                   {activeConv.user_topic && (
                     <span className="db-conv-topic-tag"><i className="fas fa-tag" /> {activeConv.user_topic}</span>
@@ -1119,6 +1186,19 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                     <span className="db-assigned"><Avatar agent={activeConv.agents} size={14} /> {activeConv.agents.name}</span>
                   )}
                   <span className="db-chat-since">{fmtTime(activeConv.created_at)}</span>
+                  {activeConv.status !== 'closed' && activeConv.created_at && (() => {
+                    const sec = Math.max(0, Math.floor((headerNow - new Date(activeConv.created_at).getTime()) / 1000))
+                    const h = Math.floor(sec / 3600)
+                    const m = Math.floor((sec % 3600) / 60)
+                    const s = sec % 60
+                    const t = h > 0 ? `${h}h ${String(m).padStart(2,'0')}m` : `${m}:${String(s).padStart(2,'0')}`
+                    return <span className={`db-conv-timer accent-${activeConv.status}`}><i className="fas fa-clock" /> {t}</span>
+                  })()}
+                  {activeConv.status === 'closed' && activeConv.created_at && activeConv.last_message_at && (
+                    <span className="db-conv-timer accent-closed">
+                      <i className="fas fa-hourglass-end" /> {formatDuration(activeConv.created_at, activeConv.last_message_at)}
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="db-chat-header-actions">
@@ -1427,6 +1507,11 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                 <span className={`db-conv-status-chip ${activeConv.status}`}>
                   {activeConv.status==='waiting'?'Wartend':activeConv.status==='active'?'Aktiv':activeConv.status==='hold'?'Warteschleife':'Beendet'}
                 </span>
+                {activeConv.status === 'closed' && activeConv.created_at && activeConv.last_message_at && (
+                  <span className="db-conv-timer accent-closed" style={{marginTop:4}}>
+                    <i className="fas fa-hourglass-end" /> Dauer: {formatDuration(activeConv.created_at, activeConv.last_message_at)}
+                  </span>
+                )}
               </div>
               <div className="db-info-rows">
                 {activeConv.user_email && <div className="db-info-row"><i className="fas fa-envelope" /><div><span>E-Mail</span><a href={`mailto:${activeConv.user_email}`}>{activeConv.user_email}</a></div></div>}

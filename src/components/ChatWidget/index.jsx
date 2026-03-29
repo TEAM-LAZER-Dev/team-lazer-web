@@ -654,6 +654,15 @@ export default function ChatWidget() {
           scrollLive()
         }
       })
+      .on('broadcast', { event: 'conv-hold' }, () => {
+        setIsOpen(true); setPhase('hold')
+      })
+      .on('broadcast', { event: 'conv-unhold' }, () => {
+        setPhase('live')
+      })
+      .on('broadcast', { event: 'customer-left' }, () => {
+        // Falls das ChatWidget selbst dieses Event empfängt (Echopf.) — ignorieren
+      })
       .subscribe()
     typingChanRef.current = tch
   }
