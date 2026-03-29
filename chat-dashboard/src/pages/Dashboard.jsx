@@ -581,8 +581,8 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
         .lt('last_message_at', cutoff.toISOString())
       if (!oldConvs?.length) return
       const ids = oldConvs.map(c => c.id)
-      await supabase.from('messages').delete().in('conversation_id', ids)
-      await supabase.from('conversations').delete().in('id', ids)
+      // Soft-Delete statt Hard-Delete (RLS blockiert DELETE)
+      await supabase.from('conversations').update({ status: 'deleted' }).in('id', ids)
     }
     runAutoCleanup()
   }, [agent?.is_admin]) // eslint-disable-line
@@ -782,16 +782,11 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   }
 
   async function deleteConv(convId) {
-    // Erst Nachrichten löschen, dann Conversation
-    const { error: msgErr } = await supabase.from('messages').delete().eq('conversation_id', convId)
-    const { error: convErr } = await supabase.from('conversations').delete().eq('id', convId)
-
-    if (convErr || msgErr) {
-      // Fallback: Wenn RLS das Löschen blockiert, Status auf 'deleted' setzen
-      // So taucht der Chat weder in loadConversations noch in loadHistory auf
-      console.warn('Hard-delete fehlgeschlagen, nutze soft-delete:', convErr?.message || msgErr?.message)
-      await supabase.from('conversations').update({ status: 'deleted' }).eq('id', convId)
-    }
+    // Soft-Delete: Status auf 'deleted' setzen.
+    // Hard-Delete funktioniert nicht wegen Supabase RLS.
+    // 'deleted' taucht weder in loadConversations (waiting/active/hold)
+    // noch in loadHistory (closed) auf — also dauerhaft weg.
+    await supabase.from('conversations').update({ status: 'deleted' }).eq('id', convId)
 
     setHistory(prev => prev.filter(c => c.id !== convId))
     setConversations(prev => prev.filter(c => c.id !== convId))
@@ -838,24 +833,42 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   }
 
   /* ── Team DMs ────────────────────────────────── */
+  // Helper: liest/schreibt Team-Chat-Clear-Timestamps aus localStorage
+  function getTeamClears() {
+    try { return JSON.parse(localStorage.getItem('tl_team_clears') || '{}') } catch { return {} }
+  }
+  function setTeamClear(partnerId) {
+    const clears = getTeamClears()
+    clears[partnerId] = new Date().toISOString()
+    localStorage.setItem('tl_team_clears', JSON.stringify(clears))
+  }
+
   async function loadTeamConvPartners() {
     if (!agent?.id) return
     const { data } = await supabase.from('team_messages')
-      .select('sender_id, receiver_id')
+      .select('sender_id, receiver_id, created_at')
       .or(`sender_id.eq.${agent.id},receiver_id.eq.${agent.id}`)
     if (!data?.length) { setTeamConvPartners([]); return }
+
+    const clears = getTeamClears()
     const partnerIds = new Set()
     data.forEach(m => {
-      if (m.sender_id !== agent.id) partnerIds.add(m.sender_id)
-      if (m.receiver_id !== agent.id) partnerIds.add(m.receiver_id)
+      const partnerId = m.sender_id !== agent.id ? m.sender_id : m.receiver_id
+      const clearTs = clears[partnerId]
+      // Nur anzeigen wenn es Nachrichten NACH dem Clear-Zeitstempel gibt
+      if (!clearTs || new Date(m.created_at) > new Date(clearTs)) {
+        partnerIds.add(partnerId)
+      }
     })
     setTeamConvPartners([...partnerIds])
   }
 
-  async function deleteTeamChat(targetAgentId) {
+  function deleteTeamChat(targetAgentId) {
     if (!agent?.id) return
-    await supabase.from('team_messages').delete()
-      .or(`and(sender_id.eq.${agent.id},receiver_id.eq.${targetAgentId}),and(sender_id.eq.${targetAgentId},receiver_id.eq.${agent.id})`)
+    // WhatsApp-Style: Clear-Zeitstempel setzen statt DB-Delete
+    // Nachrichten bleiben in DB, werden aber nicht mehr geladen
+    // Chat taucht erst wieder auf wenn neue Nachricht gesendet/empfangen wird
+    setTeamClear(targetAgentId)
     if (teamChatWith?.id === targetAgentId) {
       setTeamChatWith(null); setTeamMsgs([]); setMobileShowChat(false)
       if (teamChanRef.current) { supabase.removeChannel(teamChanRef.current); teamChanRef.current = null }
@@ -867,10 +880,12 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     setTeamChatWith(targetAgent); setActiveConv(null)
     setMobileShowChat(true); setTeamInput(''); setContactInfo(null)
     setUnreadTeam(prev => ({...prev, [targetAgent.id]:0}))
-    const { data } = await supabase.from('team_messages')
+    const clearTs = getTeamClears()[targetAgent.id]
+    let query = supabase.from('team_messages')
       .select('*')
       .or(`and(sender_id.eq.${agent.id},receiver_id.eq.${targetAgent.id}),and(sender_id.eq.${targetAgent.id},receiver_id.eq.${agent.id})`)
-      .order('created_at',{ascending:true})
+    if (clearTs) query = query.gt('created_at', clearTs)
+    const { data } = await query.order('created_at',{ascending:true})
     setTeamMsgs(data||[])
     setTimeout(() => teamEndRef.current?.scrollIntoView({behavior:'instant'}), 60)
     await supabase.from('team_messages')
