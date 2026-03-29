@@ -398,16 +398,21 @@ export default function ChatWidget() {
   const [liveInput, setLiveInput]         = useState('')
   const [agent, setAgent]                 = useState(null)
 
-  const sessionId  = useRef(getSessionId())
-  const channelRef = useRef(null)
-  const pollRef    = useRef(null)
-  const handledRef = useRef(false)
-  const botStarted = useRef(false)
-  const endRef     = useRef(null)
-  const nameRef    = useRef(null)
-  const emailRef   = useRef(null)
-  const liveRef    = useRef(null)
-  const inputRef   = useRef(null)
+  const [agentTyping, setAgentTyping]         = useState(false)
+
+  const sessionId          = useRef(getSessionId())
+  const channelRef         = useRef(null)
+  const pollRef            = useRef(null)
+  const handledRef         = useRef(false)
+  const botStarted         = useRef(false)
+  const endRef             = useRef(null)
+  const nameRef            = useRef(null)
+  const emailRef           = useRef(null)
+  const liveRef            = useRef(null)
+  const inputRef           = useRef(null)
+  const agentTypingTimer   = useRef(null)
+  const userTypingTimer    = useRef(null)
+  const typingChanRef      = useRef(null)
 
   const scrollBot  = useCallback(() => setTimeout(() => endRef.current?.scrollIntoView({ behavior:'smooth' }), 60), [])
   const scrollLive = useCallback(() => setTimeout(() => liveRef.current?.scrollIntoView({ behavior:'smooth' }), 60), [])
@@ -587,6 +592,9 @@ export default function ChatWidget() {
   /* ── Realtime ──────────────────────────────────── */
   function subscribeToConversation(cid) {
     if (channelRef.current) supabase.removeChannel(channelRef.current)
+    if (typingChanRef.current) supabase.removeChannel(typingChanRef.current)
+
+    // Main channel: conversation updates + new messages
     const ch = supabase.channel('conv-' + cid)
       .on('postgres_changes', { event:'UPDATE', schema:'public', table:'conversations', filter:`id=eq.${cid}` },
         (payload) => {
@@ -610,6 +618,8 @@ export default function ChatWidget() {
         (payload) => {
           const msg = payload.new
           if (msg.sender_type === 'agent') {
+            setAgentTyping(false)
+            clearTimeout(agentTypingTimer.current)
             setLiveMessages(prev => prev.find(m => m.id === msg.id) ? prev : [...prev, msg])
             if (!isOpen) setHasUnread(true)
             scrollLive()
@@ -617,6 +627,20 @@ export default function ChatWidget() {
         })
       .subscribe()
     channelRef.current = ch
+
+    // Typing channel: shared with dashboard for bidirectional typing indicators
+    const tch = supabase.channel('typing-conv-' + cid)
+      .on('broadcast', { event: 'typing' }, ({ payload }) => {
+        if (payload?.from === 'agent') {
+          if (payload?.stop) { setAgentTyping(false); clearTimeout(agentTypingTimer.current); return }
+          setAgentTyping(true)
+          clearTimeout(agentTypingTimer.current)
+          agentTypingTimer.current = setTimeout(() => setAgentTyping(false), 3000)
+          scrollLive()
+        }
+      })
+      .subscribe()
+    typingChanRef.current = tch
   }
 
   function startPolling(cid) {
@@ -645,7 +669,10 @@ export default function ChatWidget() {
 
   useEffect(() => () => {
     clearInterval(pollRef.current)
+    clearTimeout(agentTypingTimer.current)
+    clearTimeout(userTypingTimer.current)
     if (channelRef.current) supabase.removeChannel(channelRef.current)
+    if (typingChanRef.current) supabase.removeChannel(typingChanRef.current)
   }, [])
 
   function toggle() { setIsOpen(v => !v); setHasUnread(false) }
@@ -840,6 +867,20 @@ export default function ChatWidget() {
                       </motion.div>
                     ))}
                   </AnimatePresence>
+                  <AnimatePresence>
+                    {agentTyping && (
+                      <motion.div className="chat-msg agent"
+                        initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }}
+                        exit={{ opacity:0, y:6 }} transition={{ duration:0.18 }}>
+                        <div className="chat-msg-avatar">
+                          <Avatar agent={agent} size={28} />
+                        </div>
+                        <div className="chat-bubble typing-bubble">
+                          <span /><span /><span />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                   <div ref={liveRef} />
                 </div>
               )}
@@ -878,7 +919,16 @@ export default function ChatWidget() {
             {phase === 'live' && (
               <form className="chat-input-bar" onSubmit={sendLiveMessage}>
                 <input type="text" placeholder="Nachricht schreiben…"
-                  value={liveInput} onChange={e => setLiveInput(e.target.value)}
+                  value={liveInput} onChange={e => {
+                    setLiveInput(e.target.value)
+                    if (typingChanRef.current) {
+                      typingChanRef.current.send({ type:'broadcast', event:'typing', payload:{ from:'customer' } })
+                      clearTimeout(userTypingTimer.current)
+                      userTypingTimer.current = setTimeout(() => {
+                        typingChanRef.current?.send({ type:'broadcast', event:'typing', payload:{ from:'customer', stop:true } })
+                      }, 2500)
+                    }
+                  }}
                   className="chat-input" autoFocus />
                 <button type="submit" className="chat-send-btn" disabled={!liveInput.trim()}>
                   <i className="fas fa-paper-plane" />

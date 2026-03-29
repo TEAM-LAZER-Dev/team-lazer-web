@@ -427,14 +427,21 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   /* ── Image upload ────────────────────────────── */
   const [imageUploading, setImageUploading] = useState(false)
 
-  const endRef       = useRef(null)
-  const teamEndRef   = useRef(null)
-  const channelRef   = useRef(null)
-  const closedByMeRef = useRef(new Set())
-  const teamChanRef  = useRef(null)
+  const endRef            = useRef(null)
+  const teamEndRef        = useRef(null)
+  const channelRef        = useRef(null)
+  const closedByMeRef     = useRef(new Set())
+  const teamChanRef       = useRef(null)
+  const typingChanRef     = useRef(null)
+  const agentTypingTimer  = useRef(null)
+  const teamTypingTimer   = useRef(null)
   const inputRef     = useRef(null)
   const teamInputRef = useRef(null)
   const fileInputRef = useRef(null)
+
+  /* ── Typing indicator states ────────────────── */
+  const [customerTyping,    setCustomerTyping]    = useState(false)
+  const [teamPartnerTyping, setTeamPartnerTyping] = useState(false)
 
   /* ── SW ──────────────────────────────────────── */
   useEffect(() => {
@@ -610,20 +617,37 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const selectConv = useCallback(async (conv) => {
     setActiveConv(conv); setTeamChatWith(null)
     setMobileShowChat(true); setReplyInput(''); setShowQR(false); setShowNotes(false)
+    setCustomerTyping(false)
     const { data:msgs } = await supabase.from('messages').select('*')
       .eq('conversation_id', conv.id).order('created_at',{ascending:true})
     setMessages(msgs||[])
     setUnreadCounts(prev => ({...prev, [conv.id]:0}))
     setTimeout(() => endRef.current?.scrollIntoView({behavior:'instant'}), 60)
     if (channelRef.current) supabase.removeChannel(channelRef.current)
+    if (typingChanRef.current) supabase.removeChannel(typingChanRef.current)
+    // Messages channel
     const ch = supabase.channel('dash-msgs-'+conv.id)
       .on('postgres_changes', {event:'INSERT',schema:'public',table:'messages',filter:`conversation_id=eq.${conv.id}`},
         (payload) => {
           setMessages(prev => prev.find(m=>m.id===payload.new.id) ? prev : [...prev, payload.new])
+          setCustomerTyping(false)
           setTimeout(() => endRef.current?.scrollIntoView({behavior:'smooth'}), 60)
         }).subscribe()
     channelRef.current = ch
-  }, [])
+    // Typing broadcast channel
+    let customerTypingTimer = null
+    const tch = supabase.channel('typing-conv-'+conv.id)
+      .on('broadcast', { event: 'typing' }, ({ payload }) => {
+        if (payload?.from === 'customer') {
+          if (payload?.stop) { setCustomerTyping(false); return }
+          setCustomerTyping(true)
+          clearTimeout(customerTypingTimer)
+          customerTypingTimer = setTimeout(() => setCustomerTyping(false), 3000)
+          setTimeout(() => endRef.current?.scrollIntoView({behavior:'smooth'}), 60)
+        }
+      }).subscribe()
+    typingChanRef.current = tch
+  }, []) // eslint-disable-line
 
   async function claimConv(conv) {
     if (!agent) return
@@ -761,6 +785,8 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     await supabase.from('team_messages')
       .update({is_read:true}).eq('sender_id',targetAgent.id).eq('receiver_id',agent.id).eq('is_read',false)
     if (teamChanRef.current) supabase.removeChannel(teamChanRef.current)
+    setTeamPartnerTyping(false)
+    let partnerTypingTimer = null
     const ch = supabase.channel(`team-dm-${[agent.id,targetAgent.id].sort().join('-')}`)
       .on('postgres_changes', {event:'INSERT',schema:'public',table:'team_messages'}, (payload) => {
         const msg = payload.new
@@ -768,9 +794,20 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                    (msg.sender_id===targetAgent.id&&msg.receiver_id===agent.id)
         if (!ok) return
         setTeamMsgs(prev => prev.find(m=>m.id===msg.id) ? prev : [...prev, msg])
+        setTeamPartnerTyping(false)
         if (msg.sender_id!==agent.id) supabase.from('team_messages').update({is_read:true}).eq('id',msg.id)
         setTimeout(() => teamEndRef.current?.scrollIntoView({behavior:'smooth'}), 60)
-      }).subscribe()
+      })
+      .on('broadcast', { event: 'typing' }, ({ payload }) => {
+        if (payload?.from !== agent.id) {
+          if (payload?.stop) { setTeamPartnerTyping(false); return }
+          setTeamPartnerTyping(true)
+          clearTimeout(partnerTypingTimer)
+          partnerTypingTimer = setTimeout(() => setTeamPartnerTyping(false), 3000)
+          setTimeout(() => teamEndRef.current?.scrollIntoView({behavior:'smooth'}), 60)
+        }
+      })
+      .subscribe()
     teamChanRef.current = ch
   }
 
@@ -1167,6 +1204,16 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                   </div>
                 )
               })}
+              {/* Customer typing indicator */}
+              <AnimatePresence>
+                {customerTyping && (
+                  <motion.div className="db-typing-row incoming"
+                    initial={{opacity:0,y:6}} animate={{opacity:1,y:0}} exit={{opacity:0,y:6}}>
+                    <div className="db-msg-avatar-sm"><div className="db-msg-user-dot">{(activeConv?.user_name?.[0]||'?').toUpperCase()}</div></div>
+                    <div className="db-typing-bubble"><span/><span/><span/></div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
               <div ref={endRef} />
             </div>
 
@@ -1198,7 +1245,19 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                     disabled={imageUploading} title="Bild senden">
                     {imageUploading ? <span className="btn-spinner" style={{width:14,height:14}} /> : <i className="fas fa-image" />}
                   </button>
-                  <input ref={inputRef} type="text" placeholder={`Antworten als ${agent?.name}…`} value={replyInput} onChange={e=>setReplyInput(e.target.value)} className="db-reply-input" />
+                  <input ref={inputRef} type="text" placeholder={`Antworten als ${agent?.name}…`} value={replyInput}
+                    onChange={e => {
+                      setReplyInput(e.target.value)
+                      // Broadcast typing to customer
+                      if (typingChanRef.current) {
+                        typingChanRef.current.send({ type:'broadcast', event:'typing', payload:{ from:'agent' } })
+                        clearTimeout(agentTypingTimer.current)
+                        agentTypingTimer.current = setTimeout(() => {
+                          typingChanRef.current?.send({ type:'broadcast', event:'typing', payload:{ from:'agent', stop:true } })
+                        }, 2500)
+                      }
+                    }}
+                    className="db-reply-input" />
                   <button type="submit" className="db-send-btn" disabled={!replyInput.trim()}><i className="fas fa-paper-plane" /></button>
                 </form>
               </div>
@@ -1282,13 +1341,34 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                   </div>
                 )
               })}
+              {/* Partner typing indicator */}
+              <AnimatePresence>
+                {teamPartnerTyping && (
+                  <motion.div className="db-typing-row incoming"
+                    initial={{opacity:0,y:6}} animate={{opacity:1,y:0}} exit={{opacity:0,y:6}}>
+                    <div className="db-msg-avatar-sm"><Avatar agent={teamChatWith} size={26} /></div>
+                    <div className="db-typing-bubble"><span/><span/><span/></div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
               <div ref={teamEndRef} />
             </div>
 
             <div className="db-input-area">
               <form className="db-reply-bar" onSubmit={sendTeamMessage}>
                 <input ref={teamInputRef} type="text" placeholder={`Nachricht an ${teamChatWith.name}…`}
-                  value={teamInput} onChange={e=>setTeamInput(e.target.value)} className="db-reply-input" />
+                  value={teamInput}
+                  onChange={e => {
+                    setTeamInput(e.target.value)
+                    if (teamChanRef.current) {
+                      teamChanRef.current.send({ type:'broadcast', event:'typing', payload:{ from: agent.id } })
+                      clearTimeout(teamTypingTimer.current)
+                      teamTypingTimer.current = setTimeout(() => {
+                        teamChanRef.current?.send({ type:'broadcast', event:'typing', payload:{ from: agent.id, stop: true } })
+                      }, 2500)
+                    }
+                  }}
+                  className="db-reply-input" />
                 <button type="submit" className="db-send-btn team" disabled={!teamInput.trim()}>
                   <i className="fas fa-paper-plane" />
                 </button>
