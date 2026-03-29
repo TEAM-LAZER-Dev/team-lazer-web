@@ -1823,9 +1823,14 @@ body {
     padding: 10px 14px; gap: 10px;
     border-bottom: 1px solid rgba(255,255,255,0.05);
   }
-  .db-end-btn span { display: none; }
-  .db-end-btn { width: 34px; height: 34px; padding: 0; border-radius: 10px; justify-content: center; }
-  .db-end-btn i { font-size: 0.9rem; margin: 0; }
+  /* Header "Beenden"-Button: nur Icon, kein Text */
+  .db-chat-header-actions .db-end-btn span { display: none; }
+  .db-chat-header-actions .db-end-btn { width: 34px; height: 34px; padding: 0; border-radius: 10px; justify-content: center; }
+  .db-chat-header-actions .db-end-btn i { font-size: 0.9rem; margin: 0; }
+  /* Claim-Bar "Löschen"-Button: Text + Icon sichtbar, genug Platz */
+  .db-claim-bar .db-end-btn { width: auto; height: auto; padding: 7px 14px; border-radius: 8px; }
+  .db-claim-bar .db-end-btn span { display: inline; }
+  .db-claim-bar .db-end-btn i { font-size: 0.85rem; margin: 0; }
 
   /* ── Chat messages on mobile ── */
   .db-messages { padding: 14px 12px; gap: 10px; }

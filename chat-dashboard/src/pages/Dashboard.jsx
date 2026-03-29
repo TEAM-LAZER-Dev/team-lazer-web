@@ -658,7 +658,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
             conversation_id: payload?.convId,
             sender_type: 'system',
             sender_name: 'System',
-            content: '⚠️ ' + (payload?.userName || 'Kunde') + ' hat den Chat verlassen.',
+            content: (payload?.userName || 'Kunde') + ' hat den Chat verlassen.',
             created_at: new Date().toISOString()
           }
         ])
