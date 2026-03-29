@@ -2340,7 +2340,21 @@ body {
   font-family: 'Inter', sans-serif;
 }
 .db-team-item:hover { background: var(--surface); }
-.db-team-item.selected { background: var(--primary-dim); border-left: 3px solid #7c3aed; }
+.db-team-item.selected, .db-team-item-wrap.selected .db-team-item { background: var(--primary-dim); border-left: 3px solid #7c3aed; }
+
+/* Team item wrap (with delete button) */
+.db-team-item-wrap {
+  display: flex; align-items: center;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.db-team-item-wrap .db-team-item { border-bottom: none; }
+.db-team-delete-btn {
+  background: none; border: none; color: rgba(255,255,255,0.15);
+  cursor: pointer; padding: 8px 12px; font-size: 0.78rem;
+  transition: 0.15s; flex-shrink: 0;
+}
+.db-team-delete-btn:hover { color: #f87171; background: rgba(248,113,113,0.08); }
 .db-team-av-wrap {
   position: relative;
   flex-shrink: 0;
@@ -2763,10 +2777,12 @@ body {
 ══════════════════════════════════════════════════ */
 .db-section-spacer { flex: 1; }
 .db-section-dot-badge {
-  width: 18px; height: 18px; border-radius: 50%;
+  width: 22px; height: 22px; min-width: 22px; max-width: 22px;
+  border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 0.6rem; font-weight: 800; padding: 0;
+  font-size: 0.58rem; font-weight: 800; padding: 0;
   margin-right: 4px; line-height: 1; flex-shrink: 0;
+  overflow: hidden;
 }
 .db-section-dot-badge.waiting { background: rgba(255,255,255,0.15); color: #fff; }
 .db-section-dot-badge.active  { background: rgba(251,191,36,0.25); color: #fbbf24; }

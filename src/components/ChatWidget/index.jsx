@@ -685,20 +685,21 @@ export default function ChatWidget() {
             transition={{ duration:0.22, ease:'easeOut' }}>
 
             {/* Header */}
-            <div className={`chat-header ${phase === 'closed' || phase === 'night' ? 'chat-header-closed' : ''}`}>
+            <div className={`chat-header ${phase === 'closed' || phase === 'night' ? 'chat-header-closed' : phase === 'hold' ? 'chat-header-hold' : ''}`}>
               <div className="chat-header-left">
                 <div className="chat-header-avatar">
-                  {agent
+                  {agent && phase !== 'hold'
                     ? <Avatar agent={agent} size={38} />
                     : <div className="chat-header-bot-icon">
                         <i className={
                           phase === 'closed' ? 'fas fa-check-circle'
                           : phase === 'night' ? 'fas fa-moon'
+                          : phase === 'hold' ? 'fas fa-pause-circle'
                           : 'fas fa-robot'
                         } />
                       </div>
                   }
-                  {phase !== 'closed' && phase !== 'night' && <span className="chat-online-dot" />}
+                  {phase !== 'closed' && phase !== 'night' && phase !== 'hold' && <span className="chat-online-dot" />}
                 </div>
                 <div className="chat-header-info">
                   <strong>{headerName}</strong>

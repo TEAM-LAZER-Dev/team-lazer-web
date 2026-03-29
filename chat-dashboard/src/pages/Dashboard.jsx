@@ -416,6 +416,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const [teamInput, setTeamInput]       = useState('')
   const [unreadTeam, setUnreadTeam]     = useState({})
   const [contactInfo, setContactInfo]   = useState(null)
+  const [teamConvPartners, setTeamConvPartners] = useState([])
 
   /* ── Roles ───────────────────────────────────── */
   const [roles, setRoles] = useState([])
@@ -429,6 +430,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   const endRef       = useRef(null)
   const teamEndRef   = useRef(null)
   const channelRef   = useRef(null)
+  const closedByMeRef = useRef(new Set())
   const teamChanRef  = useRef(null)
   const inputRef     = useRef(null)
   const teamInputRef = useRef(null)
@@ -475,11 +477,12 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   /* ── Agents ──────────────────────────────────── */
   useEffect(() => {
     loadAllAgents()
+    loadTeamConvPartners()
     const ch = supabase.channel('agents-watch')
       .on('postgres_changes', { event:'UPDATE', schema:'public', table:'agents' }, loadAllAgents)
       .subscribe()
     return () => supabase.removeChannel(ch)
-  }, [])
+  }, []) // eslint-disable-line
 
   async function loadAllAgents() {
     const { data } = await supabase.from('agents').select('id,name,avatar_url,is_online,role,role_ids,email,is_admin,is_owner').order('name')
@@ -543,12 +546,13 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           if (agent?.notify_sound!==false) playSound()
           if (agent?.notify_browser!==false) showBrowserNotification('Neuer Chat! 💬', `${name} wartet`)
         }
-        if (payload.new?.status==='closed' && payload.old?.status!=='closed') {
+        if (payload.new?.status==='closed') {
           loadHistory()
           setActiveConv(prev => prev?.id===payload.new.id ? {...prev, status:'closed'} : prev)
-          // Check if this was an active chat (customer left)
-          if (payload.old?.status === 'active' || payload.old?.status === 'waiting') {
+          // If the agent didn't close this themselves, it was the customer leaving
+          if (!closedByMeRef.current.has(payload.new.id)) {
             const name = payload.new.user_name || 'Besucher'
+            if (agent?.notify_sound!==false) playSound()
             if (agent?.notify_browser!==false) showBrowserNotification('Chat beendet 👋', `${name} hat den Chat verlassen`)
           }
         }
@@ -630,11 +634,13 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   }
 
   async function closeConv(convId) {
+    closedByMeRef.current.add(convId)
     await supabase.from('conversations').update({status:'closed'}).eq('id',convId)
     setActiveConv(prev => prev?.id===convId ? {...prev,status:'closed'} : prev)
     setMobileShowChat(false)
     if (channelRef.current) { supabase.removeChannel(channelRef.current); channelRef.current=null }
     loadConversations(); loadHistory()
+    setTimeout(() => closedByMeRef.current.delete(convId), 5000)
   }
 
   async function holdConv(convId) {
@@ -717,6 +723,31 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   }
 
   /* ── Team DMs ────────────────────────────────── */
+  async function loadTeamConvPartners() {
+    if (!agent?.id) return
+    const { data } = await supabase.from('team_messages')
+      .select('sender_id, receiver_id')
+      .or(`sender_id.eq.${agent.id},receiver_id.eq.${agent.id}`)
+    if (!data?.length) { setTeamConvPartners([]); return }
+    const partnerIds = new Set()
+    data.forEach(m => {
+      if (m.sender_id !== agent.id) partnerIds.add(m.sender_id)
+      if (m.receiver_id !== agent.id) partnerIds.add(m.receiver_id)
+    })
+    setTeamConvPartners([...partnerIds])
+  }
+
+  async function deleteTeamChat(targetAgentId) {
+    if (!agent?.id) return
+    await supabase.from('team_messages').delete()
+      .or(`and(sender_id.eq.${agent.id},receiver_id.eq.${targetAgentId}),and(sender_id.eq.${targetAgentId},receiver_id.eq.${agent.id})`)
+    if (teamChatWith?.id === targetAgentId) {
+      setTeamChatWith(null); setTeamMsgs([]); setMobileShowChat(false)
+      if (teamChanRef.current) { supabase.removeChannel(teamChanRef.current); teamChanRef.current = null }
+    }
+    setTeamConvPartners(prev => prev.filter(id => id !== targetAgentId))
+  }
+
   async function openTeamChat(targetAgent) {
     setTeamChatWith(targetAgent); setActiveConv(null)
     setMobileShowChat(true); setTeamInput(''); setContactInfo(null)
@@ -747,6 +778,8 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     e?.preventDefault()
     const text = teamInput.trim(); if (!text||!teamChatWith||!agent) return
     setTeamInput('')
+    // Add to conv partners if new
+    setTeamConvPartners(prev => prev.includes(teamChatWith.id) ? prev : [...prev, teamChatWith.id])
     await supabase.from('team_messages').insert({
       sender_id:agent.id, receiver_id:teamChatWith.id, content:text, is_read:false
     })
@@ -759,6 +792,8 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
       .on('postgres_changes', {event:'INSERT',schema:'public',table:'team_messages',filter:`receiver_id=eq.${agent.id}`},
         (payload) => {
           const sid = payload.new.sender_id
+          // Add to conv partners if new
+          setTeamConvPartners(prev => prev.includes(sid) ? prev : [...prev, sid])
           if (teamChatWith?.id===sid) return
           setUnreadTeam(prev => ({...prev, [sid]:(prev[sid]||0)+1}))
           playSound()
@@ -870,27 +905,34 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
               <p className="db-panel-sub">Interne Nachrichten</p>
             </div>
             <div className="db-panel-list">
-              {allAgents.filter(a=>a.id!==agent?.id).length===0
-                ? <div className="db-panel-empty"><i className="fas fa-users"/><p>Keine anderen Mitglieder</p></div>
-                : allAgents.filter(a=>a.id!==agent?.id).map(a => (
-                    <motion.button key={a.id} className={`db-team-item ${teamChatWith?.id===a.id?'selected':''}`}
-                      onClick={() => { openTeamChat(a); setNavSection('team') }}
-                      initial={{opacity:0,x:-6}} animate={{opacity:1,x:0}}>
-                      <div className="db-team-av-wrap">
-                        <Avatar agent={a} size={38} />
-                        <span className={`db-online-dot-sm ${a.is_online?'online':''}`} />
-                      </div>
-                      <div className="db-team-info">
-                        <strong>
-                          {a.name}
-                          {a.is_admin && <span className="db-admin-crown" title="Admin"><i className="fas fa-shield-alt" /></span>}
-                        </strong>
-                        <span className={a.is_online?'text-online':'text-offline'}>{a.is_online?'● Online':'○ Offline'}</span>
-                      </div>
-                      {unreadTeam[a.id]>0 && <span className="db-team-unread">{unreadTeam[a.id]}</span>}
-                    </motion.button>
-                  ))
-              }
+              {(() => {
+                const partners = allAgents.filter(a => a.id !== agent?.id && teamConvPartners.includes(a.id))
+                return partners.length === 0
+                  ? <div className="db-panel-empty"><i className="fas fa-comments"/><p>Noch keine Chats</p><p style={{fontSize:'0.72rem',opacity:0.5,marginTop:4}}>Starte einen Chat über Kontakte</p></div>
+                  : partners.map(a => (
+                      <motion.div key={a.id} className={`db-team-item-wrap ${teamChatWith?.id===a.id?'selected':''}`}
+                        initial={{opacity:0,x:-6}} animate={{opacity:1,x:0}}>
+                        <button className="db-team-item" style={{flex:1}}
+                          onClick={() => { openTeamChat(a); setNavSection('team') }}>
+                          <div className="db-team-av-wrap">
+                            <Avatar agent={a} size={38} />
+                            <span className={`db-online-dot-sm ${a.is_online?'online':''}`} />
+                          </div>
+                          <div className="db-team-info">
+                            <strong>
+                              {a.name}
+                              {a.is_admin && <span className="db-admin-crown" title="Admin"><i className="fas fa-shield-alt" /></span>}
+                            </strong>
+                            <span className={a.is_online?'text-online':'text-offline'}>{a.is_online?'● Online':'○ Offline'}</span>
+                          </div>
+                          {unreadTeam[a.id]>0 && <span className="db-team-unread">{unreadTeam[a.id]}</span>}
+                        </button>
+                        <button className="db-team-delete-btn" onClick={(e) => {e.stopPropagation(); deleteTeamChat(a.id)}} title="Chat löschen">
+                          <i className="fas fa-trash" />
+                        </button>
+                      </motion.div>
+                    ))
+              })()}
             </div>
           </div>
         )}
@@ -1303,10 +1345,14 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
           <div className="db-nav-icon-wrap"><i className="fas fa-comments" />{totalTeamUnread>0&&<span className="db-nav-badge">{totalTeamUnread}</span>}</div>
           <span>Intern</span>
         </button>
+        <button className={mobileTab==='contacts'&&!mobileShowChat?'active':''} onClick={() => {setMobileTab('contacts');setNavSection('contacts');setMobileShowChat(false)}}>
+          <div className="db-nav-icon-wrap"><i className="fas fa-address-book" /></div>
+          <span>Kontakte</span>
+        </button>
         <button onClick={() => setShowProfileModal(true)}>
           <div className="db-nav-icon-wrap" style={{position:'relative'}}>
-            <Avatar agent={agent} size={26} />
-            <span style={{position:'absolute',bottom:-1,right:-3,width:8,height:8,borderRadius:'50%',background:isOnline?'#4ade80':'#555',border:'1.5px solid #070310'}} />
+            <Avatar agent={agent} size={22} />
+            <span style={{position:'absolute',bottom:-1,right:-3,width:7,height:7,borderRadius:'50%',background:isOnline?'#4ade80':'#555',border:'1.5px solid #070310'}} />
           </div>
           <span>Profil</span>
         </button>
