@@ -71,6 +71,15 @@ const CATEGORIES = [
     ],
   },
   {
+    icon: 'fa-brands fa-discord', cls: 'ci-purple', title: 'Discord Bots',
+    sub: 'Von simplen Utility-Bots bis zu komplexen Systemen mit Datenbank', alt: false,
+    cards: [
+      { title: 'Basic Bot', desc: 'Einfacher Bot mit Custom Commands, Slash Commands und grundlegenden Funktionen – ideal als Einstieg.', features: ['Slash Commands', 'Custom Commands', 'Lieferung in 2–4 Tagen'], slug: 'discord-basic', price: '79 €' },
+      { title: 'Advanced Bot', desc: 'Komplexe Systeme: Leveling, Ticket-System, Moderations-Bot, Musik oder alles kombiniert – mit Datenbank.', features: ['Datenbank (PostgreSQL/SQLite)', 'Leveling, Tickets, Moderation', 'Hosting auf Wunsch'], slug: 'discord-advanced', price: '199 €' },
+      { title: 'Bot Anpassung', desc: 'Du hast bereits einen Bot und willst Funktionen hinzufügen, Bugs fixen oder etwas umbauen? Kein Problem.', features: ['Analyse deines bestehenden Codes', 'Erweiterung nach Absprache', 'Stundenbasiert'], slug: 'discord-anpassung', price: '25 €/h' },
+    ],
+  },
+  {
     icon: 'fa-solid fa-gears', cls: 'ci-green', title: 'Automation & Skripte',
     sub: 'Webhooks, APIs und Skripte – repetitive Aufgaben automatisiert', alt: false,
     cards: [
@@ -90,7 +99,7 @@ export default function Services() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <span className="section-tag">AUF ANFRAGE</span>
             <h1>Leistungen</h1>
-            <p>Websites, Web-Apps und Automatisierungen – individuelle Angebote nach Briefing. Hosting und Domains werden separat und transparent aufgeführt.</p>
+            <p>Websites, Discord Bots und Automatisierungen – individuelle Angebote nach Briefing. Hosting und Domains werden separat und transparent aufgeführt.</p>
           </motion.div>
         </div>
       </section>

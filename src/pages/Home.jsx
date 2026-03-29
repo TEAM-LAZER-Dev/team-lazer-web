@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import '../styles/home.css'
 
-const WORDS = ['Websites', 'Landing Pages', 'Automatisierungen', 'Skripte', 'Web-Apps']
+const WORDS = ['Websites', 'Landing Pages', 'Automatisierungen', 'Skripte', 'Web-Apps', 'Discord Bots']
 
 function Typewriter() {
   const [wi, setWi] = useState(0)
@@ -108,7 +108,7 @@ export default function Home() {
           >
             {[
               { icon: 'fa-solid fa-globe', cls: 'c-blue', title: 'Business Website', sub: 'Responsiv · Schnell · Individuell', status: 'Live' },
-              { icon: 'fa-solid fa-code', cls: 'c-purple', title: 'Custom Web-App', sub: 'React · Node.js · API', status: 'Aktiv' },
+              { icon: 'fa-brands fa-discord', cls: 'c-purple', title: 'Discord Bot', sub: 'discord.js · Slash Commands · DB', status: 'Aktiv' },
               { icon: 'fa-solid fa-gears', cls: 'c-green', title: 'Automatisierung', sub: 'Webhooks · APIs · Skripte', status: 'Läuft' },
             ].map(({ icon, cls, title, sub, status }) => (
               <div key={title} className="hv-card">
@@ -143,7 +143,7 @@ export default function Home() {
           >
             {[
               { to: '/services', sc: '#2563eb', icon: 'fa-solid fa-globe', tag: 'Hosting inklusive', title: 'Website Entwicklung', desc: 'Landing Pages, Business-Websites und Community-Sites – responsiv, ohne Baukastensystem.', items: ['Landing Pages & Business Sites', 'Individuelles Design', 'Hosting auf Wunsch'] },
-              { to: '/services', sc: '#7c3aed', icon: 'fa-solid fa-code', tag: 'Individuell nach Maß', title: 'Custom Web-Apps', desc: 'Komplexe Webanwendungen, Dashboards und Portale – individuell entwickelt, ohne Baukastensystem.', items: ['React & Node.js', 'Datenbank & API-Integration', 'Hosting auf Wunsch'] },
+              { to: '/services', sc: '#7c3aed', icon: 'fa-brands fa-discord', tag: 'Einfach bis Komplex', title: 'Discord Bots', desc: 'Von Moderations-Bots bis zu komplexen Systemen mit Datenbank – alles individuell entwickelt.', items: ['Slash Commands & Events', 'Datenbank & Leveling', 'Hosting auf Wunsch'] },
               { to: '/services', sc: '#10b981', icon: 'fa-solid fa-gears', tag: 'Schnelle Umsetzung', title: 'Automation & Skripte', desc: 'Webhooks, API-Integrationen und Skripte – wir automatisieren repetitive Aufgaben.', items: ['Webhooks & APIs', 'Python & JavaScript', 'Datenverarbeitung'] },
             ].map(({ to, sc, icon, tag, title, desc, items }) => (
               <motion.div key={title} variants={staggerItem}>
