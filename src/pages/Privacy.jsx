@@ -42,19 +42,30 @@ export default function Privacy() {
             <p>Wenn Sie uns über das Kontaktformular eine Anfrage zukommen lassen, werden Ihre Angaben (Name, E-Mail-Adresse, Nachricht, gewählte Leistung) zur Bearbeitung der Anfrage und für eventuelle Anschlussfragen gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter. Zur Übermittlung nutzen wir den Dienst FormSubmit (formsubmit.co, Spring Monkey LLC, USA). Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen). Ihre Daten werden nach abgeschlossener Bearbeitung Ihrer Anfrage gelöscht, sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
 
             <h2>6. Live-Chat</h2>
-            <p>Unsere Website bietet einen Live-Chat zur direkten Kommunikation. Die Chat-Nachrichten werden über Supabase (Supabase Inc., 970 Toa Payoh North #07-04, Singapore 318992) in Echtzeit verarbeitet und gespeichert. Dabei werden keine personenbezogenen Daten automatisch erhoben, es sei denn, Sie geben diese freiwillig im Chat an. Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an effizienter Kundenkommunikation). Die Datenübertragung in Drittländer erfolgt auf Basis von Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO). Chat-Verläufe werden nach 90 Tagen automatisch gelöscht.</p>
+            <p>Unsere Website bietet einen Live-Chat zur direkten Kommunikation. Die Chat-Nachrichten werden über Supabase (Supabase Inc., 970 Toa Payoh North #07-04, Singapore 318992) in Echtzeit verarbeitet und gespeichert. Dabei werden keine personenbezogenen Daten automatisch erhoben, es sei denn, Sie geben diese freiwillig im Chat an. Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO. Die Datenübertragung in Drittländer erfolgt auf Basis von Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO). Chat-Verläufe werden nach 90 Tagen automatisch gelöscht.</p>
 
-            <h2>7. Cookies und lokale Speicherung</h2>
+            <h2>7. Auftragsverarbeiter / Subunternehmer (Support & E-Mail)</h2>
+            <p>Zur Erbringung unserer Dienstleistungen – insbesondere im Bereich Kundensupport und E-Mail-Bearbeitung – setzen wir selbstständige Subunternehmer ein, die als Auftragsverarbeiter im Sinne von Art. 28 DSGVO tätig sind. Diese Personen haben Zugriff auf folgende personenbezogene Daten, soweit diese im Rahmen der Kommunikation anfallen: Name und E-Mail-Adresse (sofern freiwillig angegeben), Inhalte von Chat-Gesprächen sowie Inhalte von E-Mail-Anfragen.</p>
+            <p>Mit jedem Subunternehmer wurde ein Auftragsverarbeitungsvertrag (AVV) gemäß Art. 28 DSGVO abgeschlossen. Die Subunternehmer dürfen die Daten ausschließlich zur Erfüllung ihrer Support-Aufgaben nutzen und sind zur Vertraulichkeit verpflichtet. Rechtsgrundlage: Art. 6 Abs. 1 lit. b und f DSGVO i. V. m. Art. 28 DSGVO.</p>
+            <p><strong>Subunternehmer 1:</strong><br />
+            [VORNAME NACHNAME] · [Firmenname] · [Straße, PLZ Ort], Deutschland<br />
+            Tätigkeit: IT-Support, Bearbeitung von Kundenanfragen via Chat-System und E-Mail</p>
+            <p><strong>Subunternehmer 2:</strong><br />
+            [VORNAME NACHNAME] · [Firmenname] · [Straße, PLZ Ort], Deutschland<br />
+            Tätigkeit: IT-Support, Bearbeitung von Kundenanfragen via Chat-System und E-Mail</p>
+
+            <h2>8. Cookies und lokale Speicherung</h2>
+
             <p>Diese Website verwendet ausschließlich technisch notwendige Cookies bzw. lokale Speichereinträge (localStorage), die für den Betrieb der Website erforderlich sind. Es werden keine Analyse-, Tracking- oder Marketing-Cookies eingesetzt. Die Rechtsgrundlage für die Verwendung technisch notwendiger Cookies ist Art. 6 Abs. 1 lit. f DSGVO.</p>
 
-            <h2>8. Ihre Rechte</h2>
+            <h2>9. Ihre Rechte</h2>
             <p>Sie haben gegenüber dem Verantwortlichen folgende Rechte hinsichtlich Ihrer personenbezogenen Daten: Recht auf Auskunft (Art. 15 DSGVO), Recht auf Berichtigung (Art. 16 DSGVO), Recht auf Löschung (Art. 17 DSGVO), Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO), Recht auf Widerspruch gegen die Verarbeitung (Art. 21 DSGVO) sowie das Recht auf Datenübertragbarkeit (Art. 20 DSGVO). Zur Geltendmachung Ihrer Rechte wenden Sie sich an: <a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a></p>
 
-            <h2>9. Beschwerderecht bei einer Aufsichtsbehörde</h2>
+            <h2>10. Beschwerderecht bei einer Aufsichtsbehörde</h2>
             <p>{`Sie haben das Recht, sich bei einer Datenschutzaufsichtsbehörde zu beschweren, wenn Sie der Ansicht sind, dass die Verarbeitung Ihrer personenbezogenen Daten gegen die DSGVO verstößt.\n\nZuständige Aufsichtsbehörde:\nSächsischer Datenschutz- und Transparenzbeauftragter\nDevrientstraße 5\n01067 Dresden\nhttps://www.saechsdsb.de`}</p>
 
-            <h2>10. Aktualität und Änderung dieser Datenschutzerklärung</h2>
-            <p>Diese Datenschutzerklärung ist aktuell gültig und hat den Stand März 2026. Durch die Weiterentwicklung unserer Website oder aufgrund geänderter gesetzlicher bzw. behördlicher Vorgaben kann es notwendig werden, diese Datenschutzerklärung anzupassen.</p>
+            <h2>11. Aktualität und Änderung dieser Datenschutzerklärung</h2>
+            <p>Diese Datenschutzerklärung ist aktuell gültig und hat den Stand April 2026. Durch die Weiterentwicklung unserer Website oder aufgrund geänderter gesetzlicher bzw. behördlicher Vorgaben kann es notwendig werden, diese Datenschutzerklärung anzupassen.</p>
           </motion.div>
         </div>
       </section>
