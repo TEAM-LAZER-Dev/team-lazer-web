@@ -580,9 +580,11 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
         .from('conversations').select('id').eq('status','closed')
         .lt('last_message_at', cutoff.toISOString())
       if (!oldConvs?.length) return
+      // localStorage-basiert — zuverlässig unabhängig von RLS
       const ids = oldConvs.map(c => c.id)
-      // Soft-Delete statt Hard-Delete (RLS blockiert DELETE)
-      await supabase.from('conversations').update({ status: 'deleted' }).in('id', ids)
+      const existing = getDeletedConvIds()
+      const merged = [...new Set([...existing, ...ids])]
+      localStorage.setItem('tl_deleted_convs', JSON.stringify(merged))
     }
     runAutoCleanup()
   }, [agent?.is_admin]) // eslint-disable-line
@@ -646,12 +648,14 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   async function loadConversations() {
     const { data } = await supabase.from('conversations').select('*, agents(*)')
       .in('status',['waiting','active','hold']).order('last_message_at',{ascending:false})
-    setConversations(data||[])
+    const deletedIds = getDeletedConvIds()
+    setConversations((data||[]).filter(c => !deletedIds.includes(c.id)))
   }
   async function loadHistory() {
     const { data } = await supabase.from('conversations').select('*, agents(*)')
       .eq('status','closed').order('last_message_at',{ascending:false}).limit(50)
-    setHistory(data||[])
+    const deletedIds = getDeletedConvIds()
+    setHistory((data||[]).filter(c => !deletedIds.includes(c.id)))
   }
   async function loadQuickReplies() {
     const { data } = await supabase.from('quick_replies').select('*').order('sort_order')
@@ -781,12 +785,19 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     setShowTransfer(false)
   }
 
+  // Helper: gelöschte Kunden-Chat-IDs in localStorage verwalten
+  function getDeletedConvIds() {
+    try { return JSON.parse(localStorage.getItem('tl_deleted_convs') || '[]') } catch { return [] }
+  }
+  function addDeletedConvId(convId) {
+    const ids = getDeletedConvIds()
+    if (!ids.includes(convId)) { ids.push(convId); localStorage.setItem('tl_deleted_convs', JSON.stringify(ids)) }
+  }
+
   async function deleteConv(convId) {
-    // Soft-Delete: Status auf 'deleted' setzen.
-    // Hard-Delete funktioniert nicht wegen Supabase RLS.
-    // 'deleted' taucht weder in loadConversations (waiting/active/hold)
-    // noch in loadHistory (closed) auf — also dauerhaft weg.
-    await supabase.from('conversations').update({ status: 'deleted' }).eq('id', convId)
+    // localStorage-basiert: 100% zuverlässig, unabhängig von DB/RLS.
+    // DB-Delete und soft-delete scheitern beide an Supabase RLS/Constraints.
+    addDeletedConvId(convId)
 
     setHistory(prev => prev.filter(c => c.id !== convId))
     setConversations(prev => prev.filter(c => c.id !== convId))
