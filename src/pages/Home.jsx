@@ -116,7 +116,22 @@ const staggerItem = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 }
 
+function useParallaxOrbs() {
+  useEffect(() => {
+    const orb1 = document.querySelector('.hero-orb-1')
+    const orb2 = document.querySelector('.hero-orb-2')
+    const onScroll = () => {
+      const y = window.scrollY
+      if (orb1) orb1.style.transform = `translateY(${y * 0.18}px)`
+      if (orb2) orb2.style.transform = `translateY(${y * 0.1}px)`
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+}
+
 export default function Home() {
+  useParallaxOrbs()
   useSEO({
     title: 'TEAM LAZER | Websites · Discord Bots · Entwicklung',
     description: 'TEAM LAZER – professionelle Websites, Discord Bots und Automatisierungen aus Deutschland. Individuelle Angebote nach Briefing, Source-Code Übergabe, Hosting auf Wunsch.',
@@ -139,9 +154,21 @@ export default function Home() {
                 Bereits 50+ Projekte abgeschlossen
               </div>
               <h1>
-                Professionelle<br />
-                <span className="highlight">Entwicklung</span>.<br />
-                Ohne Umwege.
+                {[
+                  'Professionelle',
+                  <><span className="highlight">Entwicklung</span>.</>,
+                  'Ohne Umwege.',
+                ].map((line, i) => (
+                  <motion.span
+                    key={i}
+                    className="hero-h1-line"
+                    initial={{ opacity: 0, y: 28 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.15 + i * 0.16 }}
+                  >
+                    {line}
+                  </motion.span>
+                ))}
               </h1>
               <Typewriter />
               <p className="hero-sub">

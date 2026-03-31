@@ -50,6 +50,8 @@
   line-height: 1.06; letter-spacing: -0.5px;
   margin-bottom: 10px;
 }
+.hero-h1-line { display: block; }
+
 .hero-tw-row {
   font-family: 'Rajdhani', sans-serif;
   font-size: clamp(1.4rem, 3vw, 2rem);
