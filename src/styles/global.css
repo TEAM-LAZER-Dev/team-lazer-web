@@ -90,10 +90,18 @@ img { max-width: 100%; }
   white-space: nowrap; border: none; text-decoration: none; line-height: 1;
 }
 .btn i { font-size: 0.85em; }
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: #6d28d9; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,0.4); }
+.btn-primary {
+  background: var(--primary); color: #fff;
+  box-shadow: 0 0 0 rgba(124,58,237,0);
+  transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+}
+.btn-primary:hover {
+  background: #6d28d9; transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(124,58,237,0.5);
+}
+.btn-primary:active { transform: translateY(0); box-shadow: none; }
 .btn-secondary { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.8); border: 1px solid var(--border); }
-.btn-secondary:hover { background: rgba(255,255,255,0.09); color: #fff; transform: translateY(-2px); }
+.btn-secondary:hover { background: rgba(255,255,255,0.09); color: #fff; transform: translateY(-2px); border-color: rgba(255,255,255,0.14); }
 .btn-sm { font-size: 0.8rem; padding: 8px 18px; border-radius: 8px; }
 
 /* ── NAVBAR ── */

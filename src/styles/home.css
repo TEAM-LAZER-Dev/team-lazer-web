@@ -99,9 +99,10 @@
   cursor: default;
 }
 .hv-card:hover {
-  border-color: rgba(255,255,255,0.15);
-  transform: translateX(6px);
-  background: rgba(20,16,34,0.8);
+  border-color: rgba(124,58,237,0.3);
+  transform: translateX(8px);
+  background: rgba(20,16,34,0.85);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.3), 0 0 0 1px rgba(124,58,237,0.1);
 }
 .hv-card:nth-child(2) { margin-left: 24px; }
 .hv-card:nth-child(3) { margin-left: 48px; }
@@ -253,6 +254,37 @@
 }
 .cta-pill i { color: var(--primary); font-size: 0.7rem; }
 
+/* ── FAQ ── */
+.faq-list { display: flex; flex-direction: column; gap: 10px; max-width: 760px; margin: 0 auto; }
+.faq-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s;
+}
+.faq-item:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.035); }
+.faq-item.faq-open { border-color: var(--primary-border); background: var(--primary-dim); }
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 20px 24px;
+  font-size: 0.95rem; font-weight: 600; color: #fff;
+  user-select: none;
+}
+.faq-icon {
+  color: var(--primary); font-size: 0.8rem; flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.faq-item.faq-open .faq-icon { transform: rotate(180deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.25s ease;
+  padding: 0 24px;
+}
+.faq-item.faq-open .faq-a { max-height: 300px; padding: 0 24px 20px; }
+.faq-a p { font-size: 0.88rem; color: var(--muted); line-height: 1.75; }
+
 /* ── TABLET ── */
 @media (max-width: 1000px) {
   .hero-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -273,6 +305,13 @@
   .ps-num { display: none; }
 
   .cta-box { padding: 48px 28px; }
+}
+
+/* ── FAQ mobile ── */
+@media (max-width: 600px) {
+  .faq-q { font-size: 0.88rem; padding: 16px 18px; }
+  .faq-item.faq-open .faq-a { padding: 0 18px 16px; }
+  .faq-a p { font-size: 0.84rem; }
 }
 
 /* ── MOBILE ── */

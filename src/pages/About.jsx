@@ -1,6 +1,52 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 import { useSEO } from '../lib/seo'
+
+function useCounter(target, duration = 1800) {
+  const [count, setCount] = useState(0)
+  const ref = useRef(null)
+  const started = useRef(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true
+        const start = performance.now()
+        const tick = (now) => {
+          const p = Math.min((now - start) / duration, 1)
+          const ease = 1 - Math.pow(1 - p, 3)
+          setCount(Math.floor(ease * target))
+          if (p < 1) requestAnimationFrame(tick)
+          else setCount(target)
+        }
+        requestAnimationFrame(tick)
+      }
+    }, { threshold: 0.5 })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [target, duration])
+  return [count, ref]
+}
+
+function AnimatedStat({ target, suffix, label }) {
+  const [count, ref] = useCounter(target)
+  return (
+    <div className="about-stat" ref={ref}>
+      <strong><span className="stat-color">{count}{suffix}</span></strong>
+      <span>{label}</span>
+    </div>
+  )
+}
+function StatFixed({ value, label }) {
+  return (
+    <div className="about-stat">
+      <strong><span className="stat-color">{value}</span></strong>
+      <span>{label}</span>
+    </div>
+  )
+}
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
@@ -98,12 +144,9 @@ export default function About() {
             </motion.div>
             <motion.div {...fadeUp(0.15)}>
               <div className="about-stats">
-                {[['50+', 'Projekte'], ['3+', 'Jahre Erfahrung'], ['24h', 'Reaktionszeit']].map(([val, label]) => (
-                  <div key={label} className="about-stat">
-                    <strong><span className="stat-color">{val}</span></strong>
-                    <span>{label}</span>
-                  </div>
-                ))}
+                <AnimatedStat target={50} suffix="+" label="Projekte" />
+                <AnimatedStat target={3} suffix="+ Jahre" label="Erfahrung" />
+                <StatFixed value="24h" label="Reaktionszeit" />
               </div>
             </motion.div>
           </div>

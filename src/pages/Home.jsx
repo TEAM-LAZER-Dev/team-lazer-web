@@ -39,6 +39,67 @@ function Typewriter() {
   )
 }
 
+const FAQ_ITEMS = [
+  {
+    q: 'Was kostet eine Website bei euch?',
+    a: 'Preise gibt es erst nach einem kurzen Briefing – weil jedes Projekt anders ist. Eine einfache Landing Page startet ab 149 €, eine Business-Website ab 349 €. Danach kommt ein individuelles Angebot mit allen Kosten transparent aufgelistet – keine Überraschungen.',
+  },
+  {
+    q: 'Wie läuft ein Projekt ab?',
+    a: 'Du schickst uns eine kurze Projektbeschreibung. Wir melden uns innerhalb von 24 Stunden, besprechen die Details und schicken dir ein Angebot. Nach Freigabe legen wir los – mit regelmäßigen Updates und direktem Kontakt. Kein Zwischenhändler, kein Ticket-System.',
+  },
+  {
+    q: 'Bekomme ich den Source-Code?',
+    a: 'Ja, immer. Nach vollständiger Bezahlung gehört dir der vollständige Quellcode – sauber, kommentiert, ohne Lock-in. Du kannst ihn danach selbst verwalten, erweitern oder woanders hosten.',
+  },
+  {
+    q: 'Kann ich die Website danach selbst bearbeiten?',
+    a: 'Das kommt auf das Projekt an. Wir können dir eine einfach pflegbare Lösung bauen oder dir nach Übergabe eine kurze Einweisung geben. Auf Wunsch richten wir auch ein CMS ein.',
+  },
+  {
+    q: 'Bietet ihr Hosting an?',
+    a: 'Ja. Wir können Websites direkt bei uns hosten – rund um die Uhr, auf deutschem Server. Hosting-Kosten werden transparent im Angebot aufgelistet, separat von den Entwicklungskosten.',
+  },
+  {
+    q: 'Was ist die Bugfix-Garantie?',
+    a: 'Fehler, die auf unsere Entwicklung zurückgehen, beheben wir kostenlos – 14 Tage lang nach Übergabe. Nicht enthalten: Fehler durch Drittanbieter, Hosting oder Änderungen durch dich.',
+  },
+  {
+    q: 'Warum kein Baukastensystem wie Wix oder Squarespace?',
+    a: 'Baukastensysteme sehen auf den ersten Blick günstig aus, binden dich aber langfristig. Du zahlst monatlich, bekommst keinen Code, bist in Design und Funktionen eingeschränkt und kannst nicht wirklich skalieren. Wir liefern dir eine echte Website – dein Eigentum, dein Code.',
+  },
+]
+
+function FAQ() {
+  const [open, setOpen] = useState(null)
+  return (
+    <section className="section-pad bg-alt" id="faq">
+      <div className="container">
+        <motion.div className="section-header" {...fadeUp()}>
+          <span className="section-tag">FAQ</span>
+          <h2>Häufige <span className="highlight">Fragen</span></h2>
+          <p>Alles, was du vor einer Anfrage wissen möchtest.</p>
+        </motion.div>
+        <motion.div className="faq-list" {...fadeUp(0.1)}>
+          {FAQ_ITEMS.map((item, i) => (
+            <div
+              key={i}
+              className={`faq-item${open === i ? ' faq-open' : ''}`}
+              onClick={() => setOpen(open === i ? null : i)}
+            >
+              <div className="faq-q">
+                <span>{item.q}</span>
+                <i className={`fa-solid fa-chevron-down faq-icon`} />
+              </div>
+              <div className="faq-a"><p>{item.a}</p></div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
@@ -75,7 +136,7 @@ export default function Home() {
             >
               <div className="hero-pill">
                 <span className="hero-pill-dot" />
-                Development aus Deutschland
+                Bereits 50+ Projekte abgeschlossen
               </div>
               <h1>
                 Professionelle<br />
@@ -195,6 +256,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── FAQ ── */}
+      <FAQ />
 
       {/* ── CTA ── */}
       <section className="section-pad" id="anfrage">
