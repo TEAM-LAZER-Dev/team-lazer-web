@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useSEO } from '../lib/seo'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
@@ -90,6 +91,10 @@ const CATEGORIES = [
 ]
 
 export default function Services() {
+  useSEO({
+    title: 'Leistungen | TEAM LAZER',
+    description: 'Website Entwicklung ab 149 €, Discord Bots ab 79 € und Automatisierungen – individuelle Angebote nach Briefing, Hosting auf Wunsch, Source-Code Übergabe.',
+  })
   return (
     <div className="page-wrapper">
       <style>{pageStyle}</style>

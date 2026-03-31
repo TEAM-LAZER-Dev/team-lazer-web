@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useSEO } from '../lib/seo'
 
 const legalStyle = `
   .legal-body{max-width:760px;margin:0 auto;}
@@ -10,6 +11,7 @@ const legalStyle = `
 `
 
 export default function Impressum() {
+  useSEO({ title: 'Impressum | TEAM LAZER', description: 'Impressum von TEAM LAZER – Jon Wagner, Scheibenmühlenstr. 20, 01833 Stolpen.' })
   return (
     <div className="page-wrapper">
       <style>{legalStyle}</style>

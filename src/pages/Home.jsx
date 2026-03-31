@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import '../styles/home.css'
+import { useSEO } from '../lib/seo'
 
 const WORDS = ['Websites', 'Landing Pages', 'Automatisierungen', 'Skripte', 'Web-Apps', 'Discord Bots']
 
@@ -55,6 +56,10 @@ const staggerItem = {
 }
 
 export default function Home() {
+  useSEO({
+    title: 'TEAM LAZER | Websites · Discord Bots · Entwicklung',
+    description: 'TEAM LAZER – professionelle Websites, Discord Bots und Automatisierungen aus Deutschland. Individuelle Angebote nach Briefing, Source-Code Übergabe, Hosting auf Wunsch.',
+  })
   return (
     <div className="page-wrapper">
       {/* ── HERO ── */}

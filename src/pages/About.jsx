@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useSEO } from '../lib/seo'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
@@ -66,6 +67,10 @@ const pageStyle = `
 `
 
 export default function About() {
+  useSEO({
+    title: 'Über uns | TEAM LAZER',
+    description: 'Lern TEAM LAZER kennen – wer wir sind, wie wir arbeiten und warum wir auf sauberen Code ohne Baukastensysteme setzen.',
+  })
   return (
     <div className="page-wrapper">
       <style>{pageStyle}</style>

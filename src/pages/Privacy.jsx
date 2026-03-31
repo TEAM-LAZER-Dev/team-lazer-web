@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useSEO } from '../lib/seo'
 
 const legalStyle = `
   .legal-body{max-width:760px;margin:0 auto;}
@@ -10,6 +11,7 @@ const legalStyle = `
 `
 
 export default function Privacy() {
+  useSEO({ title: 'Datenschutz | TEAM LAZER', description: 'Datenschutzerklärung von TEAM LAZER – Informationen zur Verarbeitung personenbezogener Daten gemäß DSGVO.' })
   return (
     <div className="page-wrapper">
       <style>{legalStyle}</style>

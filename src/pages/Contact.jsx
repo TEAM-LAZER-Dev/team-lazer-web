@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useSEO } from '../lib/seo'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
@@ -54,6 +55,10 @@ const PROJECT_MAP = {
 }
 
 export default function Contact() {
+  useSEO({
+    title: 'Kontakt | TEAM LAZER',
+    description: 'Projekt anfragen oder Fragen stellen – TEAM LAZER meldet sich innerhalb von 24 Stunden. Kostenloses Erstgespräch, individuelles Angebot.',
+  })
   const [searchParams] = useSearchParams()
   const [submitted, setSubmitted] = useState(false)
   const prefill = PROJECT_MAP[searchParams.get('projekt')] || ''
