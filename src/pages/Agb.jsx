@@ -43,19 +43,11 @@ export default function Agb() {
             <p>Nach vollständiger Bezahlung erhält der Auftraggeber alle Nutzungsrechte am erstellten Werk inklusive vollständigem Source-Code. TEAM LAZER behält das Recht, das Projekt im Portfolio zu nennen, sofern nicht ausdrücklich anders vereinbart.</p>
             <h2>§ 9 Haftungsbeschränkung</h2>
             <p>TEAM LAZER haftet nur für Schäden, die durch grobe Fahrlässigkeit oder Vorsatz entstanden sind. Die Haftung ist auf den Auftragswert begrenzt. Für indirekte Schäden oder Folgeschäden wird keine Haftung übernommen.</p>
-            <p>Soweit TEAM LAZER zur Leistungserbringung Subunternehmer einsetzt, erstreckt sich die Haftungsbeschränkung auch auf deren Handlungen, sofern diese vertragsgemäß tätig waren.</p>
-            <h2>§ 10 Einsatz von Subunternehmern</h2>
-            <p>TEAM LAZER ist berechtigt, zur Erfüllung der vertraglich geschuldeten Leistungen Subunternehmer einzusetzen. Dies umfasst insbesondere die Bereiche technische Umsetzung, Programmierung, Kundensupport sowie E-Mail-Kommunikation.</p>
-            <p>Die eingesetzten Subunternehmer sind selbstständige Gewerbetreibende, die auf eigene Rechnung tätig sind und TEAM LAZER auf Basis von Kooperationsverträgen zuarbeiten. Sie sind nicht Arbeitnehmer von TEAM LAZER.</p>
-            <p>Subunternehmer, die im Rahmen ihrer Tätigkeit Zugriff auf personenbezogene Daten von Kunden erhalten – z. B. durch Zugriff auf das Support-System oder die E-Mail-Kommunikation – sind durch einen Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO zur Einhaltung datenschutzrechtlicher Bestimmungen verpflichtet. Näheres regelt die Datenschutzerklärung.</p>
-            <p>Der Auftraggeber erklärt sich mit dem Einsatz von Subunternehmern durch Akzeptieren dieser AGB ausdrücklich einverstanden.</p>
-            <h2>§ 11 Vertraulichkeit</h2>
-            <p>Beide Parteien verpflichten sich, alle im Rahmen der Zusammenarbeit erlangten vertraulichen Informationen vertraulich zu behandeln und nicht an unbefugte Dritte weiterzugeben. Diese Pflicht gilt auch nach Beendigung des Vertragsverhältnisses. Subunternehmer werden vertraglich zur selben Vertraulichkeit verpflichtet.</p>
-            <h2>§ 12 Datenschutz</h2>
+            <h2>§ 10 Datenschutz</h2>
             <p>Personenbezogene Daten werden ausschließlich zur Vertragserfüllung und zur Kommunikation mit dem Auftraggeber verarbeitet. Die Verarbeitung erfolgt gemäß unserer Datenschutzerklärung, die Bestandteil dieser AGB ist.</p>
-            <h2>§ 13 Widerrufsrecht für Verbraucher</h2>
+            <h2>§ 11 Widerrufsrecht für Verbraucher</h2>
             <p>Verbraucher haben bei Fernabsatzverträgen grundsätzlich ein Widerrufsrecht von 14 Tagen. Da es sich bei unseren Leistungen um individuell angefertigte digitale Produkte handelt, kann das Widerrufsrecht erlöschen, sobald mit der Ausführung der Leistung begonnen wurde und der Verbraucher dem zuvor ausdrücklich zugestimmt hat (§ 356 Abs. 5 BGB).</p>
-            <h2>§ 14 Schlussbestimmungen</h2>
+            <h2>§ 12 Schlussbestimmungen</h2>
             <p>Es gilt das Recht der Bundesrepublik Deutschland. Ist der Auftraggeber Verbraucher, gilt der gesetzliche Gerichtsstand. Ist der Auftraggeber Unternehmer, ist Gerichtsstand Dresden. Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.</p>
           </motion.div>
         </div>
