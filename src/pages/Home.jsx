@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import '../styles/home.css'
 import { useSEO } from '../lib/seo'
+import { PROJECTS } from './Portfolio'
 
 const WORDS = ['Websites', 'Landing Pages', 'Automatisierungen', 'Skripte', 'Web-Apps', 'Discord Bots']
 
@@ -252,6 +253,60 @@ export default function Home() {
                 </Link>
               </motion.div>
             ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── REFERENZEN TEASER ── */}
+      <section className="section-pad" id="referenzen">
+        <div className="container">
+          <motion.div className="section-header" {...fadeUp()}>
+            <span className="section-tag">REFERENZEN</span>
+            <h2>Ausgewählte <span className="highlight">Projekte</span></h2>
+            <p>Ein Blick auf das, was wir bereits entwickelt haben.</p>
+          </motion.div>
+          <motion.div
+            className="ref-grid"
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-60px' }}
+          >
+            {PROJECTS.filter(p => p.featured).map(project => (
+              <motion.div key={project.id} variants={staggerItem}>
+                <Link to="/portfolio" className="ref-card" style={{ '--pc': project.color }}>
+                  <div className="ref-preview">
+                    <div className="ref-browser-bar">
+                      <span className="ref-dot" /><span className="ref-dot" /><span className="ref-dot" />
+                      <div className="ref-fake-url">{project.url ?? 'demnächst.verfügbar'}</div>
+                    </div>
+                    <div className="ref-screen">
+                      <div className="ref-icon-wrap"><i className={project.icon} /></div>
+                      {project.status === 'soon' && <div className="ref-soon-badge">Demnächst</div>}
+                    </div>
+                  </div>
+                  <div className="ref-body">
+                    <div className="ref-meta">
+                      <span className="ref-cat">
+                        {project.category === 'website' && 'Website'}
+                        {project.category === 'bot' && 'Discord Bot'}
+                        {project.category === 'automation' && 'Automatisierung'}
+                      </span>
+                      {project.status === 'live' && (
+                        <span className="ref-live"><span className="ref-live-dot" />Live</span>
+                      )}
+                    </div>
+                    <h3>{project.title}</h3>
+                    <p>{project.desc}</p>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+          <motion.div className="ref-cta" {...fadeUp(0.15)}>
+            <Link to="/portfolio" className="btn btn-secondary">
+              <i className="fa-solid fa-grid-2" /> Alle Projekte ansehen
+            </Link>
           </motion.div>
         </div>
       </section>

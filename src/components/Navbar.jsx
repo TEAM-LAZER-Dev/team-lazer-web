@@ -40,6 +40,7 @@ export default function Navbar() {
             <NavLink to="/" className={navLinkClass} end>Home</NavLink>
             <NavLink to="/about" className={navLinkClass}>Über uns</NavLink>
             <NavLink to="/services" className={navLinkClass}>Leistungen</NavLink>
+            <NavLink to="/portfolio" className={navLinkClass}>Portfolio</NavLink>
             <NavLink to="/contact" className={navLinkClass}>Kontakt</NavLink>
           </nav>
           <div className="nav-actions">
@@ -92,8 +93,13 @@ export default function Navbar() {
             <span className="mnav-label">Leistungen</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
-          <NavLink to="/contact" className={navLinkClass}>
+          <NavLink to="/portfolio" className={navLinkClass}>
             <span className="mnav-num">04</span>
+            <span className="mnav-label">Portfolio</span>
+            <i className="fa-solid fa-arrow-right mnav-arrow" />
+          </NavLink>
+          <NavLink to="/contact" className={navLinkClass}>
+            <span className="mnav-num">05</span>
             <span className="mnav-label">Kontakt</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
