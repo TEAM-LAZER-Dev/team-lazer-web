@@ -16,6 +16,7 @@ export default function Navbar() {
   useEffect(() => {
     setMenuOpen(false)
     document.body.style.overflow = ''
+    document.body.classList.remove('nav-open')
   }, [location])
 
   const toggleMenu = () => {
