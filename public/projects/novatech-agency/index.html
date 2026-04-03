@@ -14,13 +14,13 @@
     .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;font-size:.88rem;font-weight:600;transition:.22s;cursor:pointer;border:none}
     .btn-p{background:var(--accent);color:#fff}.btn-p:hover{background:#1d4ed8;transform:translateY(-2px);box-shadow:0 8px 26px rgba(37,99,235,.4)}
     .btn-s{background:rgba(255,255,255,.05);color:rgba(255,255,255,.8);border:1px solid var(--border)}.btn-s:hover{background:rgba(255,255,255,.09);transform:translateY(-2px)}
-    nav{position:fixed;top:0;left:0;right:0;height:66px;z-index:1000;transition:.3s}
+    nav{position:fixed;top:46px;left:0;right:0;height:66px;z-index:1000;transition:.3s}
     nav.sc{background:rgba(4,8,15,.93);backdrop-filter:blur(20px);box-shadow:0 1px 0 var(--border)}
     .ni{height:100%;display:flex;align-items:center;justify-content:space-between;gap:20px}
     .logo{font-family:'Rajdhani',sans-serif;font-size:1.35rem;font-weight:800;letter-spacing:.5px}
     .logo em{font-style:normal;color:var(--accent)}
     .nl{display:flex;gap:2px}.nl a{padding:7px 13px;border-radius:8px;font-size:.85rem;font-weight:500;color:rgba(255,255,255,.45);transition:.2s}.nl a:hover{color:#fff;background:rgba(255,255,255,.07)}
-    .hero{padding:150px 0 90px;position:relative;overflow:hidden}
+    .hero{padding:196px 0 90px;position:relative;overflow:hidden}
     .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(37,99,235,.1),transparent 55%),radial-gradient(ellipse at 80% 20%,rgba(37,99,235,.06),transparent 45%)}
     .hero-in{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
     .htag{display:inline-flex;align-items:center;gap:7px;font-size:.75rem;font-weight:600;color:var(--accent);background:var(--a-dim);border:1px solid var(--a-b);border-radius:20px;padding:5px 13px;margin-bottom:20px}
@@ -64,6 +64,18 @@
   </style>
 </head>
 <body>
+
+<!-- DEMO BANNER -->
+<div style="position:fixed;top:0;left:0;right:0;z-index:99999;background:#0f172a;border-bottom:2px solid #f59e0b;padding:9px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,-apple-system,sans-serif;font-size:13px;color:#e2e8f0;box-shadow:0 2px 14px rgba(0,0,0,.5);">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <span style="background:#f59e0b;color:#000;font-weight:800;font-size:10px;padding:3px 9px;border-radius:4px;letter-spacing:.8px;text-transform:uppercase;">Vorschau</span>
+    <span style="color:#94a3b8;">Diese Seite ist eine <strong style="color:#e2e8f0;">Demo-Website</strong> von TEAM LAZER – kein echtes Unternehmen.</span>
+  </div>
+  <a href="https://team-lazer.de/portfolio" target="_blank" rel="noopener" style="color:#f59e0b;font-weight:600;white-space:nowrap;text-decoration:none;font-size:12px;flex-shrink:0;">Zum Portfolio →</a>
+</div>
+<div style="height:46px;"></div>
+<!-- END DEMO BANNER -->
+
 <nav id="n"><div class="container"><div class="ni">
   <div class="logo">Nova<em>Tech</em> Agency</div>
   <ul class="nl"><li><a href="#services">Leistungen</a></li><li><a href="#arbeiten">Projekte</a></li><li><a href="#kontakt">Kontakt</a></li></ul>

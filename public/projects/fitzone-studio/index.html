@@ -39,7 +39,7 @@
 
     /* NAVBAR */
     nav.navbar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      position: fixed; top: 46px; left: 0; right: 0; z-index: 1000;
       height: var(--nav-h);
       transition: background .3s, backdrop-filter .3s, box-shadow .3s;
     }
@@ -63,7 +63,7 @@
 
     /* HERO */
     .hero {
-      padding-top: calc(var(--nav-h) + 80px); padding-bottom: 100px;
+      padding-top: calc(var(--nav-h) + 80px + 46px); padding-bottom: 100px;
       position: relative; overflow: hidden;
       background: radial-gradient(ellipse at 20% 50%, rgba(249,115,22,.12) 0%, transparent 55%),
                   radial-gradient(ellipse at 80% 20%, rgba(249,115,22,.06) 0%, transparent 50%);
@@ -84,9 +84,9 @@
     .hero-visual { position: relative; }
     .hero-card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; padding: 28px; position: relative; overflow: hidden;
+      border-radius: 20px; padding: 28px; position: relative;
     }
-    .hero-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--orange), #fb923c); }
+    .hero-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--orange), #fb923c); border-radius: 20px 20px 0 0; }
     .hc-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; color: #4ade80; background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.2); border-radius: 20px; padding: 3px 10px; margin-bottom: 14px; }
     .hc-badge span { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
     .hc-title { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
@@ -102,7 +102,7 @@
     .trainer-name { font-size: 0.85rem; font-weight: 600; }
     .trainer-role { font-size: 0.72rem; color: var(--muted); }
     .trainer-tag { font-size: 0.7rem; font-weight: 700; color: var(--orange); background: var(--orange-dim); border: 1px solid var(--orange-border); border-radius: 6px; padding: 2px 8px; }
-    .hero-float { position: absolute; top: -20px; right: -20px; background: var(--surface2); border: 1px solid var(--orange-border); border-radius: 14px; padding: 12px 16px; font-size: 0.78rem; font-weight: 600; }
+    .hero-float { position: absolute; top: 20px; right: 20px; background: var(--surface2); border: 1px solid var(--orange-border); border-radius: 14px; padding: 12px 16px; font-size: 0.78rem; font-weight: 600; text-align: right; }
     .hero-float-val { font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--orange); line-height: 1; }
 
     /* CLASSES */
@@ -252,6 +252,17 @@
 </head>
 <body>
 
+<!-- DEMO BANNER -->
+<div style="position:fixed;top:0;left:0;right:0;z-index:99999;background:#0f172a;border-bottom:2px solid #f59e0b;padding:9px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,-apple-system,sans-serif;font-size:13px;color:#e2e8f0;box-shadow:0 2px 14px rgba(0,0,0,.5);">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <span style="background:#f59e0b;color:#000;font-weight:800;font-size:10px;padding:3px 9px;border-radius:4px;letter-spacing:.8px;text-transform:uppercase;">Vorschau</span>
+    <span style="color:#94a3b8;">Diese Seite ist eine <strong style="color:#e2e8f0;">Demo-Website</strong> von TEAM LAZER – kein echtes Unternehmen.</span>
+  </div>
+  <a href="https://team-lazer.de/portfolio" target="_blank" rel="noopener" style="color:#f59e0b;font-weight:600;white-space:nowrap;text-decoration:none;font-size:12px;flex-shrink:0;">Zum Portfolio →</a>
+</div>
+<div style="height:46px;"></div>
+<!-- END DEMO BANNER -->
+
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <div class="container">
@@ -306,8 +317,8 @@
         </div>
       </div>
       <div class="hero-visual">
-        <div class="hero-float"><div class="hero-float-val">4.9 ★</div>Google Bewertung</div>
         <div class="hero-card">
+          <div class="hero-float"><div class="hero-float-val">4.9 ★</div>Google Bewertung</div>
           <div class="hc-badge"><span></span> Studio geöffnet</div>
           <div class="hc-title">Nächste Kurse heute</div>
           <div class="hc-sub">Dienstag, 01. April 2026</div>

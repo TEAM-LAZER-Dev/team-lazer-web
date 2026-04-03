@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zahnarztpraxis Dr. Berger & Partner – München Schwabing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #0f766e;
+      --teal-light: #14b8a6;
+      --teal-dim: rgba(15,118,110,0.08);
+      --teal-border: rgba(15,118,110,0.2);
+      --bg: #f8fafb;
+      --white: #ffffff;
+      --text: #1a2332;
+      --muted: #6b7a8d;
+      --border: #e4e9ef;
+      --surface: #f0f4f8;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { background: var(--bg); color: var(--text); font-family: 'Lato', sans-serif; font-size: 16px; line-height: 1.7; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; transition: .2s; }
+    ul { list-style: none; }
+    .container { width: min(92%, 1120px); margin: 0 auto; }
+
+    /* NAV */
+    nav { position: fixed; top: 46px; left: 0; right: 0; z-index: 1000; height: 70px; background: var(--white); border-bottom: 1px solid transparent; transition: .3s; }
+    nav.scrolled { border-bottom-color: var(--border); box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+    .ni { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--teal); display: flex; align-items: center; justify-content: center; font-size: .9rem; color: #fff; flex-shrink: 0; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .logo-name { font-family: 'Playfair Display', serif; font-size: .95rem; font-weight: 700; color: var(--text); }
+    .logo-sub { font-size: .68rem; color: var(--muted); letter-spacing: .3px; }
+    .nl { display: flex; gap: 2px; }
+    .nl a { padding: 7px 14px; border-radius: 8px; font-size: .86rem; font-weight: 700; color: var(--muted); transition: .2s; }
+    .nl a:hover, .nl a.active { color: var(--teal); background: var(--teal-dim); }
+    .nav-cta { display: flex; align-items: center; gap: 12px; }
+    .nav-phone { display: flex; align-items: center; gap: 7px; font-size: .85rem; font-weight: 700; color: var(--teal); }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 8px; font-size: .86rem; font-weight: 700; transition: .22s; cursor: pointer; border: none; font-family: 'Lato', sans-serif; }
+    .btn-p { background: var(--teal); color: #fff; }
+    .btn-p:hover { background: #0a5f58; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(15,118,110,.3); }
+    .btn-outline { background: transparent; color: var(--teal); border: 2px solid var(--teal); }
+    .btn-outline:hover { background: var(--teal); color: #fff; }
+    .burger { display: none; flex-direction: column; gap: 5px; width: 36px; height: 36px; padding: 6px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); cursor: pointer; }
+    .burger span { display: block; height: 2px; background: var(--text); border-radius: 2px; transition: .3s; }
+    .mobile-nav { display: none; flex-direction: column; gap: 4px; padding: 12px 0; border-top: 1px solid var(--border); }
+    .mobile-nav a { padding: 11px 14px; border-radius: 8px; font-size: .92rem; font-weight: 700; color: var(--muted); transition: .2s; }
+    .mobile-nav a:hover { color: var(--teal); background: var(--teal-dim); }
+    .nav-open .mobile-nav { display: flex; }
+
+    /* EMERGENCY BANNER */
+    .emergency-bar { background: #dc2626; color: #fff; text-align: center; padding: 10px; font-size: .82rem; font-weight: 700; }
+    .emergency-bar a { color: #fff; text-decoration: underline; }
+
+    /* HERO */
+    .hero { padding-top: 186px; padding-bottom: 80px; background: linear-gradient(135deg, #f0f8f7 0%, var(--bg) 60%); position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; right: -100px; top: -100px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(15,118,110,.06), transparent 70%); }
+    .hero-in { display: grid; grid-template-columns: 1fr 440px; gap: 64px; align-items: center; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; font-size: .78rem; font-weight: 700; color: var(--teal); background: var(--teal-dim); border: 1px solid var(--teal-border); border-radius: 20px; padding: 5px 14px; margin-bottom: 20px; letter-spacing: .3px; }
+    h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; line-height: 1.2; color: var(--text); margin-bottom: 18px; }
+    h1 em { font-style: normal; color: var(--teal); }
+    .hero-sub { color: var(--muted); font-size: 1rem; line-height: 1.8; max-width: 480px; margin-bottom: 32px; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
+    .hero-trust { display: flex; gap: 24px; flex-wrap: wrap; }
+    .trust-item { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--muted); }
+    .trust-item i { color: var(--teal); font-size: .9rem; }
+
+    /* Hero info card */
+    .hero-card { background: var(--white); border-radius: 18px; box-shadow: 0 8px 40px rgba(0,0,0,.1); overflow: hidden; }
+    .hcard-header { background: var(--teal); padding: 18px 22px; }
+    .hcard-header h3 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 2px; }
+    .hcard-header p { font-size: .75rem; color: rgba(255,255,255,.75); }
+    .hcard-body { padding: 20px 22px; }
+    .hours-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: .85rem; }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-row .day { color: var(--muted); font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .3px; }
+    .hours-row .time { color: var(--text); font-weight: 700; }
+    .hours-row .time.closed { color: #dc2626; }
+    .hcard-footer { padding: 16px 22px; background: var(--surface); display: flex; flex-direction: column; gap: 10px; }
+    .info-row { display: flex; align-items: center; gap: 10px; font-size: .83rem; color: var(--muted); }
+    .info-row i { color: var(--teal); width: 16px; flex-shrink: 0; }
+    .info-row strong { color: var(--text); }
+
+    /* SECTIONS */
+    .section { padding: 80px 0; }
+    .section-alt { background: var(--white); }
+    .sh { text-align: center; margin-bottom: 52px; }
+    .stag { display: inline-block; font-size: .68rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--teal); background: var(--teal-dim); border: 1px solid var(--teal-border); border-radius: 4px; padding: 4px 12px; margin-bottom: 12px; }
+    .sh h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.7rem, 3.5vw, 2.3rem); font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .sh h2 em { font-style: normal; color: var(--teal); }
+    .sh p { color: var(--muted); max-width: 480px; margin: 0 auto; font-size: .95rem; }
+
+    /* LEISTUNGEN */
+    .leist-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .leist-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px 24px; transition: .25s; position: relative; overflow: hidden; }
+    .leist-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--teal); transform: scaleX(0); transform-origin: left; transition: .3s; }
+    .leist-card:hover { border-color: var(--teal-border); box-shadow: 0 8px 28px rgba(15,118,110,.1); transform: translateY(-3px); }
+    .leist-card:hover::before { transform: scaleX(1); }
+    .leist-icon { width: 50px; height: 50px; border-radius: 12px; background: var(--teal-dim); border: 1px solid var(--teal-border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--teal); margin-bottom: 16px; }
+    .leist-card h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .leist-card p { font-size: .84rem; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+    .leist-list { display: flex; flex-direction: column; gap: 5px; }
+    .leist-list li { font-size: .81rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+    .leist-list li i { color: var(--teal); font-size: .7rem; flex-shrink: 0; }
+
+    /* TEAM */
+    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .team-card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: .25s; }
+    .team-card:hover { box-shadow: 0 10px 32px rgba(0,0,0,.1); transform: translateY(-3px); }
+    .team-img { height: 220px; display: flex; align-items: center; justify-content: center; font-size: 5rem; background: linear-gradient(135deg, #e6f4f3, #f0f8f7); }
+    .team-body { padding: 20px 22px; }
+    .team-body h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .team-role { font-size: .78rem; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+    .team-body p { font-size: .83rem; color: var(--muted); line-height: 1.65; margin-bottom: 12px; }
+    .team-qual { display: flex; flex-wrap: wrap; gap: 6px; }
+    .qual-tag { font-size: .7rem; font-weight: 700; padding: 3px 9px; border-radius: 6px; background: var(--teal-dim); color: var(--teal); border: 1px solid var(--teal-border); }
+
+    /* BEWERTUNGEN */
+    .bewert-header { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 40px; }
+    .bewert-score { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700; color: var(--teal); line-height: 1; }
+    .bewert-stars { font-size: 1.3rem; color: #f59e0b; letter-spacing: 2px; }
+    .bewert-count { font-size: .85rem; color: var(--muted); }
+    .bewert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .bewert-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+    .bw-stars { color: #f59e0b; font-size: .9rem; margin-bottom: 12px; }
+    .bw-text { font-size: .87rem; color: var(--muted); line-height: 1.75; margin-bottom: 16px; font-style: italic; }
+    .bw-author { display: flex; align-items: center; gap: 10px; }
+    .bw-av { width: 38px; height: 38px; border-radius: 50%; background: var(--teal-dim); border: 2px solid var(--teal-border); display: flex; align-items: center; justify-content: center; font-size: .9rem; flex-shrink: 0; }
+    .bw-name { font-size: .87rem; font-weight: 700; color: var(--text); }
+    .bw-meta { font-size: .73rem; color: var(--muted); }
+
+    /* NOTFALL */
+    .notfall-box { background: var(--text); border-radius: 18px; padding: 44px; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; }
+    .notfall-box h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .notfall-box p { color: rgba(255,255,255,.65); font-size: .92rem; }
+    .notfall-contact { display: flex; flex-direction: column; gap: 12px; }
+    .notfall-tel { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.1); border-radius: 12px; padding: 16px 20px; white-space: nowrap; }
+    .notfall-tel i { font-size: 1.3rem; color: #4ade80; }
+    .notfall-tel .label { font-size: .72rem; color: rgba(255,255,255,.55); text-transform: uppercase; letter-spacing: .5px; }
+    .notfall-tel .number { font-size: 1.1rem; font-weight: 700; color: #fff; }
+
+    /* KONTAKT */
+    .kontakt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: .82rem; font-weight: 700; color: var(--text); margin-bottom: 7px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px 14px; background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Lato', sans-serif; font-size: .9rem; transition: .2s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(15,118,110,.1); }
+    .form-group select option { color: var(--text); }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .kontakt-info { display: flex; flex-direction: column; gap: 24px; }
+    .ki-block h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+    .ki-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+    .ki-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--teal-dim); border: 1px solid var(--teal-border); display: flex; align-items: center; justify-content: center; font-size: .85rem; color: var(--teal); flex-shrink: 0; margin-top: 2px; }
+    .ki-text .label { font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .ki-text .val { font-size: .9rem; color: var(--text); font-weight: 700; }
+    .ki-text .val a { color: var(--teal); }
+    .privacy-note { font-size: .75rem; color: var(--muted); margin-top: 8px; }
+    .privacy-note a { color: var(--teal); }
+
+    /* FOOTER */
+    footer { background: var(--text); color: rgba(255,255,255,.7); padding: 52px 0 24px; }
+    .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+    .footer-brand .logo-name, .footer-brand .logo-sub { color: rgba(255,255,255,.9); }
+    .footer-brand .logo-sub { color: rgba(255,255,255,.5); }
+    .footer-brand p { font-size: .84rem; color: rgba(255,255,255,.5); line-height: 1.7; max-width: 240px; margin-top: 12px; }
+    .footer-col h5 { font-size: .7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 14px; }
+    .footer-col a { display: block; font-size: .84rem; color: rgba(255,255,255,.5); padding: 3px 0; transition: .2s; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: .78rem; color: rgba(255,255,255,.25); }
+
+    /* ANIMATE */
+    .fade { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .fade.in { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .hero-in { grid-template-columns: 1fr; }
+      .hero-card { max-width: 480px; }
+      .leist-grid { grid-template-columns: 1fr 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .bewert-grid { grid-template-columns: 1fr; }
+      .kontakt-grid { grid-template-columns: 1fr; gap: 36px; }
+      .notfall-box { grid-template-columns: 1fr; }
+      .nl, .nav-phone { display: none; }
+      .burger { display: flex; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .leist-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-trust { flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- DEMO BANNER -->
+<div style="position:fixed;top:0;left:0;right:0;z-index:99999;background:#0f172a;border-bottom:2px solid #f59e0b;padding:9px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,-apple-system,sans-serif;font-size:13px;color:#e2e8f0;box-shadow:0 2px 14px rgba(0,0,0,.5);">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <span style="background:#f59e0b;color:#000;font-weight:800;font-size:10px;padding:3px 9px;border-radius:4px;letter-spacing:.8px;text-transform:uppercase;">Vorschau</span>
+    <span style="color:#94a3b8;">Diese Seite ist eine <strong style="color:#e2e8f0;">Demo-Website</strong> von TEAM LAZER – kein echtes Unternehmen.</span>
+  </div>
+  <a href="https://team-lazer.de/portfolio" target="_blank" rel="noopener" style="color:#f59e0b;font-weight:600;white-space:nowrap;text-decoration:none;font-size:12px;flex-shrink:0;">Zum Portfolio →</a>
+</div>
+<div style="height:46px;"></div>
+<!-- END DEMO BANNER -->
+
+<!-- NOTFALL BANNER -->
+<div class="emergency-bar">
+  🦷 Zahnschmerzen? Zahnärztlicher Notfalldienst: <a href="tel:+49893456789">+49 89 345 67 89</a> — Mo–Fr auch ohne Termin ab 08:00 Uhr
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="container">
+    <div class="ni">
+      <a href="#" class="logo">
+        <div class="logo-icon"><i class="fa-solid fa-tooth"></i></div>
+        <div class="logo-text">
+          <span class="logo-name">Dr. Berger & Partner</span>
+          <span class="logo-sub">Zahnarztpraxis München · Schwabing</span>
+        </div>
+      </a>
+      <ul class="nl">
+        <li><a href="#leistungen">Leistungen</a></li>
+        <li><a href="#team">Unser Team</a></li>
+        <li><a href="#praxis">Die Praxis</a></li>
+        <li><a href="#bewertungen">Bewertungen</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+      <div class="nav-cta">
+        <div class="nav-phone"><i class="fa-solid fa-phone"></i> 089 345 67 89</div>
+        <a href="#kontakt" class="btn btn-p"><i class="fa-regular fa-calendar"></i> Termin buchen</a>
+        <button class="burger" id="burger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <ul class="mobile-nav">
+      <li><a href="#leistungen">Leistungen</a></li>
+      <li><a href="#team">Unser Team</a></li>
+      <li><a href="#praxis">Die Praxis</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-in">
+      <div class="hero-text fade">
+        <div class="hero-badge"><i class="fa-solid fa-star" style="font-size:.7rem"></i> 4,9 von 5 – über 340 Google-Bewertungen</div>
+        <h1>Ihre Zahnarztpraxis in München <em>Schwabing</em></h1>
+        <p class="hero-sub">Mit über 20 Jahren Erfahrung und modernstem Equipment sorgen wir dafür, dass Ihr Lächeln in besten Händen ist – von der Routineuntersuchung bis zum ästhetischen Eingriff.</p>
+        <div class="hero-btns">
+          <a href="#kontakt" class="btn btn-p"><i class="fa-regular fa-calendar"></i> Online-Termin buchen</a>
+          <a href="#leistungen" class="btn btn-outline"><i class="fa-solid fa-list"></i> Alle Leistungen</a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-item"><i class="fa-solid fa-check-circle"></i> Kasse & Privat</div>
+          <div class="trust-item"><i class="fa-solid fa-check-circle"></i> Angstpatienten willkommen</div>
+          <div class="trust-item"><i class="fa-solid fa-check-circle"></i> Modernste Gerätetechnik</div>
+          <div class="trust-item"><i class="fa-solid fa-check-circle"></i> Parkplätze vorhanden</div>
+        </div>
+      </div>
+      <div class="hero-card fade">
+        <div class="hcard-header">
+          <h3><i class="fa-regular fa-clock" style="margin-right:8px;opacity:.8"></i> Sprechzeiten</h3>
+          <p>Praxis Dr. Berger & Partner, Leopoldstr. 134</p>
+        </div>
+        <div class="hcard-body">
+          <div class="hours-row"><span class="day">Montag</span><span class="time">08:00 – 18:00 Uhr</span></div>
+          <div class="hours-row"><span class="day">Dienstag</span><span class="time">08:00 – 20:00 Uhr</span></div>
+          <div class="hours-row"><span class="day">Mittwoch</span><span class="time">08:00 – 13:00 Uhr</span></div>
+          <div class="hours-row"><span class="day">Donnerstag</span><span class="time">08:00 – 18:00 Uhr</span></div>
+          <div class="hours-row"><span class="day">Freitag</span><span class="time">08:00 – 14:00 Uhr</span></div>
+          <div class="hours-row"><span class="day">Samstag</span><span class="time closed">Geschlossen</span></div>
+          <div class="hours-row"><span class="day">Sonntag</span><span class="time closed">Geschlossen</span></div>
+        </div>
+        <div class="hcard-footer">
+          <div class="info-row"><i class="fa-solid fa-location-dot"></i><span>Leopoldstraße 134, <strong>80804 München</strong></span></div>
+          <div class="info-row"><i class="fa-solid fa-phone"></i><span><strong>089 345 67 89</strong></span></div>
+          <div class="info-row"><i class="fa-brands fa-whatsapp"></i><span>WhatsApp-Terminanfrage: <strong>0176 45 67 89 01</strong></span></div>
+          <div class="info-row"><i class="fa-solid fa-car"></i><span>Tiefgarage direkt am Haus (P1, P2)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEISTUNGEN -->
+<section class="section section-alt" id="leistungen">
+  <div class="container">
+    <div class="sh fade">
+      <div class="stag">Behandlungsspektrum</div>
+      <h2>Unsere <em>Leistungen</em> für Ihre Zahngesundheit</h2>
+      <p>Von der professionellen Reinigung bis zur Implantatversorgung – alles unter einem Dach.</p>
+    </div>
+    <div class="leist-grid">
+      <div class="leist-card fade">
+        <div class="leist-icon"><i class="fa-solid fa-shield-heart"></i></div>
+        <h3>Prophylaxe & Vorsorge</h3>
+        <p>Professionelle Zahnreinigung, Kariesvorsorge und individuelle Hygieneinstruktion – die beste Investition für Ihre Zahngesundheit.</p>
+        <ul class="leist-list">
+          <li><i class="fa-solid fa-check"></i>Professionelle Zahnreinigung (PZR)</li>
+          <li><i class="fa-solid fa-check"></i>Kariesrisikotest & Bakterienanalyse</li>
+          <li><i class="fa-solid fa-check"></i>Fissurenversiegelung für Kinder</li>
+          <li><i class="fa-solid fa-check"></i>Bleaching-Vorsorgecheck</li>
+        </ul>
+      </div>
+      <div class="leist-card fade">
+        <div class="leist-icon"><i class="fa-solid fa-tooth"></i></div>
+        <h3>Implantologie</h3>
+        <p>Festsitzende Zahnersatzlösungen auf Titanimplantaten – so komfortabel wie eigene Zähne, für ein Leben lang.</p>
+        <ul class="leist-list">
+          <li><i class="fa-solid fa-check"></i>Einzelimplantat & Implantatbrücken</li>
+          <li><i class="fa-solid fa-check"></i>All-on-4 & All-on-6 Versorgung</li>
+          <li><i class="fa-solid fa-check"></i>3D-Röntgenplanung (DVT)</li>
+          <li><i class="fa-solid fa-check"></i>Knochenaufbau bei Bedarf</li>
+        </ul>
+      </div>
+      <div class="leist-card fade">
+        <div class="leist-icon"><i class="fa-solid fa-star"></i></div>
+        <h3>Ästhetische Zahnheilkunde</h3>
+        <p>Ein strahlendes Lächeln ist keine Frage des Glücks – sondern der richtigen Behandlung. Wir machen es möglich.</p>
+        <ul class="leist-list">
+          <li><i class="fa-solid fa-check"></i>Professionelles Bleaching</li>
+          <li><i class="fa-solid fa-check"></i>Veneers aus Keramik</li>
+          <li><i class="fa-solid fa-check"></i>Zahnformkorrekturen (Composites)</li>
+          <li><i class="fa-solid fa-check"></i>Smile Design – digitale Planung</li>
+        </ul>
+      </div>
+      <div class="leist-card fade">
+        <div class="leist-icon"><i class="fa-solid fa-layer-group"></i></div>
+        <h3>Zahnersatz & Prothetik</h3>
+        <p>Hochwertige Kronen, Brücken und Prothesen – hergestellt in unserem Partnerlabor, angepasst an Ihre Bedürfnisse.</p>
+        <ul class="leist-list">
+          <li><i class="fa-solid fa-check"></i>Vollkeramikkronen & Brücken</li>
+          <li><i class="fa-solid fa-check"></i>Teleskopprothesen</li>
+          <li><i class="fa-solid fa-check"></i>Digitaler Zahnersatz (CAD/CAM)</li>
+          <li><i class="fa-solid fa-check"></i>Reparaturen & Unterfütterungen</li>
+        </ul>
+      </div>
+      <div class="leist-card fade">
+        <div class="leist-icon"><i class="fa-solid fa-child"></i></div>
+        <h3>Kinderzahnheilkunde</h3>
+        <p>Wir begrüßen kleine Patienten herzlich – in einer kinderfreundlichen Atmosphäre ohne Angst und Stress.</p>
+        <ul class="leist-list">
+          <li><i class="fa-solid fa-check"></i>Kariesvorsorge ab dem 1. Zahn</li>
+          <li><i class="fa-solid fa-check"></i>Fissurenversiegelung</li>
+          <li><i class="fa-solid fa-check"></i>Fluoridierung & Mundhygiene</li>
+          <li><i class="fa-solid fa-check"></i>Sanfte Behandlung mit Lachgas</li>
+        </ul>
+      </div>
+      <div class="leist-card fade">
+        <div class="leist-icon"><i class="fa-solid fa-face-grimace"></i></div>
+        <h3>Kieferorthopädie</h3>
+        <p>Für Kinder und Erwachsene: gerade Zähne durch bewährte und innovative Behandlungsmethoden.</p>
+        <ul class="leist-list">
+          <li><i class="fa-solid fa-check"></i>Invisalign® – unsichtbare Schienen</li>
+          <li><i class="fa-solid fa-check"></i>Feste Zahnspange (Brackets)</li>
+          <li><i class="fa-solid fa-check"></i>Retainer nach Behandlung</li>
+          <li><i class="fa-solid fa-check"></i>Frühbehandlung ab 6 Jahren</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section" id="team">
+  <div class="container">
+    <div class="sh fade">
+      <div class="stag">Das Team</div>
+      <h2>Erfahrene <em>Zahnärzte</em>, die Sie persönlich betreuen</h2>
+      <p>Wir nehmen uns Zeit für Sie – keine Fließbandmedizin, sondern individuelle Betreuung.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card fade">
+        <div class="team-img">👩‍⚕️</div>
+        <div class="team-body">
+          <h3>Dr. Sabine Berger</h3>
+          <div class="team-role">Zahnärztin & Praxisinhaberin</div>
+          <p>Studium in München und Wien, Promotion über Implantologie. Gründete die Praxis 2003 und leitet das Team mit Leidenschaft und Empathie.</p>
+          <div class="team-qual">
+            <span class="qual-tag">Implantologie</span>
+            <span class="qual-tag">Ästhetik</span>
+            <span class="qual-tag">Angstpatienten</span>
+          </div>
+        </div>
+      </div>
+      <div class="team-card fade">
+        <div class="team-img">👨‍⚕️</div>
+        <div class="team-body">
+          <h3>Dr. Markus Hoffmann</h3>
+          <div class="team-role">Zahnarzt – Kieferorthopädie</div>
+          <p>Spezialist für Kieferorthopädie mit Zusatzqualifikation in digitaler Behandlungsplanung. Invisalign®-Platinum-Provider seit 2018.</p>
+          <div class="team-qual">
+            <span class="qual-tag">Kieferorthopädie</span>
+            <span class="qual-tag">Invisalign®</span>
+            <span class="qual-tag">Digital Dentistry</span>
+          </div>
+        </div>
+      </div>
+      <div class="team-card fade">
+        <div class="team-img">👩‍⚕️</div>
+        <div class="team-body">
+          <h3>Zeynep Arslan</h3>
+          <div class="team-role">Zahnärztin – Prophylaxe & Kinder</div>
+          <p>Speziell ausgebildet in Kinderzahnheilkunde und Prophylaxe. Ihre warmherzige Art macht auch ängstliche Patienten ruhig und sicher.</p>
+          <div class="team-qual">
+            <span class="qual-tag">Kinderzahnheilkunde</span>
+            <span class="qual-tag">Prophylaxe</span>
+            <span class="qual-tag">Lachgas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEWERTUNGEN -->
+<section class="section section-alt" id="bewertungen">
+  <div class="container">
+    <div class="sh fade">
+      <div class="stag">Patientenstimmen</div>
+      <h2>Was unsere <em>Patienten</em> sagen</h2>
+    </div>
+    <div class="bewert-header fade">
+      <div>
+        <div class="bewert-score">4,9</div>
+        <div class="bewert-stars">★★★★★</div>
+        <div class="bewert-count">Basierend auf 342 Google-Bewertungen</div>
+      </div>
+    </div>
+    <div class="bewert-grid">
+      <div class="bewert-card fade">
+        <div class="bw-stars">★★★★★</div>
+        <p class="bw-text">„Ich war jahrelang ein Angstpatient und habe Zahnarztbesuche komplett gemieden. Durch das einfühlsame Team von Dr. Berger habe ich endlich wieder Vertrauen gefasst. Die Behandlungen sind schmerzfrei und man wird wirklich ernst genommen."</p>
+        <div class="bw-author"><div class="bw-av">👨</div><div><div class="bw-name">Klaus-Werner R.</div><div class="bw-meta">Patient seit 2019 · Implantologie</div></div></div>
+      </div>
+      <div class="bewert-card fade">
+        <div class="bw-stars">★★★★★</div>
+        <p class="bw-text">„Meine Kinder freuen sich tatsächlich auf den Zahnarztbesuch – das hätte ich nie gedacht. Frau Arslan hat eine unglaubliche Art, mit Kindern umzugehen. Sauber, modern, pünktlich und immer freundlich. Absolut empfehlenswert."</p>
+        <div class="bw-author"><div class="bw-av">👩</div><div><div class="bw-name">Sandra M.</div><div class="bw-meta">Mutter von 2 Patienten · Kinderzahnheilkunde</div></div></div>
+      </div>
+      <div class="bewert-card fade">
+        <div class="bw-stars">★★★★★</div>
+        <p class="bw-text">„Für meine Invisalign-Behandlung bin ich extra aus Augsburg angereist – und es hat sich gelohnt. Dr. Hoffmann hat von Anfang an alles transparent erklärt. Nach 14 Monaten bin ich begeistert vom Ergebnis. Beste Entscheidung!"</p>
+        <div class="bw-author"><div class="bw-av">👩</div><div><div class="bw-name">Julia T.</div><div class="bw-meta">Patientin seit 2022 · Kieferorthopädie</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTFALL -->
+<section class="section" id="praxis">
+  <div class="container">
+    <div class="notfall-box fade">
+      <div>
+        <h2>🦷 Zahnschmerzen – wir helfen sofort</h2>
+        <p>Akute Zahnschmerzen, abgebrochener Zahn oder verlorene Füllung? Rufen Sie uns an – wir reservieren täglich Notfalltermine und kümmern uns so schnell wie möglich um Sie.</p>
+      </div>
+      <div class="notfall-contact">
+        <div class="notfall-tel">
+          <i class="fa-solid fa-phone"></i>
+          <div>
+            <div class="label">Praxis-Direktlinie</div>
+            <div class="number">089 345 67 89</div>
+          </div>
+        </div>
+        <div class="notfall-tel">
+          <i class="fa-brands fa-whatsapp"></i>
+          <div>
+            <div class="label">WhatsApp (Mo–Fr)</div>
+            <div class="number">0176 45 67 89 01</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section class="section section-alt" id="kontakt">
+  <div class="container">
+    <div class="sh fade">
+      <div class="stag">Termin vereinbaren</div>
+      <h2>Wir freuen uns <em>auf Sie</em></h2>
+      <p>Online-Anfrage, Telefon oder WhatsApp – Sie entscheiden, wie Sie uns kontaktieren möchten.</p>
+    </div>
+    <div class="kontakt-grid">
+      <div class="fade">
+        <form onsubmit="submitForm(event)">
+          <div class="form-row">
+            <div class="form-group"><label>Vorname *</label><input type="text" placeholder="Max" required /></div>
+            <div class="form-group"><label>Nachname *</label><input type="text" placeholder="Mustermann" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Telefon *</label><input type="tel" placeholder="089 / 123 45 67" required /></div>
+            <div class="form-group"><label>E-Mail</label><input type="email" placeholder="max@beispiel.de" /></div>
+          </div>
+          <div class="form-group"><label>Anliegen *</label>
+            <select required>
+              <option value="">Bitte wählen...</option>
+              <option>Routineuntersuchung / Vorsorge</option>
+              <option>Professionelle Zahnreinigung (PZR)</option>
+              <option>Beratung Implantate</option>
+              <option>Beratung Zahnersatz</option>
+              <option>Beratung Invisalign / Kieferorthopädie</option>
+              <option>Bleaching / Ästhetik</option>
+              <option>Akuter Notfall</option>
+              <option>Kinderzahnheilkunde</option>
+              <option>Sonstiges</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Wunschtermin (optional)</label><input type="text" placeholder="z.B. Dienstag nachmittags" /></div>
+          <div class="form-group"><label>Nachricht</label><textarea placeholder="Weitere Informationen oder Fragen..."></textarea></div>
+          <button type="submit" class="btn btn-p" style="width:100%;justify-content:center;font-size:.92rem;"><i class="fa-regular fa-calendar"></i> Terminanfrage absenden</button>
+          <p class="privacy-note">Mit dem Absenden stimmen Sie unserer <a href="#">Datenschutzerklärung</a> zu. Wir melden uns werktags innerhalb von 4 Stunden.</p>
+        </form>
+        <div id="success-msg" style="display:none;margin-top:14px;padding:16px 18px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;color:#166534;font-size:.88rem;font-weight:700;">
+          <i class="fa-solid fa-circle-check"></i> Vielen Dank! Wir melden uns so schnell wie möglich bei Ihnen.
+        </div>
+      </div>
+      <div class="kontakt-info fade">
+        <div class="ki-block">
+          <h3>So erreichen Sie uns</h3>
+          <div class="ki-item"><div class="ki-icon"><i class="fa-solid fa-location-dot"></i></div><div class="ki-text"><div class="label">Adresse</div><div class="val">Leopoldstraße 134<br>80804 München-Schwabing</div></div></div>
+          <div class="ki-item"><div class="ki-icon"><i class="fa-solid fa-phone"></i></div><div class="ki-text"><div class="label">Telefon</div><div class="val"><a href="tel:+498934567890">089 345 67 89</a></div></div></div>
+          <div class="ki-item"><div class="ki-icon"><i class="fa-solid fa-envelope"></i></div><div class="ki-text"><div class="label">E-Mail</div><div class="val"><a href="mailto:info@zahnarzt-berger-muenchen.de">info@zahnarzt-berger.de</a></div></div></div>
+          <div class="ki-item"><div class="ki-icon"><i class="fa-solid fa-train"></i></div><div class="ki-text"><div class="label">Anfahrt ÖPNV</div><div class="val">U3/U6 Münchener Freiheit<br>Tram 23 Haltestelle Leopoldstr.</div></div></div>
+          <div class="ki-item"><div class="ki-icon"><i class="fa-solid fa-car"></i></div><div class="ki-text"><div class="label">Parken</div><div class="val">Tiefgarage im Haus (P1 & P2)<br>Erste 30 Min. kostenlos für Patienten</div></div></div>
+        </div>
+        <div style="background:var(--teal-dim);border:1px solid var(--teal-border);border-radius:12px;padding:16px 18px;">
+          <p style="font-size:.83rem;color:var(--teal);font-weight:700;margin-bottom:6px;"><i class="fa-solid fa-info-circle"></i> Kassenärztliche Versorgung</p>
+          <p style="font-size:.82rem;color:var(--muted);line-height:1.65;">Wir behandeln Patienten aller Krankenkassen sowie Privatpatienten. Bitte bringen Sie Ihre Versichertenkarte zum Termin mit.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon"><i class="fa-solid fa-tooth"></i></div>
+          <div class="logo-text">
+            <span class="logo-name">Dr. Berger & Partner</span>
+            <span class="logo-sub">Zahnarztpraxis München</span>
+          </div>
+        </div>
+        <p>Leopoldstraße 134, 80804 München-Schwabing. Über 20 Jahre für Ihre Zahngesundheit.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Leistungen</h5>
+        <a href="#leistungen">Prophylaxe & Vorsorge</a>
+        <a href="#leistungen">Implantologie</a>
+        <a href="#leistungen">Ästhetische Zahnheilkunde</a>
+        <a href="#leistungen">Zahnersatz</a>
+        <a href="#leistungen">Kinderzahnheilkunde</a>
+        <a href="#leistungen">Kieferorthopädie</a>
+      </div>
+      <div class="footer-col">
+        <h5>Praxis</h5>
+        <a href="#team">Unser Team</a>
+        <a href="#kontakt">Termin buchen</a>
+        <a href="#">Datenschutz</a>
+        <a href="#">Impressum</a>
+        <a href="#">Barrierefreiheit</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Zahnarztpraxis Dr. Sabine Berger & Partner · Alle Rechte vorbehalten</span>
+      <span>Website entwickelt von <strong style="color:rgba(255,255,255,.4)">TEAM LAZER</strong></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', scrollY > 50))
+  document.getElementById('burger').addEventListener('click', function() {
+    this.closest('nav').classList.toggle('nav-open')
+  })
+  document.querySelectorAll('.mobile-nav a').forEach(a => a.addEventListener('click', () => {
+    a.closest('nav').classList.remove('nav-open')
+  }))
+  const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target) } }), { threshold: 0.08, rootMargin: '-30px' })
+  document.querySelectorAll('.fade').forEach(el => obs.observe(el))
+  function submitForm(e) { e.preventDefault(); document.getElementById('success-msg').style.display = 'block'; e.target.style.display = 'none' }
+</script>
+</body>
+</html>
