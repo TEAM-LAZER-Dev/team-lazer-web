@@ -115,7 +115,7 @@ const pageStyle = `
 export default function About() {
   useSEO({
     title: 'Über uns | TEAM LAZER',
-    description: 'Lern TEAM LAZER kennen – wer wir sind, wie wir arbeiten und warum wir auf sauberen Code ohne Baukastensysteme setzen.',
+    description: 'Lern TEAM LAZER kennen – eine Dev-Community aus Deutschland, die Websites, Discord Bots und Automatisierungen aus Leidenschaft baut.',
   })
   return (
     <div className="page-wrapper">
@@ -127,7 +127,7 @@ export default function About() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <span className="section-tag">TEAM LAZER</span>
             <h1>Über uns</h1>
-            <p>Das Team hinter TEAM LAZER – leidenschaftliche Entwickler aus Deutschland, die sauberen Code und ehrliche Arbeit liefern.</p>
+            <p>Eine Dev-Community aus Deutschland – gegründet von fivozo und Wizzard Gaming. Wir bauen Websites, Discord Bots und Tools aus Leidenschaft für Code.</p>
           </motion.div>
         </div>
       </section>
@@ -137,16 +137,16 @@ export default function About() {
         <div className="container">
           <div className="about-intro">
             <motion.div className="about-intro-text" {...fadeUp()}>
-              <h2>Entwicklung,<br />auf die du dich <span className="highlight">verlassen kannst</span></h2>
-              <p>TEAM LAZER ist ein kleines, spezialisiertes Entwicklungsstudio aus Deutschland. Wir bauen <strong>Websites, Discord Bots und Automatisierungen</strong> – individuell, sauber im Code und mit transparenten Preisen.</p>
-              <p>Was uns unterscheidet: Kein Lock-in, kein Baukastensystem, keine versteckten Kosten. Du bekommst deinen <strong>vollständigen Source-Code</strong>, ein klares individuelles Angebot nach Briefing und direkten Kontakt – ohne Umwege über Agenturen.</p>
-              <p>Wir betreiben eigene Server-Infrastruktur und können Websites sowie Web-Apps direkt bei uns hosten – <strong>zuverlässig, rund um die Uhr</strong>. Hosting- und Domain-Kosten werden transparent im Angebot ausgewiesen.</p>
+              <h2>Code aus<br /><span className="highlight">Leidenschaft</span> – nicht aus Pflicht</h2>
+              <p>TEAM LAZER ist eine Dev-Community aus Deutschland, gegründet von <strong>fivozo (Jon Wagner)</strong> und <strong>Wizzard Gaming</strong>. Wir bauen <strong>Websites, Discord Bots und Automatisierungen</strong> weil wir es lieben, Dinge zum Laufen zu bringen.</p>
+              <p>Alles selbst beigebracht – HTML, CSS, JavaScript, React, Python, discord.js. Kein Studium, keine Agentur. Nur <strong>echtes Interesse, Ausdauer und eine geile Community</strong>.</p>
+              <p>Wenn wir nicht gerade coden, schauen wir uns neue Technologien an und testen aus, was möglich ist – aus Neugier und Spaß.</p>
             </motion.div>
             <motion.div {...fadeUp(0.15)}>
               <div className="about-stats">
-                <AnimatedStat target={50} suffix="+" label="Projekte" />
-                <AnimatedStat target={3} suffix="+ Jahre" label="Erfahrung" />
-                <StatFixed value="24h" label="Reaktionszeit" />
+                <AnimatedStat target={3} suffix="+ J." label="Coding-Erfahrung" />
+                <StatFixed value="100%" label="Selbst beigebracht" />
+                <StatFixed value="∞" label="Ideen im Kopf" />
               </div>
             </motion.div>
           </div>
@@ -159,7 +159,7 @@ export default function About() {
           <motion.div className="section-header" {...fadeUp()}>
             <span className="section-tag">TECH STACK</span>
             <h2>Womit wir <span className="highlight">arbeiten</span></h2>
-            <p>Unsere Kernkompetenzen im Überblick.</p>
+            <p>Die Kernkompetenzen von TEAM LAZER – alles selbst beigebracht.</p>
           </motion.div>
           <motion.div className="skills-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
             {[
@@ -185,14 +185,14 @@ export default function About() {
       <section className="section-pad">
         <div className="container">
           <motion.div className="section-header" {...fadeUp()}>
-            <span className="section-tag">UNSERE WERTE</span>
-            <h2>Wie wir <span className="highlight">arbeiten</span></h2>
+            <span className="section-tag">WARUM WIR CODEN</span>
+            <h2>Was uns <span className="highlight">antreibt</span></h2>
           </motion.div>
           <motion.div className="values-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
             {[
-              { icon: 'fa-solid fa-file-code', title: 'Source-Code gehört dir', desc: 'Kein Lock-in, kein "nur bei uns erweiterbar". Du erhältst vollständigen, sauber dokumentierten Code.' },
-              { icon: 'fa-solid fa-receipt', title: 'Transparente Preise', desc: 'Nach einem kurzen Briefing bekommst du ein individuelles Angebot – alle Kosten klar aufgelistet, inkl. möglicher Hosting- oder Domain-Gebühren.' },
-              { icon: 'fa-solid fa-shield-halved', title: '14 Tage Bugfix-Garantie', desc: 'Fehler auf unserer Seite beheben wir kostenlos. 14 Tage nach Übergabe ist das Projekt in sicheren Händen.' },
+              { icon: 'fa-solid fa-fire', title: 'Leidenschaft für Code', desc: 'Wir coden nicht für Geld – wir coden, weil es uns begeistert. Jedes Projekt ist eine Gelegenheit, etwas Neues zu lernen.' },
+              { icon: 'fa-solid fa-users', title: 'Community First', desc: 'TEAM LAZER lebt von der Community. Wir tauschen uns aus, helfen uns gegenseitig und wachsen zusammen.' },
+              { icon: 'fa-solid fa-seedling', title: 'Immer am Wachsen', desc: 'Alles selbst beigebracht. Tutorials, Docs, Trial & Error – so haben wir angefangen, so lernen wir weiter.' },
             ].map(({ icon, title, desc }, i) => (
               <motion.div key={title} className="value-card" variants={staggerItem}>
                 <div className="value-icon"><i className={icon} /></div>
@@ -208,11 +208,11 @@ export default function About() {
       <section className="section-pad bg-alt">
         <div className="container">
           <motion.div className="about-cta" {...fadeUp()}>
-            <h3>Bereit zusammenzuarbeiten?</h3>
-            <p>Stell uns dein Projekt vor – wir melden uns innerhalb von 24 Stunden und besprechen alle Details für ein individuelles Angebot.</p>
+            <h3>Neugierig oder einfach Hallo?</h3>
+            <p>Schreib mir – ob du Fragen hast, selbst coderst oder einfach quatschen willst. Ich freu mich über Nachrichten.</p>
             <div className="about-cta-btns">
-              <Link to="/contact" className="btn btn-primary"><i className="fa-solid fa-paper-plane" /> Projekt anfragen</Link>
-              <Link to="/services" className="btn btn-secondary"><i className="fa-solid fa-briefcase" /> Leistungen ansehen</Link>
+              <Link to="/contact" className="btn btn-primary"><i className="fa-solid fa-envelope" /> Schreib mir</Link>
+              <Link to="/skills" className="btn btn-secondary"><i className="fa-solid fa-code" /> Skills ansehen</Link>
             </div>
           </motion.div>
         </div>

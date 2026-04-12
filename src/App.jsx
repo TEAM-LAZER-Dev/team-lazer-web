@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
+import { AuthProvider } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import CookieBanner from './components/CookieBanner'
@@ -10,10 +12,12 @@ import ChatWidget from './components/ChatWidget'
 import Home from './pages/Home'
 import About from './pages/About'
 import Services from './pages/Services'
-import Portfolio from './pages/Portfolio'
+import Members from './pages/Members'
+import Bots from './pages/Bots'
 import Contact from './pages/Contact'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
 import Impressum from './pages/Impressum'
-import Agb from './pages/Agb'
 import Privacy from './pages/Privacy'
 
 
@@ -42,7 +46,7 @@ function useHighlightReveal(location) {
   }, [location.pathname])
 }
 
-export default function App() {
+function AppInner() {
   const location = useLocation()
   useHighlightReveal(location)
 
@@ -56,11 +60,16 @@ export default function App() {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/members" element={<Members />} />
+          <Route path="/bots" element={<Bots />} />
+          <Route path="/skills" element={<Services />} />
           <Route path="/services" element={<Services />} />
-          <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute><Dashboard /></ProtectedRoute>
+          } />
           <Route path="/impressum" element={<Impressum />} />
-          <Route path="/agb" element={<Agb />} />
           <Route path="/privacy" element={<Privacy />} />
         </Routes>
       </AnimatePresence>
@@ -68,5 +77,13 @@ export default function App() {
       <CookieBanner />
       <ChatWidget />
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppInner />
+    </AuthProvider>
   )
 }

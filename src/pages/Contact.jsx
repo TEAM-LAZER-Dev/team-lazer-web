@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useSEO } from '../lib/seo'
 
@@ -43,25 +42,12 @@ const pageStyle = `
   }
 `
 
-const PROJECT_MAP = {
-  'landing-page': 'Landing Page',
-  'business-website': 'Business Website',
-  'custom-website': 'Custom Website / Web-App',
-  'discord-basic': 'Discord Bot (Basic)',
-  'discord-advanced': 'Discord Bot (Advanced)',
-  'discord-anpassung': 'Bot Anpassung',
-  'webhook-api': 'Webhook / API Integration',
-  'custom-skript': 'Custom Skript / Automation',
-}
-
 export default function Contact() {
   useSEO({
     title: 'Kontakt | TEAM LAZER',
-    description: 'Projekt anfragen oder Fragen stellen – TEAM LAZER meldet sich innerhalb von 24 Stunden. Kostenloses Erstgespräch, individuelles Angebot.',
+    description: 'Schreib uns – Fragen, Ideen, Teil werden oder einfach Hallo. TEAM LAZER antwortet zeitnah.',
   })
-  const [searchParams] = useSearchParams()
   const [submitted, setSubmitted] = useState(false)
-  const prefill = PROJECT_MAP[searchParams.get('projekt')] || ''
 
   return (
     <div className="page-wrapper">
@@ -72,7 +58,7 @@ export default function Contact() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <span className="section-tag">SCHREIB UNS</span>
             <h1>Kontakt</h1>
-            <p>Fragen, Projektideen oder einfach Hallo – wir melden uns innerhalb von 24 Stunden.</p>
+            <p>Fragen, coole Ideen, Teil von TEAM LAZER werden oder einfach Hallo – wir antworten so schnell wir können.</p>
           </motion.div>
         </div>
       </section>
@@ -85,7 +71,7 @@ export default function Contact() {
               {submitted && (
                 <div className="form-success">
                   <i className="fa-solid fa-circle-check" style={{ fontSize: '1.4rem', marginBottom: '8px', display: 'block' }} />
-                  Danke für deine Anfrage! Wir melden uns innerhalb von 24 Stunden.
+                  Danke für deine Nachricht! Wir melden uns so schnell wir können.
                 </div>
               )}
               <form
@@ -107,17 +93,21 @@ export default function Contact() {
                   </div>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="ftyp">Betreff</label>
-                  <select id="ftyp" name="betreff" defaultValue={prefill}>
+                  <label htmlFor="fthema">Thema</label>
+                  <select id="fthema" name="thema" defaultValue="">
                     <option value="">– Bitte wählen –</option>
-                    {Object.values(PROJECT_MAP).map(v => <option key={v} value={v}>{v}</option>)}
+                    <option>Frage zu einem Projekt</option>
+                    <option>Mitglied werden</option>
+                    <option>Bot-Frage / Problem</option>
+                    <option>Austausch / Zusammenarbeit</option>
+                    <option>Feedback</option>
                     <option>Allgemeine Frage</option>
                     <option>Sonstiges</option>
                   </select>
                 </div>
                 <div className="form-group">
                   <label htmlFor="fmsg">Nachricht *</label>
-                  <textarea id="fmsg" name="nachricht" placeholder="Wie können wir dir helfen?" required />
+                  <textarea id="fmsg" name="nachricht" placeholder="Was liegt dir auf dem Herzen?" required />
                 </div>
                 <div className="form-submit">
                   <button type="submit" className="btn btn-primary">
@@ -130,9 +120,9 @@ export default function Contact() {
             <div className="contact-info">
               {[
                 { icon: 'fa-solid fa-envelope', title: 'E-Mail', content: <a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a>, delay: 0 },
-                { icon: 'fa-solid fa-clock', title: 'Reaktionszeit', content: 'Wir antworten innerhalb von 24 Stunden.', delay: 0.1 },
-                { icon: 'fa-solid fa-server', title: 'Hosting auf Wunsch', content: 'Websites und Web-Apps können bei uns gehostet werden. Monatliche Kosten werden transparent im Angebot aufgeführt.', delay: 0.2 },
-                { icon: 'fa-solid fa-receipt', title: 'Individuelles Angebot', content: 'Nach einem kurzen Briefing bekommst du ein klares Angebot – alle Kosten inkl. Domain & Hosting offen aufgelistet.', delay: 0.3 },
+                { icon: 'fa-solid fa-clock', title: 'Reaktionszeit', content: 'Ich antworte so schnell ich kann – meistens innerhalb weniger Tage.', delay: 0.1 },
+                { icon: 'fa-brands fa-discord', title: 'Discord', content: 'Du findest mich auch auf Discord – einfach über das Kontaktformular fragen.', delay: 0.2 },
+                { icon: 'fa-solid fa-code', title: 'Hobby-Projekt', content: 'TEAM LAZER ist ein privates Hobby-Projekt. Ich freue mich über jeden Austausch.', delay: 0.3 },
               ].map(({ icon, title, content, delay }) => (
                 <motion.div key={title} className="info-card" {...fadeUp(delay)}>
                   <div className="info-icon"><i className={icon} /></div>

@@ -7,28 +7,31 @@ export default function Footer() {
         <div className="footer-grid">
           <div className="footer-brand">
             <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
-            <p>Websites · Automatisierung · Individuelle Entwicklung.<br />Entwickelt in Deutschland.</p>
+            <p>Gaming · Entwicklung · Community<br />Eine Crew aus Deutschland – mit Leidenschaft dabei.</p>
             <div className="footer-social">
               <a href="https://www.instagram.com/team_lazer.de" title="Instagram" target="_blank" rel="noreferrer">
                 <i className="fa-brands fa-instagram" />
               </a>
+              <a href="mailto:kontakt@team-lazer.de" title="E-Mail">
+                <i className="fa-solid fa-envelope" />
+              </a>
             </div>
           </div>
           <div className="footer-col">
-            <h5>Leistungen</h5>
-            <Link to="/services">Alle Leistungen</Link>
-            <Link to="/services">Website Entwicklung</Link>
-            <Link to="/services">Automation & Skripte</Link>
+            <h5>Community</h5>
+            <Link to="/members">Mitglieder</Link>
+            <Link to="/bots">Discord Bots</Link>
+            <Link to="/contact">Teil werden</Link>
           </div>
           <div className="footer-col">
-            <h5>Unternehmen</h5>
+            <h5>Mehr</h5>
             <Link to="/about">Über uns</Link>
-            <Link to="/contact">Kontakt</Link>
+            <Link to="/skills">Skills</Link>
+            <Link to="/login">Mitglieder-Login</Link>
           </div>
           <div className="footer-col">
             <h5>Rechtliches</h5>
             <Link to="/impressum">Impressum</Link>
-            <Link to="/agb">AGB</Link>
             <Link to="/privacy">Datenschutz</Link>
           </div>
         </div>

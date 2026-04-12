@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import '../styles/home.css'
 import { useSEO } from '../lib/seo'
-import { PROJECTS } from './Portfolio'
 
-const WORDS = ['Websites', 'Landing Pages', 'Automatisierungen', 'Skripte', 'Web-Apps', 'Discord Bots']
+const WORDS = ['Websites', 'Discord Bots', 'Web-Apps', 'Automatisierungen', 'Landing Pages', 'Skripte']
 
 function Typewriter() {
   const [wi, setWi] = useState(0)
@@ -42,32 +41,20 @@ function Typewriter() {
 
 const FAQ_ITEMS = [
   {
-    q: 'Was kostet eine Website bei euch?',
-    a: 'Preise gibt es erst nach einem kurzen Briefing – weil jedes Projekt anders ist. Eine einfache Landing Page startet ab 149 €, eine Business-Website ab 349 €. Danach kommt ein individuelles Angebot mit allen Kosten transparent aufgelistet – keine Überraschungen.',
+    q: 'Was ist TEAM LAZER?',
+    a: 'TEAM LAZER ist eine Dev-Community gegründet von fivozo und Wizzard Gaming. Wir entwickeln gemeinsam Websites, Discord Bots und Automatisierungen – aus Leidenschaft, nicht als Gewerbe.',
   },
   {
-    q: 'Wie läuft ein Projekt ab?',
-    a: 'Du schickst uns eine kurze Projektbeschreibung. Wir melden uns innerhalb von 24 Stunden, besprechen die Details und schicken dir ein Angebot. Nach Freigabe legen wir los – mit regelmäßigen Updates und direktem Kontakt. Kein Zwischenhändler, kein Ticket-System.',
+    q: 'Wer steckt hinter TEAM LAZER?',
+    a: 'Gegründet von fivozo (Jon Wagner) und Wizzard Gaming als Co-Owner. Die Community wächst – weitere Mitglieder mit verschiedenen Skills kommen dazu. Schau auf der Mitglieder-Seite vorbei.',
   },
   {
-    q: 'Bekomme ich den Source-Code?',
-    a: 'Ja, immer. Nach vollständiger Bezahlung gehört dir der vollständige Quellcode – sauber, kommentiert, ohne Lock-in. Du kannst ihn danach selbst verwalten, erweitern oder woanders hosten.',
+    q: 'Habt ihr Discord Bots?',
+    a: 'Ja! Wir entwickeln eigene Discord Bots, die du auf unserer Bots-Seite findest. Du kannst sie direkt auf deinen Server einladen oder das Dashboard nutzen.',
   },
   {
-    q: 'Kann ich die Website danach selbst bearbeiten?',
-    a: 'Das kommt auf das Projekt an. Wir können dir eine einfach pflegbare Lösung bauen oder dir nach Übergabe eine kurze Einweisung geben. Auf Wunsch richten wir auch ein CMS ein.',
-  },
-  {
-    q: 'Bietet ihr Hosting an?',
-    a: 'Ja. Wir können Websites direkt bei uns hosten – rund um die Uhr, auf deutschem Server. Hosting-Kosten werden transparent im Angebot aufgelistet, separat von den Entwicklungskosten.',
-  },
-  {
-    q: 'Was ist die Bugfix-Garantie?',
-    a: 'Fehler, die auf unsere Entwicklung zurückgehen, beheben wir kostenlos – 14 Tage lang nach Übergabe. Nicht enthalten: Fehler durch Drittanbieter, Hosting oder Änderungen durch dich.',
-  },
-  {
-    q: 'Warum kein Baukastensystem wie Wix oder Squarespace?',
-    a: 'Baukastensysteme sehen auf den ersten Blick günstig aus, binden dich aber langfristig. Du zahlst monatlich, bekommst keinen Code, bist in Design und Funktionen eingeschränkt und kannst nicht wirklich skalieren. Wir liefern dir eine echte Website – dein Eigentum, dein Code.',
+    q: 'Kann ich Teil von TEAM LAZER werden?',
+    a: 'Wenn du coder, designst oder einfach Bock auf eine Dev-Community hast – melde dich über das Kontaktformular. Wir sind offen für neue Mitglieder.',
   },
 ]
 
@@ -79,7 +66,7 @@ function FAQ() {
         <motion.div className="section-header" {...fadeUp()}>
           <span className="section-tag">FAQ</span>
           <h2>Häufige <span className="highlight">Fragen</span></h2>
-          <p>Alles, was du vor einer Anfrage wissen möchtest.</p>
+          <p>Ein paar Dinge, die du vielleicht wissen möchtest.</p>
         </motion.div>
         <motion.div className="faq-list" {...fadeUp(0.1)}>
           {FAQ_ITEMS.map((item, i) => (
@@ -134,8 +121,8 @@ function useParallaxOrbs() {
 export default function Home() {
   useParallaxOrbs()
   useSEO({
-    title: 'TEAM LAZER | Websites · Discord Bots · Entwicklung',
-    description: 'TEAM LAZER – professionelle Websites, Discord Bots und Automatisierungen aus Deutschland. Individuelle Angebote nach Briefing, Source-Code Übergabe, Hosting auf Wunsch.',
+    title: 'TEAM LAZER | Gaming · Entwicklung · Community',
+    description: 'TEAM LAZER – Gaming, Entwicklung und Community aus Deutschland. Wir bauen Discord Bots, Websites und coole Sachen – aus Leidenschaft.',
   })
   return (
     <div className="page-wrapper">
@@ -152,13 +139,13 @@ export default function Home() {
             >
               <div className="hero-pill">
                 <span className="hero-pill-dot" />
-                Bereits 50+ Projekte abgeschlossen
+                Dev-Community aus Deutschland
               </div>
               <h1>
                 {[
-                  'Professionelle',
-                  <><span className="highlight">Entwicklung</span>.</>,
-                  'Ohne Umwege.',
+                  'Wir bauen.',
+                  <><span className="highlight">Wir lernen</span>.</>,
+                  'Wir sind TEAM LAZER.',
                 ].map((line, i) => (
                   <motion.span
                     key={i}
@@ -173,21 +160,25 @@ export default function Home() {
               </h1>
               <Typewriter />
               <p className="hero-sub">
-                Von der Landing Page bis zur komplexen Automatisierung –
-                sauberer Code, individuelle Angebote nach Briefing und Hosting auf Wunsch.
+                Gaming, Entwicklung und Community – das ist TEAM LAZER.
+                Wir bauen Discord Bots, Websites und coole Tools – aus reiner Leidenschaft.
               </p>
               <div className="hero-btns">
-                <Link to="/contact" className="btn btn-primary">
-                  <i className="fa-solid fa-paper-plane" /> Kostenloses Erstgespräch
+                <Link to="/bots" className="btn btn-primary">
+                  <i className="fa-brands fa-discord" /> Unsere Bots
                 </Link>
-                <Link to="/services" className="btn btn-secondary">
-                  <i className="fa-solid fa-briefcase" /> Alle Leistungen
+                <Link to="/members" className="btn btn-secondary">
+                  <i className="fa-solid fa-users" /> Das Team
                 </Link>
               </div>
               <div className="hero-trust">
-                {['Individuelles Angebot', 'Hosting auf Wunsch', 'Source-Code Übergabe', '14 Tage Bugfix-Garantie'].map(t => (
-                  <div key={t} className="trust-pill">
-                    <i className="fa-solid fa-check" /> {t}
+                {[
+                  { icon: 'fa-solid fa-gamepad-modern', label: 'Gaming' },
+                  { icon: 'fa-solid fa-code', label: 'Entwicklung' },
+                  { icon: 'fa-brands fa-discord', label: 'Community' },
+                ].map(({ icon, label }) => (
+                  <div key={label} className="trust-pill">
+                    <i className={icon} /> {label}
                   </div>
                 ))}
               </div>
@@ -201,9 +192,9 @@ export default function Home() {
             transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
           >
             {[
-              { icon: 'fa-solid fa-globe', cls: 'c-blue', title: 'Business Website', sub: 'Responsiv · Schnell · Individuell', status: 'Live' },
-              { icon: 'fa-brands fa-discord', cls: 'c-purple', title: 'Discord Bot', sub: 'discord.js · Slash Commands · DB', status: 'Aktiv' },
-              { icon: 'fa-solid fa-gears', cls: 'c-green', title: 'Automatisierung', sub: 'Webhooks · APIs · Skripte', status: 'Läuft' },
+              { icon: 'fa-solid fa-gamepad-modern', cls: 'c-purple', title: 'Gaming & Community', sub: 'Discord · Events · Fun', status: 'Aktiv' },
+              { icon: 'fa-solid fa-code', cls: 'c-blue', title: 'Entwicklung', sub: 'Websites · Bots · Tools', status: 'Aktiv' },
+              { icon: 'fa-brands fa-discord', cls: 'c-green', title: 'Discord Bots', sub: 'discord.js · Dashboards', status: 'Aktiv' },
             ].map(({ icon, cls, title, sub, status }) => (
               <div key={title} className="hv-card">
                 <div className={`hv-icon ${cls}`}><i className={icon} /></div>
@@ -220,13 +211,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── LEISTUNGEN ── */}
-      <section className="section-pad" id="leistungen">
+      {/* ── SKILLS OVERVIEW ── */}
+      <section className="section-pad" id="skills">
         <div className="container">
           <motion.div className="section-header" {...fadeUp()}>
-            <span className="section-tag">LEISTUNGEN</span>
-            <h2>Was wir für dich <span className="highlight">entwickeln</span></h2>
-            <p>Drei Kernbereiche – alles aus einer Hand, mit Hosting-Option.</p>
+            <span className="section-tag">SKILLS</span>
+            <h2>Was wir <span className="highlight">bauen können</span></h2>
+            <p>Die Kernbereiche von TEAM LAZER – alles selbst beigebracht, mit echter Leidenschaft.</p>
           </motion.div>
           <motion.div
             className="services-grid"
@@ -236,9 +227,9 @@ export default function Home() {
             viewport={{ once: true, margin: '-60px' }}
           >
             {[
-              { to: '/services', sc: '#2563eb', icon: 'fa-solid fa-globe', tag: 'Hosting inklusive', title: 'Website Entwicklung', desc: 'Landing Pages, Business-Websites und Community-Sites – responsiv, ohne Baukastensystem.', items: ['Landing Pages & Business Sites', 'Individuelles Design', 'Hosting auf Wunsch'] },
-              { to: '/services', sc: '#7c3aed', icon: 'fa-brands fa-discord', tag: 'Einfach bis Komplex', title: 'Discord Bots', desc: 'Von Moderations-Bots bis zu komplexen Systemen mit Datenbank – alles individuell entwickelt.', items: ['Slash Commands & Events', 'Datenbank & Leveling', 'Hosting auf Wunsch'] },
-              { to: '/services', sc: '#10b981', icon: 'fa-solid fa-gears', tag: 'Schnelle Umsetzung', title: 'Automation & Skripte', desc: 'Webhooks, API-Integrationen und Skripte – wir automatisieren repetitive Aufgaben.', items: ['Webhooks & APIs', 'Python & JavaScript', 'Datenverarbeitung'] },
+              { to: '/skills', sc: '#2563eb', icon: 'fa-solid fa-globe', tag: 'Frontend & Backend', title: 'Websites', desc: 'Von einfachen Landing Pages bis zu Multi-Page-Sites mit eigenem Design – responsiv, ohne Baukästen.', items: ['HTML / CSS / JavaScript', 'React & Vite', 'Responsives Design'] },
+              { to: '/skills', sc: '#7c3aed', icon: 'fa-brands fa-discord', tag: 'Discord Ökosystem', title: 'Discord Bots', desc: 'Einfache Utility-Bots oder komplexe Systeme mit Datenbank – alles selbst entwickelt für eigene Server.', items: ['discord.js v14', 'Slash Commands & Events', 'Datenbank-Anbindung'] },
+              { to: '/skills', sc: '#10b981', icon: 'fa-solid fa-gears', tag: 'Python & JS', title: 'Skripte & Tools', desc: 'Kleine Automatisierungen, API-Anbindungen und nützliche Tools – für den Alltag und eigene Projekte.', items: ['Python & Node.js', 'REST APIs & Webhooks', 'Datenverarbeitung'] },
             ].map(({ to, sc, icon, tag, title, desc, items }) => (
               <motion.div key={title} variants={staggerItem}>
                 <Link to={to} className="svc-card" style={{ '--sc': sc }}>
@@ -249,64 +240,10 @@ export default function Home() {
                   <ul className="svc-list">
                     {items.map(i => <li key={i}><i className="fa-solid fa-check" /> {i}</li>)}
                   </ul>
-                  <div className="svc-link">Ansehen <i className="fa-solid fa-arrow-right" /></div>
+                  <div className="svc-link">Mehr ansehen <i className="fa-solid fa-arrow-right" /></div>
                 </Link>
               </motion.div>
             ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── REFERENZEN TEASER ── */}
-      <section className="section-pad" id="referenzen">
-        <div className="container">
-          <motion.div className="section-header" {...fadeUp()}>
-            <span className="section-tag">REFERENZEN</span>
-            <h2>Ausgewählte <span className="highlight">Projekte</span></h2>
-            <p>Ein Blick auf das, was wir bereits entwickelt haben.</p>
-          </motion.div>
-          <motion.div
-            className="ref-grid"
-            variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: '-60px' }}
-          >
-            {PROJECTS.filter(p => p.featured).map(project => (
-              <motion.div key={project.id} variants={staggerItem}>
-                <Link to="/portfolio" className="ref-card" style={{ '--pc': project.color }}>
-                  <div className="ref-preview">
-                    <div className="ref-browser-bar">
-                      <span className="ref-dot" /><span className="ref-dot" /><span className="ref-dot" />
-                      <div className="ref-fake-url">{project.url ?? 'demnächst.verfügbar'}</div>
-                    </div>
-                    <div className="ref-screen">
-                      <div className="ref-icon-wrap"><i className={project.icon} /></div>
-                      {project.status === 'soon' && <div className="ref-soon-badge">Demnächst</div>}
-                    </div>
-                  </div>
-                  <div className="ref-body">
-                    <div className="ref-meta">
-                      <span className="ref-cat">
-                        {project.category === 'website' && 'Website'}
-                        {project.category === 'bot' && 'Discord Bot'}
-                        {project.category === 'automation' && 'Automatisierung'}
-                      </span>
-                      {project.status === 'live' && (
-                        <span className="ref-live"><span className="ref-live-dot" />Live</span>
-                      )}
-                    </div>
-                    <h3>{project.title}</h3>
-                    <p>{project.desc}</p>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-          <motion.div className="ref-cta" {...fadeUp(0.15)}>
-            <Link to="/portfolio" className="btn btn-secondary">
-              <i className="fa-solid fa-grid-2" /> Alle Projekte ansehen
-            </Link>
           </motion.div>
         </div>
       </section>
@@ -315,16 +252,16 @@ export default function Home() {
       <section className="section-pad bg-alt" id="prozess">
         <div className="container">
           <motion.div className="section-header" {...fadeUp()}>
-            <span className="section-tag">SO LÄUFT'S</span>
-            <h2>Von der Anfrage zur <span className="highlight">fertigen Lieferung</span></h2>
-            <p>Transparent, unkompliziert, ohne Überraschungen.</p>
+            <span className="section-tag">WIE WIR ARBEITEN</span>
+            <h2>Von der Idee zum <span className="highlight">fertigen Projekt</span></h2>
+            <p>So geht TEAM LAZER an neue Sachen heran – egal ob Website, Bot oder Skript.</p>
           </motion.div>
           <div className="process-row">
             {[
-              { num: '01', icon: 'fa-solid fa-comments', title: 'Anfrage stellen', desc: 'Kontaktformular ausfüllen oder E-Mail schicken. Kurze Beschreibung genügt – wir melden uns innerhalb von 24 Stunden.' },
-              { num: '02', icon: 'fa-solid fa-file-invoice', title: 'Angebot erhalten', desc: 'Nach einem kurzen Briefing erhältst du ein individuelles Angebot – was wir liefern, bis wann und zu welchem Preis. Ohne Kleingedrucktes.' },
-              { num: '03', icon: 'fa-solid fa-code', title: 'Wir entwickeln', desc: 'Nach Freigabe legen wir los. Du bekommst Updates und kannst jederzeit Feedback geben – keine Blackbox.' },
-              { num: '04', icon: 'fa-solid fa-rocket', title: 'Übergabe & Launch', desc: 'Vollständiger Source-Code, Deployment oder Hosting nach Wunsch. Fertig in vereinbarter Zeit.' },
+              { num: '01', icon: 'fa-solid fa-lightbulb', title: 'Idee', desc: 'Alles fängt mit einer Idee an – aus der Community, von uns selbst oder einfach weil es cool wäre. Wir sammeln und priorisieren.' },
+              { num: '02', icon: 'fa-solid fa-pencil', title: 'Planung', desc: 'Kurze Überlegung zu Struktur, Design und Technik. Meistens ein schnelles Konzept – kein Overengineering.' },
+              { num: '03', icon: 'fa-solid fa-code', title: 'Entwicklung', desc: 'Der eigentliche Spaß beginnt. Wir setzen das Projekt um, testen regelmäßig und verfeinern bis es passt.' },
+              { num: '04', icon: 'fa-solid fa-rocket', title: 'Fertig & Live', desc: 'Das Projekt geht live, landet im Portfolio und wenn es ein Bot ist – direkt einladbar. Dann kommt das nächste.' },
             ].map(({ num, icon, title, desc }, idx) => (
               <>
                 <motion.div key={title} className="process-step" {...fadeUp(idx * 0.12)}>
@@ -343,21 +280,21 @@ export default function Home() {
       <FAQ />
 
       {/* ── CTA ── */}
-      <section className="section-pad" id="anfrage">
+      <section className="section-pad" id="kontakt">
         <div className="container">
           <motion.div className="cta-box" {...fadeUp()}>
-            <h2>Bereit dein Projekt <span className="highlight">zu starten?</span></h2>
-            <p>Beschreib uns kurz dein Projekt – wir melden uns innerhalb von 24 Stunden und erstellen nach einem kurzen Briefing ein individuelles Angebot.</p>
+            <h2>Neugierig oder <span className="highlight">Teil werden?</span></h2>
+            <p>Schreib uns – ob du Fragen hast, selbst etwas baust oder einfach Teil von TEAM LAZER werden willst.</p>
             <div className="cta-btns">
               <Link to="/contact" className="btn btn-primary">
-                <i className="fa-solid fa-paper-plane" /> Jetzt anfragen
+                <i className="fa-solid fa-envelope" /> Kontakt aufnehmen
               </Link>
-              <Link to="/services" className="btn btn-secondary">
-                <i className="fa-solid fa-briefcase" /> Alle Leistungen
+              <Link to="/members" className="btn btn-secondary">
+                <i className="fa-solid fa-users" /> Das Team kennenlernen
               </Link>
             </div>
             <div className="cta-pills">
-              {['24h Reaktionszeit', 'Hosting auf Wunsch', 'Bugfix-Garantie', 'Source-Code Übergabe'].map(p => (
+              {['Kein Gewerbe', 'Echter Austausch', 'Dev-Community'].map(p => (
                 <div key={p} className="cta-pill"><i className="fa-solid fa-check" /> {p}</div>
               ))}
             </div>

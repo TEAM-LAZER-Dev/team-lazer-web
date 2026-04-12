@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { NavLink, Link, useLocation } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
@@ -38,15 +40,21 @@ export default function Navbar() {
           </Link>
           <nav className="nav-links">
             <NavLink to="/" className={navLinkClass} end>Home</NavLink>
-            <NavLink to="/about" className={navLinkClass}>Über uns</NavLink>
-            <NavLink to="/services" className={navLinkClass}>Leistungen</NavLink>
-            <NavLink to="/portfolio" className={navLinkClass}>Portfolio</NavLink>
+            <NavLink to="/members" className={navLinkClass}>Mitglieder</NavLink>
+            <NavLink to="/bots" className={navLinkClass}>Bots</NavLink>
+            <NavLink to="/skills" className={navLinkClass}>Skills</NavLink>
             <NavLink to="/contact" className={navLinkClass}>Kontakt</NavLink>
           </nav>
           <div className="nav-actions">
-            <Link to="/contact" className="btn btn-primary btn-sm">
-              <i className="fa-solid fa-paper-plane" /> Projekt anfragen
-            </Link>
+            {user ? (
+              <Link to="/dashboard" className="btn btn-primary btn-sm">
+                <i className="fa-solid fa-gauge-high" /> Dashboard
+              </Link>
+            ) : (
+              <Link to="/login" className="btn btn-secondary btn-sm">
+                <i className="fa-solid fa-right-to-bracket" /> Login
+              </Link>
+            )}
             <button
               className={`burger${menuOpen ? ' open' : ''}`}
               onClick={toggleMenu}
@@ -83,40 +91,56 @@ export default function Navbar() {
             <span className="mnav-label">Home</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
-          <NavLink to="/about" className={navLinkClass}>
+          <NavLink to="/members" className={navLinkClass}>
             <span className="mnav-num">02</span>
+            <span className="mnav-label">Mitglieder</span>
+            <i className="fa-solid fa-arrow-right mnav-arrow" />
+          </NavLink>
+          <NavLink to="/bots" className={navLinkClass}>
+            <span className="mnav-num">03</span>
+            <span className="mnav-label">Bots</span>
+            <i className="fa-solid fa-arrow-right mnav-arrow" />
+          </NavLink>
+          <NavLink to="/skills" className={navLinkClass}>
+            <span className="mnav-num">04</span>
+            <span className="mnav-label">Skills</span>
+            <i className="fa-solid fa-arrow-right mnav-arrow" />
+          </NavLink>
+          <NavLink to="/about" className={navLinkClass}>
+            <span className="mnav-num">05</span>
             <span className="mnav-label">Über uns</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
-          <NavLink to="/services" className={navLinkClass}>
-            <span className="mnav-num">03</span>
-            <span className="mnav-label">Leistungen</span>
-            <i className="fa-solid fa-arrow-right mnav-arrow" />
-          </NavLink>
-          <NavLink to="/portfolio" className={navLinkClass}>
-            <span className="mnav-num">04</span>
-            <span className="mnav-label">Portfolio</span>
-            <i className="fa-solid fa-arrow-right mnav-arrow" />
-          </NavLink>
           <NavLink to="/contact" className={navLinkClass}>
-            <span className="mnav-num">05</span>
+            <span className="mnav-num">06</span>
             <span className="mnav-label">Kontakt</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
         </div>
 
         <div className="mobile-nav-footer">
-          <Link to="/contact" className="btn btn-primary">
-            <i className="fa-solid fa-paper-plane" /> Projekt anfragen
-          </Link>
+          {user ? (
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <Link to="/dashboard" className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }}>
+                <i className="fa-solid fa-gauge-high" /> Dashboard
+              </Link>
+              <button
+                onClick={logout}
+                style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(239,68,68,.1)', border: '1px solid rgba(239,68,68,.2)', color: '#f87171', cursor: 'pointer', fontSize: '.84rem' }}
+              >
+                <i className="fa-solid fa-right-from-bracket" />
+              </button>
+            </div>
+          ) : (
+            <Link to="/login" className="btn btn-primary">
+              <i className="fa-solid fa-right-to-bracket" /> Mitglieder-Login
+            </Link>
+          )}
           <div className="mnav-social">
-            <a href="https://instagram.com/teamlazer" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <a href="https://www.instagram.com/team_lazer.de" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
               <i className="fa-brands fa-instagram" />
             </a>
-            <a href="https://linkedin.com/company/teamlazer" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <i className="fa-brands fa-linkedin-in" />
-            </a>
-            <a href="mailto:hallo@team-lazer.de" aria-label="E-Mail">
+            <a href="mailto:kontakt@team-lazer.de" aria-label="E-Mail">
               <i className="fa-solid fa-envelope" />
             </a>
           </div>
