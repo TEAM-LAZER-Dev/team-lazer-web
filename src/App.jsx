@@ -11,8 +11,8 @@ import ScrollProgress from './components/ScrollProgress'
 import ChatWidget from './components/ChatWidget'
 import Home from './pages/Home'
 import About from './pages/About'
-import Services from './pages/Services'
 import Members from './pages/Members'
+import Portfolio from './pages/Portfolio'
 import Bots from './pages/Bots'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
@@ -62,13 +62,14 @@ function AppInner() {
           <Route path="/about" element={<About />} />
           <Route path="/members" element={<Members />} />
           <Route path="/bots" element={<Bots />} />
-          <Route path="/skills" element={<Services />} />
-          <Route path="/services" element={<Services />} />
+          <Route path="/skills" element={<About />} />
+          <Route path="/services" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={
             <ProtectedRoute><Dashboard /></ProtectedRoute>
           } />
+          <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/privacy" element={<Privacy />} />
         </Routes>

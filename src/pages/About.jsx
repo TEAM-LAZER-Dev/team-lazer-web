@@ -209,10 +209,10 @@ export default function About() {
         <div className="container">
           <motion.div className="about-cta" {...fadeUp()}>
             <h3>Neugierig oder einfach Hallo?</h3>
-            <p>Schreib mir – ob du Fragen hast, selbst coderst oder einfach quatschen willst. Ich freu mich über Nachrichten.</p>
+            <p>Schreib uns – ob du Fragen hast, selbst coderst oder einfach Teil werden willst. Wir freuen uns über Nachrichten.</p>
             <div className="about-cta-btns">
-              <Link to="/contact" className="btn btn-primary"><i className="fa-solid fa-envelope" /> Schreib mir</Link>
-              <Link to="/skills" className="btn btn-secondary"><i className="fa-solid fa-code" /> Skills ansehen</Link>
+              <Link to="/contact" className="btn btn-primary"><i className="fa-solid fa-envelope" /> Schreib uns</Link>
+              <Link to="/members" className="btn btn-secondary"><i className="fa-solid fa-users" /> Das Team</Link>
             </div>
           </motion.div>
         </div>

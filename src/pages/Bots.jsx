@@ -8,13 +8,13 @@ const fadeItem = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, tran
 
 const STATUS_MAP = {
   online: { label: 'Online', color: '#4ade80', dot: '#22c55e' },
-  beta: { label: 'Beta', color: '#f59e0b', dot: '#d97706' },
+  beta: { label: 'in Entwicklung', color: '#f59e0b', dot: '#d97706' },
   maintenance: { label: 'Wartung', color: '#94a3b8', dot: '#64748b' },
 }
 
 const pageStyle = `
   .bots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
-  .bot-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: .3s; display: flex; flex-direction: column; }
+  .bot-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: .3s; display: flex; flex-direction: column; height: 100%; }
   .bot-card:hover { border-color: rgba(255,255,255,.12); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.3); }
   .bot-card-header { padding: 24px 24px 20px; display: flex; align-items: flex-start; gap: 16px; }
   .bot-icon { width: 60px; height: 60px; border-radius: 16px; background: rgba(255,255,255,.06); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; overflow: hidden; }
@@ -27,13 +27,19 @@ const pageStyle = `
   .bot-short-desc { font-size: .83rem; color: var(--muted); }
   .bot-tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 24px 16px; }
   .bot-tag { font-size: .74rem; font-weight: 500; padding: 3px 10px; border-radius: 6px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); color: rgba(255,255,255,.5); }
-  .bot-desc { padding: 0 24px 20px; font-size: .86rem; color: rgba(255,255,255,.5); line-height: 1.7; }
+  .bot-desc { padding: 0 24px 20px; font-size: .86rem; color: rgba(255,255,255,.5); line-height: 1.7; flex: 1; }
   .bot-stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .bot-stat { padding: 14px 8px; text-align: center; position: relative; }
   .bot-stat:not(:last-child)::after { content:''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: var(--border); }
   .bot-stat-val { display: block; font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; font-weight: 800; color: #fff; line-height: 1; }
   .bot-stat-label { display: block; font-size: .7rem; color: var(--muted); margin-top: 3px; }
-  .bot-actions { padding: 18px 24px; display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; }
+  .bot-actions { padding: 18px 24px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .bot-private { display:flex; align-items:center; gap:8px; padding:10px 16px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:10px; font-size:.85rem; color:rgba(255,255,255,.3); width:100%; line-height:1.5; }
+  .bot-locked-btn { opacity:.35; cursor:not-allowed; position:relative; }
+  .bot-locked-btn .bot-locked-hover { display:none; }
+  .bot-locked-btn:hover .bot-locked-default { display:none; }
+  .bot-locked-btn:hover .bot-locked-hover { display:flex; align-items:center; gap:6px; }
+  .bot-locked-btn:hover { opacity:.35; box-shadow:none !important; transform:none !important; background:inherit !important; }
   .bot-actions .btn { flex: 1; min-width: 120px; justify-content: center; padding: 10px 16px; font-size: .85rem; }
   .bots-hero-strip { display: flex; gap: 32px; flex-wrap: wrap; margin-top: 20px; }
   .bhs-item { display: flex; flex-direction: column; gap: 2px; }
@@ -99,19 +105,34 @@ function BotCard({ bot }) {
       </div>
 
       <div className="bot-actions">
-        <a
-          href={bot.inviteUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="btn btn-primary"
-          style={{ background: bot.status === 'maintenance' ? 'rgba(255,255,255,.06)' : undefined, pointerEvents: bot.status === 'maintenance' ? 'none' : undefined }}
-        >
-          <i className="fa-solid fa-plus" /> Bot einladen
-        </a>
-        {bot.hasDashboard && bot.dashboardUrl && (
-          <a href={bot.dashboardUrl} target="_blank" rel="noreferrer" className="btn btn-secondary">
-            <i className="fa-solid fa-gauge-high" /> Dashboard
-          </a>
+        {bot.private ? (
+          <>
+            <a className="btn btn-primary bot-locked-btn" style={{ flex:1, justifyContent:'center', padding:'10px 16px', fontSize:'.85rem' }}>
+              <span className="bot-locked-default"><i className="fa-solid fa-plus" /> Bot einladen</span>
+              <span className="bot-locked-hover"><i className="fa-solid fa-lock" /> Gesperrt</span>
+            </a>
+            <a className="btn btn-secondary bot-locked-btn" style={{ flex:1, justifyContent:'center', padding:'10px 16px', fontSize:'.85rem' }}>
+              <span className="bot-locked-default"><i className="fa-solid fa-gauge-high" /> Dashboard</span>
+              <span className="bot-locked-hover"><i className="fa-solid fa-lock" /> Gesperrt</span>
+            </a>
+          </>
+        ) : (
+          <>
+            <a
+              href={bot.inviteUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-primary"
+              style={{ background: bot.status === 'maintenance' ? 'rgba(255,255,255,.06)' : undefined, pointerEvents: bot.status === 'maintenance' ? 'none' : undefined }}
+            >
+              <i className="fa-solid fa-plus" /> Bot einladen
+            </a>
+            {bot.hasDashboard && bot.dashboardUrl && (
+              <a href={bot.dashboardUrl} target="_blank" rel="noreferrer" className="btn btn-secondary">
+                <i className="fa-solid fa-gauge-high" /> Dashboard
+              </a>
+            )}
+          </>
         )}
       </div>
     </motion.div>
@@ -124,9 +145,6 @@ export default function Bots() {
     description: 'Alle Discord Bots von TEAM LAZER – einladen, Statistiken einsehen und Dashboards nutzen.',
   })
 
-  const totalServers = BOTS.reduce((s, b) => s + b.stats.servers, 0)
-  const totalCommands = BOTS.reduce((s, b) => s + b.stats.commands, 0)
-
   return (
     <div className="page-wrapper">
       <style>{pageStyle}</style>
@@ -138,11 +156,6 @@ export default function Bots() {
             <span className="section-tag">DISCORD BOTS</span>
             <h1>Unsere Bots</h1>
             <p>Handgemachte Discord Bots von TEAM LAZER – lade sie auf deinen Server ein oder nutze die Dashboards.</p>
-            <div className="bots-hero-strip">
-              <div className="bhs-item"><span className="bhs-num"><span>{BOTS.length}</span></span><span className="bhs-label">Bots</span></div>
-              <div className="bhs-item"><span className="bhs-num"><span>{totalServers}</span></span><span className="bhs-label">Server gesamt</span></div>
-              <div className="bhs-item"><span className="bhs-num"><span>{totalCommands}</span></span><span className="bhs-label">Slash Commands</span></div>
-            </div>
           </motion.div>
         </div>
       </section>

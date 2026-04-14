@@ -102,7 +102,6 @@
 }
 .hv-card:hover {
   border-color: rgba(124,58,237,0.3);
-  transform: translateX(8px);
   background: rgba(20,16,34,0.85);
   box-shadow: 0 8px 28px rgba(0,0,0,0.3), 0 0 0 1px rgba(124,58,237,0.1);
 }
@@ -141,7 +140,7 @@
   0%,100%{transform:translateY(0);}
   50%{transform:translateY(-7px);}
 }
-.hv-card:hover { animation: none; }
+.hv-card:hover { animation-play-state: paused; }
 
 /* ── SERVICES SECTION ── */
 .services-grid {

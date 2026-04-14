@@ -4,7 +4,8 @@ import { motion } from 'framer-motion'
 import '../styles/home.css'
 import { useSEO } from '../lib/seo'
 
-const WORDS = ['Websites', 'Discord Bots', 'Web-Apps', 'Automatisierungen', 'Landing Pages', 'Skripte']
+const WORDS = ['Websites', 'Discord Bots', 'Apps', 'Automatisierungen', 'Landing Pages', 'Discord Server', 'Web-Apps', 'Games']
+
 
 function Typewriter() {
   const [wi, setWi] = useState(0)
@@ -121,8 +122,8 @@ function useParallaxOrbs() {
 export default function Home() {
   useParallaxOrbs()
   useSEO({
-    title: 'TEAM LAZER | Gaming · Entwicklung · Community',
-    description: 'TEAM LAZER – Gaming, Entwicklung und Community aus Deutschland. Wir bauen Discord Bots, Websites und coole Sachen – aus Leidenschaft.',
+    title: 'TEAM LAZER | Entwicklung · Bots · Community',
+    description: 'TEAM LAZER – Dev-Community aus Deutschland. Wir entwickeln Websites, Discord Bots und Tools – aus reiner Leidenschaft.',
   })
   return (
     <div className="page-wrapper">
@@ -143,9 +144,9 @@ export default function Home() {
               </div>
               <h1>
                 {[
-                  'Wir bauen.',
-                  <><span className="highlight">Wir lernen</span>.</>,
-                  'Wir sind TEAM LAZER.',
+                  'Professionelle',
+                  <><span className="highlight">Entwicklung</span>.</>,
+                  'Ohne Umwege.',
                 ].map((line, i) => (
                   <motion.span
                     key={i}
@@ -160,22 +161,21 @@ export default function Home() {
               </h1>
               <Typewriter />
               <p className="hero-sub">
-                Gaming, Entwicklung und Community – das ist TEAM LAZER.
-                Wir bauen Discord Bots, Websites und coole Tools – aus reiner Leidenschaft.
+                Wir entwickeln Websites, Discord Bots und digitale Tools – sauber strukturiert, modern umgesetzt. Getragen von einer aktiven Community, die gemeinsam wächst.
               </p>
               <div className="hero-btns">
-                <Link to="/bots" className="btn btn-primary">
-                  <i className="fa-brands fa-discord" /> Unsere Bots
+                <Link to="/skills" className="btn btn-primary">
+                  Mehr erfahren
                 </Link>
-                <Link to="/members" className="btn btn-secondary">
-                  <i className="fa-solid fa-users" /> Das Team
+                <Link to="/bots" className="btn btn-secondary">
+                  <i className="fa-brands fa-discord" /> Unsere Bots
                 </Link>
               </div>
               <div className="hero-trust">
                 {[
-                  { icon: 'fa-solid fa-gamepad-modern', label: 'Gaming' },
                   { icon: 'fa-solid fa-code', label: 'Entwicklung' },
                   { icon: 'fa-brands fa-discord', label: 'Community' },
+                  { icon: 'fa-solid fa-gamepad', label: 'Gaming' },
                 ].map(({ icon, label }) => (
                   <div key={label} className="trust-pill">
                     <i className={icon} /> {label}
@@ -192,9 +192,9 @@ export default function Home() {
             transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
           >
             {[
-              { icon: 'fa-solid fa-gamepad-modern', cls: 'c-purple', title: 'Gaming & Community', sub: 'Discord · Events · Fun', status: 'Aktiv' },
               { icon: 'fa-solid fa-code', cls: 'c-blue', title: 'Entwicklung', sub: 'Websites · Bots · Tools', status: 'Aktiv' },
-              { icon: 'fa-brands fa-discord', cls: 'c-green', title: 'Discord Bots', sub: 'discord.js · Dashboards', status: 'Aktiv' },
+              { icon: 'fa-brands fa-discord', cls: 'c-green', title: 'Community', sub: 'Discord · Events · Austausch', status: 'Aktiv' },
+              { icon: 'fa-solid fa-gamepad', cls: 'c-purple', title: 'Gaming', sub: 'Gemeinsam zocken · Fun', status: 'Aktiv' },
             ].map(({ icon, cls, title, sub, status }) => (
               <div key={title} className="hv-card">
                 <div className={`hv-icon ${cls}`}><i className={icon} /></div>
@@ -215,9 +215,9 @@ export default function Home() {
       <section className="section-pad" id="skills">
         <div className="container">
           <motion.div className="section-header" {...fadeUp()}>
-            <span className="section-tag">SKILLS</span>
-            <h2>Was wir <span className="highlight">bauen können</span></h2>
-            <p>Die Kernbereiche von TEAM LAZER – alles selbst beigebracht, mit echter Leidenschaft.</p>
+            <span className="section-tag">ENTWICKLUNG</span>
+            <h2>Was wir <span className="highlight">bauen</span></h2>
+            <p>Websites, Discord Bots, Skripte – das ist der Kern von TEAM LAZER. Alles selbst entwickelt, aus Leidenschaft.</p>
           </motion.div>
           <motion.div
             className="services-grid"
@@ -283,18 +283,18 @@ export default function Home() {
       <section className="section-pad" id="kontakt">
         <div className="container">
           <motion.div className="cta-box" {...fadeUp()}>
-            <h2>Neugierig oder <span className="highlight">Teil werden?</span></h2>
-            <p>Schreib uns – ob du Fragen hast, selbst etwas baust oder einfach Teil von TEAM LAZER werden willst.</p>
+            <h2>Coder? Dann bist du <span className="highlight">richtig hier.</span></h2>
+            <p>Wenn du entwickelst, designst oder einfach Bock auf eine echte Dev-Community hast – melde dich. Wir bauen gemeinsam.</p>
             <div className="cta-btns">
-              <Link to="/contact" className="btn btn-primary">
-                <i className="fa-solid fa-envelope" /> Kontakt aufnehmen
+              <Link to="/skills" className="btn btn-primary">
+                <i className="fa-solid fa-code" /> Skills ansehen
               </Link>
-              <Link to="/members" className="btn btn-secondary">
-                <i className="fa-solid fa-users" /> Das Team kennenlernen
+              <Link to="/contact" className="btn btn-secondary">
+                <i className="fa-solid fa-envelope" /> Teil werden
               </Link>
             </div>
             <div className="cta-pills">
-              {['Kein Gewerbe', 'Echter Austausch', 'Dev-Community'].map(p => (
+              {['Kein Gewerbe', 'Open Source Mindset', 'Dev-Community'].map(p => (
                 <div key={p} className="cta-pill"><i className="fa-solid fa-check" /> {p}</div>
               ))}
             </div>

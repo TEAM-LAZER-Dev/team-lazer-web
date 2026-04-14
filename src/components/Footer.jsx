@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="footer-grid">
           <div className="footer-brand">
             <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
-            <p>Gaming · Entwicklung · Community<br />Eine Crew aus Deutschland – mit Leidenschaft dabei.</p>
+            <p>Excellence in Gaming<br />& Development.</p>
             <div className="footer-social">
               <a href="https://www.instagram.com/team_lazer.de" title="Instagram" target="_blank" rel="noreferrer">
                 <i className="fa-brands fa-instagram" />
@@ -18,15 +18,15 @@ export default function Footer() {
             </div>
           </div>
           <div className="footer-col">
-            <h5>Community</h5>
-            <Link to="/members">Mitglieder</Link>
+            <h5>Entwicklung</h5>
+            <Link to="/skills">Skills</Link>
             <Link to="/bots">Discord Bots</Link>
-            <Link to="/contact">Teil werden</Link>
+            <Link to="/about">Über uns</Link>
           </div>
           <div className="footer-col">
-            <h5>Mehr</h5>
-            <Link to="/about">Über uns</Link>
-            <Link to="/skills">Skills</Link>
+            <h5>Community</h5>
+            <Link to="/members">Mitglieder</Link>
+            <Link to="/contact">Teil werden</Link>
             <Link to="/login">Mitglieder-Login</Link>
           </div>
           <div className="footer-col">

@@ -40,9 +40,9 @@ export default function Navbar() {
           </Link>
           <nav className="nav-links">
             <NavLink to="/" className={navLinkClass} end>Home</NavLink>
-            <NavLink to="/members" className={navLinkClass}>Mitglieder</NavLink>
+            <NavLink to="/skills" className={navLinkClass}>Über uns</NavLink>
             <NavLink to="/bots" className={navLinkClass}>Bots</NavLink>
-            <NavLink to="/skills" className={navLinkClass}>Skills</NavLink>
+            <NavLink to="/members" className={navLinkClass}>Mitglieder</NavLink>
             <NavLink to="/contact" className={navLinkClass}>Kontakt</NavLink>
           </nav>
           <div className="nav-actions">
@@ -91,9 +91,9 @@ export default function Navbar() {
             <span className="mnav-label">Home</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
-          <NavLink to="/members" className={navLinkClass}>
+          <NavLink to="/skills" className={navLinkClass}>
             <span className="mnav-num">02</span>
-            <span className="mnav-label">Mitglieder</span>
+            <span className="mnav-label">Über uns</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
           <NavLink to="/bots" className={navLinkClass}>
@@ -101,9 +101,9 @@ export default function Navbar() {
             <span className="mnav-label">Bots</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
-          <NavLink to="/skills" className={navLinkClass}>
+          <NavLink to="/members" className={navLinkClass}>
             <span className="mnav-num">04</span>
-            <span className="mnav-label">Skills</span>
+            <span className="mnav-label">Mitglieder</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
           <NavLink to="/about" className={navLinkClass}>
