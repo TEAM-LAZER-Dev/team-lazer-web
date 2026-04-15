@@ -96,9 +96,9 @@ export default function Contact() {
                   <label htmlFor="fthema">Thema</label>
                   <select id="fthema" name="thema" defaultValue="">
                     <option value="">– Bitte wählen –</option>
-                    <option>Frage zu einem Projekt</option>
-                    <option>Mitglied werden</option>
                     <option>Bot-Frage / Problem</option>
+                    <option>Website-Frage</option>
+                    <option>Discord Server</option>
                     <option>Austausch / Zusammenarbeit</option>
                     <option>Feedback</option>
                     <option>Allgemeine Frage</option>

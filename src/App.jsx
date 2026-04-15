@@ -1,22 +1,19 @@
 import { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
-import { AuthProvider } from './context/AuthContext'
-import ProtectedRoute from './components/ProtectedRoute'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import CookieBanner from './components/CookieBanner'
 import ScrollToTop from './components/ScrollToTop'
 import ScrollProgress from './components/ScrollProgress'
 import ChatWidget from './components/ChatWidget'
+import FlyingTiles from './components/FlyingTiles'
 import Home from './pages/Home'
 import About from './pages/About'
 import Members from './pages/Members'
 import Portfolio from './pages/Portfolio'
 import Bots from './pages/Bots'
 import Contact from './pages/Contact'
-import Login from './pages/Login'
-import Dashboard from './pages/Dashboard'
 import Impressum from './pages/Impressum'
 import Privacy from './pages/Privacy'
 
@@ -54,6 +51,7 @@ function AppInner() {
     <>
       <ScrollProgress />
       <div className="global-bg" />
+      <FlyingTiles />
       <ScrollToTop />
       <Navbar />
       <AnimatePresence mode="wait">
@@ -65,10 +63,6 @@ function AppInner() {
           <Route path="/skills" element={<About />} />
           <Route path="/services" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute><Dashboard /></ProtectedRoute>
-          } />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/privacy" element={<Privacy />} />
@@ -82,9 +76,5 @@ function AppInner() {
 }
 
 export default function App() {
-  return (
-    <AuthProvider>
-      <AppInner />
-    </AuthProvider>
-  )
+  return <AppInner />
 }

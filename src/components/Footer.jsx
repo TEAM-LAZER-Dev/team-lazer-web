@@ -19,15 +19,13 @@ export default function Footer() {
           </div>
           <div className="footer-col">
             <h5>Entwicklung</h5>
-            <Link to="/skills">Skills</Link>
             <Link to="/bots">Discord Bots</Link>
-            <Link to="/about">Über uns</Link>
+            <Link to="/skills">Über uns</Link>
+            <Link to="/contact">Kontakt</Link>
           </div>
           <div className="footer-col">
             <h5>Community</h5>
-            <Link to="/members">Mitglieder</Link>
-            <Link to="/contact">Teil werden</Link>
-            <Link to="/login">Mitglieder-Login</Link>
+            <Link to="/members">Team</Link>
           </div>
           <div className="footer-col">
             <h5>Rechtliches</h5>

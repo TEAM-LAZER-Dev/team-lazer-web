@@ -38,14 +38,36 @@ img { max-width: 100%; }
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background: var(--bg);
   background-image:
-    linear-gradient(rgba(124,58,237,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(124,58,237,0.05) 1px, transparent 1px);
+    linear-gradient(rgba(124,58,237,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.06) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 .global-bg::after {
   content: '';
   position: absolute; inset: 0;
   background: radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.1) 0%, transparent 65%);
+}
+
+/* ── FLYING TILES ── */
+.tile-container {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  overflow: hidden;
+}
+.bg-tile {
+  position: absolute;
+  bottom: -100px;
+  background: rgba(124,58,237,0.05);
+  border: 1px solid rgba(124,58,237,0.18);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(124,58,237,0.08);
+  will-change: transform, opacity;
+  animation: tileRise linear forwards;
+}
+@keyframes tileRise {
+  0%   { transform: perspective(800px) translateY(0)      rotateX(0deg)      rotateY(0deg);      opacity: 0; }
+  10%  { opacity: 0.4; }
+  85%  { opacity: 0.15; }
+  100% { transform: perspective(800px) translateY(-110vh) rotateX(var(--rx)) rotateY(var(--ry)); opacity: 0; }
 }
 
 /* ── LAYOUT ── */
