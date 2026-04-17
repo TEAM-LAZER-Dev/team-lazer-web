@@ -5,8 +5,11 @@ import { MEMBERS } from '../data/members'
 
 const TIER_CONFIG = {
   'owner':    { label: 'Owner',    color: '#a78bfa', border: 'rgba(124,58,237,0.55)', bg: 'rgba(124,58,237,0.07)', glow: 'rgba(124,58,237,0.25)', icon: 'fa-crown'   },
-  'co-owner': { label: 'Co-Owner', color: '#38bdf8', border: 'rgba(14,165,233,0.45)',  bg: 'rgba(14,165,233,0.07)',  glow: 'rgba(14,165,233,0.2)',  icon: 'fa-star'    },
+  'co-owner': { label: 'Co-Owner', color: '#b197fc', border: 'rgba(140,70,245,0.5)',  bg: 'rgba(140,70,245,0.07)',  glow: 'rgba(140,70,245,0.22)', icon: 'fa-star'    },
   'co-dev':   { label: 'Co-Dev',   color: '#4ade80', border: 'rgba(74,222,128,0.35)',  bg: 'rgba(74,222,128,0.05)',  glow: 'rgba(74,222,128,0.15)', icon: 'fa-code'    },
+  'supporter':{ label: 'Supporter',color: '#fb923c', border: 'rgba(251,146,60,0.4)',  bg: 'rgba(251,146,60,0.06)',  glow: 'rgba(251,146,60,0.15)', icon: 'fa-heart'   },
+  'mod':      { label: 'Moderator',color: '#4ade80', border: 'rgba(74,222,128,0.4)',  bg: 'rgba(74,222,128,0.06)',  glow: 'rgba(74,222,128,0.15)', icon: 'fa-shield'  },
+  'partner':  { label: 'Partner',  color: '#38bdf8', border: 'rgba(14,165,233,0.4)',  bg: 'rgba(14,165,233,0.06)',  glow: 'rgba(14,165,233,0.15)', icon: 'fa-handshake'},
 }
 
 const pageStyle = `
@@ -144,10 +147,17 @@ const pageStyle = `
   @media(max-width:768px) {
     .mt-row { flex-direction: column; align-items: center; gap: 16px; }
     .mt-hline { display: none; }
-    .mt-card, .mt-card.is-owner { width: 100%; max-width: 300px; }
-    .mt-placeholder { width: 100%; max-width: 300px; }
+    .mt-card, .mt-card.is-owner { width: 100%; max-width: 340px; }
+    .mt-card.is-featured { transform: none; }
+    .mt-placeholder { width: 100%; max-width: 340px; }
     .mt-ph-gap { display: none; }
     .mt-cta { padding: 32px 20px; }
+  }
+  @media(max-width:400px) {
+    .mt-card, .mt-card.is-owner, .mt-placeholder { max-width: 100%; }
+    .mt-card { padding: 20px 16px; }
+    .mt-name { font-size: 1.05rem; }
+    .mt-cta { padding: 24px 16px; margin-top: 40px; }
   }
 `
 
@@ -226,16 +236,18 @@ function PlaceholderCard() {
 export default function Members() {
   useSEO({ title:'Mitglieder | TEAM LAZER', description:'Das Team hinter TEAM LAZER – Gaming, Entwicklung und Community aus Deutschland.' })
 
-  // Top row: Wizzard – fivozo (center, featured) – Nico
+  // Top row: Wizzard – fivozo (center, featured) – Mr.Floppa (owners only)
   const raw = MEMBERS.filter(m => !m.placeholder)
-  const fivozo  = raw.find(m => m.id === 'fivozo')
-  const others  = raw.filter(m => m.id !== 'fivozo')
+  const topRow = raw.filter(m => m.tier === 'owner' || m.tier === 'co-owner')
+  const fivozo  = topRow.find(m => m.id === 'fivozo')
+  const others  = topRow.filter(m => m.id !== 'fivozo')
   const left    = others.slice(0, Math.floor(others.length / 2))
   const right   = others.slice(Math.floor(others.length / 2))
   const named   = [...left, fivozo, ...right]
 
-  // Bottom row: 4 placeholder slots
-  const placeholders = [0,1,2,3]
+  // Bottom row: supporters + placeholder slots
+  const supporters = raw.filter(m => m.tier === 'supporter' || m.tier === 'mod' || m.tier === 'partner')
+  const placeholders = [0,1,2,3].slice(supporters.length)
 
   // connector color = blend between adjacent members
   const connColor = 'rgba(255,255,255,0.18)'
@@ -282,9 +294,10 @@ export default function Members() {
             <div className="mt-separator-line" />
           </div>
 
-          {/* ROW 2 – placeholder slots */}
+          {/* ROW 2 – supporters + placeholder slots */}
           <div className="mt-row" style={{ gap:'20px' }}>
-            {placeholders.map(i => <PlaceholderCard key={i} />)}
+            {supporters.map(m => <MemberCard key={m.id} member={m} />)}
+            {placeholders.map(i => <PlaceholderCard key={`ph${i}`} />)}
           </div>
 
           {/* CTA */}

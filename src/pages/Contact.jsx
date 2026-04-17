@@ -45,7 +45,7 @@ const pageStyle = `
 export default function Contact() {
   useSEO({
     title: 'Kontakt | TEAM LAZER',
-    description: 'Schreib uns – Fragen, Ideen, Teil werden oder einfach Hallo. TEAM LAZER antwortet zeitnah.',
+    description: 'Schreib uns – Fragen, Ideen oder einfach Hallo. TEAM LAZER antwortet zeitnah.',
   })
   const [submitted, setSubmitted] = useState(false)
 
@@ -58,7 +58,7 @@ export default function Contact() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <span className="section-tag">SCHREIB UNS</span>
             <h1>Kontakt</h1>
-            <p>Fragen, coole Ideen, Teil von TEAM LAZER werden oder einfach Hallo – wir antworten so schnell wir können.</p>
+            <p>Fragen, Ideen, Feedback oder einfach Hallo – wir antworten so schnell wir können.</p>
           </motion.div>
         </div>
       </section>
@@ -120,9 +120,9 @@ export default function Contact() {
             <div className="contact-info">
               {[
                 { icon: 'fa-solid fa-envelope', title: 'E-Mail', content: <a href="mailto:kontakt@team-lazer.de">kontakt@team-lazer.de</a>, delay: 0 },
-                { icon: 'fa-solid fa-clock', title: 'Reaktionszeit', content: 'Ich antworte so schnell ich kann – meistens innerhalb weniger Tage.', delay: 0.1 },
-                { icon: 'fa-brands fa-discord', title: 'Discord', content: 'Du findest mich auch auf Discord – einfach über das Kontaktformular fragen.', delay: 0.2 },
-                { icon: 'fa-solid fa-code', title: 'Hobby-Projekt', content: 'TEAM LAZER ist ein privates Hobby-Projekt. Ich freue mich über jeden Austausch.', delay: 0.3 },
+                { icon: 'fa-solid fa-clock', title: 'Reaktionszeit', content: 'Wir antworten meist innerhalb von 12 Std.', delay: 0.1 },
+                { icon: 'fa-brands fa-discord', title: 'Discord', content: <span>Komm direkt auf unseren Server.<br /><a href="https://discord.gg/dCxU6KqWFz" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ marginTop: '10px', padding: '8px 16px', fontSize: '0.8rem' }}><i className="fa-brands fa-discord" /> Beitreten</a></span>, delay: 0.2 },
+                { icon: 'fa-solid fa-gamepad', title: 'Community', content: 'TEAM LAZER ist ein nicht-kommerzielles Hobby-Projekt aus Leidenschaft für Gaming und Entwicklung.', delay: 0.3 },
               ].map(({ icon, title, content, delay }) => (
                 <motion.div key={title} className="info-card" {...fadeUp(delay)}>
                   <div className="info-icon"><i className={icon} /></div>

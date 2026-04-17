@@ -205,6 +205,10 @@
   .pgrid { grid-template-columns: 1fr; }
   .pfilter { gap: 6px; }
   .pfilter-btn { padding: 7px 13px; font-size: 0.8rem; }
+  .portfolio-empty { padding: 60px 20px; }
+  .portfolio-empty-icon { font-size: 44px; }
+  .portfolio-empty h3 { font-size: 1.1rem; }
+  .portfolio-empty p { font-size: 0.88rem; }
   .pm-backdrop { padding: 12px; }
   .pm-modal { border-radius: 12px; }
   .pm-footer { flex-direction: column; align-items: flex-start; }

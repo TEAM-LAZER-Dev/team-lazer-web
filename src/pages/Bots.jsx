@@ -48,7 +48,8 @@ const pageStyle = `
   .bhs-label { font-size: .78rem; color: var(--muted); }
   .bot-dev { display: flex; align-items: center; gap: 6px; padding: 0 24px 14px; font-size: .78rem; color: var(--muted); }
   .bot-dev i { color: var(--primary); font-size: .8rem; }
-  @media(max-width:600px){ .bots-grid { grid-template-columns: 1fr; } .bot-stats-bar { grid-template-columns: repeat(2,1fr); } .bot-stat:nth-child(2)::after { display: none; } .bot-stat:nth-child(3)::after { display: none; } }
+  @media(max-width:600px){ .bots-grid { grid-template-columns: 1fr; gap: 12px; } .bot-stats-bar { grid-template-columns: repeat(2,1fr); } .bot-stat:nth-child(2)::after { display: none; } .bot-stat:nth-child(3)::after { display: none; } }
+  @media(max-width:480px){ .bot-card { padding: 16px 14px 14px; } .bot-card-head { padding: 0 0 14px; gap: 10px; } .bot-dev { padding: 0 0 10px; } }
 `
 
 function BotCard({ bot }) {

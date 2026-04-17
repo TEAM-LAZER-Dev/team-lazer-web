@@ -433,10 +433,10 @@
   .hero-tw-row { font-size: 1.15rem; margin-bottom: 16px; }
   .hero-sub { font-size: 0.9rem; line-height: 1.7; margin-bottom: 24px; max-width: 100%; }
 
-  /* Buttons: both visible, side by side */
-  .hero-btns { flex-direction: row; gap: 10px; margin-bottom: 0; flex-wrap: nowrap; }
+  /* Buttons: stack on very small, side-by-side otherwise */
+  .hero-btns { flex-direction: row; gap: 10px; margin-bottom: 0; flex-wrap: wrap; }
   .hero-btns .btn {
-    flex: 1; justify-content: center;
+    flex: 1 1 auto; min-width: 140px; justify-content: center;
     padding: 13px 10px; font-size: 0.82rem;
   }
 
