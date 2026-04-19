@@ -127,6 +127,13 @@
   status = 404
   force = true
 
+# Login-Seite existiert nicht mehr
+[[redirects]]
+  from = "/login"
+  to = "/404.html"
+  status = 404
+  force = true
+
 # SPA-Fallback – MUSS ganz am Ende stehen!
 [[redirects]]
   from = "/*"
