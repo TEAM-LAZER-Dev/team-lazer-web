@@ -1,64 +1,83 @@
 /**
  * Netlify Function: discord-stats
- * Ruft die Mitgliederzahl des Discord-Servers ab.
+ * Gibt Mitglieder- und Online-Zahlen für einen Discord-Server zurück.
  *
- * Benötigt: DISCORD_BOT_TOKEN als Umgebungsvariable in Netlify
- * Endpunkt: /.netlify/functions/discord-stats
+ * Aufruf: /discord-stats?invite=dCxU6KqWFz
+ *
+ * Für den eigenen Server (mit Bot-Token): exakte Zahlen via Bot-API
+ * Für externe Server: approximierte Zahlen via öffentlicher Invite-API (kein Token nötig)
+ *
+ * Env-Variable (optional, nur für genauere Zahlen):
+ *   DISCORD_BOT_TOKEN  – Bot-Token des tl-hub Bots
+ *   TL_GUILD_ID        – Guild ID des TEAM LAZER Servers
  */
 
-const GUILD_ID = "1466808002920185909";
+const TL_GUILD_ID  = process.env.TL_GUILD_ID  || "1466808002920185909"
+const BOT_TOKEN    = process.env.DISCORD_BOT_TOKEN
 
-export default async (req, context) => {
-  const token = process.env.DISCORD_BOT_TOKEN;
+export default async (req) => {
+  const url    = new URL(req.url)
+  const invite = url.searchParams.get("invite")
 
-  if (!token) {
-    return new Response(JSON.stringify({ error: "Token fehlt" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (!invite) {
+    return json({ error: "invite parameter fehlt" }, 400)
   }
 
+  // ── Für den eigenen Server: Bot-API (exakter) ──────────────────────────────
+  if (BOT_TOKEN) {
+    try {
+      // Invite auflösen → Guild ID ermitteln
+      const inviteRes = await fetch(
+        `https://discord.com/api/v10/invites/${invite}`,
+        { headers: { Authorization: `Bot ${BOT_TOKEN}` } }
+      )
+      if (inviteRes.ok) {
+        const inviteData = await inviteRes.json()
+        const guildId = inviteData?.guild?.id
+
+        // Wenn es unser eigener Server ist → exakte Zahlen via Bot-API
+        if (guildId === TL_GUILD_ID) {
+          const guildRes = await fetch(
+            `https://discord.com/api/v10/guilds/${guildId}?with_counts=true`,
+            { headers: { Authorization: `Bot ${BOT_TOKEN}` } }
+          )
+          if (guildRes.ok) {
+            const g = await guildRes.json()
+            return json({
+              member_count: g.approximate_member_count ?? 0,
+              online_count: g.approximate_presence_count ?? 0,
+            })
+          }
+        }
+      }
+    } catch (_) {}
+  }
+
+  // ── Fallback: öffentliche Invite-API (keine Auth nötig) ───────────────────
   try {
     const res = await fetch(
-      `https://discord.com/api/v10/guilds/${GUILD_ID}?with_counts=true`,
-      {
-        headers: {
-          Authorization: `Bot ${token}`,
-          "User-Agent": "TeamLazerWebsite/1.0",
-        },
-      }
-    );
+      `https://discord.com/api/v10/invites/${invite}?with_counts=true`,
+    )
+    if (!res.ok) return json({ error: "Invite nicht gefunden" }, 404)
 
-    if (!res.ok) {
-      return new Response(JSON.stringify({ error: "Discord API Fehler", status: res.status }), {
-        status: 502,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const data = await res.json();
-
-    return new Response(
-      JSON.stringify({
-        member_count: data.approximate_member_count ?? 0,
-        online_count: data.approximate_presence_count ?? 0,
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "public, s-maxage=300", // 5 Min cachen
-        },
-      }
-    );
+    const data = await res.json()
+    return json({
+      member_count: data.approximate_member_count ?? 0,
+      online_count: data.approximate_presence_count ?? 0,
+    })
   } catch (e) {
-    return new Response(JSON.stringify({ error: "Fetch fehlgeschlagen" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return json({ error: "Fetch fehlgeschlagen" }, 500)
   }
-};
+}
 
-export const config = {
-  path: "/discord-stats",
-};
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, s-maxage=300",
+    },
+  })
+}
+
+export const config = { path: "/discord-stats" }

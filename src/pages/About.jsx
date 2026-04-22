@@ -3,6 +3,17 @@ import { motion, useScroll, useTransform, useInView, useSpring } from 'framer-mo
 import { useEffect, useRef, useState } from 'react'
 import { useSEO } from '../lib/seo'
 
+function useServerStats(inviteCode) {
+  const [stats, setStats] = useState(null)
+  useEffect(() => {
+    fetch(`/discord-stats?invite=${inviteCode}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => d && setStats(d))
+      .catch(() => {})
+  }, [inviteCode])
+  return stats
+}
+
 /* ── Mouse glow effect ── */
 function MouseGlow() {
   const glowRef = useRef(null)
@@ -498,6 +509,8 @@ const VALUES = [
 ]
 
 export default function About() {
+  const tlStats     = useServerStats('dCxU6KqWFz')
+  const forestStats = useServerStats('znyXupmuK2')
   useSEO({
     title: 'Über uns | TEAM LAZER',
     description: 'TEAM LAZER – von einem Gaming-Clantag zu einer Dev- und Gaming-Community. Unsere Geschichte seit 2021.',
@@ -615,7 +628,8 @@ export default function About() {
               {
                 name: 'TEAM LAZER',
                 badge: 'Hauptserver', badgeType: 'private',
-                members: 15, online: 3,
+                stats: tlStats,
+                fallback: { members: 15, online: 3 },
                 tags: ['TEAM-LAZER', 'DEUTSCH', 'COMMUNITY', 'GAMING'],
                 desc: 'Unser Zuhause. Hier trifft sich die Community und alles rund um TEAM LAZER passiert.',
                 list: ['Regelmäßige Giveaways', 'Dev & Gaming Community', 'Direkter Kontakt zum Team'],
@@ -625,14 +639,18 @@ export default function About() {
               {
                 name: 'The Forest | Deutschland',
                 badge: 'Spielserver', badgeType: 'public',
-                members: 240, online: 11,
+                stats: forestStats,
+                fallback: { members: 240, online: 11 },
                 tags: ['THE-FOREST', 'DEUTSCH', 'GAMING'],
                 desc: 'Du suchst nach neuen Mitspielern oder möchtest dich mit anderen Nutzern austauschen? Dann bist du bei uns genau richtig.',
                 list: ['Aktive Spieler', 'Freundlicher Support', 'Stetige Weiterentwicklung'],
                 img: '/images/discord-server/TheForestDE.webp',
                 invite: 'https://discord.gg/znyXupmuK2',
               },
-            ].map(({ name, badge, badgeType, members, online, tags, desc, list, img, invite }) => (
+            ].map(({ name, badge, badgeType, stats, fallback, tags, desc, list, img, invite }) => {
+              const members = stats?.member_count ?? fallback.members
+              const online  = stats?.online_count  ?? fallback.online
+              return (
               <motion.div
                 key={name}
                 className="au-server-card"
@@ -676,7 +694,7 @@ export default function About() {
                   </a>
                 </div>
               </motion.div>
-            ))}
+            )})}
           </motion.div>
         </div>
       </section>
