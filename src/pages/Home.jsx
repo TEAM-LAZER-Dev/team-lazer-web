@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import '../styles/home.css'
@@ -89,6 +89,17 @@ function FAQ() {
   )
 }
 
+function useDiscordStats() {
+  const [count, setCount] = useState(null)
+  useEffect(() => {
+    fetch('/discord-stats')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => d && setCount(d.member_count))
+      .catch(() => {})
+  }, [])
+  return count
+}
+
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
@@ -121,6 +132,7 @@ function useParallaxOrbs() {
 
 export default function Home() {
   useParallaxOrbs()
+  const memberCount = useDiscordStats()
   useSEO({
     title: 'TEAM LAZER | Entwicklung · Bots · Community',
     description: 'TEAM LAZER – Dev-Community aus Deutschland. Wir entwickeln Websites, Discord Bots und Tools – aus reiner Leidenschaft.',
@@ -181,6 +193,12 @@ export default function Home() {
                     <i className={icon} /> {label}
                   </div>
                 ))}
+                {memberCount !== null && (
+                  <div className="trust-pill trust-pill--live">
+                    <span className="trust-pill-dot" />
+                    {memberCount.toLocaleString('de-DE')} Mitglieder
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>

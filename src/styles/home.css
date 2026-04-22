@@ -84,6 +84,18 @@
   border-radius: 20px; padding: 4px 11px;
 }
 .trust-pill i { color: var(--primary); font-size: 0.68rem; }
+.trust-pill--live { color: rgba(255,255,255,0.55); }
+.trust-pill-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+  animation: pulse-dot 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
 
 /* Hero Visual – floating project cards */
 .hero-visual {
