@@ -364,11 +364,12 @@ const pageStyle = `
 
   /* ── RESPONSIVE ── */
   @media(max-width:900px){
-    .au-hero { min-height: auto; padding: calc(var(--nav-h) + 50px) 0 60px; }
-    .au-hero-h1 { font-size: clamp(2.4rem, 9vw, 3.5rem); }
-    .au-hero-sub { font-size: 0.95rem; }
+    .au-hero { min-height: auto; padding: calc(var(--nav-h) + 40px) 0 56px; }
+    .au-hero-h1 { font-size: clamp(1.9rem, 5.5vw, 2.8rem); }
+    .au-hero-tag { margin-bottom: 20px; }
+    .au-hero-sub { font-size: 0.92rem; margin-bottom: 28px; }
     .au-hero-pills { gap: 8px; }
-    .au-hero-pill { padding: 6px 14px; font-size: 0.78rem; }
+    .au-hero-pill { padding: 6px 13px; font-size: 0.76rem; }
     .au-values-grid { grid-template-columns: 1fr; }
     .tl-line-track { left: 20px; }
     .au-timeline-wrap .tl-line-track { left: 20px; }
@@ -382,16 +383,20 @@ const pageStyle = `
     .au-cta-btns .btn { width: 100%; justify-content: center; }
   }
   @media(max-width:480px){
-    .au-hero-h1 { font-size: clamp(2rem, 11vw, 2.8rem); }
-    .tl-card { width: calc(100% - 44px); margin-left: 40px !important; padding: 20px 18px; }
+    .au-hero { padding: calc(var(--nav-h) + 28px) 0 44px; }
+    .au-hero-h1 { font-size: clamp(1.7rem, 8vw, 2.2rem); }
+    .au-hero-tag { margin-bottom: 16px; }
+    .au-hero-sub { font-size: 0.88rem; margin-bottom: 22px; }
+    .au-hero-pills { gap: 6px; }
+    .au-hero-pill { padding: 5px 11px; font-size: 0.72rem; }
+    .tl-card { width: calc(100% - 44px); margin-left: 40px !important; padding: 18px 16px; }
     .tl-left .tl-card::after, .tl-right .tl-card::after { left: -20px; width: 20px; }
     .tl-dot { left: 20px; width: 10px; height: 10px; }
     .tl-line-track { left: 20px; }
-    .au-server-card { padding: 18px 16px; }
+    .au-server-card { padding: 16px 14px; }
     .au-server-icon { width: 44px; height: 44px; }
-    .au-bot-card { padding: 20px 18px; }
-    .au-value-card { padding: 24px 18px; }
-    .au-cta { padding: 30px 18px; border-radius: 16px; }
+    .au-value-card { padding: 22px 16px; }
+    .au-cta { padding: 28px 16px; border-radius: 16px; }
   }
 `
 

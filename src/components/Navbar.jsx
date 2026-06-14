@@ -106,6 +106,9 @@ export default function Navbar() {
         </div>
 
         <div className="mobile-nav-footer">
+          <a href="https://discord.gg/teamlazer" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+            <i className="fa-brands fa-discord" /> Discord beitreten
+          </a>
           <div className="mnav-social">
             <a href="https://www.instagram.com/team_lazer.de" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
               <i className="fa-brands fa-instagram" />

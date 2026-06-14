@@ -403,7 +403,7 @@
   .hv-card:nth-child(2) { margin-left: 16px; }
   .hv-card:nth-child(3) { margin-left: 32px; }
 
-  .services-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .services-grid { grid-template-columns: 1fr; gap: 12px; }
   .ref-grid { grid-template-columns: 1fr; gap: 14px; }
 
   .process-row { flex-direction: column; align-items: stretch; gap: 24px; }
@@ -412,7 +412,9 @@
   .ps-icon { flex-shrink: 0; margin-bottom: 0; width: 52px; height: 52px; border-radius: 14px; font-size: 1.2rem; }
   .ps-num { display: none; }
 
-  .cta-box { padding: 48px 28px; }
+  .cta-box { padding: 44px 28px; }
+  .cta-btns { flex-direction: column; align-items: center; }
+  .cta-btns .btn { width: 100%; max-width: 320px; justify-content: center; }
 }
 
 /* ── FAQ mobile ── */
