@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import '../styles/home.css'
 import { useSEO } from '../lib/seo'
 
-const WORDS = ['Websites', 'Discord Bots', 'Apps', 'Automatisierungen', 'Landing Pages', 'Discord Server', 'Web-Apps', 'Games']
+const WORDS = ['Gaming', 'Discord', 'Code', 'Hosting', 'Events', 'Bots', 'Server']
 
 
 function Typewriter() {
@@ -19,22 +19,22 @@ function Typewriter() {
     if (!del) {
       t = setTimeout(() => {
         setWord(target.slice(0, ci + 1))
-        if (ci + 1 === target.length) { setTimeout(() => setDel(true), 2000) }
+        if (ci + 1 === target.length) { setTimeout(() => setDel(true), 2500) }
         else setCi(c => c + 1)
-      }, 80)
+      }, 150)
     } else {
       t = setTimeout(() => {
         setWord(target.slice(0, ci - 1))
         if (ci - 1 === 0) { setDel(false); setWi(i => (i + 1) % WORDS.length); setCi(0) }
         else setCi(c => c - 1)
-      }, 45)
+      }, 60)
     }
     return () => clearTimeout(t)
   }, [ci, del, wi])
 
   return (
     <div className="hero-tw-row">
-      Wir bauen <span className="tw-word">{word}</span>
+      Wir lieben <span className="tw-word">{word}</span>
       <span className="tw-cursor">|</span>
     </div>
   )
@@ -43,19 +43,19 @@ function Typewriter() {
 const FAQ_ITEMS = [
   {
     q: 'Was ist TEAM LAZER?',
-    a: 'TEAM LAZER ist eine Dev- und Gaming-Community gegründet von fivozo und Wizzard Gaming. Wir entwickeln und überarbeiten Discord Bots, Websites und Automatisierungen – und richten Discord Server professionell ein.',
+    a: 'TEAM LAZER ist eine Dev- und Gaming-Community aus Deutschland. Wir zocken zusammen, entwickeln eigene Bots und Websites – und bauen eine Community auf die wir selbst gerne nutzen.',
   },
   {
     q: 'Wer steckt hinter TEAM LAZER?',
-    a: 'Gegründet von fivozo und Wizzard Gaming als Co-Owner. Eine Dev- und Gaming-Community aus Deutschland mit echtem Fokus auf saubere Entwicklung und aktive Gemeinschaft.',
+    a: 'Gegründet von fivozo und Wizzard Gaming als Co-Owner. Was als kleines Projekt begann ist heute eine wachsende Community die gemeinsam baut, hostet und zockt.',
   },
   {
     q: 'Habt ihr Discord Bots?',
     a: 'Ja! Wir entwickeln kostenlose, öffentlich nutzbare Discord Bots – direkt einladbar für jeden. Daneben gibt es private Bots, die exklusiv für unsere Community gebaut sind.',
   },
   {
-    q: 'Richtet ihr auch Discord Server ein?',
-    a: 'Ja – wir richten Discord Server professionell ein: Strukturierung, Rollen, Kategorien, Bots und alles was dazu gehört. Meld dich einfach über das Kontaktformular.',
+    q: 'Kann ich Teil von TEAM LAZER werden?',
+    a: 'Auf jeden Fall. Komm einfach auf unseren Discord, schau dich um und werde Teil der Community. Kein Bewerbungsprozess, keine Hürden – einfach dabei sein.',
   },
 ]
 
@@ -152,13 +152,13 @@ export default function Home() {
             >
               <div className="hero-pill">
                 <span className="hero-pill-dot" />
-                Dev-Community aus Deutschland
+                Eine Community. Zwei Welten.
               </div>
               <h1>
                 {[
-                  'Professionelle',
-                  <><span className="highlight">Entwicklung</span>.</>,
-                  'Ohne Umwege.',
+                  'Community.',
+                  <><span className="highlight">Hosting.</span></>,
+                  'Development.',
                 ].map((line, i) => (
                   <motion.span
                     key={i}
@@ -173,15 +173,15 @@ export default function Home() {
               </h1>
               <Typewriter />
               <p className="hero-sub">
-                Tagsüber coden, abends zocken – manchmal beides gleichzeitig. Wir sind eine Community, die Projekte baut, die aus echtem Interesse entstehen. Kein Auftrag. Keine Agentur. Einfach wir.
+                Code. Gaming. Community. Drei Welten. Ein Team. Willkommen bei TEAM LAZER. Gegründet auf Discord. Angetrieben von Leidenschaft. Wir hosten, entwickeln und wachsen – zusammen.
               </p>
               <div className="hero-btns">
                 <Link to="/skills" className="btn btn-primary">
                   Mehr erfahren
                 </Link>
-                <Link to="/bots" className="btn btn-secondary">
-                  <i className="fa-brands fa-discord" /> Unsere Bots
-                </Link>
+                <a href="https://discord.gg/teamlazer" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                  <i className="fa-brands fa-discord" /> Discord
+                </a>
               </div>
               <div className="hero-trust">
                 {[
@@ -233,9 +233,9 @@ export default function Home() {
       <section className="section-pad" id="skills">
         <div className="container">
           <motion.div className="section-header" {...fadeUp()}>
-            <span className="section-tag">ENTWICKLUNG</span>
-            <h2>Was wir <span className="highlight">machen</span></h2>
-            <p>Entwicklung, Überarbeitung und Einrichtung – von Discord Bots über Websites bis zu kompletten Discord Servern.</p>
+            <span className="section-tag">WER WIR SIND</span>
+            <h2>Was uns <span className="highlight">ausmacht</span></h2>
+            <p>Drei Dinge die TEAM LAZER definieren – und die uns jeden Tag zusammenbringen.</p>
           </motion.div>
           <motion.div
             className="services-grid"
@@ -245,9 +245,9 @@ export default function Home() {
             viewport={{ once: true, margin: '-60px' }}
           >
             {[
-              { to: '/skills', sc: '#2563eb', icon: 'fa-solid fa-globe', tag: 'Frontend & Backend', title: 'Websites', desc: 'Entwicklung und Überarbeitung von Websites – von der Landing Page bis zur mehrseitigen Web-App, responsiv und ohne Baukästen.', items: ['HTML / CSS / JavaScript', 'React & Vite', 'Responsives Design'] },
-              { to: '/bots', sc: '#7c3aed', icon: 'fa-brands fa-discord', tag: 'Discord Ökosystem', title: 'Discord Bots', desc: 'Entwicklung und Überarbeitung von Discord Bots – einfache Utility-Bots oder komplexe Systeme mit Datenbank und Dashboard.', items: ['discord.js v14', 'Slash Commands & Events', 'Datenbank-Anbindung'] },
-              { to: '/skills', sc: '#10b981', icon: 'fa-brands fa-discord', tag: 'Discord Server', title: 'Server-Einrichtung', desc: 'Professionelle Einrichtung von Discord Servern – Struktur, Rollen, Kategorien, Bots und alles was dein Server braucht.', items: ['Rollen & Berechtigungen', 'Kategorien & Kanäle', 'Bot-Integration'] },
+              { to: '/about', sc: '#7c3aed', icon: 'fa-brands fa-discord', tag: 'Unsere Basis', title: 'Community', desc: 'Der Kern von TEAM LAZER. Ein Ort wo Menschen zusammenkommen die dieselbe Leidenschaft teilen – egal ob Coder, Gamer oder beides.', items: ['Discord Server', 'Aktive Mitglieder', 'Zusammen wachsen'] },
+              { to: '/bots', sc: '#2563eb', icon: 'fa-solid fa-code', tag: 'Was wir bauen', title: 'Entwicklung', desc: 'Von Discord Bots bis zur eigenen Website – wir entwickeln Dinge die wir selbst brauchen und nutzen. Aus Interesse, nicht auf Bestellung.', items: ['Discord Bots', 'Websites & Tools', 'Eigene Projekte'] },
+              { to: '/about', sc: '#10b981', icon: 'fa-solid fa-gamepad', tag: 'Was wir lieben', title: 'Gaming', desc: 'Neben dem ganzen Code-Kram zocken wir zusammen. Verschiedene Games, verschiedene Plattformen – Hauptsache zusammen.', items: ['Gemeinsam zocken', 'Gaming Events', 'Verschiedene Plattformen'] },
             ].map(({ to, sc, icon, tag, title, desc, items }) => (
               <motion.div key={title} variants={staggerItem}>
                 <Link to={to} className="svc-card" style={{ '--sc': sc }}>
@@ -280,9 +280,9 @@ export default function Home() {
               <Link to="/skills" className="btn btn-primary">
                 Mehr erfahren
               </Link>
-              <Link to="/bots" className="btn btn-secondary">
-                <i className="fa-brands fa-discord" /> Unsere Bots
-              </Link>
+              <a href="https://discord.gg/teamlazer" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                <i className="fa-brands fa-discord" /> Discord
+              </a>
             </div>
             <div className="cta-pills">
               {['Dev & Gaming Community', 'Discord Bots & Websites', 'Aus Leidenschaft'].map(p => (

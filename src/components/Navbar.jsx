@@ -44,6 +44,9 @@ export default function Navbar() {
             <NavLink to="/contact" className={navLinkClass}>Kontakt</NavLink>
           </nav>
           <div className="nav-actions">
+            <a href="https://discord.gg/teamlazer" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm">
+              <i className="fa-brands fa-discord" /> Discord
+            </a>
             <button
               className={`burger${menuOpen ? ' open' : ''}`}
               onClick={toggleMenu}

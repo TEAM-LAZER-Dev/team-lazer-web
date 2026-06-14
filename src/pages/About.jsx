@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useTransform, useInView, useSpring } from 'framer-motion'
+import { motion, useScroll, useInView, useSpring } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { useSEO } from '../lib/seo'
 
@@ -30,24 +30,8 @@ function MouseGlow() {
   return <div ref={glowRef} className="au-mouse-glow" />
 }
 
-/* ── Word-reveal line component ── */
-function RevealLine({ children, delay = 0, className = '' }) {
-  return (
-    <div style={{ overflow: 'hidden', display: 'block' }}>
-      <motion.div
-        className={className}
-        initial={{ y: '110%', opacity: 0 }}
-        animate={{ y: '0%', opacity: 1 }}
-        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  )
-}
-
 /* ── Timeline item ── */
-function TimelineItem({ year, title, desc, side, index }) {
+function TimelineItem({ year, title, desc, side }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   return (
@@ -142,7 +126,7 @@ const pageStyle = `
   }
   .au-hero-h1 {
     font-family: 'Rajdhani', sans-serif;
-    font-size: clamp(3.4rem, 7.5vw, 6rem);
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
     font-weight: 800; text-transform: uppercase;
     line-height: 1.0; margin-bottom: 32px;
     letter-spacing: -0.5px;
@@ -323,41 +307,8 @@ const pageStyle = `
   .au-server-badge.private { background: rgba(124,58,237,0.12); color: #a78bfa; border: 1px solid rgba(124,58,237,0.25); }
   .au-server-badge.public  { background: rgba(52,211,153,0.1);  color: #34d399;  border: 1px solid rgba(52,211,153,0.25); }
 
-  /* ── BOTS TEASER ── */
-  .au-bots-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 32px; }
-  .au-bot-card {
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 18px; padding: 28px 26px;
-    position: relative; overflow: hidden;
-    transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
-    cursor: default;
-  }
-  .au-bot-card:hover {
-    border-color: rgba(124,58,237,0.4);
-    background: rgba(124,58,237,0.04);
-    box-shadow: 0 8px 36px rgba(124,58,237,0.1);
-  }
-  .au-bot-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-  .au-bot-avatar {
-    width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
-    background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.25);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; color: var(--primary);
-  }
-  .au-bot-name { font-family: 'Rajdhani', sans-serif; font-size: 1.05rem; font-weight: 700; color: #fff; }
-  .au-bot-tag {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase; padding: 2px 9px; border-radius: 100px; margin-top: 4px;
-  }
-  .au-bot-tag.exclusive { background: rgba(167,139,250,0.12); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
-  .au-bot-tag.open      { background: rgba(52,211,153,0.1);   color: #34d399;  border: 1px solid rgba(52,211,153,0.25); }
-  .au-bot-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.65; }
-  .au-bots-cta { text-align: center; }
-
   @media(max-width:700px){
-    .au-servers-grid, .au-bots-grid { grid-template-columns: 1fr; }
+    .au-servers-grid { grid-template-columns: 1fr; }
   }
 
   /* ── VALUES ── */
@@ -445,7 +396,7 @@ const pageStyle = `
 `
 
 const HERO_LINES = [
-  { text: 'Drei Dudes.', highlight: false },
+  { text: 'Aus Leidenschaft.', highlight: false },
   { text: 'Eine Community.', highlight: true },
   { text: 'Seit 2021.', highlight: false },
 ]
@@ -460,25 +411,25 @@ const TIMELINE = [
   {
     year: '2021 – 2022',
     title: 'Der Anfang.',
-    desc: 'Was als Spielerei anfing, wurde zu einer Idee. Aus einem wurden zwei – und plötzlich wollten wir etwas aufbauen. Erste Discord-Server entstehen. Nicht perfekt, aber ein Anfang.',
+    desc: 'Was als Spielerei anfing, wurde zu einer Idee. Plötzlich wollte man etwas aufbauen. Erste Discord-Server entstehen. Nicht perfekt, aber ein Anfang.',
     side: 'right',
   },
   {
     year: '2023 – 2024',
     title: 'Erste Website geht live.',
-    desc: 'fivozo gab TEAM LAZER eine echte Heimat im Netz. Erste eigene Website, erste Gehversuche mit HTML, CSS und JavaScript – alles selbst beigebracht. Kein Kurs, kein Lehrer.',
+    desc: 'TEAM LAZER bekommt eine echte Heimat im Netz. Erste eigene Website, erste Gehversuche mit HTML, CSS und JavaScript – alles durch Trial & Error. Kein Kurs, kein Lehrer.',
     side: 'left',
   },
   {
     year: '2025',
-    title: 'Zu dritt.',
-    desc: 'Eine dritte Person stößt dazu – und bringt nicht nur Energie, sondern auch Code mit. Erste eigene Bots gehen live, Discord-Server werden professioneller. Was vorher Idee war, wird real.',
+    title: 'Das Projekt wächst.',
+    desc: 'Die Community gewinnt an Fahrt. Erste eigene Bots gehen live, Discord-Server werden professioneller. Was vorher Idee war, wird real.',
     side: 'right',
   },
   {
     year: '2026',
     title: 'TEAM LAZER steht.',
-    desc: 'Drei Leute. Eine Community. Eine Plattform. Was als Clantag begann, ist heute ein echtes Projekt – und wir sind längst nicht fertig.',
+    desc: 'Eine Community. Eine Plattform. Was als Clantag begann, ist heute ein echtes Projekt – und wir sind längst nicht fertig.',
     side: 'left',
   },
 ]
@@ -492,18 +443,18 @@ const PILLS = [
 
 const VALUES = [
   {
-    icon: 'fa-solid fa-gamepad', title: 'Gamer zuerst.',
-    desc: 'Wir zocken. Das ist der Ursprung. Alles andere – Coden, Projekte, Community – kam danach. Gaming ist kein Hobby, es ist ein Teil von uns.',
+    icon: 'fa-solid fa-gamepad', title: 'Gaming zuerst.',
+    desc: 'Alles begann mit Zocken. Nicht mit einem Plan oder einem Konzept – einfach mit Spielen, die man zusammen liebt. Das ist der Kern von TEAM LAZER.',
     color: '#a78bfa', bg: 'rgba(167,139,250,0.06)', border: 'rgba(167,139,250,0.3)',
   },
   {
-    icon: 'fa-solid fa-terminal', title: 'Selbst beigebracht.',
-    desc: 'HTML, CSS, JavaScript, React, discord.js – alles durch Trial & Error, Docs und schlaflosen Nächten. Kein Studium. Kein Kurs. Einfach machen.',
+    icon: 'fa-solid fa-terminal', title: 'Community-driven.',
+    desc: 'Was hier entsteht, entsteht für die Community. Bots, Websites, Server – alles gebaut weil es gebraucht wird, nicht weil jemand dafür bezahlt.',
     color: '#60a5fa', bg: 'rgba(96,165,250,0.06)', border: 'rgba(96,165,250,0.3)',
   },
   {
-    icon: 'fa-solid fa-bolt', title: 'Wir erschaffen.',
-    desc: 'Wenn uns eine Idee nicht loslässt, setzen wir sie um. Bots, Websites, Setups – nicht weil wir müssen, sondern weil das Erschaffen das Beste daran ist.',
+    icon: 'fa-solid fa-bolt', title: 'Einfach machen.',
+    desc: 'Kein Studium. Kein Kurs. Wenn eine Idee da ist, wird sie umgesetzt. Trial & Error, Docs und schlaflosen Nächten – so entsteht hier alles.',
     color: '#34d399', bg: 'rgba(52,211,153,0.06)', border: 'rgba(52,211,153,0.3)',
   },
 ]
@@ -561,7 +512,7 @@ export default function About() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.58 }}
           >
-            Was als Gaming-Clantag begann, wurde zu echten Projekten, echtem Code und einer Community, die zusammen wächst. Kein Studium. Keine Agentur. Einfach machen.
+            Was als Gaming-Clantag begann, wurde zu echten Projekten, echtem Code und einer Community, die zusammen wächst. Keine Agentur. Kein Auftrag. Einfach Leidenschaft.
           </motion.p>
 
           {/* Pills — staggered */}
@@ -699,65 +650,9 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── BOTS TEASER ── */}
-      <section className="section-pad">
-        <div className="container">
-          <motion.div className="section-header" {...fadeUp()}>
-            <span className="section-tag">BOTS</span>
-            <h2>Was wir <span className="highlight">gebaut haben</span></h2>
-            <p>Zwei Bots – einer für uns, einer für alle.</p>
-          </motion.div>
-          <motion.div
-            className="au-bots-grid"
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: '-60px' }}
-            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }}
-          >
-            {[
-              {
-                name: 'TEAM LAZER Hub',
-                tag: 'Exklusiv', tagType: 'exclusive',
-                desc: 'Unser offizieller Moderationsbot. Entwickelt speziell für unsere Server – nicht öffentlich, aber genau das was wir brauchen.',
-                img: '/images/discord-server/TL-Logo-steel-nobg.webp',
-              },
-              {
-                name: 'Nexus',
-                tag: 'Open & kostenlos', tagType: 'open',
-                desc: 'Ein vollständiger Discord Bot – komplett kostenlos, öffentlich einladbar und mit allem was man braucht.',
-                img: null,
-                icon: 'fa-solid fa-robot',
-              },
-            ].map(({ name, tag, tagType, desc, img, icon }) => (
-              <motion.div
-                key={name}
-                className="au-bot-card"
-                variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              >
-                <div className="au-bot-header">
-                  <div className="au-bot-avatar">
-                    {img ? <img src={img} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} /> : <i className={icon} />}
-                  </div>
-                  <div>
-                    <div className="au-bot-name">{name}</div>
-                    <span className={`au-bot-tag ${tagType}`}>{tag}</span>
-                  </div>
-                </div>
-                <p className="au-bot-desc">{desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-          <motion.div className="au-bots-cta" {...fadeUp(0.1)}>
-            <Link to="/bots" className="btn btn-secondary">
-              <i className="fa-brands fa-discord" /> Alle Bots ansehen
-            </Link>
-          </motion.div>
-        </div>
-      </section>
 
       {/* ── VALUES ── */}
-      <section className="section-pad bg-alt">
+      <section className="section-pad">
         <div className="container">
           <motion.div className="section-header" {...fadeUp()}>
             <span className="section-tag">WAS UNS AUSMACHT</span>
@@ -800,12 +695,12 @@ export default function About() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: '-60px' }}
           >
-            <h3>Neugierig auf das <span className="highlight">Team?</span></h3>
-            <p>Schau wer hinter TEAM LAZER steckt – oder schreib uns direkt.</p>
+            <h3>Bereit, <span className="highlight">dabei zu sein?</span></h3>
+            <p>Komm auf unseren Discord, schau dich um und werde Teil der Community.</p>
             <div className="au-cta-btns">
-              <Link to="/members" className="btn btn-primary">
-                <i className="fa-solid fa-users" /> Das Team
-              </Link>
+              <a href="https://discord.gg/teamlazer" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                <i className="fa-brands fa-discord" /> Discord beitreten
+              </a>
               <Link to="/contact" className="btn btn-secondary">
                 <i className="fa-solid fa-envelope" /> Kontakt
               </Link>
