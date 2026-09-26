@@ -152,7 +152,7 @@ export default function Home() {
             >
               <div className="hero-pill">
                 <span className="hero-pill-dot" />
-                Eine Community. Zwei Welten.
+                Dev. Gaming. Community.
               </div>
               <h1>
                 {[
@@ -173,13 +173,13 @@ export default function Home() {
               </h1>
               <Typewriter />
               <p className="hero-sub">
-                Code. Gaming. Community. Drei Welten. Ein Team. Willkommen bei TEAM LAZER. Gegründet auf Discord. Angetrieben von Leidenschaft. Wir hosten, entwickeln und wachsen – zusammen.
+                Willkommen bei TEAM LAZER – gegründet auf Discord, angetrieben von Leidenschaft. Wir hosten, entwickeln und zocken zusammen.
               </p>
               <div className="hero-btns">
                 <Link to="/skills" className="btn btn-primary">
                   Mehr erfahren
                 </Link>
-                <a href="https://discord.gg/teamlazer" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                <a href="https://discord.gg/dCxU6KqWFz" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
                   <i className="fa-brands fa-discord" /> Discord
                 </a>
               </div>
@@ -280,7 +280,7 @@ export default function Home() {
               <Link to="/skills" className="btn btn-primary">
                 Mehr erfahren
               </Link>
-              <a href="https://discord.gg/teamlazer" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+              <a href="https://discord.gg/dCxU6KqWFz" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
                 <i className="fa-brands fa-discord" /> Discord
               </a>
             </div>

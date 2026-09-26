@@ -691,6 +691,51 @@ export default function ChatWidget() {
     if (data) { setLiveMessages(prev => [...prev, data]); scrollLive() }
   }
 
+  /* ── Fallback-Sync: Nachrichten + Status regelmäßig abgleichen ──
+     Realtime kann stillschweigend abreißen (Hintergrund-Tab, Mobil, WLAN-Wechsel).
+     Dieser Abgleich stellt sicher, dass Agent-Antworten immer ankommen. */
+  const isOpenRef = useRef(isOpen)
+  useEffect(() => { isOpenRef.current = isOpen }, [isOpen])
+
+  useEffect(() => {
+    if (!convId || !['live', 'hold'].includes(phase)) return
+    let stopped = false
+    async function sync() {
+      if (stopped) return
+      const [{ data: msgs }, { data: conv }] = await Promise.all([
+        supabase.from('messages').select('*').eq('conversation_id', convId).order('created_at', { ascending: true }),
+        supabase.from('conversations').select('status').eq('id', convId).single(),
+      ])
+      if (stopped) return
+      if (msgs) {
+        setLiveMessages(prev => {
+          const known = new Set(prev.map(m => m.id))
+          const fresh = msgs.filter(m => !known.has(m.id) && m.sender_type !== 'user')
+          if (!fresh.length) return prev
+          if (fresh.some(m => m.sender_type === 'agent')) {
+            setAgentTyping(false)
+            if (!isOpenRef.current) setHasUnread(true)
+            scrollLive()
+          }
+          return [...prev, ...fresh]
+        })
+      }
+      if (conv?.status === 'closed') { setClosedByUser(false); setPhase('closed'); setIsOpen(true) }
+      else if (conv?.status === 'hold') setPhase(p => (p === 'live' ? 'hold' : p))
+      else if (conv?.status === 'active') setPhase(p => (p === 'hold' ? 'live' : p))
+    }
+    const iv = setInterval(sync, 2500)
+    const onVisible = () => { if (document.visibilityState === 'visible') sync() }
+    document.addEventListener('visibilitychange', onVisible)
+    window.addEventListener('online', sync)
+    return () => {
+      stopped = true
+      clearInterval(iv)
+      document.removeEventListener('visibilitychange', onVisible)
+      window.removeEventListener('online', sync)
+    }
+  }, [convId, phase]) // eslint-disable-line
+
   useEffect(() => () => {
     clearInterval(pollRef.current)
     clearTimeout(agentTypingTimer.current)

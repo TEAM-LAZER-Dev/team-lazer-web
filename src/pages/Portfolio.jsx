@@ -24,7 +24,7 @@ export default function Portfolio() {
           >
             <span className="section-tag">PORTFOLIO</span>
             <h1>Unsere <span className="highlight">Referenzen</span></h1>
-            <p>Abgeschlossene Projekte – Websites, Discord Bots und Automatisierungen aus einer Hand.</p>
+            <p>Hier erscheinen künftig unsere abgeschlossenen Projekte.</p>
           </motion.div>
         </div>
       </section>
@@ -39,8 +39,8 @@ export default function Portfolio() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <i className="fa-solid fa-folder-open portfolio-empty-icon" />
-            <h3>Projekte folgen in Kürze</h3>
-            <p>Wir arbeiten gerade an unseren Referenzen. Schau bald wieder vorbei!</p>
+            <h3>Aktuell noch nichts verfügbar</h3>
+            <p>Hier gibt es noch keine Referenzen. Sobald wir Projekte veröffentlichen, findest du sie an dieser Stelle.</p>
           </motion.div>
         </div>
       </section>

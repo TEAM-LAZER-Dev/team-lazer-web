@@ -44,7 +44,7 @@ export default function Navbar() {
             <NavLink to="/contact" className={navLinkClass}>Kontakt</NavLink>
           </nav>
           <div className="nav-actions">
-            <a href="https://discord.gg/teamlazer" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm">
+            <a href="https://discord.gg/dCxU6KqWFz" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm">
               <i className="fa-brands fa-discord" /> Discord
             </a>
             <button
@@ -106,7 +106,7 @@ export default function Navbar() {
         </div>
 
         <div className="mobile-nav-footer">
-          <a href="https://discord.gg/teamlazer" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+          <a href="https://discord.gg/dCxU6KqWFz" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
             <i className="fa-brands fa-discord" /> Discord beitreten
           </a>
           <div className="mnav-social">

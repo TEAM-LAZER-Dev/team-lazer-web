@@ -21,16 +21,11 @@ export default function CookieBanner() {
   return (
     <div className={`cookie-banner${visible ? ' visible' : ''}`}>
       <div className="cookie-text">
-        Wir verwenden <strong>Cookies</strong>, um die Nutzererfahrung zu verbessern. Mit Klick auf{' '}
-        <strong>„Alle akzeptieren"</strong> stimmst du auch optionalen Analyse-Cookies zu.{' '}
-        <Link to="/privacy">Datenschutzerklärung</Link>
+        Diese Website nutzt nur <strong>technisch notwendige</strong> Speicherfunktionen (kein Tracking, keine Werbung). <Link to="/privacy">Datenschutzerklärung</Link>
       </div>
       <div className="cookie-actions">
-        <button className="btn-cookie-decline" onClick={() => dismiss('declined')}>
-          Nur notwendige
-        </button>
-        <button className="btn-cookie-accept" onClick={() => dismiss('accepted')}>
-          Alle akzeptieren
+        <button className="btn-cookie-accept" onClick={() => dismiss('ok')}>
+          Verstanden
         </button>
       </div>
     </div>

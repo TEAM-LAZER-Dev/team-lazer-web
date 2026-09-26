@@ -23,6 +23,7 @@ export const BOTS = [
     status: 'online', // online | maintenance | beta
     developer: 'fivozo',
     private: true, // privater Bot – kein Invite, kein Dashboard
+    lockedLabel: 'Privat',
   },
   {
     id: 'nexus',
@@ -45,5 +46,7 @@ export const BOTS = [
     status: 'beta',
     developer: 'TEAM LAZER',
     private: false,
+    locked: true, // noch in Entwicklung – Buttons deaktiviert
+    lockedLabel: 'Bald verfügbar',
   },
 ]

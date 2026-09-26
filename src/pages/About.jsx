@@ -703,7 +703,7 @@ export default function About() {
             <h3>Bereit, <span className="highlight">dabei zu sein?</span></h3>
             <p>Komm auf unseren Discord, schau dich um und werde Teil der Community.</p>
             <div className="au-cta-btns">
-              <a href="https://discord.gg/teamlazer" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+              <a href="https://discord.gg/dCxU6KqWFz" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
                 <i className="fa-brands fa-discord" /> Discord beitreten
               </a>
               <Link to="/contact" className="btn btn-secondary">

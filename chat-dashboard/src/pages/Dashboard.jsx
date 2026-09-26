@@ -722,6 +722,29 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     typingChanRef.current = tch
   }, []) // eslint-disable-line
 
+  /* Fallback-Sync für den offenen Chat (falls Realtime abreißt) */
+  useEffect(() => {
+    if (!activeConv?.id) return
+    const cid = activeConv.id
+    let stopped = false
+    async function sync() {
+      const { data } = await supabase.from('messages').select('*')
+        .eq('conversation_id', cid).order('created_at', { ascending: true })
+      if (stopped || !data) return
+      setMessages(prev => {
+        const known = new Set(prev.map(m => m.id))
+        const fresh = data.filter(m => !known.has(m.id))
+        if (!fresh.length) return prev
+        setTimeout(() => endRef.current?.scrollIntoView({ behavior: 'smooth' }), 60)
+        return [...prev, ...fresh].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)))
+      })
+    }
+    const iv = setInterval(sync, 3000)
+    const onVisible = () => { if (document.visibilityState === 'visible') sync() }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => { stopped = true; clearInterval(iv); document.removeEventListener('visibilitychange', onVisible) }
+  }, [activeConv?.id])
+
   async function claimConv(conv) {
     if (!agent) return
     await supabase.from('conversations').update({status:'active',assigned_agent_id:agent.id}).eq('id',conv.id)

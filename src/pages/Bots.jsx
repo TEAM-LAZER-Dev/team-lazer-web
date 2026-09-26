@@ -35,7 +35,7 @@ const pageStyle = `
   .bot-stat-label { display: block; font-size: .7rem; color: var(--muted); margin-top: 3px; }
   .bot-actions { padding: 18px 24px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
   .bot-private { display:flex; align-items:center; gap:8px; padding:10px 16px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:10px; font-size:.85rem; color:rgba(255,255,255,.3); width:100%; line-height:1.5; }
-  .bot-locked-btn { opacity:.35; cursor:not-allowed; position:relative; }
+  .bot-locked-btn { opacity:.35; cursor:not-allowed; position:relative; pointer-events:auto; user-select:none; }
   .bot-locked-btn .bot-locked-hover { display:none; }
   .bot-locked-btn:hover .bot-locked-default { display:none; }
   .bot-locked-btn:hover .bot-locked-hover { display:flex; align-items:center; gap:6px; }
@@ -106,15 +106,15 @@ function BotCard({ bot }) {
       </div>
 
       <div className="bot-actions">
-        {bot.private ? (
+        {(bot.private || bot.locked) ? (
           <>
-            <a className="btn btn-primary bot-locked-btn" style={{ flex:1, justifyContent:'center', padding:'10px 16px', fontSize:'.85rem' }}>
+            <a aria-disabled="true" className="btn btn-primary bot-locked-btn" style={{ flex:1, justifyContent:'center', padding:'10px 16px', fontSize:'.85rem' }}>
               <span className="bot-locked-default"><i className="fa-solid fa-plus" /> Bot einladen</span>
-              <span className="bot-locked-hover"><i className="fa-solid fa-lock" /> Gesperrt</span>
+              <span className="bot-locked-hover"><i className="fa-solid fa-lock" /> {bot.lockedLabel || 'Gesperrt'}</span>
             </a>
-            <a className="btn btn-secondary bot-locked-btn" style={{ flex:1, justifyContent:'center', padding:'10px 16px', fontSize:'.85rem' }}>
+            <a aria-disabled="true" className="btn btn-secondary bot-locked-btn" style={{ flex:1, justifyContent:'center', padding:'10px 16px', fontSize:'.85rem' }}>
               <span className="bot-locked-default"><i className="fa-solid fa-gauge-high" /> Dashboard</span>
-              <span className="bot-locked-hover"><i className="fa-solid fa-lock" /> Gesperrt</span>
+              <span className="bot-locked-hover"><i className="fa-solid fa-lock" /> {bot.lockedLabel || 'Gesperrt'}</span>
             </a>
           </>
         ) : (

@@ -26,16 +26,11 @@ export default function Impressum() {
       <section className="section-pad">
         <div className="container">
           <motion.div className="legal-body" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.1 }}>
-            <div className="legal-date">Stand: März 2026</div>
             <h2>Angaben gemäß § 5 DDG</h2>
             <p>{`TEAM LAZER\nJon Wagner\nScheibenmühlenstr. 20\n01833 Stolpen\nDeutschland`}</p>
             <h2>Kontakt</h2>
             <p>{`E-Mail: kontakt@team-lazer.de`}</p>
-            <h2>Haftungsausschluss</h2>
-            <p>Für eigene Inhalte gelten die allgemeinen Gesetze gemäß § 7 Abs. 1 DDG. Für externe Links übernehmen wir keine Haftung – die Verantwortung liegt beim jeweiligen Betreiber. Bei Kenntnis von Rechtsverstößen werden entsprechende Inhalte umgehend entfernt.</p>
-            <h2>Urheberrecht</h2>
-            <p>Die auf dieser Website veröffentlichten Inhalte unterliegen dem deutschen Urheberrecht. Eine Vervielfältigung oder Verwendung ohne ausdrückliche Genehmigung ist nicht gestattet.</p>
-          </motion.div>
+            </motion.div>
         </div>
       </section>
     </div>
