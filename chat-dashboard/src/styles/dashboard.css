@@ -3065,3 +3065,14 @@ body {
 .tl-density-relaxed .db-msg-meta   { margin-bottom: 6px !important; }
 .tl-density-relaxed .db-messages   { padding: 20px 20px !important; }
 .tl-density-relaxed .db-date-divider { margin: 16px 0 !important; }
+
+/* ── Sektions-Aktionen (Alle beenden / löschen) ── */
+.db-section-action {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: calc(100% - 20px); margin: 6px 10px 10px; padding: 8px 10px;
+  font-size: .75rem; font-weight: 600; cursor: pointer; border-radius: 9px;
+  color: rgba(255,255,255,.55); background: rgba(255,255,255,.04);
+  border: 1px dashed rgba(255,255,255,.14); transition: .2s;
+}
+.db-section-action:hover { color: #fff; background: rgba(255,255,255,.08); }
+.db-section-action.danger:hover { color: #fca5a5; background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.4); }

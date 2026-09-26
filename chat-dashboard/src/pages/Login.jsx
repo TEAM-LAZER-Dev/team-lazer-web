@@ -1,6 +1,15 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { supabase } from '../lib/supabase'
+import { supabase, setRememberMe } from '../lib/supabase'
+
+function translateError(err) {
+  const m = (err?.message || '').toLowerCase()
+  if (m.includes('invalid login')) return 'E-Mail oder Passwort ist falsch.'
+  if (m.includes('email not confirmed')) return 'Diese E-Mail-Adresse wurde noch nicht bestätigt.'
+  if (m.includes('rate limit') || m.includes('too many')) return 'Zu viele Versuche. Bitte warte kurz und versuche es erneut.'
+  if (m.includes('network') || m.includes('fetch')) return 'Keine Verbindung. Bitte prüfe dein Internet.'
+  return 'Aktion fehlgeschlagen. Bitte versuche es erneut.'
+}
 
 export default function Login() {
   const [email, setEmail]           = useState('')
@@ -15,13 +24,21 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const { error: err } = await supabase.auth.signInWithPassword({ email, password })
-    if (err) setError(err.message)
+    setRememberMe(rememberMe)
+    const { error: err } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+    if (err) setError(translateError(err))
     setLoading(false)
   }
 
-  function handleForgotPassword(e) {
+  async function handleForgotPassword(e) {
     e.preventDefault()
+    if (!email.trim()) { setError('Bitte gib zuerst oben deine E-Mail-Adresse ein.'); return }
+    setLoading(true); setError('')
+    const { error: err } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: window.location.origin,
+    })
+    setLoading(false)
+    if (err) { setError(translateError(err)); return }
     setForgotSent(true)
   }
 
@@ -42,7 +59,7 @@ export default function Login() {
           <motion.div className="login-forgot-msg"
             initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
             <i className="fas fa-info-circle" />
-            <p>Bitte wende dich an den Administrator, um dein Passwort zurückzusetzen.</p>
+            <p>Wir haben dir einen Link zum Zurücksetzen an <strong>{email}</strong> geschickt. Prüfe auch deinen Spam-Ordner.</p>
             <button className="login-link-btn" onClick={() => setForgotSent(false)}>
               Zurück zum Login
             </button>

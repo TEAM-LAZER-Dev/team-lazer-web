@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { useSEO } from '../lib/seo'
 
 const legalStyle = `
@@ -30,6 +31,7 @@ export default function Impressum() {
             <p>{`TEAM LAZER\nJon Wagner\nScheibenmühlenstr. 20\n01833 Stolpen\nDeutschland`}</p>
             <h2>Kontakt</h2>
             <p>{`E-Mail: kontakt@team-lazer.de`}</p>
+            <p>Kontaktformular: <Link to="/contact">team-lazer.de/contact</Link> · Live-Chat: unten rechts auf jeder Seite dieser Website</p>
             </motion.div>
         </div>
       </section>

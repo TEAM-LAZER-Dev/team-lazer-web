@@ -13,6 +13,14 @@ function renderContent(content) {
         onClick={() => window.open(url, '_blank')} />
     )
   }
+  if (content.startsWith('[file]')) {
+    const [url, ...nm] = content.slice(6).split('|')
+    return (
+      <a href={url} target="_blank" rel="noreferrer" download className="db-msg-link">
+        <i className="fas fa-file-arrow-down" /> {nm.join('|') || 'Datei'}
+      </a>
+    )
+  }
   // Split on URLs, keep delimiters
   const parts = content.split(/(https?:\/\/\S+)/g)
   return parts.map((part, i) =>
@@ -569,25 +577,18 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     return () => { window.removeEventListener('beforeunload', off); off() }
   }, [agent?.id])
 
-  /* ── DSGVO auto-cleanup on login ────────────── */
+  /* ── Aufräumen: verwaiste Chats (>3h ohne Aktivität) automatisch beenden ── */
   useEffect(() => {
-    if (!agent?.is_admin) return
-    const retentionDays = Number(localStorage.getItem('tl_retention_days') || 90)
-    async function runAutoCleanup() {
-      const cutoff = new Date()
-      cutoff.setDate(cutoff.getDate() - retentionDays)
-      const { data: oldConvs } = await supabase
-        .from('conversations').select('id').eq('status','closed')
-        .lt('last_message_at', cutoff.toISOString())
-      if (!oldConvs?.length) return
-      // localStorage-basiert — zuverlässig unabhängig von RLS
-      const ids = oldConvs.map(c => c.id)
-      const existing = getDeletedConvIds()
-      const merged = [...new Set([...existing, ...ids])]
-      localStorage.setItem('tl_deleted_convs', JSON.stringify(merged))
+    if (!agent?.id) return
+    try { localStorage.removeItem('tl_deleted_convs') } catch {}
+    async function cleanup() {
+      await supabase.rpc('cleanup_conversations')
+      loadConversations(); loadHistory()
     }
-    runAutoCleanup()
-  }, [agent?.is_admin]) // eslint-disable-line
+    cleanup()
+    const iv = setInterval(cleanup, 5 * 60 * 1000)
+    return () => clearInterval(iv)
+  }, [agent?.id]) // eslint-disable-line
 
   /* ── Customer convs ──────────────────────────── */
   useEffect(() => {
@@ -595,6 +596,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     const ch = supabase.channel('db-convs')
       .on('postgres_changes', { event:'*', schema:'public', table:'conversations' }, (payload) => {
         loadConversations()
+        if (payload.eventType==='DELETE') loadHistory()
         if (payload.eventType==='INSERT' && payload.new.status==='waiting') {
           const name = payload.new.user_name||'Besucher'
           if (agent?.notify_sound!==false) playSound()
@@ -648,14 +650,12 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
   async function loadConversations() {
     const { data } = await supabase.from('conversations').select('*, agents(*)')
       .in('status',['waiting','active','hold']).order('last_message_at',{ascending:false})
-    const deletedIds = getDeletedConvIds()
-    setConversations((data||[]).filter(c => !deletedIds.includes(c.id)))
+    setConversations(data||[])
   }
   async function loadHistory() {
     const { data } = await supabase.from('conversations').select('*, agents(*)')
       .eq('status','closed').order('last_message_at',{ascending:false}).limit(50)
-    const deletedIds = getDeletedConvIds()
-    setHistory((data||[]).filter(c => !deletedIds.includes(c.id)))
+    setHistory(data||[])
   }
   async function loadQuickReplies() {
     const { data } = await supabase.from('quick_replies').select('*').order('sort_order')
@@ -808,23 +808,48 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     setShowTransfer(false)
   }
 
-  // Helper: gelöschte Kunden-Chat-IDs in localStorage verwalten
-  function getDeletedConvIds() {
-    try { return JSON.parse(localStorage.getItem('tl_deleted_convs') || '[]') } catch { return [] }
-  }
-  function addDeletedConvId(convId) {
-    const ids = getDeletedConvIds()
-    if (!ids.includes(convId)) { ids.push(convId); localStorage.setItem('tl_deleted_convs', JSON.stringify(ids)) }
-  }
-
-  async function deleteConv(convId) {
-    // localStorage-basiert: 100% zuverlässig, unabhängig von DB/RLS.
-    // DB-Delete und soft-delete scheitern beide an Supabase RLS/Constraints.
-    addDeletedConvId(convId)
-
+  async function deleteConv(convId, silent = false) {
+    if (!agent?.is_admin) return
+    if (!silent && !window.confirm('Diesen Chat endgültig löschen?')) return
+    const { data, error } = await supabase.from('conversations').delete().eq('id', convId).select('id')
+    if (error || !data?.length) { window.alert('Löschen fehlgeschlagen. Bitte Seite neu laden und erneut versuchen.'); return }
     setHistory(prev => prev.filter(c => c.id !== convId))
     setConversations(prev => prev.filter(c => c.id !== convId))
     if (activeConv?.id === convId) { setActiveConv(null); setMessages([]) }
+  }
+
+  async function deleteAllClosed() {
+    if (!agent?.is_admin || !history.length) return
+    if (!window.confirm(`Alle ${history.length} beendeten Chats endgültig löschen?`)) return
+    const { error } = await supabase.from('conversations').delete().eq('status', 'closed')
+    if (error) { window.alert('Löschen fehlgeschlagen.'); return }
+    setHistory([])
+    if (activeConv?.status === 'closed') { setActiveConv(null); setMessages([]) }
+    loadHistory()
+  }
+
+  async function closeAllOpen(list, label) {
+    if (!list.length) return
+    if (!window.confirm(`Alle ${list.length} ${label} Chats beenden?`)) return
+    list.forEach(c => closedByMeRef.current.add(c.id))
+    await supabase.from('conversations').update({ status: 'closed' }).in('id', list.map(c => c.id))
+    setActiveConv(prev => prev && list.some(c => c.id === prev.id) ? { ...prev, status: 'closed' } : prev)
+    loadConversations(); loadHistory()
+  }
+
+  /* ── Bild-/Datei-Freigabe für den Kunden ─────── */
+  async function toggleUploads(conv) {
+    const next = !conv.allow_uploads
+    const { error } = await supabase.from('conversations').update({ allow_uploads: next }).eq('id', conv.id)
+    if (error) return
+    setActiveConv(prev => prev?.id === conv.id ? { ...prev, allow_uploads: next } : prev)
+    setConversations(prev => prev.map(c => c.id === conv.id ? { ...c, allow_uploads: next } : c))
+    await supabase.from('messages').insert({
+      conversation_id: conv.id, sender_type: 'system', sender_name: 'System',
+      content: next
+        ? 'Du darfst jetzt Bilder und Dateien senden – nutze dafür die Büroklammer neben dem Textfeld. 📎'
+        : 'Das Senden von Bildern und Dateien wurde wieder deaktiviert.'
+    })
   }
 
   async function sendMessage(e) {
@@ -1043,16 +1068,26 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                 open={sectionsOpen.waiting} onToggle={() => setSectionsOpen(p=>({...p,waiting:!p.waiting}))}>
                 {waitingList.length===0
                   ? <p className="db-section-empty">Keine wartenden Chats</p>
-                  : waitingList.map(conv => <ConvItem key={conv.id} conv={conv} accent="waiting"
-                      active={activeConv?.id===conv.id} unread={unreadCounts[conv.id]||0} onSelect={selectConv} />)
+                  : <>
+                      {waitingList.map(conv => <ConvItem key={conv.id} conv={conv} accent="waiting"
+                        active={activeConv?.id===conv.id} unread={unreadCounts[conv.id]||0} onSelect={selectConv} />)}
+                      <button className="db-section-action" onClick={() => closeAllOpen(waitingList, 'wartenden')}>
+                        <i className="fas fa-times-circle" /> Alle beenden
+                      </button>
+                    </>
                 }
               </Section>
               <Section title="Aktiv" count={activeList.length} accent="active"
                 open={sectionsOpen.active} onToggle={() => setSectionsOpen(p=>({...p,active:!p.active}))}>
                 {activeList.length===0
                   ? <p className="db-section-empty">Keine aktiven Chats</p>
-                  : activeList.map(conv => <ConvItem key={conv.id} conv={conv} accent="active"
-                      active={activeConv?.id===conv.id} unread={unreadCounts[conv.id]||0} onSelect={selectConv} />)
+                  : <>
+                      {activeList.map(conv => <ConvItem key={conv.id} conv={conv} accent="active"
+                        active={activeConv?.id===conv.id} unread={unreadCounts[conv.id]||0} onSelect={selectConv} />)}
+                      <button className="db-section-action" onClick={() => closeAllOpen(activeList, 'aktiven')}>
+                        <i className="fas fa-times-circle" /> Alle beenden
+                      </button>
+                    </>
                 }
               </Section>
               {holdList.length > 0 && (
@@ -1066,8 +1101,15 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                 open={sectionsOpen.closed} onToggle={() => setSectionsOpen(p=>({...p,closed:!p.closed}))}>
                 {history.length===0
                   ? <p className="db-section-empty">Keine beendeten Chats</p>
-                  : history.map(conv => <ConvItem key={conv.id} conv={conv} accent="closed"
-                      active={activeConv?.id===conv.id} unread={0} onSelect={selectConv} onDelete={deleteConv} />)
+                  : <>
+                      {history.map(conv => <ConvItem key={conv.id} conv={conv} accent="closed"
+                        active={activeConv?.id===conv.id} unread={0} onSelect={selectConv} onDelete={agent?.is_admin ? deleteConv : undefined} />)}
+                      {agent?.is_admin && (
+                        <button className="db-section-action danger" onClick={deleteAllClosed}>
+                          <i className="fas fa-trash" /> Alle beendeten löschen
+                        </button>
+                      )}
+                    </>
                 }
               </Section>
             </div>
@@ -1254,6 +1296,12 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
                 <button className={`icon-btn ${showInfo?'active':''}`} onClick={() => setShowInfo(v=>!v)} title="Info">
                   <i className="fas fa-user-circle" />
                 </button>
+                {activeConv.status==='active' && (activeConv.assigned_agent_id===agent?.id || agent?.is_admin) && (
+                  <button className={`icon-btn ${activeConv.allow_uploads?'active':''}`} onClick={() => toggleUploads(activeConv)}
+                    title={activeConv.allow_uploads ? 'Bild-/Datei-Upload für Kunden sperren' : 'Bild-/Datei-Upload für Kunden freigeben'}>
+                    <i className={`fas ${activeConv.allow_uploads ? 'fa-paperclip' : 'fa-lock'}`} />
+                  </button>
+                )}
                 {activeConv.status!=='closed' && activeConv.assigned_agent_id===agent?.id && (
                   <button className={`icon-btn ${showNotes?'active':''}`} onClick={() => setShowNotes(v=>!v)} title="Notiz">
                     <i className="fas fa-sticky-note" />

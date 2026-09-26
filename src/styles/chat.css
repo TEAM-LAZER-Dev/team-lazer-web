@@ -711,3 +711,19 @@
   }
   .chat-fab { bottom: 20px; right: 16px; }
 }
+
+/* ── Anhänge im Live-Chat ── */
+.chat-attach-btn {
+  width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.55); background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08); transition: .2s;
+}
+.chat-attach-btn:hover:not(:disabled) { color: #fff; background: rgba(124,58,237,.2); border-color: rgba(124,58,237,.4); }
+.chat-attach-btn:disabled { opacity: .6; cursor: default; }
+.chat-attach-spin {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.25); border-top-color: #fff; animation: chat-spin .7s linear infinite;
+}
+@keyframes chat-spin { to { transform: rotate(360deg); } }
+.chat-upload-note { padding: 6px 14px 0; font-size: .75rem; color: rgba(255,255,255,.55); }

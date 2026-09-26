@@ -46,7 +46,7 @@ E-Mail: kontakt@team-lazer.de`}</p>
             <p>Bei Nutzung des Kontaktformulars werden deine Angaben (Name, E-Mail, Thema, Nachricht) zur Bearbeitung deiner Anfrage verarbeitet und über FormSubmit (formsubmit.co, USA) per E-Mail an uns weitergeleitet. Rechtsgrundlage: Art. 6 Abs. 1 lit. b bzw. f DSGVO. Die Daten werden gelöscht, sobald die Anfrage erledigt ist.</p>
 
             <h2>5. Live-Chat</h2>
-            <p>Im Live-Chat werden dein Name, optional deine E-Mail-Adresse, das gewählte Thema sowie deine Nachrichten verarbeitet und über Supabase (Datenbank-Dienstleister) gespeichert, damit wir dir antworten können. Zur Wiedererkennung deiner Sitzung wird eine zufällige Chat-ID in deinem Browser gespeichert (localStorage). Rechtsgrundlage: Art. 6 Abs. 1 lit. b bzw. f DSGVO. Chat-Daten werden gelöscht, sobald sie für die Bearbeitung nicht mehr erforderlich sind.</p>
+            <p>Im Live-Chat werden dein Name, optional deine E-Mail-Adresse, das gewählte Thema sowie deine Nachrichten verarbeitet und über Supabase (Datenbank-Dienstleister) gespeichert, damit wir dir antworten können. Zur Wiedererkennung deiner Sitzung wird eine zufällige Chat-ID in deinem Browser gespeichert (localStorage). Rechtsgrundlage: Art. 6 Abs. 1 lit. b bzw. f DSGVO. Nach Freigabe durch unser Team kannst du im Chat auch Bilder oder Dateien senden; diese werden ebenfalls bei Supabase gespeichert. Chat-Daten und Anhänge werden gelöscht, sobald sie für die Bearbeitung nicht mehr erforderlich sind.</p>
 
             <h2>6. Cookies und lokale Speicherung</h2>
             <p>Wir setzen ausschließlich technisch notwendige Speicherfunktionen ein (z. B. Chat-ID, Merken der Cookie-Hinweis-Bestätigung). Es gibt kein Tracking und keine Werbung.</p>

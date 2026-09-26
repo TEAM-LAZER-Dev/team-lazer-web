@@ -14,6 +14,16 @@ function renderWidgetContent(content) {
         onClick={() => window.open(url, '_blank')} />
     )
   }
+  if (content.startsWith('[file]')) {
+    const [url, ...nm] = content.slice(6).split('|')
+    const name = nm.join('|') || 'Datei'
+    return (
+      <a href={url} target="_blank" rel="noreferrer" download
+        style={{ color:'#93c5fd', display:'inline-flex', alignItems:'center', gap:8, wordBreak:'break-all' }}>
+        <i className="fas fa-file-arrow-down" /> {name}
+      </a>
+    )
+  }
   const parts = content.split(/(https?:\/\/\S+)/g)
   return parts.map((part, i) =>
     /^https?:\/\//.test(part)
@@ -138,7 +148,7 @@ const BOT_KB = {
     keywords: /kontakt|erreichen|melden|schreiben|email|mail|telefon|anruf|sprechen|termin|meeting|call/i,
     reply: [
       '📬 So erreichst du uns:',
-      '✉️ **E-Mail:** kontakt@team-lazer.de\n🌐 **Website:** team-lazer.de\n💬 **Direkt hier im Chat** — ein Klick auf "Mit Mitarbeiter sprechen" und wir sind da!\n\nWir antworten werktags in der Regel innerhalb weniger Stunden.'
+      '✉️ **E-Mail:** kontakt@team-lazer.de\n🌐 **Website:** team-lazer.de\n💬 **Direkt hier im Chat** — ein Klick auf "Mit echter Person schreiben" und wir sind da!\n\nWir antworten werktags in der Regel innerhalb weniger Stunden.'
     ]
   },
 
@@ -174,7 +184,7 @@ const BOT_KB = {
     keywords: /support|hilfe|problem|fehler|bug|kaputt|funktioniert nicht|geht nicht|absturz|crash|broken/i,
     reply: [
       '🆘 Kein Problem, wir helfen!',
-      'Beschreib mir kurz:\n\n1️⃣ Was genau funktioniert nicht?\n2️⃣ Seit wann?\n3️⃣ Hast du Fehlermeldungen?\n\nOder klick direkt auf "Mit Mitarbeiter sprechen" — dann kümmert sich unser Team sofort darum!'
+      'Beschreib mir kurz:\n\n1️⃣ Was genau funktioniert nicht?\n2️⃣ Seit wann?\n3️⃣ Hast du Fehlermeldungen?\n\nOder klick direkt auf "Mit echter Person schreiben" — dann kümmert sich unser Team sofort darum!'
     ]
   },
 
@@ -203,7 +213,7 @@ const BOT_KB = {
   fallback: {
     reply: [
       'Danke für deine Nachricht! Zu diesem Thema kann ich dir leider keine direkte Auskunft geben.',
-      'Unser Team steht dir gerne persönlich zur Verfügung und beantwortet deine Frage schnell und kompetent. Klick einfach auf "Mit Mitarbeiter sprechen" — wir sind für dich da! 💬'
+      'Unser Team steht dir gerne persönlich zur Verfügung und beantwortet deine Frage schnell und kompetent. Klick einfach auf "Mit echter Person schreiben" — wir sind für dich da! 💬'
     ]
   }
 }
@@ -396,6 +406,11 @@ export default function ChatWidget() {
   const [convId, setConvId]               = useState(null)
   const [liveMessages, setLiveMessages]   = useState([])
   const [liveInput, setLiveInput]         = useState('')
+  const [allowUploads, setAllowUploads]   = useState(false)
+  const [uploading, setUploading]         = useState(false)
+  const [uploadNote, setUploadNote]       = useState('')
+  const fileRef                           = useRef(null)
+  const uploadAskedRef                    = useRef(false)
   const [agent, setAgent]                 = useState(null)
 
   const [agentTyping, setAgentTyping]         = useState(false)
@@ -440,6 +455,7 @@ export default function ChatWidget() {
 
       botStarted.current = true
       setConvId(conv.id); setUserName(conv.user_name)
+      setAllowUploads(!!conv.allow_uploads)
       setLiveMessages(msgs || [])
 
       if (conv.status === 'active' && conv.agents) {
@@ -462,7 +478,7 @@ export default function ChatWidget() {
     if (!isOpen || phase !== 'bot' || botStarted.current) return
     botStarted.current = true
     addBotMsg('Hey! 👋 Willkommen bei TEAM LAZER.', 0)
-    addBotMsg('Wie kann ich dir behilflich sein? Stell mir einfach deine Frage — oder klick auf "Mit Mitarbeiter sprechen" wenn du direkt jemanden brauchst.', 900, () => setShowLiveBtn(true))
+    addBotMsg('Ich bin der automatische Assistent von TEAM LAZER und beantworte dir die häufigsten Fragen sofort. Du möchtest lieber mit einem echten Menschen aus unserem Team schreiben? Kein Problem — klick unten auf "Mit echter Person schreiben".', 900, () => setShowLiveBtn(true))
   }, [isOpen, phase]) // eslint-disable-line
 
   /* ── Bot-Nachricht hinzufügen ──────────────────── */
@@ -499,7 +515,7 @@ export default function ChatWidget() {
     }, totalDelay)
   }
 
-  /* ── "Mit Mitarbeiter sprechen" ────────────────── */
+  /* ── "Mit echter Person schreiben" ────────────────── */
   function handleLiveChatRequest() {
     if (isNightHours()) { setPhase('night'); return }
     setShowLiveBtn(false)
@@ -577,7 +593,8 @@ export default function ChatWidget() {
         })
       }
       // 3) DB-Status update
-      await supabase.from('conversations').update({ status:'closed' }).eq('id', convId)
+      const { error: rpcErr } = await supabase.rpc('close_conversation', { p_id: convId })
+      if (rpcErr) await supabase.from('conversations').update({ status:'closed' }).eq('id', convId)
     }
     clearInterval(pollRef.current)
     clearTimeout(userTypingTimer.current)
@@ -601,6 +618,7 @@ export default function ChatWidget() {
     setNameInput(''); setEmailInput(''); setUserName(''); setUserTopic('')
     setConvId(null); setLiveMessages([]); setLiveInput(''); setAgent(null)
     setClosedByUser(false); setShowEndConfirm(false)
+    setAllowUploads(false); setUploadNote(''); uploadAskedRef.current = false
     handledRef.current = false; botStarted.current = false
   }
 
@@ -614,6 +632,7 @@ export default function ChatWidget() {
       .on('postgres_changes', { event:'UPDATE', schema:'public', table:'conversations', filter:`id=eq.${cid}` },
         (payload) => {
           const c = payload.new
+          setAllowUploads(!!c.allow_uploads)
           if (c.status === 'active' && c.assigned_agent_id) {
             setPhase(prev => {
               if (prev === 'hold') return 'live'  // unhold — return to live without re-animation
@@ -678,6 +697,42 @@ export default function ChatWidget() {
     }, 2000)
   }
 
+  /* ── Datei/Bild senden (nur nach Freigabe durch das Team) ── */
+  async function handleFilePick(e) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file || !convId || !allowUploads) return
+    if (file.size > 10 * 1024 * 1024) { setUploadNote('Die Datei ist zu groß (max. 10 MB).'); return }
+    setUploadNote(''); setUploading(true)
+    try {
+      const ext = (file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 8) || 'bin'
+      const path = `customer/${convId}/${Date.now()}.${ext}`
+      const { error } = await supabase.storage.from('chat-images').upload(path, file, { contentType: file.type || undefined })
+      if (error) throw error
+      const { data: { publicUrl } } = supabase.storage.from('chat-images').getPublicUrl(path)
+      const isImg = file.type.startsWith('image/')
+      const { data } = await supabase.from('messages').insert({
+        conversation_id: convId, sender_type: 'user', sender_name: userName,
+        content: isImg ? `[img]${publicUrl}` : `[file]${publicUrl}|${file.name.replace(/\|/g, '')}`,
+      }).select().single()
+      if (data) { setLiveMessages(prev => [...prev, data]); scrollLive() }
+    } catch {
+      setUploadNote('Upload fehlgeschlagen. Bitte versuche es erneut.')
+    }
+    setUploading(false)
+  }
+
+  async function requestUploadPermission() {
+    if (!convId || uploadAskedRef.current) return
+    uploadAskedRef.current = true
+    setUploadNote('Anfrage gesendet – das Team gibt dir Bescheid.')
+    const { data } = await supabase.from('messages').insert({
+      conversation_id: convId, sender_type: 'user', sender_name: userName,
+      content: '📎 Ich würde gerne ein Bild bzw. eine Datei senden. Kannst du das freigeben?',
+    }).select().single()
+    if (data) { setLiveMessages(prev => [...prev, data]); scrollLive() }
+  }
+
   /* ── Live-Nachricht senden ─────────────────────── */
   async function sendLiveMessage(e) {
     e.preventDefault()
@@ -704,7 +759,7 @@ export default function ChatWidget() {
       if (stopped) return
       const [{ data: msgs }, { data: conv }] = await Promise.all([
         supabase.from('messages').select('*').eq('conversation_id', convId).order('created_at', { ascending: true }),
-        supabase.from('conversations').select('status').eq('id', convId).single(),
+        supabase.from('conversations').select('status,allow_uploads').eq('id', convId).single(),
       ])
       if (stopped) return
       if (msgs) {
@@ -720,6 +775,7 @@ export default function ChatWidget() {
           return [...prev, ...fresh]
         })
       }
+      if (conv) setAllowUploads(!!conv.allow_uploads)
       if (conv?.status === 'closed') { setClosedByUser(false); setPhase('closed'); setIsOpen(true) }
       else if (conv?.status === 'hold') setPhase(p => (p === 'live' ? 'hold' : p))
       else if (conv?.status === 'active') setPhase(p => (p === 'hold' ? 'live' : p))
@@ -978,7 +1034,7 @@ export default function ChatWidget() {
                     <motion.button className="chat-live-request-btn"
                       onClick={handleLiveChatRequest}
                       initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:6 }}>
-                      <i className="fas fa-headset" /> Mit Mitarbeiter sprechen
+                      <i className="fas fa-user" /> Mit echter Person schreiben
                     </motion.button>
                   )}
                 </AnimatePresence>
@@ -986,7 +1042,16 @@ export default function ChatWidget() {
             )}
 
             {phase === 'live' && (
+              <>
+              {uploadNote && <div className="chat-upload-note">{uploadNote}</div>}
               <form className="chat-input-bar" onSubmit={sendLiveMessage}>
+                <input ref={fileRef} type="file" style={{ display:'none' }} onChange={handleFilePick}
+                  accept="image/*,.pdf,.txt,.zip,.doc,.docx" />
+                <button type="button" className="chat-attach-btn" disabled={uploading}
+                  onClick={() => allowUploads ? fileRef.current?.click() : requestUploadPermission()}
+                  title={allowUploads ? 'Bild oder Datei senden' : 'Freigabe für Bilder/Dateien anfragen'}>
+                  {uploading ? <span className="chat-attach-spin" /> : <i className={allowUploads ? 'fas fa-paperclip' : 'fas fa-lock'} />}
+                </button>
                 <input type="text" placeholder="Nachricht schreiben…"
                   value={liveInput} onChange={e => {
                     setLiveInput(e.target.value)
@@ -1003,6 +1068,7 @@ export default function ChatWidget() {
                   <i className="fas fa-paper-plane" />
                 </button>
               </form>
+              </>
             )}
 
             {(phase !== 'live' && phase !== 'closed' && phase !== 'night') && (
