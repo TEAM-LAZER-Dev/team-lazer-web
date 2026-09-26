@@ -622,7 +622,7 @@ export default function Dashboard({ session, agent, onAgentUpdate }) {
     const ch = supabase.channel('global-msgs-unread')
       .on('postgres_changes', { event:'INSERT', schema:'public', table:'messages' }, (payload) => {
         const msg = payload.new
-        if (msg.sender_type === 'agent' || msg.sender_type === 'note' || msg.sender_type === 'system') return
+        if (['agent','note','system','bot'].includes(msg.sender_type)) return
         // Only count if not currently viewing this conversation
         setUnreadCounts(prev => {
           const convId = msg.conversation_id

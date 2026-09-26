@@ -456,7 +456,7 @@ export default function ChatWidget() {
       botStarted.current = true
       setConvId(conv.id); setUserName(conv.user_name)
       setAllowUploads(!!conv.allow_uploads)
-      setLiveMessages(msgs || [])
+      setLiveMessages((msgs || []).filter(m => m.sender_type !== 'bot'))
 
       if (conv.status === 'active' && conv.agents) {
         setAgent(conv.agents); setPhase('live')
@@ -569,7 +569,7 @@ export default function ChatWidget() {
     const ag = agentData || (await supabase.from('agents').select('*').eq('id', agentId).single()).data
     if (!ag) return
     const { data: msgs } = await supabase.from('messages').select('*').eq('conversation_id', cid).order('created_at')
-    setLiveMessages(msgs || [])
+    setLiveMessages((msgs || []).filter(m => m.sender_type !== 'bot'))
     setAgent(ag)
     playConnectedSound()
     setTimeout(() => setPhase('live'), 2800)
@@ -765,7 +765,7 @@ export default function ChatWidget() {
       if (msgs) {
         setLiveMessages(prev => {
           const known = new Set(prev.map(m => m.id))
-          const fresh = msgs.filter(m => !known.has(m.id) && m.sender_type !== 'user')
+          const fresh = msgs.filter(m => !known.has(m.id) && m.sender_type !== 'user' && m.sender_type !== 'bot')
           if (!fresh.length) return prev
           if (fresh.some(m => m.sender_type === 'agent')) {
             setAgentTyping(false)
