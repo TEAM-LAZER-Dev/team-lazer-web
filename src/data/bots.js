@@ -8,7 +8,11 @@ const grlBot = (id, name, shortDesc, description, color, tags) => ({
   status: 'online', developer: 'fivozo', private: true, lockedLabel: 'Privat (GRL)',
 })
 
-export const BOTS = [
+// Aktuell stehen keine Bots für die Community zur Verfügung – die Software-Seite zeigt deshalb einen Leer-Zustand.
+// Zum Veröffentlichen: Einträge aus BOTS_VORLAGE nach BOTS verschieben (oder BOTS = BOTS_VORLAGE setzen).
+export const BOTS = []
+
+const BOTS_VORLAGE = [
   {
     id: 'tl-hub',
     name: 'TEAM LAZER Hub',

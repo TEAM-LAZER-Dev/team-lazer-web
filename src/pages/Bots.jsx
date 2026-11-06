@@ -142,6 +142,7 @@ function BotCard({ bot }) {
 }
 
 export function BotsSection() {
+  if (BOTS.length === 0) return null
   return (
     <>
       <style>{pageStyle}</style>

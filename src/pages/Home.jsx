@@ -246,7 +246,7 @@ export default function Home() {
           >
             {[
               { to: '/about', sc: '#7c3aed', icon: 'fa-brands fa-discord', tag: 'Unsere Basis', title: 'Community', desc: 'Der Kern von TEAM LAZER. Ein Ort wo Menschen zusammenkommen die dieselbe Leidenschaft teilen – egal ob Coder, Gamer oder beides.', items: ['Discord Server', 'Aktive Mitglieder', 'Zusammen wachsen'] },
-              { to: '/software', sc: '#2563eb', icon: 'fa-solid fa-code', tag: 'Was wir bauen', title: 'Entwicklung', desc: 'Von Discord Bots bis zur eigenen Website – wir entwickeln Dinge die wir selbst brauchen und nutzen. Aus Interesse, nicht auf Bestellung.', items: ['Discord Bots', 'Websites & Tools', 'Eigene Projekte'] },
+              { to: '/about', sc: '#2563eb', icon: 'fa-solid fa-code', tag: 'Was wir bauen', title: 'Entwicklung', desc: 'Von Discord Bots bis zur eigenen Website – wir entwickeln Dinge die wir selbst brauchen und nutzen. Aus Interesse, nicht auf Bestellung.', items: ['Discord Bots', 'Websites & Tools', 'Eigene Projekte'] },
               { to: '/about', sc: '#10b981', icon: 'fa-solid fa-gamepad', tag: 'Was wir lieben', title: 'Gaming', desc: 'Neben dem ganzen Code-Kram zocken wir zusammen. Verschiedene Games, verschiedene Plattformen – Hauptsache zusammen.', items: ['Gemeinsam zocken', 'Gaming Events', 'Verschiedene Plattformen'] },
             ].map(({ to, sc, icon, tag, title, desc, items }) => (
               <motion.div key={title} variants={staggerItem}>
