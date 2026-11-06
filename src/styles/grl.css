@@ -48,7 +48,9 @@ body.grl-sticky { overflow-x: clip; }
 .grl-h1-line { display: block; }
 .grl-h1-line > span { display: inline-block; will-change: clip-path, transform; }
 .grl-h1-line:nth-child(2) > span { color: transparent; -webkit-text-stroke: 2px rgba(255, 255, 255, .85); }
-.grl-h1-rise { color: var(--cy); text-shadow: 0 0 40px rgba(34, 211, 238, .5); }
+.grl-h1-rise { color: var(--cy); animation: grlGlowIn .9s ease-out 1.25s both; }
+/* Leuchten erst nach dem Einwischen, einmalig – vorher scheint nur ein Schimmer ohne Buchstaben durch */
+@keyframes grlGlowIn { from { text-shadow: 0 0 0 rgba(34, 211, 238, 0); } to { text-shadow: 0 0 40px rgba(34, 211, 238, .5); } }
 .grl-lead { color: var(--muted); font-size: 1.08rem; max-width: 520px; margin-bottom: 30px; }
 .grl-cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
 .grl-tl { margin-top: 28px; display: flex; align-items: center; gap: 10px; font-size: .8rem; color: rgba(255,255,255,.45); }

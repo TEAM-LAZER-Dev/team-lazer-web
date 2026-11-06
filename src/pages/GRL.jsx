@@ -34,7 +34,7 @@ function Rise({ children, delay = 0, className }) {
 function Hero() {
   const reduce = useReducedMotion()
   const line = i => (reduce ? {} : {
-    initial: { clipPath: 'inset(-30% 100% -30% -30%)', x: -36 },
+    initial: { clipPath: 'inset(0% 100% 0% 0%)', x: -36 },
     animate: { clipPath: 'inset(-30% -30% -30% -30%)', x: 0 },
     transition: { duration: 0.85, delay: 0.25 + i * 0.16, ease: EASE },
   })
