@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useSEO } from '../lib/seo'
 import { CATEGORIES, DOWNLOADS } from '../data/downloads'
 
 const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0 } } }
@@ -76,12 +75,7 @@ export function DownloadCard({ item }) {
   )
 }
 
-export default function Downloads() {
-  useSEO({
-    title: 'Downloads | TEAM LAZER × GRL',
-    description: 'PC-Programme, Tools, Discord-Links und weitere Downloads von TEAM LAZER und der German Rising League.',
-  })
-
+export function DownloadsSection() {
   const [cat, setCat] = useState('alle')
   const [brand, setBrand] = useState('ALLE')
   const [q, setQ] = useState('')
@@ -98,21 +92,16 @@ export default function Downloads() {
   )
 
   return (
-    <div className="page-wrapper">
+    <>
       <style>{pageStyle}</style>
 
-      <section className="small-hero">
+      <section className="section-pad" id="downloads">
         <div className="container">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-            <span className="section-tag">DOWNLOADS</span>
-            <h1>Downloads &amp; <span className="highlight">Links</span></h1>
-            <p>PC-Programme, Tools und Discord-Einladungen von TEAM LAZER und der German Rising League.</p>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="section-pad">
-        <div className="container">
+          <div className="section-header">
+            <span className="section-tag">PC-PROGRAMME &amp; DOWNLOADS</span>
+            <h2>Programme, Tools &amp; <span className="highlight">Links</span></h2>
+            <p>PC-Programme, Tools und Discord-Einladungen zum Herunterladen.</p>
+          </div>
           <div className="dl-filters">
             <div className="dl-chips">
               {CATEGORIES.map(c => (
@@ -148,6 +137,6 @@ export default function Downloads() {
           </p>
         </div>
       </section>
-    </div>
+    </>
   )
 }

@@ -463,7 +463,7 @@ export default function Members() {
             <p>Du zockst, codest, designst oder willst einfach dabei sein?<br />Melde dich – wir freuen uns.</p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link to="/contact" className="btn btn-primary"><i className="fa-solid fa-paper-plane" /> Kontakt aufnehmen</Link>
-              <Link to="/bots" className="btn btn-secondary"><i className="fa-brands fa-discord" /> Unsere Bots</Link>
+              <Link to="/software" className="btn btn-secondary"><i className="fa-brands fa-discord" /> Unsere Bots</Link>
             </div>
           </motion.div>
 

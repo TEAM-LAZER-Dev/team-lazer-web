@@ -246,7 +246,7 @@ export default function Home() {
           >
             {[
               { to: '/about', sc: '#7c3aed', icon: 'fa-brands fa-discord', tag: 'Unsere Basis', title: 'Community', desc: 'Der Kern von TEAM LAZER. Ein Ort wo Menschen zusammenkommen die dieselbe Leidenschaft teilen – egal ob Coder, Gamer oder beides.', items: ['Discord Server', 'Aktive Mitglieder', 'Zusammen wachsen'] },
-              { to: '/bots', sc: '#2563eb', icon: 'fa-solid fa-code', tag: 'Was wir bauen', title: 'Entwicklung', desc: 'Von Discord Bots bis zur eigenen Website – wir entwickeln Dinge die wir selbst brauchen und nutzen. Aus Interesse, nicht auf Bestellung.', items: ['Discord Bots', 'Websites & Tools', 'Eigene Projekte'] },
+              { to: '/software', sc: '#2563eb', icon: 'fa-solid fa-code', tag: 'Was wir bauen', title: 'Entwicklung', desc: 'Von Discord Bots bis zur eigenen Website – wir entwickeln Dinge die wir selbst brauchen und nutzen. Aus Interesse, nicht auf Bestellung.', items: ['Discord Bots', 'Websites & Tools', 'Eigene Projekte'] },
               { to: '/about', sc: '#10b981', icon: 'fa-solid fa-gamepad', tag: 'Was wir lieben', title: 'Gaming', desc: 'Neben dem ganzen Code-Kram zocken wir zusammen. Verschiedene Games, verschiedene Plattformen – Hauptsache zusammen.', items: ['Gemeinsam zocken', 'Gaming Events', 'Verschiedene Plattformen'] },
             ].map(({ to, sc, icon, tag, title, desc, items }) => (
               <motion.div key={title} variants={staggerItem}>
@@ -266,42 +266,6 @@ export default function Home() {
         </div>
       </section>
 
-
-      {/* ── GRL + DOWNLOADS ── */}
-      <section className="section-pad bg-alt" id="grl">
-        <div className="container">
-          <motion.div className="section-header" {...fadeUp()}>
-            <span className="section-tag">NEU</span>
-            <h2>TEAM LAZER × <span className="highlight">GRL</span></h2>
-            <p>Die German Rising League gehört jetzt zur Seite – dazu ein Bereich für Downloads und Links.</p>
-          </motion.div>
-          <motion.div
-            className="services-grid"
-            variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: '-60px' }}
-          >
-            {[
-              { to: '/downloads', sc: '#7c3aed', icon: 'fa-solid fa-download', tag: 'Neu', title: 'Downloads', desc: 'PC-Programme, Tools und Dateien zum Herunterladen – dazu die Links zu unseren Discords.', items: ['PC-Programme', 'Discord-Links', 'Weitere Dateien'] },
-              { to: '/grl', sc: '#22d3ee', icon: 'fa-solid fa-crosshairs', tag: 'Community', title: 'German Rising League', desc: 'Die GRL-Community mit eigenen Bots, Ranking, Voice-Räumen und einem Shooter direkt in Discord.', items: ['Eigene Bots', 'Ranking & Events', 'Discord Shooter'] },
-            ].map(({ to, sc, icon, tag, title, desc, items }) => (
-              <motion.div key={title} variants={staggerItem}>
-                <Link to={to} className="svc-card" style={{ '--sc': sc }}>
-                  <div className="svc-icon"><i className={icon} /></div>
-                  <span className="svc-tag">{tag}</span>
-                  <h3>{title}</h3>
-                  <p>{desc}</p>
-                  <ul className="svc-list">
-                    {items.map(i => <li key={i}><i className="fa-solid fa-check" /> {i}</li>)}
-                  </ul>
-                  <div className="svc-link">Ansehen <i className="fa-solid fa-arrow-right" /></div>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
 
       {/* ── FAQ ── */}
       <FAQ />

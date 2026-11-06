@@ -125,7 +125,7 @@ export default function GRL() {
           </div>
           <Tiles items={FEATURES} />
           <div className="grl-cta">
-            <Link to="/bots" className="btn btn-secondary"><i className="fa-solid fa-robot" /> GRL-Bots ansehen</Link>
+            <Link to="/software" className="btn btn-secondary"><i className="fa-solid fa-robot" /> GRL-Bots ansehen</Link>
           </div>
         </div>
       </section>

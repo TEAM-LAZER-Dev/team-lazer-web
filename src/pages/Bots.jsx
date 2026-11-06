@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { useSEO } from '../lib/seo'
 import { BOTS } from '../data/bots'
 
 const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0 } } }
@@ -142,30 +141,19 @@ function BotCard({ bot }) {
   )
 }
 
-export default function Bots() {
-  useSEO({
-    title: 'Discord Bots | TEAM LAZER',
-    description: 'Alle Discord Bots von TEAM LAZER – einladen, Statistiken einsehen und Dashboards nutzen.',
-  })
-
+export function BotsSection() {
   return (
-    <div className="page-wrapper">
+    <>
       <style>{pageStyle}</style>
 
-      {/* HERO */}
-      <section className="small-hero">
-        <div className="container">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-            <span className="section-tag">DISCORD BOTS</span>
-            <h1>Unsere Bots</h1>
-            <p>Handgemachte Discord Bots von TEAM LAZER – lade sie auf deinen Server ein oder nutze die Dashboards.</p>
-          </motion.div>
-        </div>
-      </section>
-
       {/* BOT GRID */}
-      <section className="section-pad">
+      <section className="section-pad" id="bots">
         <div className="container">
+          <div className="section-header">
+            <span className="section-tag">DISCORD BOTS</span>
+            <h2>Unsere <span className="highlight">Bots</span></h2>
+            <p>Handgemachte Discord Bots von TEAM LAZER – lade sie auf deinen Server ein oder nutze die Dashboards.</p>
+          </div>
           <motion.div className="bots-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
             {BOTS.map(bot => <BotCard key={bot.id} bot={bot} />)}
           </motion.div>
@@ -189,6 +177,6 @@ export default function Bots() {
           </motion.div>
         </div>
       </section>
-    </div>
+    </>
   )
 }

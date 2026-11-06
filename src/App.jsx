@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -12,9 +12,8 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Members from './pages/Members'
 import Portfolio from './pages/Portfolio'
-import Bots from './pages/Bots'
 import Contact from './pages/Contact'
-import Downloads from './pages/Downloads'
+import Software from './pages/Software'
 import GRL from './pages/GRL'
 import Impressum from './pages/Impressum'
 import Privacy from './pages/Privacy'
@@ -61,10 +60,11 @@ function AppInner() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/members" element={<Members />} />
-          <Route path="/bots" element={<Bots />} />
+          <Route path="/software" element={<Software />} />
+          <Route path="/bots" element={<Navigate to="/software" replace />} />
+          <Route path="/downloads" element={<Navigate to="/software" replace />} />
           <Route path="/skills" element={<About />} />
           <Route path="/services" element={<About />} />
-          <Route path="/downloads" element={<Downloads />} />
           <Route path="/grl" element={<GRL />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/portfolio" element={<Portfolio />} />
