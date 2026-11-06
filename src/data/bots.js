@@ -1,6 +1,13 @@
 // TEAM LAZER – Bot data
 // Edit this file to update bot listings
 
+const grlBot = (id, name, shortDesc, description, color, tags) => ({
+  id, name, shortDesc, description, icon: null, color, tags,
+  stats: { servers: 1, commands: '—', uptime: '—', version: '—' },
+  inviteUrl: '', dashboardUrl: '', hasDashboard: false,
+  status: 'online', developer: 'fivozo', private: true, lockedLabel: 'Privat (GRL)',
+})
+
 export const BOTS = [
   {
     id: 'tl-hub',
@@ -49,4 +56,13 @@ export const BOTS = [
     locked: true, // noch in Entwicklung – Buttons deaktiviert
     lockedLabel: 'Bald verfügbar',
   },
+  grlBot('grl-hub', 'GRL Hub', 'Zentraler Bot der German Rising League.',
+    'Willkommensnachrichten, Automod, Giveaways, Support, Statistiken und Member-Counter für den GRL-Server.',
+    '#22d3ee', ['GRL', 'Moderation', 'Giveaways', 'Stats']),
+  grlBot('grl-voice', 'GRL Voice', 'Temporäre Voice-Räume und Sprach-Bot.',
+    'Eigene Sprachräume per Klick, ein Bedienfeld für den Raum und ein Sprach-Bot mit eigenem Charakter.',
+    '#a78bfa', ['GRL', 'Temp-Voice', 'Panel']),
+  grlBot('grl-helferlein', 'GRL Helferlein', 'Team-Werkzeug für Sanktionen und Ranking.',
+    'Sanktionen, Ranking-Verwaltung, Control Center und System-Health – gebaut für das GRL-Team.',
+    '#f59e0b', ['GRL', 'Sanktionen', 'Ranking', 'Admin']),
 ]

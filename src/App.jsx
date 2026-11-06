@@ -14,6 +14,8 @@ import Members from './pages/Members'
 import Portfolio from './pages/Portfolio'
 import Bots from './pages/Bots'
 import Contact from './pages/Contact'
+import Downloads from './pages/Downloads'
+import GRL from './pages/GRL'
 import Impressum from './pages/Impressum'
 import Privacy from './pages/Privacy'
 
@@ -62,6 +64,8 @@ function AppInner() {
           <Route path="/bots" element={<Bots />} />
           <Route path="/skills" element={<About />} />
           <Route path="/services" element={<About />} />
+          <Route path="/downloads" element={<Downloads />} />
+          <Route path="/grl" element={<GRL />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/impressum" element={<Impressum />} />

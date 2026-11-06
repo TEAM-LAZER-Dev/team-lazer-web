@@ -21,6 +21,16 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://team-lazer.de/downloads</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://team-lazer.de/grl</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://team-lazer.de/impressum</loc>
     <priority>0.3</priority>
     <changefreq>yearly</changefreq>

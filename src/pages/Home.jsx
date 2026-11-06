@@ -267,6 +267,42 @@ export default function Home() {
       </section>
 
 
+      {/* ── GRL + DOWNLOADS ── */}
+      <section className="section-pad bg-alt" id="grl">
+        <div className="container">
+          <motion.div className="section-header" {...fadeUp()}>
+            <span className="section-tag">NEU</span>
+            <h2>TEAM LAZER × <span className="highlight">GRL</span></h2>
+            <p>Die German Rising League gehört jetzt zur Seite – dazu ein Bereich für Downloads und Links.</p>
+          </motion.div>
+          <motion.div
+            className="services-grid"
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-60px' }}
+          >
+            {[
+              { to: '/downloads', sc: '#7c3aed', icon: 'fa-solid fa-download', tag: 'Neu', title: 'Downloads', desc: 'PC-Programme, Tools und Dateien zum Herunterladen – dazu die Links zu unseren Discords.', items: ['PC-Programme', 'Discord-Links', 'Weitere Dateien'] },
+              { to: '/grl', sc: '#22d3ee', icon: 'fa-solid fa-crosshairs', tag: 'Community', title: 'German Rising League', desc: 'Die GRL-Community mit eigenen Bots, Ranking, Voice-Räumen und einem Shooter direkt in Discord.', items: ['Eigene Bots', 'Ranking & Events', 'Discord Shooter'] },
+            ].map(({ to, sc, icon, tag, title, desc, items }) => (
+              <motion.div key={title} variants={staggerItem}>
+                <Link to={to} className="svc-card" style={{ '--sc': sc }}>
+                  <div className="svc-icon"><i className={icon} /></div>
+                  <span className="svc-tag">{tag}</span>
+                  <h3>{title}</h3>
+                  <p>{desc}</p>
+                  <ul className="svc-list">
+                    {items.map(i => <li key={i}><i className="fa-solid fa-check" /> {i}</li>)}
+                  </ul>
+                  <div className="svc-link">Ansehen <i className="fa-solid fa-arrow-right" /></div>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* ── FAQ ── */}
       <FAQ />
 

@@ -39,6 +39,8 @@ export default function Navbar() {
           <nav className="nav-links">
             <NavLink to="/" className={navLinkClass} end>Home</NavLink>
             <NavLink to="/skills" className={navLinkClass}>Über uns</NavLink>
+            <NavLink to="/downloads" className={navLinkClass}>Downloads</NavLink>
+            <NavLink to="/grl" className={navLinkClass}>GRL</NavLink>
             <NavLink to="/bots" className={navLinkClass}>Bots</NavLink>
             <NavLink to="/members" className={navLinkClass}>Team</NavLink>
             <NavLink to="/contact" className={navLinkClass}>Kontakt</NavLink>
@@ -88,18 +90,28 @@ export default function Navbar() {
             <span className="mnav-label">Über uns</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
-          <NavLink to="/bots" className={navLinkClass}>
+          <NavLink to="/downloads" className={navLinkClass}>
             <span className="mnav-num">03</span>
+            <span className="mnav-label">Downloads</span>
+            <i className="fa-solid fa-arrow-right mnav-arrow" />
+          </NavLink>
+          <NavLink to="/grl" className={navLinkClass}>
+            <span className="mnav-num">04</span>
+            <span className="mnav-label">GRL</span>
+            <i className="fa-solid fa-arrow-right mnav-arrow" />
+          </NavLink>
+          <NavLink to="/bots" className={navLinkClass}>
+            <span className="mnav-num">05</span>
             <span className="mnav-label">Bots</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
           <NavLink to="/members" className={navLinkClass}>
-            <span className="mnav-num">04</span>
+            <span className="mnav-num">06</span>
             <span className="mnav-label">Team</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
           <NavLink to="/contact" className={navLinkClass}>
-            <span className="mnav-num">05</span>
+            <span className="mnav-num">07</span>
             <span className="mnav-label">Kontakt</span>
             <i className="fa-solid fa-arrow-right mnav-arrow" />
           </NavLink>
