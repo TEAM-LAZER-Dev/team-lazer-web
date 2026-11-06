@@ -392,7 +392,7 @@ export default function Members() {
              ║  DESKTOP LAYOUT (original)   ║
              ╚══════════════════════════════╝ */}
           <div className="desktop-layout">
-            {/* ROW 1 – Wizzard — fivozo (featured) — einsneun46 */}
+            {/* ROW 1 – Dezz nuts — fivozo (featured) — einsneun46 */}
             <div className="mt-row">
               {named.map((m, i) => (
                 <>

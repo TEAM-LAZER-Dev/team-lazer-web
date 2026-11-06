@@ -47,7 +47,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Wer steckt hinter TEAM LAZER?',
-    a: 'Gegründet von fivozo und Wizzard Gaming als Co-Owner. Was als kleines Projekt begann ist heute eine wachsende Community die gemeinsam baut, hostet und zockt.',
+    a: 'Gegründet von fivozo (Owner) und Dezz nuts (Co-Owner). Was als kleines Projekt begann ist heute eine wachsende Community die gemeinsam baut, hostet und zockt.',
   },
   {
     q: 'Habt ihr Discord Bots?',
