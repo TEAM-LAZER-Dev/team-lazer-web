@@ -620,9 +620,8 @@ export default function About() {
                 list: ['Eigenes Ranking-System', 'Turniere in mehreren Formaten', 'Statistiken & Hall of Fame'],
                 img: grlLive?.icon || '/images/grl-logo.webp',
                 invite: LINKS.grlDiscord,
-                hostedLabel: 'Bots & Technik von',
               },
-            ].map(({ name, badge, badgeType, stats, fallback, tags, desc, list, img, invite, hostedLabel = 'hosted by' }) => {
+            ].map(({ name, badge, badgeType, stats, fallback, tags, desc, list, img, invite }) => {
               const members = stats?.member_count ?? fallback.members
               const online  = stats?.online_count  ?? fallback.online
               return (
@@ -663,7 +662,7 @@ export default function About() {
                   </ul>
                 )}
                 <div className="au-server-footer">
-                  <span className="au-server-hosted">{hostedLabel} <span>TEAM LAZER</span></span>
+                  <span className="au-server-hosted">hosted by <span>TEAM LAZER</span></span>
                   <a href={invite} target="_blank" rel="noopener noreferrer" className="au-server-join">
                     <i className="fa-brands fa-discord" /> Beitreten
                   </a>
