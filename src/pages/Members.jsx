@@ -6,6 +6,7 @@ import { MEMBERS } from '../data/members'
 const TIER_CONFIG = {
   'owner':    { label: 'Owner',    color: '#a78bfa', border: 'rgba(124,58,237,0.55)', bg: 'rgba(124,58,237,0.07)', glow: 'rgba(124,58,237,0.25)', icon: 'fa-crown'   },
   'co-owner': { label: 'Co-Owner', color: '#b197fc', border: 'rgba(140,70,245,0.5)',  bg: 'rgba(140,70,245,0.07)',  glow: 'rgba(140,70,245,0.22)', icon: 'fa-star'    },
+  'grl-owner':{ label: 'GRL-Owner',color: '#22d3ee', border: 'rgba(34,211,238,0.45)', bg: 'rgba(34,211,238,0.06)', glow: 'rgba(34,211,238,0.2)',  icon: 'fa-crown'   },
   'co-dev':   { label: 'Co-Dev',   color: '#4ade80', border: 'rgba(74,222,128,0.35)',  bg: 'rgba(74,222,128,0.05)',  glow: 'rgba(74,222,128,0.15)', icon: 'fa-code'    },
   'supporter':{ label: 'Supporter',color: '#fb923c', border: 'rgba(251,146,60,0.4)',  bg: 'rgba(251,146,60,0.06)',  glow: 'rgba(251,146,60,0.15)', icon: 'fa-heart'   },
   'mod':      { label: 'Moderator',color: '#4ade80', border: 'rgba(74,222,128,0.4)',  bg: 'rgba(74,222,128,0.06)',  glow: 'rgba(74,222,128,0.15)', icon: 'fa-shield'  },
@@ -356,7 +357,7 @@ export default function Members() {
   useSEO({ title: 'Mitglieder | TEAM LAZER', description: 'Das Team hinter TEAM LAZER – Gaming, Entwicklung und Community aus Deutschland.' })
 
   const raw = MEMBERS.filter(m => !m.placeholder)
-  const topRow = raw.filter(m => m.tier === 'owner' || m.tier === 'co-owner')
+  const topRow = raw.filter(m => m.tier === 'owner' || m.tier === 'co-owner' || m.tier === 'grl-owner')
   const fivozo = topRow.find(m => m.id === 'fivozo')
   const others = topRow.filter(m => m.id !== 'fivozo')
   const left = others.slice(0, Math.floor(others.length / 2))
