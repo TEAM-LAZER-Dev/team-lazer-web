@@ -115,7 +115,7 @@ function Projects() {
     {
       icon: 'fa-solid fa-crosshairs', tag: 'In Entwicklung', title: 'GRL Discord Shooter',
       text: 'Ein Browser-Multiplayer-Shooter im Stil von Call of Duty, der direkt als Discord Activity im Voice-Chat läuft. Gebaut mit Babylon.js und Nakama.',
-      chips: ['Map Shipment-Mini', '1v1 bis 6v6', 'Discord Activity'],
+      chips: ['Map-Rotation', '1v1 bis 6v6', 'Discord Activity'],
     },
   ]
   return (
