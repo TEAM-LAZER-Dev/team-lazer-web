@@ -1,11 +1,23 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import {
+  motion, useMotionValue, useSpring, useScroll, useTransform, useReducedMotion,
+} from 'framer-motion'
 import { useSEO } from '../lib/seo'
 import { LINKS, GRL_INVITE_CODE } from '../data/site'
 import { useDiscordInvite } from '../lib/discord'
+import RisingParticles from '../components/grl/RisingParticles'
+import TiltCard from '../components/grl/TiltCard'
+import CountUp from '../components/grl/CountUp'
+import Marquee from '../components/grl/Marquee'
+import Heading from '../components/grl/Heading'
+import Steps from '../components/grl/Steps'
+import '../styles/grl.css'
 
-const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0 } } }
-const fadeItem = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } } }
+const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } }
+const fadeItem = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } } }
+const listVar = { hidden: {}, show: { transition: { staggerChildren: 0.07, delayChildren: 0.25 } } }
+const liVar = { hidden: { opacity: 0, x: -16 }, show: { opacity: 1, x: 0, transition: { duration: 0.4 } } }
 
 // Infos stammen aus dem GRL-Discord (Regeln, First-Steps, Modi-Erklärungen) – bei Änderungen dort hier nachziehen.
 const STEPS = [
@@ -35,134 +47,239 @@ const GAME = [
   ['fa-solid fa-lock', 'Bald mehr', 'Battle Pass, Events und Karriere sind in Planung.'],
 ]
 
-const pageStyle = `
-  .grl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-  .grl-tile { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 24px; height: 100%; transition: .3s; }
-  .grl-tile:hover { border-color: rgba(34,211,238,.35); transform: translateY(-4px); }
-  .grl-tile > i { font-size: 1.5rem; color: #67e8f9; margin-bottom: 14px; display: block; }
-  .grl-tile h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.25rem; font-weight: 800; margin-bottom: 6px; }
-  .grl-tile p { font-size: .86rem; color: var(--muted); line-height: 1.7; }
-  .grl-tile ul { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
-  .grl-tile li { font-size: .86rem; color: rgba(255,255,255,.6); display: flex; align-items: center; gap: 8px; }
-  .grl-tile li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #22d3ee; flex-shrink: 0; }
-  .grl-dc { background: linear-gradient(160deg, rgba(34,211,238,.08), rgba(255,255,255,.02)); border: 1px solid rgba(34,211,238,.3); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 18px; transition: .3s; }
-  .grl-dc:hover { border-color: rgba(34,211,238,.55); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.3); }
-  .grl-dc-head { display: flex; align-items: center; gap: 16px; }
-  .grl-dc-icon { width: 64px; height: 64px; border-radius: 18px; object-fit: cover; flex-shrink: 0; box-shadow: 0 0 24px rgba(34,211,238,.25); }
-  .grl-dc-name { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 800; line-height: 1.2; }
-  .grl-dc-sub { font-size: .78rem; color: var(--muted); margin-top: 4px; }
-  .grl-dc-sub i { color: #5865F2; margin-right: 4px; }
-  .grl-dc-stats { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .86rem; color: var(--muted); padding: 12px 14px; border-radius: 12px; background: rgba(0,0,0,.25); border: 1px solid var(--border); }
-  .grl-dc-stats strong { color: #fff; font-weight: 700; }
-  .grl-dc-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #6b7280; margin-right: 6px; }
-  .grl-dc-dot.on { background: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,.7); }
-  .grl-dc .btn { width: 100%; }
-  .grl-cta { text-align: center; margin-top: 32px; }
-  .grl-logos { display: flex; align-items: center; justify-content: center; gap: 22px; margin-bottom: 22px; }
-  .grl-logos img { height: 96px; width: auto; object-fit: contain; }
-  .grl-logos img:last-child { filter: drop-shadow(0 0 28px rgba(34,211,238,.35)); }
-  .grl-logos span { font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; font-weight: 800; color: rgba(255,255,255,.35); }
-  .grl-tl-note { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; padding: 9px 18px; border-radius: 99px; background: var(--surface); border: 1px solid var(--border); font-size: .82rem; color: var(--muted); text-align: left; }
-  .grl-tl-note img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
-  .grl-tl-note strong { color: #fff; font-weight: 600; }
-  .grl-split { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 40px; align-items: center; }
-  .grl-about h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.7rem; font-weight: 800; margin-bottom: 12px; }
-  .grl-about p { font-size: .95rem; color: var(--muted); line-height: 1.8; margin-bottom: 12px; }
-  .grl-facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-  .grl-facts span { font-size: .78rem; padding: 5px 12px; border-radius: 99px; background: rgba(34,211,238,.08); border: 1px solid rgba(34,211,238,.25); color: #67e8f9; }
-  .grl-step-num { font-family: 'Rajdhani', sans-serif; font-size: .8rem; font-weight: 800; letter-spacing: 2px; color: #22d3ee; margin-bottom: 10px; display: block; }
-  @media (max-width: 860px) { .grl-split { grid-template-columns: 1fr; gap: 24px; } }
-  @media (max-width: 600px) { .grl-grid { grid-template-columns: 1fr; gap: 12px; } .grl-logos img { height: 72px; } }
-`
+const MODES_A = ['TKR', 'Killrace', 'Total Of', 'Matchpoint', 'David vs Goliath', 'Fair Wheel', 'Draft']
+const MODES_B = ['Single Elimination', 'Double Elimination', 'Schweizer System', 'Round Robin', 'Custom Lobby', 'Public Lobby']
 
-function GrlDiscordCard() {
-  const live = useDiscordInvite(GRL_INVITE_CODE)
-  const fmt = n => new Intl.NumberFormat('de-DE').format(n)
+/* ───────────────────────── HERO ───────────────────────── */
+function Hero() {
+  const reduce = useReducedMotion()
+  const rx = useSpring(useMotionValue(0), { stiffness: 90, damping: 14 })
+  const ry = useSpring(useMotionValue(0), { stiffness: 90, damping: 14 })
+  const { scrollY } = useScroll()
+  const emblemY = useTransform(scrollY, [0, 600], [0, -60])
+
+  useEffect(() => {
+    if (reduce) return undefined
+    const onMove = e => {
+      if (e.pointerType === 'touch') return
+      ry.set((e.clientX / window.innerWidth - 0.5) * 24)
+      rx.set(-(e.clientY / window.innerHeight - 0.5) * 20)
+    }
+    window.addEventListener('pointermove', onMove, { passive: true })
+    return () => window.removeEventListener('pointermove', onMove)
+  }, [reduce, rx, ry])
+
+  let idx = 0
   return (
-    <motion.div variants={fadeItem} style={{ height: '100%' }}>
-      <div className="grl-dc">
-        <div className="grl-dc-head">
-          <img className="grl-dc-icon" src={live?.icon || '/images/grl-logo.webp'} alt="Server-Icon der German Rising League" width="64" height="64" />
-          <div>
-            <div className="grl-dc-name">{live?.name || 'German Rising League [GRL]'}</div>
-            <div className="grl-dc-sub"><i className="fa-brands fa-discord" /> Discord-Server</div>
-          </div>
+    <section className="grl-hero">
+      <div className="grl-aurora" aria-hidden="true"><i /><i /><i /></div>
+      {!reduce && <RisingParticles className="grl-canvas" />}
+
+      <div className="container grl-hero-in">
+        <motion.div className="grl-emblem-wrap" style={reduce ? undefined : { y: emblemY }}>
+          <motion.div
+            className="grl-emblem"
+            style={reduce ? undefined : { rotateX: rx, rotateY: ry }}
+            initial={reduce ? false : { opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="grl-pulse" />
+            <div className="grl-ring" />
+            <div className="grl-ring b" />
+            <img className="grl-emblem-img" src="/images/grl-logo.webp" alt="German Rising League" />
+            <div className="grl-orbit"><img src="/images/tl-logo-v2.webp" alt="TEAM LAZER" /></div>
+          </motion.div>
+        </motion.div>
+
+        <motion.span
+          className="section-tag"
+          initial={reduce ? false : { opacity: 0, letterSpacing: '10px' }}
+          animate={{ opacity: 1, letterSpacing: '2.5px' }}
+          transition={{ duration: 1, delay: 0.2 }}
+        >
+          GERMAN RISING LEAGUE
+        </motion.span>
+
+        <h1 className="grl-title" aria-label="Together we rise">
+          <span aria-hidden="true">
+            {['Together', 'we', 'rise'].map(word => (
+              <span key={word} className={`grl-word${word === 'rise' ? ' grl-rise' : ''}`}>
+                {[...word].map(ch => {
+                  const i = idx++
+                  return (
+                    <motion.span
+                      key={i}
+                      className="grl-letter"
+                      initial={reduce ? false : { opacity: 0, y: 60, filter: 'blur(12px)' }}
+                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      transition={{ duration: 0.7, delay: 0.5 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      {word === 'rise' ? <span className="grl-bob" style={{ animationDelay: `${i * 0.12}s` }}>{ch}</span> : ch}
+                    </motion.span>
+                  )
+                })}
+              </span>
+            ))}
+          </span>
+        </h1>
+
+        <motion.p
+          className="grl-sub"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 1.5 }}
+        >
+          Die German Rising League ist eine Turnier-Community für Call of Duty – mit Ranking, fairen Teams und klaren Regelwerken.
+        </motion.p>
+
+        <motion.div
+          className="grl-tl-note"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 1.7 }}
+        >
+          <img src="/images/tl-logo-v2.webp" alt="" />
+          <span><strong>TEAM LAZER</strong> hostet die GRL-Bots, stellt die Technik bereit und hilft bei der Verwaltung.</span>
+        </motion.div>
+
+        <div className="grl-scroll" aria-hidden="true">
+          <i className="fa-solid fa-chevron-down" />
+          <i className="fa-solid fa-chevron-down" />
         </div>
-        {live && live.members ? (
-          <div className="grl-dc-stats">
-            <span><i className="grl-dc-dot on" /> <strong>{fmt(live.online)}</strong> online</span>
-            <span><i className="grl-dc-dot" /> <strong>{fmt(live.members)}</strong> Mitglieder</span>
-          </div>
-        ) : null}
-        <a className="btn btn-primary" href={LINKS.grlDiscord} target="_blank" rel="noopener noreferrer">
-          <i className="fa-brands fa-discord" /> Server beitreten
-        </a>
       </div>
-    </motion.div>
+    </section>
   )
 }
 
+/* ───────────────────────── ZAHLEN ───────────────────────── */
+function StatsBand({ live }) {
+  const stats = [
+    { label: 'online', value: live?.online, live: true },
+    { label: 'Mitglieder', value: live?.members },
+    { label: 'Turniersysteme', value: TURNIERE[0][2].length },
+    { label: 'Spielmodi', value: TURNIERE[1][2].length },
+  ]
+  return (
+    <div className="container" style={{ position: 'relative', zIndex: 3, marginTop: -46 }}>
+      <motion.div
+        className="grl-stats"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {stats.map(s => (
+          <div className="grl-stat" key={s.label}>
+            <div className="grl-stat-num"><CountUp value={s.value} /></div>
+            <div className="grl-stat-label">{s.live && <i className="grl-live" />}{s.label}</div>
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  )
+}
+
+/* ───────────────────────── DISCORD ───────────────────────── */
+function GrlDiscordCard({ live }) {
+  const fmt = n => new Intl.NumberFormat('de-DE').format(n)
+  return (
+    <TiltCard className="grl-dc" max={6}>
+      <div className="grl-dc-head">
+        <img className="grl-dc-icon" src={live?.icon || '/images/grl-logo.webp'} alt="Server-Icon der German Rising League" width="68" height="68" />
+        <div>
+          <div className="grl-dc-name">{live?.name || 'German Rising League [GRL]'}</div>
+          <div className="grl-dc-sub"><i className="fa-brands fa-discord" /> Discord-Server</div>
+        </div>
+      </div>
+      {live && live.members ? (
+        <div className="grl-dc-stats">
+          <span><i className="grl-dc-dot on" /><strong>{fmt(live.online)}</strong> online</span>
+          <span><i className="grl-dc-dot" /><strong>{fmt(live.members)}</strong> Mitglieder</span>
+        </div>
+      ) : null}
+      <a className="btn btn-primary" href={LINKS.grlDiscord} target="_blank" rel="noopener noreferrer">
+        <i className="fa-brands fa-discord" /> Server beitreten
+      </a>
+    </TiltCard>
+  )
+}
+
+/* ───────────────────────── KACHELN ───────────────────────── */
 function Tiles({ items }) {
   return (
-    <motion.div className="grl-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
+    <motion.div className="grl-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
       {items.map(([icon, t, s]) => (
         <motion.div key={t} variants={fadeItem} style={{ height: '100%' }}>
-          <div className="grl-tile"><i className={icon} /><h3>{t}</h3><p>{s}</p></div>
+          <TiltCard className="grl-tile"><i className={icon} /><h3>{t}</h3><p>{s}</p></TiltCard>
         </motion.div>
       ))}
     </motion.div>
   )
 }
 
+/* ───────────────────────── FADENKREUZ ───────────────────────── */
+function Crosshair() {
+  const reduce = useReducedMotion()
+  const x = useSpring(useMotionValue(0), { stiffness: 110, damping: 14 })
+  const y = useSpring(useMotionValue(0), { stiffness: 110, damping: 14 })
+  const onMove = e => {
+    if (reduce || e.pointerType === 'touch') return
+    const r = e.currentTarget.getBoundingClientRect()
+    x.set(Math.max(-320, Math.min(320, (e.clientX - (r.left + r.width / 2)) * 0.7)))
+    y.set(Math.max(-30, Math.min(30, (e.clientY - (r.top + r.height / 2)) * 0.12)))
+  }
+  const onLeave = () => { x.set(0); y.set(0) }
+  return (
+    <div className="grl-aim" onPointerMove={onMove} onPointerLeave={onLeave} aria-hidden="true">
+      <motion.svg className="grl-cross" viewBox="0 0 200 200" fill="none" stroke="#22d3ee" strokeWidth="2" style={{ x, y }}>
+        <g className="rot"><circle cx="100" cy="100" r="84" strokeDasharray="6 10" opacity=".7" /></g>
+        <g className="rot2"><circle cx="100" cy="100" r="62" strokeDasharray="30 12" /></g>
+        <circle className="ping" cx="100" cy="100" r="40" strokeWidth="1.5" />
+        <path d="M100 4v38M100 158v38M4 100h38M158 100h38" strokeWidth="3" strokeLinecap="round" />
+        <circle cx="100" cy="100" r="4" fill="#22d3ee" stroke="none" />
+      </motion.svg>
+    </div>
+  )
+}
+
+/* ───────────────────────── SEITE ───────────────────────── */
 export default function GRL() {
   useSEO({
     title: 'German Rising League [GRL] | TEAM LAZER',
     description: 'German Rising League: Turnier-Community für Call of Duty mit Ranking, fairen Teams und eigenen Regelwerken.',
   })
+  const live = useDiscordInvite(GRL_INVITE_CODE)
 
   return (
-    <div className="page-wrapper">
-      <style>{pageStyle}</style>
+    <div className="page-wrapper grl-page">
+      <Hero />
+      <StatsBand live={live} />
 
-      {/* HERO */}
-      <section className="small-hero">
-        <div className="container">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-            <div className="grl-logos">
-              <img src="/images/tl-logo-v2.webp" alt="TEAM LAZER" />
-              <span>×</span>
-              <img src="/images/grl-logo.webp" alt="German Rising League" />
-            </div>
-            <span className="section-tag">GERMAN RISING LEAGUE</span>
-            <h1>Together we <span className="highlight">rise</span></h1>
-            <p>Die German Rising League ist eine Turnier-Community für Call of Duty – mit Ranking, fairen Teams und klaren Regelwerken.</p>
-            <div className="grl-tl-note">
-              <img src="/images/tl-logo-v2.webp" alt="" />
-              <span><strong>TEAM LAZER</strong> hostet die GRL-Bots, stellt die Technik bereit und hilft bei der Verwaltung.</span>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <div className="grl-mq-stack" aria-hidden="true">
+        <Marquee items={MODES_A} />
+        <Marquee items={MODES_B} reverse outline />
+      </div>
 
       {/* DER SERVER */}
       <section className="section-pad">
         <div className="container">
           <div className="grl-split">
-            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
-              <GrlDiscordCard />
+            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
+              <motion.div variants={fadeItem}><GrlDiscordCard live={live} /></motion.div>
             </motion.div>
-            <motion.div className="grl-about" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
+            <motion.div className="grl-about" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
               <motion.div variants={fadeItem}>
-              <h3>Der GRL-Discord</h3>
-              <p>
-                Hier findet die GRL statt: Turnier-Infos, Anmeldungen, Leaderboard und Spielersuche an einem Ort.
-                Wer mitspielen will, bekommt zuerst ein Ranking – damit die Teams später möglichst fair zusammengestellt werden können.
-              </p>
-              <p>Fairplay, Transparenz und gleiche Bedingungen für alle stehen an erster Stelle.</p>
-              <div className="grl-facts">
-                <span>Turniere in mehreren Formaten</span>
-                <span>Teilnahme ab 18 Jahren</span>
-              </div>
+                <h3>Der GRL-Discord</h3>
+                <p>
+                  Hier findet die GRL statt: Turnier-Infos, Anmeldungen, Leaderboard und Spielersuche an einem Ort.
+                  Wer mitspielen will, bekommt zuerst ein Ranking – damit die Teams später möglichst fair zusammengestellt werden können.
+                </p>
+                <p>Fairplay, Transparenz und gleiche Bedingungen für alle stehen an erster Stelle.</p>
+                <div className="grl-facts">
+                  <span>Turniere in mehreren Formaten</span>
+                  <span>Teilnahme ab 18 Jahren</span>
+                </div>
               </motion.div>
             </motion.div>
           </div>
@@ -172,41 +289,30 @@ export default function GRL() {
       {/* EINSTIEG */}
       <section className="bg-alt section-pad">
         <div className="container">
-          <div className="section-header">
-            <span className="section-tag">EINSTIEG</span>
-            <h2>So kommst du <span className="highlight">rein</span></h2>
-            <p>In vier Schritten vom Beitritt zum ersten Turnier.</p>
-          </div>
-          <motion.div className="grl-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
-            {STEPS.map(([t, s], i) => (
-              <motion.div key={t} variants={fadeItem} style={{ height: '100%' }}>
-                <div className="grl-tile">
-                  <span className="grl-step-num">SCHRITT {i + 1}</span>
-                  <h3>{t}</h3>
-                  <p>{s}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+          <Heading tag="EINSTIEG" before="So kommst du" highlight="rein" sub="In vier Schritten vom Beitritt zum ersten Turnier." />
+          <Steps steps={STEPS} />
         </div>
       </section>
 
       {/* TURNIERE */}
       <section className="section-pad">
         <div className="container">
-          <div className="section-header">
-            <span className="section-tag">TURNIERE</span>
-            <h2>Systeme, Modi &amp; <span className="highlight">Teams</span></h2>
-            <p>Gespielt wird in Public Lobbys und Custom Lobbys. Für Killrace, TKR und Custom-Lobby gibt es jeweils ein eigenes Regelwerk.</p>
-          </div>
-          <motion.div className="grl-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
+          <Heading
+            tag="TURNIERE"
+            before="Systeme, Modi &"
+            highlight="Teams"
+            sub="Gespielt wird in Public Lobbys und Custom Lobbys. Für Killrace, TKR und Custom-Lobby gibt es jeweils ein eigenes Regelwerk."
+          />
+          <motion.div className="grl-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
             {TURNIERE.map(([icon, t, list]) => (
               <motion.div key={t} variants={fadeItem} style={{ height: '100%' }}>
-                <div className="grl-tile">
+                <TiltCard className="grl-tile">
                   <i className={icon} />
                   <h3>{t}</h3>
-                  <ul>{list.map(x => <li key={x}>{x}</li>)}</ul>
-                </div>
+                  <motion.ul variants={listVar} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                    {list.map(x => <motion.li key={x} variants={liVar}>{x}</motion.li>)}
+                  </motion.ul>
+                </TiltCard>
               </motion.div>
             ))}
           </motion.div>
@@ -216,10 +322,7 @@ export default function GRL() {
       {/* COMMUNITY */}
       <section className="bg-alt section-pad">
         <div className="container">
-          <div className="section-header">
-            <span className="section-tag">COMMUNITY</span>
-            <h2>Mehr als <span className="highlight">Turniere</span></h2>
-          </div>
+          <Heading tag="COMMUNITY" before="Mehr als" highlight="Turniere" />
           <Tiles items={COMMUNITY} />
           <div className="grl-cta">
             <Link to="/software" className="btn btn-secondary"><i className="fa-solid fa-robot" /> GRL-Bots ansehen</Link>
@@ -230,11 +333,13 @@ export default function GRL() {
       {/* SHOOTER */}
       <section className="section-pad">
         <div className="container">
-          <div className="section-header">
-            <span className="section-tag">IN ENTWICKLUNG</span>
-            <h2>GRL <span className="highlight">Discord Shooter</span></h2>
-            <p>Ein Browser-Multiplayer-Shooter im Stil von Call of Duty – gebaut mit Babylon.js und Nakama.</p>
-          </div>
+          <Crosshair />
+          <Heading
+            tag="IN ENTWICKLUNG"
+            before="GRL Discord"
+            highlight="Shooter"
+            sub="Ein Browser-Multiplayer-Shooter im Stil von Call of Duty – gebaut mit Babylon.js und Nakama."
+          />
           <Tiles items={GAME} />
         </div>
       </section>
