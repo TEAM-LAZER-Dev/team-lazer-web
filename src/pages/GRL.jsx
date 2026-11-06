@@ -115,7 +115,8 @@ export default function GRL() {
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
               <DownloadCard item={grlDiscord} />
             </motion.div>
-            <div className="grl-about">
+            <motion.div className="grl-about" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
+              <motion.div variants={fadeItem}>
               <h3>Der GRL-Discord</h3>
               <p>
                 Hier findet die GRL statt: Turnier-Infos, Anmeldungen, Leaderboard und Spielersuche an einem Ort.
@@ -124,10 +125,11 @@ export default function GRL() {
               <p>Fairplay, Transparenz und gleiche Bedingungen für alle stehen an erster Stelle.</p>
               <div className="grl-facts">
                 <span>Über 100 Mitglieder</span>
-                <span>Turniere kostenlos (Free Entry)</span>
+                <span>Turniere in mehreren Formaten</span>
                 <span>Teilnahme ab 18 Jahren</span>
               </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
