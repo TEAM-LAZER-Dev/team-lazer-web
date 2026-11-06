@@ -534,3 +534,13 @@ h2 .highlight.hl-visible::after { transform: scaleX(1); }
 
 /* ── Hide chat FAB when mobile nav is open ── */
 body.nav-open .chat-fab { opacity: 0 !important; pointer-events: none !important; transform: scale(0.8) !important; transition: opacity 0.2s, transform 0.2s !important; }
+
+/* ── Marke: TEAM LAZER × GRL ── */
+.nav-logo .nav-x { color: rgba(255,255,255,0.35); font-weight: 600; margin: 0 -2px; }
+.nav-logo .nav-grl { color: #22d3ee; text-shadow: 0 0 18px rgba(34,211,238,0.45); }
+@media (max-width: 380px) { .nav-logo .nav-x, .nav-logo .nav-grl { display: none; } }
+
+.footer-grl { display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+.footer-brand .footer-grl img { width: 28px; height: 28px; margin: 0; object-fit: contain; }
+.footer-grl strong { color: #22d3ee; font-weight: 600; }
+.footer-grl:hover { color: #fff; }

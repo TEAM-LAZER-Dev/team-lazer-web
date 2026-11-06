@@ -35,6 +35,8 @@ export default function Navbar() {
           <Link className="nav-logo" to="/">
             <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
             TEAM LAZER
+            <span className="nav-x">×</span>
+            <span className="nav-grl">GRL</span>
           </Link>
           <nav className="nav-links">
             <NavLink to="/" className={navLinkClass} end>Home</NavLink>
@@ -73,6 +75,8 @@ export default function Navbar() {
           <Link className="nav-logo" to="/">
             <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
             TEAM LAZER
+            <span className="nav-x">×</span>
+            <span className="nav-grl">GRL</span>
           </Link>
           <button className="mobile-nav-close" onClick={toggleMenu} aria-label="Schließen">
             <i className="fa-solid fa-xmark" />

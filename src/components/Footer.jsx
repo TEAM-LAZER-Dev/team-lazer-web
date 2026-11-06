@@ -8,6 +8,10 @@ export default function Footer() {
           <div className="footer-brand">
             <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
             <p>Excellence in Gaming<br />& Development.</p>
+            <Link to="/grl" className="footer-grl">
+              <img src="/images/grl-logo.webp" alt="" />
+              <span>Zuhause der <strong>German Rising League</strong></span>
+            </Link>
             <div className="footer-social">
               <a href="https://www.instagram.com/team_lazer.de" title="Instagram" target="_blank" rel="noreferrer">
                 <i className="fa-brands fa-instagram" />
