@@ -252,10 +252,11 @@ const pageStyle = `
   .au-server-meta strong {
     display: block; font-family: 'Rajdhani', sans-serif;
     font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 4px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .au-server-members {
     display: flex; align-items: center; gap: 10px;
-    font-size: 0.8rem; color: var(--muted); font-weight: 500;
+    font-size: 0.8rem; color: var(--muted); font-weight: 500; white-space: nowrap;
   }
   .au-server-members-item { display: flex; align-items: center; gap: 5px; }
   .au-server-members-dot {
@@ -631,6 +632,7 @@ export default function About() {
                 variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
               >
+                <span className={`au-server-badge ${badgeType}`} style={{ alignSelf: 'flex-start', marginBottom: 14 }}>{badge}</span>
                 <div className="au-server-head">
                   <div className="au-server-icon">
                     <img src={img} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }} />
@@ -648,7 +650,6 @@ export default function About() {
                       </span>
                     </div>
                   </div>
-                  <span className={`au-server-badge ${badgeType}`}>{badge}</span>
                 </div>
                 <div className="au-server-tags">
                   {tags.map(t => <span key={t} className="au-server-tag">{t}</span>)}
