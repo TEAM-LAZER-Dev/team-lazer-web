@@ -17,64 +17,31 @@ export const CATEGORIES = [
   { id: 'sonstiges', label: 'Sonstiges', icon: 'fa-solid fa-box-archive' },
 ]
 
-export const DOWNLOADS = [
-  {
-    id: 'tl-discord',
-    type: 'link',
-    category: 'discord',
-    brand: 'TL',
-    title: 'TEAM LAZER Discord',
-    desc: 'Unsere Community: Support, Projekte, Bots und gemeinsames Zocken.',
-    url: LINKS.tlDiscord,
-    icon: 'fa-brands fa-discord',
-  },
-  {
-    id: 'grl-discord',
-    type: 'link',
-    category: 'discord',
-    brand: 'GRL',
-    title: 'German Rising League Discord',
-    desc: 'Die GRL-Community mit Ranking, Voice-Räumen und Events.',
-    url: LINKS.grlDiscord,
-    icon: 'fa-brands fa-discord',
-  },
-  {
-    id: 'tl-dashboard',
-    type: 'file',
-    category: 'programme',
-    brand: 'TL',
-    title: 'TEAM LAZER Dashboard',
-    desc: 'Desktop-App zum Verwalten von Bots und Projekten.',
-    platform: 'Windows',
-    version: 'v1.0',
-    size: '—',
-    url: '', // z. B. '/downloads/TEAM-LAZER-Dashboard.exe'
-    icon: 'fa-solid fa-gauge-high',
-  },
-  {
-    id: 'grl-launcher',
-    type: 'file',
-    category: 'programme',
-    brand: 'GRL',
-    title: 'GRL Launcher',
-    desc: 'Start-Programm für den GRL Discord Shooter und GRL-Tools.',
-    platform: 'Windows',
-    version: 'Beta',
-    size: '—',
-    url: '',
-    icon: 'fa-solid fa-rocket',
-  },
-  {
-    id: 'asset-pack',
-    type: 'file',
-    category: 'sonstiges',
-    brand: 'BEIDE',
-    title: 'Logo- & Banner-Paket',
-    desc: 'Offizielle Logos und Banner von TEAM LAZER und GRL (PNG/WebP).',
-    platform: 'Alle',
-    version: '2026',
-    size: '—',
-    url: '',
-    icon: 'fa-solid fa-image',
-  },
-]
+// Aktuell gibt es keine Downloads – solange die Liste leer ist, wird der Bereich auf der Software-Seite ausgeblendet.
+// Vorlage für einen neuen Eintrag:
+// {
+//   id: 'mein-tool',
+//   type: 'file',            // 'file' oder 'link'
+//   category: 'programme',
+//   brand: 'TL',             // 'TL' | 'GRL' | 'BEIDE'
+//   title: 'Mein Tool',
+//   desc: 'Kurze Beschreibung.',
+//   platform: 'Windows',
+//   version: 'v1.0',
+//   size: '12 MB',
+//   url: '/downloads/mein-tool.exe',
+//   icon: 'fa-solid fa-computer',
+// },
+export const DOWNLOADS = []
+
+// Beitritts-Karte für die GRL-Seite (gehört nicht zur Software-Liste)
+export const GRL_DISCORD = {
+  id: 'grl-discord',
+  type: 'link',
+  category: 'discord',
+  brand: 'GRL',
+  title: 'German Rising League Discord',
+  desc: 'Die GRL-Community mit Ranking, Voice-Räumen und Events.',
+  url: LINKS.grlDiscord,
+  icon: 'fa-brands fa-discord',
+}

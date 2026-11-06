@@ -91,6 +91,8 @@ export function DownloadsSection() {
     [cat, brand, q]
   )
 
+  if (DOWNLOADS.length === 0) return null
+
   return (
     <>
       <style>{pageStyle}</style>

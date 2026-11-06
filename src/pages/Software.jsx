@@ -6,7 +6,7 @@ import { BotsSection } from './Bots'
 export default function Software() {
   useSEO({
     title: 'Software | TEAM LAZER',
-    description: 'PC-Programme, Tools, Downloads und Discord-Bots von TEAM LAZER und der German Rising League.',
+    description: 'Die Discord-Bots von TEAM LAZER und der German Rising League.',
   })
 
   return (
@@ -16,7 +16,7 @@ export default function Software() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <span className="section-tag">SOFTWARE</span>
             <h1><span className="highlight">Software</span></h1>
-            <p>PC-Programme, Tools und Discord-Bots – alles zum Herunterladen, Einladen und Nutzen.</p>
+            <p>Unsere Discord-Bots – handgemacht von TEAM LAZER.</p>
           </motion.div>
         </div>
       </section>

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useSEO } from '../lib/seo'
-import { DOWNLOADS } from '../data/downloads'
+import { GRL_DISCORD } from '../data/downloads'
 import { DownloadCard, pageStyle as dlStyle } from './Downloads'
 
 const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0 } } }
@@ -81,8 +81,6 @@ export default function GRL() {
     description: 'German Rising League: Turnier-Community für Call of Duty mit Ranking, fairen Teams und eigenen Regelwerken.',
   })
 
-  const grlDiscord = DOWNLOADS.find(d => d.id === 'grl-discord')
-
   return (
     <div className="page-wrapper">
       <style>{dlStyle}</style>
@@ -113,7 +111,7 @@ export default function GRL() {
         <div className="container">
           <div className="grl-split">
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
-              <DownloadCard item={grlDiscord} />
+              <DownloadCard item={GRL_DISCORD} />
             </motion.div>
             <motion.div className="grl-about" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
               <motion.div variants={fadeItem}>
