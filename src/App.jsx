@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import CookieBanner from './components/CookieBanner'
@@ -55,7 +54,8 @@ function AppInner() {
       <FlyingTiles />
       <ScrollToTop />
       <Navbar />
-      <AnimatePresence mode="wait">
+      {/* Kein AnimatePresence um die Routen: Es gibt keine Abgang-Animationen, und es blockierte den Seitenwechsel,
+          wenn auf der GRL-Seite ein innerer AnimatePresence (Reiter/Kanalansicht) mitten in einer Animation steckte. */}
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -71,7 +71,6 @@ function AppInner() {
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/privacy" element={<Privacy />} />
         </Routes>
-      </AnimatePresence>
       <Footer />
       <CookieBanner />
       <ChatWidget />
