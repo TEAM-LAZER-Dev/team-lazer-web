@@ -4,7 +4,7 @@ import { useSEO } from '../lib/seo'
 import { DOWNLOADS } from '../data/downloads'
 import { DownloadCard, pageStyle as dlStyle } from './Downloads'
 
-const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } }
+const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0 } } }
 const fadeItem = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } } }
 
 const FEATURES = [

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useSEO } from '../lib/seo'
 import { BOTS } from '../data/bots'
 
-const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.12 } } }
+const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0 } } }
 const fadeItem = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } } }
 
 const STATUS_MAP = {
@@ -55,7 +55,8 @@ const pageStyle = `
 function BotCard({ bot }) {
   const statusInfo = STATUS_MAP[bot.status] || STATUS_MAP.online
   return (
-    <motion.div className="bot-card" variants={fadeItem}>
+    <motion.div variants={fadeItem} style={{ height: '100%' }}>
+    <div className="bot-card">
       <div className="bot-card-header">
         <div className="bot-icon" style={{ borderColor: `${bot.color}33` }}>
           {bot.icon
@@ -136,6 +137,7 @@ function BotCard({ bot }) {
           </>
         )}
       </div>
+    </div>
     </motion.div>
   )
 }

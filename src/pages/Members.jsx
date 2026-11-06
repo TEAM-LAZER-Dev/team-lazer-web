@@ -23,6 +23,7 @@ const pageStyle = `
   /* ═══════════════════════════
      CARDS (shared)
      ═══════════════════════════ */
+  .mt-rise { flex-shrink: 0; }
   .mt-card {
     width: 210px; min-height: 260px;
     border-radius: 20px;
@@ -110,13 +111,13 @@ const pageStyle = `
     transition: transform .3s;
   }
   .featured-wrap:hover { transform: translateY(-14px); }
-  .featured-wrap > .mt-card {
+  .featured-wrap .mt-card {
     position: relative; z-index: 1;
     border: 1px solid rgba(124,58,237,0.3) !important;
     transform: none !important;
     box-shadow: 0 8px 40px rgba(124,58,237,0.3), 0 2px 12px rgba(0,0,0,0.4) !important;
   }
-  .featured-wrap > .mt-card:hover { transform: none !important; }
+  .featured-wrap .mt-card:hover { transform: none !important; }
 
   /* ═══════════════════════════
      SEPARATOR
@@ -135,7 +136,7 @@ const pageStyle = `
      PLACEHOLDER
      ═══════════════════════════ */
   .mt-placeholder {
-    width: 200px; min-height: 240px;
+    width: 210px; min-height: 260px;
     border-radius: 20px; flex-shrink: 0;
     border: 1px dashed rgba(255,255,255,.1);
     background: rgba(255,255,255,.015);
@@ -224,7 +225,7 @@ const pageStyle = `
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
-    .mob-crew-grid > :nth-child(even) { transform: translateY(16px); }
+    .mob-crew-grid > :nth-child(even) { position: relative; top: 16px; }
     .mob-crew-grid .mt-card {
       width: 100%; flex-shrink: 1;
       padding: 22px 14px 18px;
@@ -251,7 +252,7 @@ const pageStyle = `
     }
     .mob-co-grid .mt-avatar, .mob-crew-grid .mt-avatar { width: 56px; height: 56px; margin-bottom: 10px; }
     .mob-crew-grid { gap: 10px; }
-    .mob-crew-grid > :nth-child(even) { transform: translateY(12px); }
+    .mob-crew-grid > :nth-child(even) { position: relative; top: 12px; }
     .mob-crew-grid .mt-placeholder { min-height: 140px; border-radius: 16px; }
 
     .mt-badge { font-size: .55rem; padding: 2px 7px; letter-spacing: 1px; }
@@ -271,20 +272,32 @@ const pageStyle = `
   }
 `
 
+// Einblend-Animation sitzt auf einem eigenen Wrapper, damit sie sich nicht mit
+// den CSS-Transitions/Hover-Transforms der Kachel selbst überschneidet.
+function Rise({ children }) {
+  return (
+    <motion.div
+      className="mt-rise"
+      initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .5 }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
 function MemberCard({ member, featured = false }) {
   const t = TIER_CONFIG[member.tier] || TIER_CONFIG['co-dev']
   const isOwner = member.tier === 'owner'
   return (
-    <motion.div
+    <Rise>
+    <div
       className={`mt-card${isOwner ? ' is-owner' : ''}`}
       style={featured ? {
         background: `linear-gradient(160deg, rgba(124,58,237,0.18), rgba(124,58,237,0.06))`,
         border: `2px solid rgba(124,58,237,0.7)`,
         boxShadow: `0 0 0 1px rgba(124,58,237,0.2), 0 8px 40px rgba(124,58,237,0.35), 0 2px 12px rgba(0,0,0,0.4)`,
-        transform: 'translateY(-10px)',
         zIndex: 2,
       } : { background: `linear-gradient(160deg,${t.bg},rgba(255,255,255,.01))`, border: `1px solid ${t.border}`, boxShadow: `0 6px 28px rgba(0,0,0,.22)` }}
-      initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .5 }}
     >
       <div className="mt-card-glow" style={{ background: t.glow }} />
 
@@ -315,7 +328,8 @@ function MemberCard({ member, featured = false }) {
           ))}
         </div>
       )}
-    </motion.div>
+    </div>
+    </Rise>
   )
 }
 
@@ -325,17 +339,16 @@ function Connector({ color }) {
 
 function PlaceholderCard() {
   return (
-    <motion.div
-      className="mt-placeholder"
-      initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .5 }}
-    >
-      <div className="mt-placeholder-inner">
-        <div className="mt-placeholder-circle">
-          <i className="fa-solid fa-user-plus" />
+    <Rise>
+      <div className="mt-placeholder">
+        <div className="mt-placeholder-inner">
+          <div className="mt-placeholder-circle">
+            <i className="fa-solid fa-user-plus" />
+          </div>
+          <span className="mt-placeholder-text">Offen</span>
         </div>
-        <span className="mt-placeholder-text">Offen</span>
       </div>
-    </motion.div>
+    </Rise>
   )
 }
 

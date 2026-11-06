@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useSEO } from '../lib/seo'
 import { CATEGORIES, DOWNLOADS } from '../data/downloads'
 
-const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } }
+const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0 } } }
 const fadeItem = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } } }
 
 export const pageStyle = `
@@ -40,7 +40,8 @@ export function DownloadCard({ item }) {
   const isFile = item.type === 'file'
   const external = /^https?:/.test(item.url)
   return (
-    <motion.div className="dl-card" variants={fadeItem}>
+    <motion.div variants={fadeItem} style={{ height: '100%' }}>
+    <div className="dl-card">
       <div className="dl-top">
         <div className="dl-icon"><i className={item.icon} /></div>
         <span className={`dl-brand ${item.brand.toLowerCase()}`}>{item.brand === 'BEIDE' ? 'TL × GRL' : item.brand}</span>
@@ -70,6 +71,7 @@ export function DownloadCard({ item }) {
           <i className="fa-solid fa-clock" /> Bald verfügbar
         </button>
       )}
+    </div>
     </motion.div>
   )
 }
