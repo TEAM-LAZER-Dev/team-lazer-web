@@ -1,44 +1,47 @@
 import { Fragment } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 
-// Abschnitts-Überschrift: Tag scannt ein, Wörter steigen einzeln aus einer Maske auf.
-export default function Heading({ tag, before, highlight, sub, left = false }) {
+// Abschnitts-Kopf im Übertragungs-Look: "// 01 — LABEL" mit Linie, die sich einmal zieht, darunter die Überschrift.
+export default function Heading({ n, tag, before, highlight, sub }) {
   const reduce = useReducedMotion()
   const words = [...before.split(' ').map(w => ({ w })), { w: highlight, hl: true }]
+  const vp = { once: true, margin: '-70px' }
   return (
-    <div className={`grl-head${left ? ' left' : ''}`}>
-      <motion.span
-        className="section-tag grl-tag"
-        initial={reduce ? false : { opacity: 0, letterSpacing: '8px' }}
-        whileInView={{ opacity: 1, letterSpacing: '2.5px' }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.7, ease: 'easeOut' }}
-      >
-        {tag}
-      </motion.span>
+    <div className="grl-head">
+      <div className="grl-lab">
+        <span className="grl-lab-n">// {n}</span>
+        <span className="grl-lab-t">{tag}</span>
+        <motion.i
+          className="grl-lab-line"
+          initial={reduce ? false : { scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={vp}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        />
+      </div>
       <h2 className="grl-h2">
         {words.map(({ w, hl }, i) => (
           <Fragment key={w + i}>
-          <span className="grl-mask">
-            <motion.span
-              className={hl ? 'grl-hl' : undefined}
-              initial={reduce ? false : { y: '115%', rotate: 4 }}
-              whileInView={{ y: 0, rotate: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.65, delay: 0.08 * i, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {w}
-            </motion.span>
-          </span>{' '}
+            <span className="grl-mask">
+              <motion.span
+                className={hl ? 'grl-hl' : undefined}
+                initial={reduce ? false : { y: '110%' }}
+                whileInView={{ y: 0 }}
+                viewport={vp}
+                transition={{ duration: 0.6, delay: 0.07 * i, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {w}
+              </motion.span>
+            </span>{' '}
           </Fragment>
         ))}
       </h2>
       {sub && (
         <motion.p
-          initial={reduce ? false : { opacity: 0, y: 14 }}
+          initial={reduce ? false : { opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          viewport={vp}
+          transition={{ duration: 0.6, delay: 0.25 }}
         >
           {sub}
         </motion.p>
