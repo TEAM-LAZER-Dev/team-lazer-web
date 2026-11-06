@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useSEO } from '../lib/seo'
-import { GRL_DISCORD } from '../data/downloads'
-import { DownloadCard, pageStyle as dlStyle } from './Downloads'
+import { LINKS, GRL_INVITE_CODE } from '../data/site'
+import { useDiscordInvite } from '../lib/discord'
 
 const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0 } } }
 const fadeItem = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } } }
@@ -45,6 +45,18 @@ const pageStyle = `
   .grl-tile ul { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
   .grl-tile li { font-size: .86rem; color: rgba(255,255,255,.6); display: flex; align-items: center; gap: 8px; }
   .grl-tile li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #22d3ee; flex-shrink: 0; }
+  .grl-dc { background: linear-gradient(160deg, rgba(34,211,238,.08), rgba(255,255,255,.02)); border: 1px solid rgba(34,211,238,.3); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 18px; transition: .3s; }
+  .grl-dc:hover { border-color: rgba(34,211,238,.55); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.3); }
+  .grl-dc-head { display: flex; align-items: center; gap: 16px; }
+  .grl-dc-icon { width: 64px; height: 64px; border-radius: 18px; object-fit: cover; flex-shrink: 0; box-shadow: 0 0 24px rgba(34,211,238,.25); }
+  .grl-dc-name { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 800; line-height: 1.2; }
+  .grl-dc-sub { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+  .grl-dc-sub i { color: #5865F2; margin-right: 4px; }
+  .grl-dc-stats { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .86rem; color: var(--muted); padding: 12px 14px; border-radius: 12px; background: rgba(0,0,0,.25); border: 1px solid var(--border); }
+  .grl-dc-stats strong { color: #fff; font-weight: 700; }
+  .grl-dc-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #6b7280; margin-right: 6px; }
+  .grl-dc-dot.on { background: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,.7); }
+  .grl-dc .btn { width: 100%; }
   .grl-cta { text-align: center; margin-top: 32px; }
   .grl-logos { display: flex; align-items: center; justify-content: center; gap: 22px; margin-bottom: 22px; }
   .grl-logos img { height: 96px; width: auto; object-fit: contain; }
@@ -62,6 +74,33 @@ const pageStyle = `
   @media (max-width: 860px) { .grl-split { grid-template-columns: 1fr; gap: 24px; } }
   @media (max-width: 600px) { .grl-grid { grid-template-columns: 1fr; gap: 12px; } .grl-logos img { height: 72px; } }
 `
+
+function GrlDiscordCard() {
+  const live = useDiscordInvite(GRL_INVITE_CODE)
+  const fmt = n => new Intl.NumberFormat('de-DE').format(n)
+  return (
+    <motion.div variants={fadeItem} style={{ height: '100%' }}>
+      <div className="grl-dc">
+        <div className="grl-dc-head">
+          <img className="grl-dc-icon" src={live?.icon || '/images/grl-logo.webp'} alt="Server-Icon der German Rising League" width="64" height="64" />
+          <div>
+            <div className="grl-dc-name">{live?.name || 'German Rising League [GRL]'}</div>
+            <div className="grl-dc-sub"><i className="fa-brands fa-discord" /> Discord-Server</div>
+          </div>
+        </div>
+        {live && live.members ? (
+          <div className="grl-dc-stats">
+            <span><i className="grl-dc-dot on" /> <strong>{fmt(live.online)}</strong> online</span>
+            <span><i className="grl-dc-dot" /> <strong>{fmt(live.members)}</strong> Mitglieder</span>
+          </div>
+        ) : null}
+        <a className="btn btn-primary" href={LINKS.grlDiscord} target="_blank" rel="noopener noreferrer">
+          <i className="fa-brands fa-discord" /> Server beitreten
+        </a>
+      </div>
+    </motion.div>
+  )
+}
 
 function Tiles({ items }) {
   return (
@@ -83,7 +122,6 @@ export default function GRL() {
 
   return (
     <div className="page-wrapper">
-      <style>{dlStyle}</style>
       <style>{pageStyle}</style>
 
       {/* HERO */}
@@ -111,7 +149,7 @@ export default function GRL() {
         <div className="container">
           <div className="grl-split">
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
-              <DownloadCard item={GRL_DISCORD} />
+              <GrlDiscordCard />
             </motion.div>
             <motion.div className="grl-about" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
               <motion.div variants={fadeItem}>
@@ -122,7 +160,6 @@ export default function GRL() {
               </p>
               <p>Fairplay, Transparenz und gleiche Bedingungen für alle stehen an erster Stelle.</p>
               <div className="grl-facts">
-                <span>Über 100 Mitglieder</span>
                 <span>Turniere in mehreren Formaten</span>
                 <span>Teilnahme ab 18 Jahren</span>
               </div>

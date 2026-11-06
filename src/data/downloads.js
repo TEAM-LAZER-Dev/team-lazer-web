@@ -7,7 +7,6 @@
 // url:      Datei in /public/downloads/ ablegen -> '/downloads/datei.exe'
 //           oder externer Link (z. B. GitHub Release). Leer ('') = "Bald verfügbar"
 // ─────────────────────────────────────────────────────────────
-import { LINKS } from './site'
 
 export const CATEGORIES = [
   { id: 'alle', label: 'Alle', icon: 'fa-solid fa-layer-group' },
@@ -33,15 +32,3 @@ export const CATEGORIES = [
 //   icon: 'fa-solid fa-computer',
 // },
 export const DOWNLOADS = []
-
-// Beitritts-Karte für die GRL-Seite (gehört nicht zur Software-Liste)
-export const GRL_DISCORD = {
-  id: 'grl-discord',
-  type: 'link',
-  category: 'discord',
-  brand: 'GRL',
-  title: 'German Rising League Discord',
-  desc: 'Die GRL-Community mit Ranking, Voice-Räumen und Events.',
-  url: LINKS.grlDiscord,
-  icon: 'fa-brands fa-discord',
-}
