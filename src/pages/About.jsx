@@ -589,7 +589,7 @@ export default function About() {
                 tags: ['TEAM-LAZER', 'DEUTSCH', 'COMMUNITY', 'GAMING'],
                 desc: 'Unser Zuhause. Hier trifft sich die Community und alles rund um TEAM LAZER passiert.',
                 list: ['Regelmäßige Giveaways', 'Dev & Gaming Community', 'Direkter Kontakt zum Team'],
-                img: '/images/discord-server/TL-Logo-steel-nobg.webp',
+                img: '/images/tl-logo-v2.webp',
                 invite: 'https://discord.gg/dCxU6KqWFz',
               },
               {

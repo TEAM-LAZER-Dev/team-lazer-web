@@ -73,7 +73,7 @@ export default function GRL() {
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <div className="grl-logos">
-              <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
+              <img src="/images/tl-logo-v2.webp" alt="TEAM LAZER" />
               <span>×</span>
               <img src="/images/grl-logo.webp" alt="German Rising League" />
             </div>
@@ -97,7 +97,7 @@ export default function GRL() {
               <p>Eigenständiges Projekt und eigener Discord. Gegründet von einsneun46, die die Community leitet. Hier passieren Ranking, Events, Voice-Räume und der Shooter.</p>
             </div>
             <div className="grl-role tl">
-              <img src="/images/tl-logo-nobg.webp" alt="" />
+              <img src="/images/tl-logo-v2.webp" alt="" />
               <h3>TEAM LAZER</h3>
               <p>Der eigene Discord und das Team dahinter. Wir hosten die GRL-Bots, stellen die Technik bereit, entwickeln mit und verwalten die Server gemeinsam mit der GRL.</p>
             </div>

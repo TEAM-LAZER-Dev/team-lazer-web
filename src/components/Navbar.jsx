@@ -33,7 +33,7 @@ export default function Navbar() {
       <header className={`navbar${scrolled ? ' scrolled' : ''}`} id="navbar">
         <div className="container nav-container">
           <Link className="nav-logo" to="/">
-            <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
+            <img src="/images/tl-logo-v2.webp" alt="TEAM LAZER" />
             TEAM LAZER
             <span className="nav-x">×</span>
             <span className="nav-grl">GRL</span>
@@ -73,7 +73,7 @@ export default function Navbar() {
       <nav className={`mobile-nav${menuOpen ? ' open' : ''}`} aria-hidden={!menuOpen}>
         <div className="mobile-nav-head">
           <Link className="nav-logo" to="/">
-            <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
+            <img src="/images/tl-logo-v2.webp" alt="TEAM LAZER" />
             TEAM LAZER
             <span className="nav-x">×</span>
             <span className="nav-grl">GRL</span>

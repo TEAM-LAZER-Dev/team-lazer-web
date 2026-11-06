@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <img src="/images/tl-logo-nobg.webp" alt="TEAM LAZER" />
+            <img src="/images/tl-logo-v2.webp" alt="TEAM LAZER" />
             <p>Excellence in Gaming<br />& Development.</p>
             <Link to="/grl" className="footer-grl">
               <img src="/images/grl-logo.webp" alt="" />
