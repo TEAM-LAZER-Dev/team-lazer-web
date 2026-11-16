@@ -13,7 +13,6 @@ import Members from './pages/Members'
 import Portfolio from './pages/Portfolio'
 import Contact from './pages/Contact'
 import Software from './pages/Software'
-import GRL from './pages/GRL'
 import Impressum from './pages/Impressum'
 import Privacy from './pages/Privacy'
 
@@ -55,7 +54,7 @@ function AppInner() {
       <ScrollToTop />
       <Navbar />
       {/* Kein AnimatePresence um die Routen: Es gibt keine Abgang-Animationen, und es blockierte den Seitenwechsel,
-          wenn auf der GRL-Seite ein innerer AnimatePresence (Reiter/Kanalansicht) mitten in einer Animation steckte. */}
+          wenn auf einer Seite ein innerer AnimatePresence mitten in einer Animation steckte. */}
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -63,9 +62,9 @@ function AppInner() {
           <Route path="/software" element={<Software />} />
           <Route path="/bots" element={<Navigate to="/software" replace />} />
           <Route path="/downloads" element={<Navigate to="/software" replace />} />
+          <Route path="/grl" element={<Navigate to="/" replace />} />
           <Route path="/skills" element={<About />} />
           <Route path="/services" element={<About />} />
-          <Route path="/grl" element={<GRL />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/impressum" element={<Impressum />} />

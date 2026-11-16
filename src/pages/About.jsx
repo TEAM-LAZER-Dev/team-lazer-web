@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom'
 import { motion, useScroll, useInView, useSpring } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { useSEO } from '../lib/seo'
-import { useDiscordInvite } from '../lib/discord'
-import { LINKS, GRL_INVITE_CODE } from '../data/site'
 
 function useServerStats(inviteCode) {
   const [stats, setStats] = useState(null)
@@ -228,8 +226,6 @@ const pageStyle = `
 
   /* ── SERVER ── */
   .au-servers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .au-servers-grid > :nth-child(3) { grid-column: 1 / -1; }
-  @media(min-width:1240px){ .au-servers-grid { grid-template-columns: repeat(3, 1fr); } .au-servers-grid > :nth-child(3) { grid-column: auto; } }
   .au-server-card {
     background: rgba(255,255,255,0.025);
     border: 1px solid rgba(255,255,255,0.07);
@@ -472,8 +468,6 @@ const VALUES = [
 export default function About() {
   const tlStats     = useServerStats('dCxU6KqWFz')
   const forestStats = useServerStats('znyXupmuK2')
-  const grlLive     = useDiscordInvite(GRL_INVITE_CODE)
-  const grlStats    = grlLive ? { member_count: grlLive.members, online_count: grlLive.online } : null
   useSEO({
     title: 'Über uns | TEAM LAZER',
     description: 'TEAM LAZER – von einem Gaming-Clantag zu einer Dev- und Gaming-Community. Unsere Geschichte seit 2021.',
@@ -578,7 +572,7 @@ export default function About() {
           <motion.div className="section-header" {...fadeUp()}>
             <span className="section-tag">COMMUNITY</span>
             <h2>Unsere <span className="highlight">Server</span></h2>
-            <p>Drei Discord-Server – einer für uns, zwei für alle.</p>
+            <p>Zwei Discord-Server – einer für uns, einer für alle.</p>
           </motion.div>
           <motion.div
             className="au-servers-grid"
@@ -609,17 +603,6 @@ export default function About() {
                 list: ['Aktive Spieler', 'Freundlicher Support', 'Stetige Weiterentwicklung'],
                 img: '/images/discord-server/TheForestDE.webp',
                 invite: 'https://discord.gg/znyXupmuK2',
-              },
-              {
-                name: 'German Rising League [GRL]',
-                badge: 'Turnier-Community', badgeType: 'public',
-                stats: grlStats,
-                fallback: { members: 231, online: 90 },
-                tags: ['GRL', 'DEUTSCH', 'TURNIERE', 'WARZONE'],
-                desc: 'Turnier-Community für Warzone mit eigenem Ranking, TKR- und Killrace-Events, Multiplayer-Bereich und Hall of Fame.',
-                list: ['Eigenes Ranking-System', 'Turniere in mehreren Formaten', 'Statistiken & Hall of Fame'],
-                img: grlLive?.icon || '/images/grl-logo.webp',
-                invite: LINKS.grlDiscord,
               },
             ].map(({ name, badge, badgeType, stats, fallback, tags, desc, list, img, invite }) => {
               const members = stats?.member_count ?? fallback.members

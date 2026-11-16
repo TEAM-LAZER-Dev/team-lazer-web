@@ -26,7 +26,6 @@ export default function Footer() {
           <div className="footer-col">
             <h5>Community</h5>
             <Link to="/members">Team</Link>
-            <Link to="/grl">German Rising League</Link>
           </div>
           <div className="footer-col">
             <h5>Rechtliches</h5>
